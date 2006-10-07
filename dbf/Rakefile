@@ -1,0 +1,65 @@
+require 'rubygems'
+require 'rake/testtask'
+require 'rake/rdoctask'
+require 'rake/gempackagetask'
+Gem::manage_gems
+
+PKG_NAME = "dbf"
+PKG_VERSION = "0.4.0"
+PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
+
+spec = Gem::Specification.new do |s|
+  s.name = PKG_NAME
+  s.version = PKG_VERSION
+  s.author = "Keith Morrison"
+  s.email = "keithm@infused.org"
+  s.homepage = "http://www.infused.org"
+  s.platform = Gem::Platform::RUBY
+  s.summary = "A library for reading dBase (or xBase, Clipper, Foxpro, etc) database files"
+  s.files = FileList["{lib,test}/**/*"].to_a
+  s.require_path = "lib"
+  s.has_rdoc = true
+end
+
+desc 'Build Gem'
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.need_zip = true
+  pkg.need_tar = true
+end
+
+desc 'Run tests'
+task :default => :test
+
+desc 'Run tests'
+Rake::TestTask.new :test do |t|
+  t.libs << "test"
+  t.pattern = 'test/*_test.rb'
+  t.verbose = true
+end
+
+task :verify_user do
+  raise "RUBYFORGE_USER environment variable not set!" unless ENV['RUBYFORGE_USER']
+end
+
+task :verify_password do
+  raise "RUBYFORGE_PASSWORD environment variable not set!" unless ENV['RUBYFORGE_PASSWORD']
+end
+
+desc "Publish gem+tgz+zip on RubyForge. You must make sure lib/version.rb is aligned with the CHANGELOG file"
+task :publish_packages => [:verify_user, :verify_password, :package] do
+  require 'meta_project'
+  require 'rake/contrib/xforge'
+  release_files = FileList[
+    "pkg/#{PKG_FILE_NAME}.gem",
+    "pkg/#{PKG_FILE_NAME}.tgz",
+    "pkg/#{PKG_FILE_NAME}.zip"
+  ]
+
+  Rake::XForge::Release.new(MetaProject::Project::XForge::RubyForge.new('dbf')) do |xf|
+    # Never hardcode user name and password in the Rakefile!
+    xf.user_name = ENV['RUBYFORGE_USER']
+    xf.password = ENV['RUBYFORGE_PASSWORD']
+    xf.files = release_files.to_a
+    xf.release_name = "#{PKG_VERSION}"
+  end
+end
