@@ -50,7 +50,7 @@ module DBF
         filename = file.sub(/dbf$/i, extension)
         if File.exists?(filename)
           @memo_file_format = extension.downcase.to_sym
-          return File.open(filename)
+          return File.open(filename, 'rb')
         end
       end
       nil

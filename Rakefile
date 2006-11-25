@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
 Gem::manage_gems
 
 PKG_NAME = "dbf"
-PKG_VERSION = "0.4.0"
+PKG_VERSION = "0.4.1"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
 spec = Gem::Specification.new do |s|
