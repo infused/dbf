@@ -75,6 +75,9 @@ module DBF
             memo_string << block = @memo_file.read(512)
             break if block.strip.size < 512
           end
+        elsif version == "8b" # dbase iv
+          memo_type, memo_size = @memo_file.read(8).unpack("LL")
+          memo_string = @memo_file.read(memo_size)
         end
       end
       memo_string
