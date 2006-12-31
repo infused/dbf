@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
 Gem::manage_gems
 
 PKG_NAME = "dbf"
-PKG_VERSION = "0.4.1"
+PKG_VERSION = "0.4.2"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
 spec = Gem::Specification.new do |s|
@@ -16,7 +16,7 @@ spec = Gem::Specification.new do |s|
   s.homepage = "http://www.infused.org"
   s.platform = Gem::Platform::RUBY
   s.summary = "A library for reading dBase (or xBase, Clipper, Foxpro, etc) database files"
-  s.files = FileList["{lib,test}/**/*"].to_a
+  s.files = FileList["{lib,test}/**/*", "doc/README"].to_a
   s.require_path = "lib"
   s.has_rdoc = true
 end
@@ -35,4 +35,25 @@ Rake::TestTask.new :test do |t|
   t.libs << "test"
   t.pattern = 'test/*_test.rb'
   t.verbose = true
+end
+
+desc "Generate documentation for the application"
+Rake::RDocTask.new("rdoc") do |t|
+  t.rdoc_dir = 'doc/app'
+  t.title    = "Ruby DBF Library"
+  t.options << '--line-numbers' << '--inline-source'
+  t.rdoc_files.include('doc/README')
+  t.rdoc_files.include('lib/**/*.rb')
+end
+
+desc "Creates a release tag"
+task :create_release_tag do |t|
+  puts "Creating svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')}"
+  `svn copy . svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')} -m "Creating RELEASE_#{PKG_VERSION.gsub('.', '_')} tag"`
+end
+
+desc "Removes the current release tag"
+task :remove_release_tag do |t|
+  puts "Removing svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')}"
+  `svn remove svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')} -m "Removing RELEASE_#{PKG_VERSION.gsub('.', '_')} tag"`
 end
