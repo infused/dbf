@@ -1,31 +1,42 @@
-require 'rubygems'
-require 'rake/testtask'
-require 'rake/rdoctask'
-require 'rake/gempackagetask'
-Gem::manage_gems
+require 'hoe'
+# require 'rubygems'
+# require 'rake/testtask'
+# require 'rake/rdoctask'
+# require 'rake/gempackagetask'
+# Gem::manage_gems
 
 PKG_NAME = "dbf"
 PKG_VERSION = "0.4.3"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
-spec = Gem::Specification.new do |s|
-  s.name = PKG_NAME
-  s.version = PKG_VERSION
-  s.author = "Keith Morrison"
-  s.email = "keithm@infused.org"
-  s.homepage = "http://www.infused.org"
-  s.platform = Gem::Platform::RUBY
-  s.summary = "A library for reading dBase (or xBase, Clipper, Foxpro, etc) database files"
-  s.files = FileList["{lib,test}/**/*", "doc/README", "Rakefile"].to_a
-  s.require_path = "lib"
-  s.has_rdoc = true
+Hoe.new PKG_NAME, PKG_VERSION do |p|
+  p.rubyforge_name = PKG_NAME
+  p.author = "Keith Morrison"
+  p.email = "keithm@infused.org"
+  p.summary = "A library for reading dBase (or xBase, Clipper, Foxpro, etc) database files"
+  p.url = "http://dbf.rubyforge.org"
+  p.need_tar = true
+  p.need_zip = true
 end
 
-desc 'Build Gem'
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.need_zip = true
-  pkg.need_tar = true
-end
+# spec = Gem::Specification.new do |s|
+#   s.name = PKG_NAME
+#   s.version = PKG_VERSION
+#   s.author = "Keith Morrison"
+#   s.email = "keithm@infused.org"
+#   s.homepage = "http://www.infused.org"
+#   s.platform = Gem::Platform::RUBY
+#   s.summary = "A library for reading dBase (or xBase, Clipper, Foxpro, etc) database files"
+#   s.files = FileList["{lib,test}/**/*", "doc/README", "Rakefile"].to_a
+#   s.require_path = "lib"
+#   s.has_rdoc = true
+# end
+# 
+# desc 'Build Gem'
+# Rake::GemPackageTask.new(spec) do |pkg|
+#   pkg.need_zip = true
+#   pkg.need_tar = true
+# end
 
 desc 'Run tests'
 task :default => :test
