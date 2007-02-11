@@ -48,23 +48,23 @@ Rake::TestTask.new :test do |t|
   t.verbose = true
 end
 
-desc "Generate documentation for the application"
-Rake::RDocTask.new("rdoc") do |t|
-  t.rdoc_dir = 'doc/app'
-  t.title    = "Ruby DBF Library"
-  t.options << '--line-numbers' << '--inline-source'
-  t.rdoc_files.include('doc/README')
-  t.rdoc_files.include('lib/**/*.rb')
-end
-
-desc "Creates a release tag"
-task :create_release_tag do |t|
-  puts "Creating svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')}"
-  `svn copy . svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')} -m "Creating RELEASE_#{PKG_VERSION.gsub('.', '_')} tag"`
-end
-
-desc "Removes the current release tag"
-task :remove_release_tag do |t|
-  puts "Removing svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')}"
-  `svn remove svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')} -m "Removing RELEASE_#{PKG_VERSION.gsub('.', '_')} tag"`
-end
+# desc "Generate documentation for the application"
+# Rake::RDocTask.new("rdoc") do |t|
+#   t.rdoc_dir = 'doc/app'
+#   t.title    = "Ruby DBF Library"
+#   t.options << '--line-numbers' << '--inline-source'
+#   t.rdoc_files.include('doc/README')
+#   t.rdoc_files.include('lib/**/*.rb')
+# end
+# 
+# desc "Creates a release tag"
+# task :create_release_tag do |t|
+#   puts "Creating svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')}"
+#   `svn copy . svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')} -m "Creating RELEASE_#{PKG_VERSION.gsub('.', '_')} tag"`
+# end
+# 
+# desc "Removes the current release tag"
+# task :remove_release_tag do |t|
+#   puts "Removing svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')}"
+#   `svn remove svn+ssh://infused@rubyforge.org/var/svn/dbf/tags/RELEASE_#{PKG_VERSION.gsub('.', '_')} -m "Removing RELEASE_#{PKG_VERSION.gsub('.', '_')} tag"`
+# end
