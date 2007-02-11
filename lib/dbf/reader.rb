@@ -150,7 +150,16 @@ module DBF
     end
     
     def get_field_descriptors
-      @fields = Array.new(@field_count) {|i| Field.new(*@data_file.read(32).unpack('a10xax4CC'))}
+      @fields = []
+      @field_count.times do
+        name, type, length, decimal = @data_file.read(32).unpack('a10xax4CC')
+        if length > 0 && !name.strip.empty?
+          @fields << Field.new(name.strip, type, length, decimal)
+        end
+      end
+      # adjust field count
+      @field_count = @fields.size
+      @fields
     end
     
     def get_memo_header_info

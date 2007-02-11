@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
 Gem::manage_gems
 
 PKG_NAME = "dbf"
-PKG_VERSION = "0.4.2"
+PKG_VERSION = "0.4.3"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
 spec = Gem::Specification.new do |s|
@@ -16,7 +16,7 @@ spec = Gem::Specification.new do |s|
   s.homepage = "http://www.infused.org"
   s.platform = Gem::Platform::RUBY
   s.summary = "A library for reading dBase (or xBase, Clipper, Foxpro, etc) database files"
-  s.files = FileList["{lib,test}/**/*", "doc/README"].to_a
+  s.files = FileList["{lib,test}/**/*", "doc/README", "Rakefile"].to_a
   s.require_path = "lib"
   s.has_rdoc = true
 end
