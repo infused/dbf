@@ -11,7 +11,7 @@ module CommonTests
     end
     
     def test_memo_file_format
-      assert_equal @controls[:memo_file_format], @dbf.instance_eval("@memo_file_format")
+      assert_equal @controls[:memo_file_format], @dbf.memo_file_format
     end
     
     def test_records

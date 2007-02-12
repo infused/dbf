@@ -1,7 +1,7 @@
 Rakefile
+README
 lib/dbf.rb
 lib/dbf/reader.rb
-doc/README
 test/common.rb
 test/dbase_iii_read_test.rb
 test/foxpro_read_test.rb

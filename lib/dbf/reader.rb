@@ -28,8 +28,10 @@ module DBF
     attr_reader :record_count
     attr_reader :version
     attr_reader :last_updated
+    attr_reader :memo_file_format
     
     def initialize(file)
+      
       @data_file = File.open(file, 'rb')
       @memo_file = open_memo(file)
       reload!
@@ -113,7 +115,9 @@ module DBF
     private
     
     def active_record?
-      @data_file.read(1).unpack('H2').to_s == '20' rescue false
+      @data_file.read(1).unpack('H2').to_s == '20'
+    rescue
+      false
     end
     
     def build_record
@@ -201,7 +205,7 @@ module DBF
   class FieldError < StandardError; end
   
   class Field
-    attr_accessor :name, :type, :length, :decimal
+    attr_accessor :type, :length, :decimal
 
     def initialize(name, type, length, decimal)
       raise FieldError, "field length must be greater than 0" unless length > 0
@@ -210,6 +214,10 @@ module DBF
 
     def name=(name)
       @name = name.gsub(/\0/, '')
+    end
+    
+    def name
+      @name
     end
   end
   
