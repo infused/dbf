@@ -166,7 +166,7 @@ module DBF
       @field_count.times do
         name, type, length, decimal = @data_file.read(32).unpack('a10xax4CC')
         if length > 0 && !name.strip.empty?
-          @fields << Field.new(name.strip, type, length, decimal)
+          @fields << Field.new(name, type, length, decimal)
         end
       end
       # adjust field count
@@ -213,20 +213,17 @@ module DBF
   class FieldError < StandardError; end
   
   class Field
-    attr_accessor :type, :length, :decimal
+    attr_accessor :name, :type, :length, :decimal
 
     def initialize(name, type, length, decimal)
       raise FieldError, "field length must be greater than 0" unless length > 0
-      self.name, self.type, self.length, self.decimal = name, type, length, decimal
+      self.name, self.type, self.length, self.decimal = name.strip, type, length, decimal
     end
 
     def name=(name)
       @name = name.gsub(/\0/, '')
     end
-    
-    def name
-      @name
-    end
+
   end
   
   class Record < Hash
