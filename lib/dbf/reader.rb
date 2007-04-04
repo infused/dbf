@@ -99,7 +99,9 @@ module DBF
     
     alias_method :rows, :records
     
-    # Jump to record
+    # Returns the record at <a>index</i> by seeking to the record in the
+    # physical database file. See the documentation for the records method for
+    # information on how these two methods differ.
     def record(index)
       seek_to_record(index)
       active_record? ? build_record : nil
@@ -113,14 +115,21 @@ module DBF
     
     private
     
+    # Returns false if the record has been marked as deleted, otherwise it returns true. When dBase records are deleted a
+    # flag is marking the record as deleted. The record will not be fully removed until the database has been compacted.
     def active_record?
       @data_file.read(1).unpack('H2').to_s == '20'
     rescue
       false
     end
     
+    # Returns a record with all fields typecast.
+    #--
+    # This needs to be refactored so that you can simply call Record.new(@fields).  This means that Field will need to 
+    # learn typecasting so that Record can simply enermerate the fields and call field.value on each.  We should also
+    # allow field.value_before_typecast.
     def build_record
-      record = Record.new
+      record = Record.new(self)
       @fields.each do |field| 
         case field.type
         when 'N' # number
