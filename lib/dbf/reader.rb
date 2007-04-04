@@ -31,7 +31,6 @@ module DBF
     attr_reader :memo_file_format
     
     def initialize(file)
-      
       @data_file = File.open(file, 'rb')
       @memo_file = open_memo(file)
       reload!
@@ -125,21 +124,21 @@ module DBF
       @fields.each do |field| 
         case field.type
         when 'N' # number
-          record[field.name] = field.decimal == 0 ? unpack_integer(field) : unpack_float(field) rescue nil
+          record[field.name] = field.decimal == 0 ? unpack_integer(field) : unpack_float(field)
         when 'D' # date
           raw = unpack_string(field).to_s.strip
           unless raw.empty?
             begin
               record[field.name] = Time.gm(*raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i})
             rescue
-              record[field.name] = Date.new(*raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i}) rescue nil
+              record[field.name] = Date.new(*raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i})
             end
           end
         when 'M' # memo
           starting_block = unpack_integer(field)
-          record[field.name] = starting_block == 0 ? nil : memo(starting_block) rescue nil
+          record[field.name] = starting_block == 0 ? nil : memo(starting_block)
         when 'L' # logical
-          record[field.name] = unpack_string(field) =~ /^(y|t)$/i ? true : false rescue false
+          record[field.name] = unpack_string(field) =~ /^(y|t)$/i ? true : false
         else
           record[field.name] = unpack_string(field)
         end
