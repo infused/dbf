@@ -24,4 +24,10 @@ class FoxproReadTest < Test::Unit::TestCase
     @dbf = DBF::Reader.new(File.join(File.dirname(__FILE__),'databases', 'foxpro.dbf'))
   end
   
+  # make sure we're grabbing the correct memo
+  def test_memo_contents
+    assert_equal "jos\202 vicente salvador\r\ncapell\205: salvador vidal\r\nen n\202ixer, les castellers li van fer un pilar i el van entregar al seu pare.", 
+      @dbf.records[3]['OBSE']
+  end
+  
 end
