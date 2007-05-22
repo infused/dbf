@@ -26,7 +26,7 @@ module DBF
     
     def open_memo(file)
       %w(fpt FPT dbt DBT).each do |extension|
-        filename = file.sub(/dbf$/i, extension)
+        filename = file.sub(/#{File.extname(file)[1..-1]}$/, extension)
         if File.exists?(filename)
           @memo_file_format = extension.downcase.to_sym
           return File.open(filename, 'rb')
