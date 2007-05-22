@@ -1,7 +1,7 @@
 require 'hoe'
 
 PKG_NAME = "dbf"
-PKG_VERSION = "0.4.5"
+PKG_VERSION = "0.4.6"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
 Hoe.new PKG_NAME, PKG_VERSION do |p|
