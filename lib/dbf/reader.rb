@@ -1,27 +1,4 @@
 module DBF
-  
-  DBF_HEADER_SIZE = 32
-  FPT_HEADER_SIZE = 512
-  FPT_BLOCK_HEADER_SIZE = 8
-  DATE_REGEXP = /([\d]{4})([\d]{2})([\d]{2})/
-  VERSION_DESCRIPTIONS = {
-    "02" => "FoxBase",
-    "03" => "dBase III without memo file",
-    "04" => "dBase IV without memo file",
-    "05" => "dBase V without memo file",
-    "30" => "Visual FoxPro",
-    "31" => "Visual FoxPro with AutoIncrement field",
-    "7b" => "dBase IV with memo file",
-    "83" => "dBase III with memo file",
-    "8b" => "dBase IV with memo file",
-    "8e" => "dBase IV with SQL table",
-    "f5" => "FoxPro with memo file",
-    "fb" => "FoxPro without memo file"
-  }
-    
-  class DBFError < StandardError; end
-  class UnpackError < DBFError; end
-  
   class Reader
     attr_reader :field_count
     attr_reader :fields
@@ -94,7 +71,7 @@ module DBF
     private
     
     # Returns false if the record has been marked as deleted, otherwise it returns true. When dBase records are deleted a
-    # flag is marking the record as deleted. The record will not be fully removed until the database has been compacted.
+    # flag is set, marking the record as deleted. The record will not be fully removed until the database has been compacted.
     def active_record?
       @data_file.read(1).unpack('H2').to_s == '20'
     rescue
@@ -157,6 +134,7 @@ module DBF
   end
   
   class Record < Hash
+    
     def initialize(reader, data_file, memo_file)
       @reader, @data_file, @memo_file = reader, data_file, memo_file
       reader.fields.each do |field| 
@@ -197,8 +175,12 @@ module DBF
       @memo_file.seek(start_block * @reader.memo_block_size)
       if @reader.memo_file_format == :fpt
         memo_type, memo_size, memo_string = @memo_file.read(@reader.memo_block_size).unpack("NNa56")
-        if memo_size > (@reader.memo_block_size - FPT_BLOCK_HEADER_SIZE)
+        
+        memo_block_content_size = @reader.memo_block_size - FPT_BLOCK_HEADER_SIZE
+        if memo_size > memo_block_content_size
           memo_string << @memo_file.read(memo_size - @reader.memo_block_size + FPT_BLOCK_HEADER_SIZE)
+        elsif memo_size > 0 and memo_size < memo_block_content_size
+          memo_string = memo_string[0, memo_size]
         end
       else
         case @reader.version

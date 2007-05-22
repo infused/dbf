@@ -9,3 +9,5 @@ test/performance.rb
 test/databases/dbase_iii.dbf
 test/databases/foxpro.dbf
 test/databases/foxpro.fpt
+test/databases/visual_foxpro.dbf
+test/databases/visual_foxpro.fpt

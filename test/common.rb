@@ -85,6 +85,7 @@ module CommonTests
 
     def test_memo_fields
       @controls[:testable_memo_field_names].each do |name|
+        assert(@dbf.records.any? {|record| record[name].is_a?(String)}, "expected a String")
         assert(@dbf.records.any? {|record| record[name].is_a?(String) && record[name].size > 1})
       end
     end
