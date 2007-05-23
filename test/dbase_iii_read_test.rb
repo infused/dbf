@@ -21,7 +21,7 @@ class DBaseIIIReadTest < Test::Unit::TestCase
       :testable_logical_field_names => [],
       :testable_memo_field_names => []
     }
-    @dbf = DBF::Reader.new(File.join(File.dirname(__FILE__),'databases', 'dbase_iii.dbf'))
+    @dbf = DBF::Reader.new "#{File.dirname(__FILE__)}/databases/dbase_iii.dbf"
   end
   
 end

@@ -1,4 +1,5 @@
 require 'date'
 
-require 'dbf/common'
+require 'dbf/globals'
+require 'dbf/record'
 require 'dbf/reader'

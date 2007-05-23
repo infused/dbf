@@ -8,7 +8,7 @@ Hoe.new PKG_NAME, PKG_VERSION do |p|
   p.rubyforge_name = PKG_NAME
   p.author = "Keith Morrison"
   p.email = "keithm@infused.org"
-  p.summary = "A library for reading dBase (or xBase, Clipper, Foxpro, etc) database files"
+  p.summary = "A small fast library for reading dBase, xBase, Clipper and FoxPro database files."
   p.url = "http://dbf.rubyforge.org"
   p.need_tar = true
   p.need_zip = true

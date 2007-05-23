@@ -19,5 +19,4 @@ module DBF
   }
   
   class DBFError < StandardError; end
-  
 end

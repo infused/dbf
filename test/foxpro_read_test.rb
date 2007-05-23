@@ -21,7 +21,7 @@ class FoxproReadTest < Test::Unit::TestCase
       :testable_logical_field_names => [],
       :testable_memo_field_names => ["OBSE"]
     }
-    @dbf = DBF::Reader.new(File.join(File.dirname(__FILE__),'databases', 'foxpro.dbf'))
+    @dbf = DBF::Reader.new "#{File.dirname(__FILE__)}/databases/foxpro.dbf"
   end
   
   # make sure we're grabbing the correct memo
