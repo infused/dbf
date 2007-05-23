@@ -1,6 +1,7 @@
 Rakefile
 README.txt
 lib/dbf.rb
+lib/dbf/common.rb
 lib/dbf/reader.rb
 test/common.rb
 test/dbase_iii_read_test.rb
