@@ -117,17 +117,13 @@ module DBF
     
   end
   
-  class FieldLenthError < DBFError; end
+  class FieldLengthError < DBFError; end
   class Field
-    attr_accessor :name, :type, :length, :decimal
+    attr_reader :name, :type, :length, :decimal
 
     def initialize(name, type, length, decimal)
-      raise FieldLenthError, "field length must be greater than 0" unless length > 0
-      self.name, self.type, self.length, self.decimal = name, type, length, decimal
-    end
-
-    def name=(name)
-      @name = name.gsub(/\0/, '')
+      raise FieldLengthError, "field length must be greater than 0" unless length > 0
+      @name, @type, @length, @decimal = name.gsub(/\0/, ''), type, length, decimal
     end
 
   end

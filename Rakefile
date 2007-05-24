@@ -1,4 +1,5 @@
 require 'hoe'
+require 'spec/rake/spectask'
 
 PKG_NAME = "dbf"
 PKG_VERSION = "0.4.6"
@@ -22,4 +23,10 @@ Rake::TestTask.new :test do |t|
   t.libs << "test"
   t.pattern = 'test/*_test.rb'
   t.verbose = true
+end
+
+desc "Run specs"
+Spec::Rake::SpecTask.new :spec do |t|
+  t.spec_opts = ["-f specdoc"]
+  t.spec_files = FileList['spec/**/*spec.rb']
 end
