@@ -1,8 +1,11 @@
 Rakefile
 README.txt
+LICENSE.txt
 lib/dbf.rb
-lib/dbf/common.rb
+lib/dbf/field.rb
+lib/dbf/globals.rb
 lib/dbf/reader.rb
+lib/dbf/record.rb
 test/common.rb
 test/dbase_iii_read_test.rb
 test/foxpro_read_test.rb
