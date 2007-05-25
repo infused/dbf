@@ -10,6 +10,8 @@ test/dbase_iii_read_test.rb
 test/foxpro_read_test.rb
 test/performance.rb
 test/databases/dbase_iii.dbf
+test/databases/dbase_iii_memo.dbf
+test/databases/dbase_iii_memo.dbt
 test/databases/foxpro.dbf
 test/databases/foxpro.fpt
 test/databases/visual_foxpro.dbf
