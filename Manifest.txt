@@ -1,6 +1,5 @@
 Rakefile
 README.txt
-LICENSE.txt
 lib/dbf.rb
 lib/dbf/field.rb
 lib/dbf/globals.rb
