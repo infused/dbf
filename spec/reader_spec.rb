@@ -76,11 +76,67 @@ describe DBF::Reader, "when the in_memory flag is false" do
 end
 
 describe DBF::Reader, "schema" do
+  
   it "should match test schema " do
     reader = DBF::Reader.new File.dirname(__FILE__) + '/../test/databases/dbase_iii_memo.dbf'
     control_schema = File.read(File.dirname(__FILE__) + '/fixtures/dbase_iii_memo_schema.rb')
     
     reader.schema.should == control_schema
+  end
+  
+end
+
+describe DBF::Reader, "find(index)" do
+  
+  before(:all) do
+    @reader = DBF::Reader.new File.dirname(__FILE__) + '/../test/databases/dbase_iii_memo.dbf'
+  end
+  
+  it "should return the correct record" do
+    @reader.find(5).should == @reader.record(5)
+  end
+  
+  it "should raise an error if options are not empty" do
+    lambda { @reader.find(5, :name => 'test') }.should raise_error(ArgumentError)
+  end
+  
+end
+
+describe DBF::Reader, "find(:all)" do
+  
+  before(:all) do
+    @reader = DBF::Reader.new File.dirname(__FILE__) + '/../test/databases/dbase_iii_memo.dbf'
+  end
+  
+  it "should return all records if options are empty" do
+    @reader.find(:all).should == @reader.records
+  end
+  
+  it "should return matching records when used with options" do
+    @reader.find(:all, "WEIGHT" => 0.0).should == @reader.records.select {|r| r["WEIGHT"] == 0.0}
+  end
+  
+  it "with multiple options should search for all search terms as if using AND" do
+    @reader.find(:all, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should == []
+  end
+end
+
+describe DBF::Reader, "find(:first)" do
+  
+  before(:all) do
+    @reader = DBF::Reader.new File.dirname(__FILE__) + '/../test/databases/dbase_iii_memo.dbf'
+  end
+  
+  it "should return the first record if options are empty" do
+    @reader.find(:first).should == @reader.records.first
+  end
+  
+  it "should return the first matching record when used with options" do
+    @reader.find(:first, "CODE" => "C").should == @reader.record(5)
+  end
+  
+  it "with multiple options should search for all search terms as if using AND" do
+    @reader.find(:first, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should be_nil
   end
 end
 

@@ -1,0 +1,9 @@
+== 0.5.0 / 2007-05-25
+
+* New find method
+* Full compatibility with the two flavors of memo file
+* Two modes of operation:
+  * In memory (default): All records are loaded into memory on the first
+ 		request. Records are retrieved from memory for all subsequent requests.
+  * File I/O: All records are retrieved from disk on every request
+* Improved documentation and more usage examples
