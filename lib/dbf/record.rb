@@ -21,7 +21,7 @@ module DBF
         when 'L' # logical
           self[field.name] = unpack_string(field) =~ /^(y|t)$/i ? true : false
         else
-          self[field.name] = unpack_string(field)
+          self[field.name] = unpack_string(field).strip
         end
       end
       self

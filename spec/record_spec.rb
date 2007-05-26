@@ -6,5 +6,4 @@ describe DBF::Record, "when initialized" do
     
   end
   
-  
 end

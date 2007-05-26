@@ -2,46 +2,58 @@
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files.  It is written completely in Ruby and has no external dependencies.
 
+Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org, www.infused.org>
+
+* Official project page: http://rubyforge.org/projects/dbf
+* API Documentation: http://dbf.rubyforge.org/docs
+* To report bugs: http://www.rubyforge.org/tracker/?group_id=2009
+* Questions: Email keithm@infused.org and put DBF somewhere in the subject
+  line
+
 == Features
 
 * No external dependencies
-* DB fields are type cast
+* Fields are type cast to the appropriate Ruby types
 * Date/Time fields are returned as either a Time or Date object.  Date 
-  will only be used if the date is outside the range for Time.
+  will only be used if the date is out of range for Ruby's built in Time
+  class.
+* Ability to dump the database schema in the portable ActiveRecord::Schema
+  format.
 
 == Installation
-
+  
   gem install dbf
   
-== Usage
+== Basic Usage
+
+  require 'rubygems'
+  require 'dbf'
 
   reader = DBF::Reader.new("old_data.dbf")
   
+  # Print the 'name' field from record number 4
+  puts reader.record(4)['name'] 
+  
+  # Print the 'name' and 'address' fields from each record
   reader.records.each do |record|
     puts record['name']
     puts record['email']
   end
+
+  # Find records
+  reader.find :all, :first_name => 'Keith'
+  reader.find :all, :first_name => 'Keith', :last_name => 'Morrison'
+  reader.find :first, :first_name => 'Keith'
+  reader.find(10)
   
-  puts reader.records[4]['name']
-  puts reader.record(4)['name']
-  
-=== A note on record vs. records
-
-DBF::Reader#records is an in-memory array of all rows in the database.  All
-rows are loaded the first time that the method is called.  Subsequent calls
-retrieve the row from memory.
-
-DBF::Reader#record retrieves the requested row from the database each time
-it is called. 
-
-Using records is probably faster most of the time.  Record is more appropriate 
-for very large databases where you don't want the whole db loaded into memory.
-
 == Limitations and known bugs
   
-* DBF is read-only.  Writing to the database has not yet been implemented.
+* DBF is read-only at the moment
+* Index files are not utilized
 
 == License
+
+(The MIT Licence)
 
 Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org>
 
