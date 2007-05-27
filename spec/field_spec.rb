@@ -6,19 +6,19 @@ describe DBF::Field, "when initialized" do
     @field = DBF::Field.new "FieldName", "N", 1, 0
   end
   
-  it "should set the 'name' accessor" do
+  it "should set the #name accessor" do
     @field.name.should == "FieldName"
   end
   
-  it "should set the 'type' accessor" do
+  it "should set the #type accessor" do
     @field.type.should == "N"
   end
   
-  it "should set the 'length' accessor" do
+  it "should set the #length accessor" do
     @field.length.should == 1
   end
   
-  it "should set the 'decimal' accessor" do
+  it "should set the #decimal accessor" do
     @field.decimal.should == 0
   end
   

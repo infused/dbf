@@ -140,3 +140,32 @@ describe DBF::Reader, "find(:first)" do
   end
 end
 
+describe DBF::Reader do
+  
+  before(:each) do
+    @reader = DBF::Reader.new File.dirname(__FILE__) + '/../test/databases/dbase_iii_memo.dbf'
+  end
+  
+  it "should reload all data when sent #reload!" do
+    @reader.records
+    @reader.instance_eval("@records").should be_kind_of(Array)
+    @reader.reload!
+    @reader.instance_eval("@records").should be_nil
+  end
+  
+  it "should return a DBF::Field object when sent #field with a valid field_name given as a string or symbol" do
+    @reader.field("IMAGE").should be_kind_of(DBF::Field)
+    @reader.field(:IMAGE).should be_kind_of(DBF::Field)
+  end
+  
+  it "should return nil when sent #field with an invalid field_name given as a string or symbol" do
+    @reader.field("NOTANIMAGE").should be_nil
+    @reader.field(:NOTANIMAGE).should be_nil
+  end
+  
+  it "should return a text description of the database type when sent #version_description" do
+    @reader.version_description.should == "dBase III with memo file"
+  end
+
+end
+

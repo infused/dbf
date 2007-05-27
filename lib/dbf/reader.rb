@@ -49,6 +49,8 @@ module DBF
       @in_memory = boolean
     end
     
+    # Returns an instance of DBF::Field for <b>field_name</b>.  <b>field_name</b>
+    # can be a symbol or a string.
     def field(field_name)
       @fields.detect {|f| f.name == field_name.to_s}
     end
