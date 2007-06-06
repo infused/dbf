@@ -43,6 +43,9 @@ module DBF
         if @reader.memo_file_format == :fpt
           memo_type, memo_size, memo_string = @memo_file.read(@reader.memo_block_size).unpack("NNa56")
         
+          # skip the memo if it isn't texst
+          return nil unless memo_type == 1
+          
           memo_block_content_size = @reader.memo_block_size - FPT_BLOCK_HEADER_SIZE
           if memo_size > memo_block_content_size
             memo_string << @memo_file.read(memo_size - @reader.memo_block_size + FPT_BLOCK_HEADER_SIZE)
