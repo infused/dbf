@@ -2,16 +2,22 @@ module DBF
   class Reader
     # The total number of fields (columns)
     attr_reader :field_count
+    
     # An array of DBF::Field records
     attr_reader :fields
-    # The total number of records.  This number includes any deleted records.
+    
+    # The total number of records.  This number includes records marked as deleted.
     attr_reader :record_count
+    
     # Internal dBase version number
     attr_reader :version
+    
     # Last updated datetime
     attr_reader :last_updated
+    
     # Either :fpt or :dpt
     attr_reader :memo_file_format
+    
     # The block size for memo records
     attr_reader :memo_block_size
     
@@ -55,7 +61,8 @@ module DBF
       @fields.detect {|f| f.name == field_name.to_s}
     end
     
-    # An array of all the records contained in the database file
+    # An array of all the records contained in the database file.  Each record is an instance
+    # of DBF::Record (or nil if the record is marked for deletion).
     def records
       if in_memory?
         @records ||= get_all_records_from_file
@@ -66,7 +73,7 @@ module DBF
     
     alias_method :rows, :records
     
-    # Returns the record at <tt>index</tt>.
+    # Returns a DBF::Record (or nil if the record has been marked for deletion) for the record at <tt>index</tt>.
     def record(index)
       if in_memory?
         records[index]

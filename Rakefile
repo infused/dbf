@@ -17,7 +17,7 @@ Hoe.new PKG_NAME, PKG_VERSION do |p|
 end
 
 desc 'Run tests'
-task :default => :test
+task :default => [:spec, :test]
 
 desc 'Run tests'
 Rake::TestTask.new :test do |t|
@@ -28,6 +28,6 @@ end
 
 desc "Run specs"
 Spec::Rake::SpecTask.new :spec do |t|
-  t.spec_opts = ["-f specdoc"]
+  # t.spec_opts = ["-f specdoc"]
   t.spec_files = FileList['spec/**/*spec.rb']
 end
