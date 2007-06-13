@@ -244,10 +244,16 @@ module DBF
       end
       
       def get_all_records_from_file
-        seek_to_record(0)
-        Array.new(@record_count) do |i|
-          active_record? ? DBF::Record.new(self, @data_file, @memo_file) : nil
+        all_records = []
+        0.upto(@record_count - 1) do |n|
+          seek_to_record(n)
+          if active_record?
+            all_records << DBF::Record.new(self, @data_file, @memo_file)
+          else
+            all_records << nil
+          end
         end
+        all_records
       end
     
   end
