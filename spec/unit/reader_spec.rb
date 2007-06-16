@@ -79,7 +79,7 @@ describe DBF::Reader, "schema" do
   
   it "should match test schema " do
     reader = DBF::Reader.new "#{DB_PATH}/dbase_iii_memo.dbf"
-    control_schema = File.read(File.dirname(__FILE__) + '/../fixtures/dbase_iii_memo_schema.rb')
+    control_schema = File.read(File.dirname(__FILE__) + '/../fixtures/dbase_iii_memo_schema.txt')
     
     reader.schema.should == control_schema
   end
