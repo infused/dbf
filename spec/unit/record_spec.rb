@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + "/spec_helper"
+require File.dirname(__FILE__) + "/../spec_helper"
 
 describe DBF::Record, "when initialized" do
   
   before(:each) do
-    @reader = DBF::Reader.new File.dirname(__FILE__) + '/../test/databases/dbase_iii_memo.dbf'
+    @reader = DBF::Reader.new File.dirname(__FILE__) + '/../../test/databases/dbase_iii_memo.dbf'
     @record = @reader.record(5)
   end
   
