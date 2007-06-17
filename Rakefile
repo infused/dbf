@@ -16,18 +16,16 @@ Hoe.new PKG_NAME, PKG_VERSION do |p|
   p.need_zip = true
 end
 
-desc 'Run tests'
-task :default => [:spec, :test]
-
-desc 'Run tests'
-Rake::TestTask.new :test do |t|
-  t.libs << "test"
-  t.pattern = 'test/*_test.rb'
-  t.verbose = true
-end
+task :default => [:spec]
 
 desc "Run specs"
 Spec::Rake::SpecTask.new :spec do |t|
   # t.spec_opts = ["-f specdoc"]
+  t.spec_files = FileList['spec/**/*spec.rb']
+end
+
+desc "Run spec docs"
+Spec::Rake::SpecTask.new :specdoc do |t|
+  t.spec_opts = ["-f specdoc"]
   t.spec_files = FileList['spec/**/*spec.rb']
 end

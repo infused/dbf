@@ -1,5 +1,5 @@
 ActiveRecord::Schema.define do
-  create_table "dbase_iii_memo" do |t|
+  create_table "dbase_83" do |t|
     t.column "ID", :integer
     t.column "CATCOUNT", :integer
     t.column "AGRPCOUNT", :integer
