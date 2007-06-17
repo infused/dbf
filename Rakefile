@@ -20,7 +20,6 @@ task :default => [:spec]
 
 desc "Run specs"
 Spec::Rake::SpecTask.new :spec do |t|
-  # t.spec_opts = ["-f specdoc"]
   t.spec_files = FileList['spec/**/*spec.rb']
 end
 
