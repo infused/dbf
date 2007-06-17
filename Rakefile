@@ -10,6 +10,7 @@ Hoe.new PKG_NAME, PKG_VERSION do |p|
   p.author = "Keith Morrison"
   p.email = "keithm@infused.org"
   p.summary = "A small fast library for reading dBase, xBase, Clipper and FoxPro database files."
+  p.description = p.paragraphs_of("README.txt", 1..3).join("\n\n")
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
   p.url = "http://dbf.rubyforge.org"
   p.need_tar = true
