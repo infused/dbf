@@ -1,6 +1,6 @@
-== 1.0.0
+== 0.5.3
 
-* Install dbf utility (try dbf -h for help)
+* Added a standalone dbf utility (try dbf -h for help)
 
 == 0.5.0 / 2007-05-25
 
