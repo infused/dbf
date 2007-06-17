@@ -64,6 +64,16 @@ records before iterating over it:
     puts record['name']
     puts record['email']
   end
+
+== Command-line utility
+
+A small command-line utility called dbf is installed along with the gem.
+
+  $ dbf -h
+  usage: dbf [-h|-s|-a] filename
+    -h = print this message
+    -s = print summary information
+    -a = create an ActiveRecord::Schema
   
 == Limitations and known bugs
   
