@@ -25,7 +25,7 @@ module DBF
     # Example:
     #   reader = DBF::Reader.new 'data.dbf'
     def initialize(filename, options = {})
-      options.merge!({:in_memory => true})
+      options = {:in_memory => true}.merge(options)
       @in_memory = options[:in_memory]
       @data_file = File.open(filename, 'rb')
       @memo_file = open_memo(filename)
@@ -248,7 +248,7 @@ module DBF
         all_records = []
         0.upto(@record_count - 1) do |n|
           seek_to_record(n)
-          if @include_deleted_records || active_record?
+          if active_record?
             all_records << DBF::Record.new(self, @data_file, @memo_file)
           else
             all_records << nil

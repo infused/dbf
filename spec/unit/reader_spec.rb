@@ -39,6 +39,12 @@ describe DBF::Reader, "when initialized" do
     @reader.version.should == "83"
   end
   
+  it "should set the in_memory option" do
+    @reader.in_memory?.should be_true
+    reader = DBF::Reader.new "#{DB_PATH}/dbase_83.dbf", :in_memory => false
+    reader.in_memory?.should be_false
+  end
+  
 end
 
 describe DBF::Reader, "when the in_memory flag is true" do
