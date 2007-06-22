@@ -65,6 +65,14 @@ records before iterating over it:
     puts record['email']
   end
 
+== Large databases
+
+DBF::Reader defaults to loading all records into memory. This may not be what
+you want, especially if the database is large. To disable this behavior, set
+the in_memory option to false during initialization.
+
+  reader = DBF::Reader.new("old_data.dbf", :in_memory => false)
+
 == Command-line utility
 
 A small command-line utility called dbf is installed along with the gem.
