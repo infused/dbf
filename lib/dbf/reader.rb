@@ -6,9 +6,6 @@ module DBF
     # An array of DBF::Field records
     attr_reader :fields
     
-    # The total number of records.  This number includes records marked as deleted.
-    attr_reader :record_count
-    
     # Internal dBase version number
     attr_reader :version
     
@@ -39,6 +36,7 @@ module DBF
       get_header_info
       get_memo_header_info if @memo_file
       get_field_descriptors
+      build_db_index
     end
     
     # Returns true if there is a corresponding memo file
@@ -51,6 +49,11 @@ module DBF
     #   reader = DBF::Reader.new 'data.dbf', :in_memory => false
     def in_memory?
       @in_memory
+    end
+    
+    # The total number of active records.
+    def record_count
+      @db_index.size
     end
     
     # Returns an instance of DBF::Field for <b>field_name</b>.  <b>field_name</b>
@@ -237,7 +240,7 @@ module DBF
       # physical database file. See the documentation for the records method for
       # information on how these two methods differ.
       def get_record_from_file(index)
-        seek_to_record(index)
+        seek_to_record(@db_index[index])
         active_record? ? Record.new(self, @data_file, @memo_file) : nil
       end
       
@@ -247,13 +250,23 @@ module DBF
           seek_to_record(n)
           if active_record?
             all_records << DBF::Record.new(self, @data_file, @memo_file)
-          else
-            all_records << nil
           end
         end
         all_records
       end
     
+      def build_db_index
+        @db_index = []
+        @deleted_records = []
+        0.upto(@record_count - 1) do |n|
+          seek_to_record(n)
+          if active_record?
+            @db_index << n
+          else
+            @deleted_records << n
+          end
+        end
+      end
   end
   
 end

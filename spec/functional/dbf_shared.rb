@@ -1,8 +1,4 @@
 describe DBF, :shared => true do
-  specify "number of records found should equal number of records calculated from the header information" do
-    @reader.record_count.should == @reader.records.size
-  end
-  
   specify "sum of field lengths should equal record length specified in header" do
     header_record_length = @reader.instance_eval {@record_length}
     sum_of_field_lengths = @reader.fields.inject(1) {|sum, field| sum + field.length}

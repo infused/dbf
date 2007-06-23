@@ -46,25 +46,6 @@ Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org, www.infused.org>
   reader.find :first, :first_name => 'Keith'
   reader.find(10)
   
-== Dealing with deleted records
-xBase database systems do not physically delete records, but merely mark the
-records for deletion. The file must be compacted using a special utility to
-remove the deleted records.
-
-DBF returns nil for any record that has been marked for deletion, so if the
-database file has deleted records, you need to be careful when looping. For
-example, the following will fail if it encounters a nil record:
-
-  reader.records.each do |record| puts record['name'] end
-  
-Therefore, it's a good idea to compact the records array to remove any nil
-records before iterating over it:
-
-  reader.records.compact.each do |record|
-    puts record['name']
-    puts record['email']
-  end
-
 == Large databases
 
 DBF::Reader defaults to loading all records into memory. This may not be what
