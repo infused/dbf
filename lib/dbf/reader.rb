@@ -83,7 +83,9 @@ module DBF
       end
     end
     
-    # Find records.  Examples:
+    # Find records using a simple ActiveRecord-like syntax.
+    #
+    # Examples:
     #   reader = DBF::Reader.new 'mydata.dbf'
     #   
     #   # Find record number 5

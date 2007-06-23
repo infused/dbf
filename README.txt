@@ -66,8 +66,8 @@ A small command-line utility called dbf is installed along with the gem.
   
 == Limitations and known bugs
   
-* DBF is read-only at the moment
-* Index files are not utilized
+* DBF is read-only
+* Index files are not used
 
 == License
 
