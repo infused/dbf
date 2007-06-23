@@ -1,3 +1,7 @@
+== 0.5.4
+
+* Ignore deleted records in both memory modes
+
 == 0.5.3
 
 * Added a standalone dbf utility (try dbf -h for help)
