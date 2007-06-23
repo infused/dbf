@@ -26,6 +26,7 @@ module DBF
     #   reader = DBF::Reader.new 'data.dbf'
     def initialize(filename, options = {})
       options = {:in_memory => true}.merge(options)
+      
       @in_memory = options[:in_memory]
       @data_file = File.open(filename, 'rb')
       @memo_file = open_memo(filename)
@@ -46,14 +47,10 @@ module DBF
     end
     
     # If true, DBF::Reader will load all records into memory.  If false, records are retrieved using file I/O.
+    # You can set this option is set during initialization of the DBF::Reader. Defaults to true. Example:
+    #   reader = DBF::Reader.new 'data.dbf', :in_memory => false
     def in_memory?
       @in_memory
-    end
-    
-    # Tells DBF::Reader whether to load all records into memory.  Defaults to true.
-    # You may need to set this to false if the database is very large in order to reduce memory usage.
-    def in_memory=(boolean)
-      @in_memory = boolean
     end
     
     # Returns an instance of DBF::Field for <b>field_name</b>.  <b>field_name</b>

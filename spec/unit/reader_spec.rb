@@ -70,14 +70,10 @@ end
 
 describe DBF::Reader, "when the in_memory flag is false" do
   
-  before(:each) do
-    @reader = DBF::Reader.new "#{DB_PATH}/dbase_83.dbf"
-  end
-  
   it "should read the records from disk on every request" do
-    @reader.in_memory = false
-    @reader.expects(:get_all_records_from_file).times(3).returns([])
-    3.times { @reader.records }
+    reader = DBF::Reader.new "#{DB_PATH}/dbase_83.dbf", :in_memory => false
+    reader.expects(:get_all_records_from_file).times(3).returns([])
+    3.times { reader.records }
   end
 end
 
