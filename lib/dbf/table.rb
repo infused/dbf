@@ -1,10 +1,11 @@
 module DBF
-  class Reader
-    # The total number of fields (columns)
-    attr_reader :field_count
+
+  class Table
+    # The total number of columns (columns)
+    attr_reader :column_count
     
-    # An array of DBF::Field records
-    attr_reader :fields
+    # An array of DBF::Column records
+    attr_reader :columns
     
     # Internal dBase version number
     attr_reader :version
@@ -18,15 +19,22 @@ module DBF
     # The block size for memo records
     attr_reader :memo_block_size
     
+    # The options that were used when initializing DBF::Table.  This is a Hash.
+    attr_reader :options
+    
+    attr_reader :data
+    attr_reader :memo
+    
     # Initialize a new DBF::Reader.
     # Example:
     #   reader = DBF::Reader.new 'data.dbf'
     def initialize(filename, options = {})
-      options = {:in_memory => true}.merge(options)
+      @options = {:in_memory => true, :accessors => true}.merge(options)
       
-      @in_memory = options[:in_memory]
-      @data_file = File.open(filename, 'rb')
-      @memo_file = open_memo(filename)
+      @in_memory = @options[:in_memory]
+      @accessors = @options[:accessors]
+      @data = File.open(filename, 'rb')
+      @memo = open_memo(filename)
       reload!
     end
     
@@ -34,21 +42,14 @@ module DBF
     def reload!
       @records = nil
       get_header_info
-      get_memo_header_info if @memo_file
-      get_field_descriptors
+      get_memo_header_info if @memo
+      get_column_descriptors
       build_db_index
     end
     
     # Returns true if there is a corresponding memo file
     def has_memo_file?
-      @memo_file ? true : false
-    end
-    
-    # If true, DBF::Reader will load all records into memory.  If false, records are retrieved using file I/O.
-    # You can set this option is set during initialization of the DBF::Reader. Defaults to true. Example:
-    #   reader = DBF::Reader.new 'data.dbf', :in_memory => false
-    def in_memory?
-      @in_memory
+      @memo ? true : false
     end
     
     # The total number of active records.
@@ -56,16 +57,16 @@ module DBF
       @db_index.size
     end
     
-    # Returns an instance of DBF::Field for <b>field_name</b>.  <b>field_name</b>
+    # Returns an instance of DBF::Column for <b>column_name</b>.  <b>column_name</b>
     # can be a symbol or a string.
-    def field(field_name)
-      @fields.detect {|f| f.name == field_name.to_s}
+    def column(column_name)
+      @columns.detect {|f| f.name == column_name.to_s}
     end
     
     # An array of all the records contained in the database file.  Each record is an instance
     # of DBF::Record (or nil if the record is marked for deletion).
     def records
-      if in_memory?
+      if options[:in_memory]
         @records ||= get_all_records_from_file
       else
         get_all_records_from_file
@@ -76,7 +77,7 @@ module DBF
     
     # Returns a DBF::Record (or nil if the record has been marked for deletion) for the record at <tt>index</tt>.
     def record(index)
-      if in_memory?
+      if options[:in_memory]
         records[index]
       else
         get_record_from_file(index)
@@ -99,25 +100,23 @@ module DBF
     #
     # The <b>command</b> can be an id, :all, or :first.
     # <b>options</b> is optional and, if specified, should be a hash where the keys correspond
-    # to field names in the database.  The values will be matched exactly with the value
+    # to column names in the database.  The values will be matched exactly with the value
     # in the database.  If you specify more than one key, all values must match in order 
     # for the record to be returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
     def find(command, options = {})
       case command
       when Fixnum
-        if !options.empty?
-          raise ArgumentError, "options are not allowed when command is a record number"
-        end
         record(command)
       when :all
+        return records if options.empty?
         records.select do |record|
-          options.map {|key, value| record[key.to_s] == value}.all?
+          options.map {|key, value| record.attributes[key.to_s] == value}.all?
         end
       when :first
         return records.first if options.empty?
         records.detect do |record|
-          options.map {|key, value| record[key.to_s] == value}.all?
+          options.map {|key, value| record.attributes[key.to_s] == value}.all?
         end
       end
     end
@@ -132,13 +131,13 @@ module DBF
     # Returns a database schema in the portable ActiveRecord::Schema format.
     # 
     # xBase data types are converted to generic types as follows:
-    # - Number fields are converted to :integer if there are no decimals, otherwise
+    # - Number columns are converted to :integer if there are no decimals, otherwise
     #   they are converted to :float
-    # - Date fields are converted to :datetime
-    # - Logical fields are converted to :boolean
-    # - Memo fields are converted to :text
-    # - Character fields are converted to :string and the :limit option is set
-    #   to the length of the character field
+    # - Date columns are converted to :datetime
+    # - Logical columns are converted to :boolean
+    # - Memo columns are converted to :text
+    # - Character columns are converted to :string and the :limit option is set
+    #   to the length of the character column
     #
     # Example:
     #   create_table "mydata" do |t|
@@ -150,12 +149,12 @@ module DBF
     #   end
     def schema(path = nil)
       s = "ActiveRecord::Schema.define do\n"
-      s << "  create_table \"#{File.basename(@data_file.path, ".*")}\" do |t|\n"
-      fields.each do |field|
-        s << "    t.column \"#{field.name}\""
-        case field.type
+      s << "  create_table \"#{File.basename(@data.path, ".*")}\" do |t|\n"
+      columns.each do |column|
+        s << "    t.column \"#{column.name}\""
+        case column.type
         when "N" # number
-          if field.decimal > 0
+          if column.decimal > 0
             s << ", :float"
           else
             s << ", :integer"
@@ -167,17 +166,17 @@ module DBF
         when "M" # memo
           s << ", :text"
         else
-          s << ", :string, :limit => #{field.length}"
+          s << ", :string, :limit => #{column.length}"
         end
         s << "\n"
       end
       s << "  end\nend"
       
       if path
-        return File.open(path, 'w') {|f| f.puts(s)}
+        File.open(path, 'w') {|f| f.puts(s)}
       else
-       return s
-     end
+        s
+      end
     end
     
     private
@@ -193,45 +192,42 @@ module DBF
         nil
       end
     
-      # Returns false if the record has been marked as deleted, otherwise it returns true. When dBase records are deleted a
-      # flag is set, marking the record as deleted. The record will not be fully removed until the database has been compacted.
-      def active_record?
-        @data_file.read(1).unpack('H2').to_s == '20'
-      rescue
-        false
+      def deleted_record?
+        @data.read(1).unpack('a') == ['*']
       end
     
       def get_header_info
-        @data_file.rewind
-        @version, @record_count, @header_length, @record_length = @data_file.read(DBF_HEADER_SIZE).unpack('H2xxxVvv')
-        @field_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
+        @data.rewind
+        @version, @record_count, @header_length, @record_length = @data.read(DBF_HEADER_SIZE).unpack('H2 x3 V v2')
+        @column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
       end
     
-      def get_field_descriptors
-        @fields = []
-        @field_count.times do
-          name, type, length, decimal = @data_file.read(32).unpack('a10xax4CC')
-          if length > 0 && !name.strip.empty?
-            @fields << Field.new(name, type, length, decimal)
+      def get_column_descriptors
+        @columns = []
+        @column_count.times do
+          name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
+          if length > 0 && name.strip.any?
+            @columns << Column.new(name, type, length, decimal)
           end
         end
-        # adjust field count
-        @field_count = @fields.size
-        @fields
+        # Reset the column count
+        @column_count = @columns.size
+        
+        @columns
       end
     
       def get_memo_header_info
-        @memo_file.rewind
+        @memo.rewind
         if @memo_file_format == :fpt
-          @memo_next_available_block, @memo_block_size = @memo_file.read(FPT_HEADER_SIZE).unpack('Nxxn')
+          @memo_next_available_block, @memo_block_size = @memo.read(FPT_HEADER_SIZE).unpack('N x2 n')
         else
           @memo_block_size = 512
-          @memo_next_available_block = File.size(@memo_file.path) / @memo_block_size
+          @memo_next_available_block = File.size(@memo.path) / @memo_block_size
         end
       end
     
       def seek(offset)
-        @data_file.seek(@header_length + offset)
+        @data.seek(@header_length + offset)
       end
     
       def seek_to_record(index)
@@ -243,16 +239,14 @@ module DBF
       # information on how these two methods differ.
       def get_record_from_file(index)
         seek_to_record(@db_index[index])
-        active_record? ? Record.new(self, @data_file, @memo_file) : nil
+        deleted_record? ? nil : Record.new(self)
       end
       
       def get_all_records_from_file
         all_records = []
         0.upto(@record_count - 1) do |n|
           seek_to_record(n)
-          if active_record?
-            all_records << DBF::Record.new(self, @data_file, @memo_file)
-          end
+          all_records << DBF::Record.new(self) unless deleted_record?
         end
         all_records
       end
@@ -262,10 +256,10 @@ module DBF
         @deleted_records = []
         0.upto(@record_count - 1) do |n|
           seek_to_record(n)
-          if active_record?
-            @db_index << n
-          else
+          if deleted_record?
             @deleted_records << n
+          else
+            @db_index << n
           end
         end
       end

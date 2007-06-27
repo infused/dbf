@@ -1,4 +1,3 @@
-.DS_Store
 History.txt
 Manifest.txt
 README.txt
@@ -7,12 +6,10 @@ benchmarks/performance.rb
 benchmarks/seek_benchmark.rb
 bin/dbf
 lib/dbf.rb
-lib/dbf/field.rb
+lib/dbf/column.rb
 lib/dbf/globals.rb
-lib/dbf/reader.rb
 lib/dbf/record.rb
-spec/.DS_Store
-spec/fixtures/.DS_Store
+lib/dbf/table.rb
 spec/fixtures/dbase_03.dbf
 spec/fixtures/dbase_30.dbf
 spec/fixtures/dbase_30.fpt
@@ -30,6 +27,6 @@ spec/functional/format_83_spec.rb
 spec/functional/format_8b_spec.rb
 spec/functional/format_f5_spec.rb
 spec/spec_helper.rb
-spec/unit/field_spec.rb
-spec/unit/reader_spec.rb
+spec/unit/column_spec.rb
 spec/unit/record_spec.rb
+spec/unit/table_spec.rb

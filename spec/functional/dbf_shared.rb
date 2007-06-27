@@ -1,38 +1,47 @@
 describe DBF, :shared => true do
-  specify "sum of field lengths should equal record length specified in header" do
-    header_record_length = @reader.instance_eval {@record_length}
-    sum_of_field_lengths = @reader.fields.inject(1) {|sum, field| sum + field.length}
+  specify "sum of column lengths should equal record length specified in header" do
+    header_record_length = @table.instance_eval {@record_length}
+    sum_of_column_lengths = @table.columns.inject(1) {|sum, column| sum + column.length}
     
-    header_record_length.should == sum_of_field_lengths
+    header_record_length.should == sum_of_column_lengths
   end
 
   specify "records should be instances of DBF::Record" do
-    @reader.records.all? {|record| record.should be_an_instance_of(DBF::Record)}
+    @table.records.all? {|record| record.should be_an_instance_of(DBF::Record)}
   end
   
-  specify "fields should be instances of DBF::Field" do
-    @reader.fields.all? {|field| field.should be_an_instance_of(DBF::Field)}
+  specify "columns should be instances of DBF::Column" do
+    @table.columns.all? {|column| column.should be_an_instance_of(DBF::Column)}
   end
   
-  specify "field names should not be blank" do
-    @reader.fields.all? {|field| field.name.should_not be_empty}
+  specify "column names should not be blank" do
+    @table.columns.all? {|column| column.name.should_not be_empty}
   end
   
-  specify "field types should be valid" do
-    valid_field_types = %w(C N L D M F B G P Y T I V X @ O +)
-    @reader.fields.all? {|field| valid_field_types.should include(field.type)}
+  specify "column types should be valid" do
+    valid_column_types = %w(C N L D M F B G P Y T I V X @ O +)
+    @table.columns.all? {|column| valid_column_types.should include(column.type)}
   end
   
-  specify "field lengths should be instances of Fixnum" do
-    @reader.fields.all? {|field| field.length.should be_an_instance_of(Fixnum)}
+  specify "column lengths should be instances of Fixnum" do
+    @table.columns.all? {|column| column.length.should be_an_instance_of(Fixnum)}
   end
   
-  specify "field lengths should be larger than 0" do
-    @reader.fields.all? {|field| field.length.should > 0}
+  specify "column lengths should be larger than 0" do
+    @table.columns.all? {|column| column.length.should > 0}
   end
   
-  specify "field decimals should be instances of Fixnum" do
-    @reader.fields.all? {|field| field.decimal.should be_an_instance_of(Fixnum)}
+  specify "column decimals should be instances of Fixnum" do
+    @table.columns.all? {|column| column.decimal.should be_an_instance_of(Fixnum)}
+  end
+  
+  specify "column read accessors should return the attribute after typecast" do
+    if @table.options[:accessors]
+      @table.columns do |column|
+        record = table.records.first
+        record.send(column.name).should == record[column.name]
+      end
+    end
   end
   
 end

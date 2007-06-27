@@ -29,30 +29,33 @@ Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org, www.infused.org>
   require 'rubygems'
   require 'dbf'
 
-  reader = DBF::Reader.new("old_data.dbf")
+  table = DBF::Table.new("old_data.dbf")
   
   # Print the 'name' field from record number 4
-  puts reader.record(4)['name'] 
+  puts table.record(4).name
+
+	# Attributes can also be accessed using the column name as a Hash key
+	puts table.record(4)["name"]
   
   # Print the 'name' and 'address' fields from each record
-  reader.records.each do |record|
-    puts record['name']
-    puts record['email']
+  table.records.each do |record|
+    puts record.name
+    puts record.email
   end
 
   # Find records
-  reader.find :all, :first_name => 'Keith'
-  reader.find :all, :first_name => 'Keith', :last_name => 'Morrison'
-  reader.find :first, :first_name => 'Keith'
-  reader.find(10)
+  table.find :all, :first_name => 'Keith'
+  table.find :all, :first_name => 'Keith', :last_name => 'Morrison'
+  table.find :first, :first_name => 'Keith'
+  table.find(10)
   
 == Large databases
 
-DBF::Reader defaults to loading all records into memory. This may not be what
+DBF::Table defaults to loading all records into memory. This may not be what
 you want, especially if the database is large. To disable this behavior, set
 the in_memory option to false during initialization.
 
-  reader = DBF::Reader.new("old_data.dbf", :in_memory => false)
+  table = DBF::Table.new("old_data.dbf", :in_memory => false)
 
 == Command-line utility
 

@@ -33,7 +33,7 @@ else
     puts "\nFields:"
     puts "Name             Type       Length     Decimal"
     puts "-" * 78
-    reader.fields.each do |f|
+    reader.columns.each do |f|
       puts "%-16s %-10s %-10s %-10s" % [f.name, f.type, f.length, f.decimal]
     end
   end
