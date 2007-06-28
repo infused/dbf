@@ -1,3 +1,8 @@
+== 1.0.0
+
+* Renamed classes and refactored code in preparation for adding the
+  ability to save records and create/compact databases.
+
 == 0.5.4
 
 * Ignore deleted records in both memory modes
