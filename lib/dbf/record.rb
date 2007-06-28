@@ -36,9 +36,11 @@ module DBF
           raw = unpack_string(column).strip
           unless raw.empty?
             begin
-              @attributes[column.name] = Time.gm(*raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i})
+              parts = raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i}
+              @attributes[column.name] = Time.gm(*parts)
             rescue
-              @attributes[column.name] = Date.new(*raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i})
+              parts = raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i}
+              @attributes[column.name] = Date.new(*parts)
             end
           end
         when 'M' # memo
