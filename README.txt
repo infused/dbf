@@ -35,7 +35,7 @@ Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org, www.infused.org>
   puts table.record(4).name
 
 	# Attributes can also be accessed using the column name as a Hash key
-	puts table.record(4)["name"]
+	puts table.record(4).attributes["name"]
   
   # Print the 'name' and 'address' fields from each record
   table.records.each do |record|
@@ -66,6 +66,12 @@ A small command-line utility called dbf is installed along with the gem.
     -h = print this message
     -s = print summary information
     -a = create an ActiveRecord::Schema
+
+== Changes from 0.5.x
+
+* The Reader class has been renamed to Table
+* Attributes are no longer accessed directly from the record.  Use record.attribute['column_name']
+  instead, or use the new attribute accessors detailed under Basic Usage.
   
 == Limitations and known bugs
   
