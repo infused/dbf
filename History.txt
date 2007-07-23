@@ -1,3 +1,7 @@
+== 1.0.1
+
+* Fixes error when using the command-line interface [#11984]
+
 == 1.0.0
 
 * Renamed classes and refactored code in preparation for adding the

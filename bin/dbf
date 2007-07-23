@@ -18,12 +18,12 @@ else
 
   # create an ActiveRecord::Schema
   if $a
-    reader = DBF::Reader.new filename
+    reader = DBF::Table.new filename
     puts reader.schema
   end
   
   if $s
-    reader = DBF::Reader.new filename
+    reader = DBF::Table.new filename
     puts
     puts "Database: #{filename}"
     puts "Type: (#{reader.version}) #{reader.version_description}"

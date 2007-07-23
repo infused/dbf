@@ -19,7 +19,7 @@ describe DBF::Table, "when initialized" do
     @table.memo_file_format.should == :dbt
   end
   
-  it "should determine the memo block size" do
+  it "should determine the correct memo block size" do
     @table.memo_block_size.should == 512
   end
   
