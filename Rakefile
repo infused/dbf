@@ -2,7 +2,7 @@ require 'hoe'
 require 'spec/rake/spectask'
 
 PKG_NAME = "dbf"
-PKG_VERSION = "1.0.1"
+PKG_VERSION = "1.0.2"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
 Hoe.new PKG_NAME, PKG_VERSION do |p|

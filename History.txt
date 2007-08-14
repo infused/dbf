@@ -1,3 +1,7 @@
+== 1.0.2
+
+* Compatibility fix for Visual Foxpro memo files (ignore negative memo index values)
+
 == 1.0.1
 
 * Fixes error when using the command-line interface [#11984]

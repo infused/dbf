@@ -63,7 +63,7 @@ module DBF
     end
   
     def read_memo(start_block)
-      return nil if start_block == 0
+      return nil if start_block <= 0
       @memo.seek(start_block * @table.memo_block_size)
       if @table.memo_file_format == :fpt
         memo_type, memo_size, memo_string = @memo.read(@table.memo_block_size).unpack("NNa56")
