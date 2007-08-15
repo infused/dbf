@@ -10,6 +10,9 @@
 
 * Renamed classes and refactored code in preparation for adding the
   ability to save records and create/compact databases.
+* The Reader class has been renamed to Table
+* Attributes are no longer accessed directly from the record.  Use record.attribute['column_name']
+  instead, or use the new attribute accessors detailed under Basic Usage.
 
 == 0.5.4
 

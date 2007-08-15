@@ -49,6 +49,27 @@ Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org, www.infused.org>
   table.find :first, :first_name => 'Keith'
   table.find(10)
   
+== Migrating to ActiveRecord
+
+An example of migrating a DBF book table to ActiveRecord using a migration:
+
+  require 'dbf'
+  
+  class CreateBooks < ActiveRecord::Migration
+    def self.up
+      table = DBF::Table.new('db/dbf/books.dbf')
+      eval(table.schema)
+
+      table.records.each do |record|
+        Book.create(record.attributes)
+      end
+    end
+
+    def self.down
+      drop_table :books
+    end
+  end
+  
 == Large databases
 
 DBF::Table defaults to loading all records into memory. This may not be what
@@ -66,12 +87,6 @@ A small command-line utility called dbf is installed along with the gem.
     -h = print this message
     -s = print summary information
     -a = create an ActiveRecord::Schema
-
-== Changes from 0.5.x
-
-* The Reader class has been renamed to Table
-* Attributes are no longer accessed directly from the record.  Use record.attribute['column_name']
-  instead, or use the new attribute accessors detailed under Basic Usage.
   
 == Limitations and known bugs
   
