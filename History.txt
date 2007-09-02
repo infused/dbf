@@ -1,3 +1,6 @@
+== 1.0.3
+* Add support for Visual Foxpro Integer and Datetime columns
+
 == 1.0.2
 
 * Compatibility fix for Visual Foxpro memo files (ignore negative memo index values)

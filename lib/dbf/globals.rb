@@ -18,5 +18,9 @@ module DBF
     "fb" => "FoxPro without memo file"
   }
   
+  MS_PER_SECOND = 1000
+  MS_PER_MINUTE = MS_PER_SECOND * 60
+  MS_PER_HOUR = MS_PER_MINUTE * 60
+  
   class DBFError < StandardError; end
 end

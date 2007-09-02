@@ -48,6 +48,10 @@ module DBF
           @attributes[column.name] = read_memo(starting_block)
         when 'L' # logical
           @attributes[column.name] = unpack_string(column) =~ /^(y|t)$/i ? true : false
+        when 'I' # integer
+          @attributes[column.name] = unpack_integer(column)
+        when 'T' # datetime
+          @attributes[column.name] = unpack_datetime(column)
         else
           @attributes[column.name] = unpack_string(column).strip
         end
@@ -61,9 +65,21 @@ module DBF
     def unpack_string(column)
       unpack_column(column).to_s
     end
+    
+    def unpack_integer(column)
+      @data.read(column.length).unpack("v").first
+    end
+    
+    def unpack_datetime(column)
+      days, milliseconds = @data.read(column.length).unpack('l2')
+      hours = (milliseconds / MS_PER_HOUR).to_i
+      minutes = ((milliseconds - (hours * MS_PER_HOUR)) / MS_PER_MINUTE).to_i
+      seconds = ((milliseconds - (hours * MS_PER_HOUR) - (minutes * MS_PER_MINUTE)) / MS_PER_SECOND).to_i
+      DateTime.jd(days, hours, minutes, seconds)
+    end
   
     def read_memo(start_block)
-      return nil if start_block <= 0
+      return nil if start_block <= 0 || @table.memo_block_size.nil?
       @memo.seek(start_block * @table.memo_block_size)
       if @table.memo_file_format == :fpt
         memo_type, memo_size, memo_string = @memo.read(@table.memo_block_size).unpack("NNa56")
