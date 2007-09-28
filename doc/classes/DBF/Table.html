@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: DBF::Table</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">DBF::Table</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/dbf/table_rb.html">
+                lib/dbf/table.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+    <div id="diagram">
+      <map id="map" name="map">
+  <area shape="rect" coords="344,101,424,149"      href="DBFError.html" alt="DBFError" />
+  <area shape="rect" coords="283,197,424,245"      href="ColumnLengthError.html" alt="ColumnLengthError" />
+  <area shape="rect" coords="329,5,439,53"      href="../StandardError.html" alt="StandardError" />
+  <area shape="rect" coords="219,101,293,149"      href="Column.html" alt="Column" />
+  <area shape="rect" coords="123,101,195,149"      href="Table.html" alt="Table" />
+  <area shape="rect" coords="27,101,99,149"      href="Record.html" alt="Record" />
+  <area shape="rect" coords="16,67,435,256"      href="../DBF.html" alt="DBF" />
+</map>
+<img src="../../dot/f_4.png" usemap="#map" border="0" alt="dot/f_4.png">
+    </div>
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000006">column</a>&nbsp;&nbsp;
+      <a href="#M000010">find</a>&nbsp;&nbsp;
+      <a href="#M000004">has_memo_file?</a>&nbsp;&nbsp;
+      <a href="#M000002">new</a>&nbsp;&nbsp;
+      <a href="#M000009">record</a>&nbsp;&nbsp;
+      <a href="#M000005">record_count</a>&nbsp;&nbsp;
+      <a href="#M000007">records</a>&nbsp;&nbsp;
+      <a href="#M000003">reload!</a>&nbsp;&nbsp;
+      <a href="#M000011">row</a>&nbsp;&nbsp;
+      <a href="#M000008">rows</a>&nbsp;&nbsp;
+      <a href="#M000013">schema</a>&nbsp;&nbsp;
+      <a href="#M000012">version_description</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">column_count</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The total number of columns (columns)
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">columns</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+An array of <a href="Column.html">DBF::Column</a> <a
+href="Table.html#M000007">records</a>
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">data</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">last_updated</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Last updated datetime
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">memo</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">memo_block_size</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The block size for memo <a href="Table.html#M000007">records</a>
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">memo_file_format</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Either :fpt or :dpt
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">options</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The options that were used when initializing <a
+href="Table.html">DBF::Table</a>. This is a Hash.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">version</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Internal dBase version number
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000002" class="method-detail">
+        <a name="M000002"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000002.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000002.html');return false;">
+          <span class="method-name">new</span><span class="method-args">(filename, options = {})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Initialize a <a href="Table.html#M000002">new</a> DBF::Reader. Example:
+</p>
+<pre>
+  reader = DBF::Reader.new 'data.dbf'
+</pre>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000006.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000006.html');return false;">
+          <span class="method-name">column</span><span class="method-args">(column_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns an instance of <a href="Column.html">DBF::Column</a> for
+<b>column_name</b>. <b>column_name</b> can be a symbol or a string.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000010.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000010.html');return false;">
+          <span class="method-name">find</span><span class="method-args">(command, options = {})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Find <a href="Table.html#M000007">records</a> using a simple
+ActiveRecord-like syntax.
+</p>
+<p>
+Examples:
+</p>
+<pre>
+  reader = DBF::Reader.new 'mydata.dbf'
+
+  # Find record number 5
+  reader.find(5)
+
+  # Find all records for Keith Morrison
+  reader.find :all, :first_name =&gt; &quot;Keith&quot;, :last_name =&gt; &quot;Morrison&quot;
+
+  # Find first record
+  reader.find :first, :first_name =&gt; &quot;Keith&quot;
+</pre>
+<p>
+The <b>command</b> can be an id, :all, or :first. <b>options</b> is
+optional and, if specified, should be a hash where the keys correspond to
+<a href="Table.html#M000006">column</a> names in the database. The values
+will be matched exactly with the value in the database. If you specify more
+than one key, all values must match in order for the <a
+href="Table.html#M000009">record</a> to be returned. The equivalent SQL
+would be &quot;WHERE key1 = &#8216;value1&#8217; AND key2 =
+&#8216;value2&#8217;&quot;.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000004.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000004.html');return false;">
+          <span class="method-name">has_memo_file?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns true if there is a corresponding memo file
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000009.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000009.html');return false;">
+          <span class="method-name">record</span><span class="method-args">(index)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns a <a href="Record.html">DBF::Record</a> (or nil if the <a
+href="Table.html#M000009">record</a> has been marked for deletion) for the
+<a href="Table.html#M000009">record</a> at <tt>index</tt>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000005.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000005.html');return false;">
+          <span class="method-name">record_count</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The total number of active <a href="Table.html#M000007">records</a>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000007.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000007.html');return false;">
+          <span class="method-name">records</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+An array of all the <a href="Table.html#M000007">records</a> contained in
+the database file. Each <a href="Table.html#M000009">record</a> is an
+instance of <a href="Record.html">DBF::Record</a> (or nil if the <a
+href="Table.html#M000009">record</a> is marked for deletion).
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000003" class="method-detail">
+        <a name="M000003"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000003.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000003.html');return false;">
+          <span class="method-name">reload!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Reloads the database and memo files
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000011" class="method-detail">
+        <a name="M000011"></a>
+
+        <div class="method-heading">
+          <span class="method-name">row</span><span class="method-args">(index)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Table.html#M000009">record</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <span class="method-name">rows</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Table.html#M000007">records</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000013.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000013.html');return false;">
+          <span class="method-name">schema</span><span class="method-args">(path = nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns a database <a href="Table.html#M000013">schema</a> in the portable
+ActiveRecord::Schema format.
+</p>
+<p>
+xBase data types are converted to generic types as follows:
+</p>
+<ul>
+<li>Number columns are converted to :integer if there are no decimals,
+otherwise they are converted to :float
+
+</li>
+<li>Date columns are converted to :datetime
+
+</li>
+<li>Logical columns are converted to :boolean
+
+</li>
+<li>Memo columns are converted to :text
+
+</li>
+<li>Character columns are converted to :string and the :limit option is set to
+the length of the character <a href="Table.html#M000006">column</a>
+
+</li>
+</ul>
+<p>
+Example:
+</p>
+<pre>
+  create_table &quot;mydata&quot; do |t|
+    t.column :name, :string, :limit =&gt; 30
+    t.column :last_update, :datetime
+    t.column :is_active, :boolean
+    t.column :age, :integer
+    t.column :notes, :text
+  end
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="Table.src/M000012.html" target="Code" class="method-signature"
+            onclick="popupCode('Table.src/M000012.html');return false;">
+          <span class="method-name">version_description</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns a description of the current database file.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

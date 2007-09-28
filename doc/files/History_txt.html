@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: History.txt</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>History.txt</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>History.txt
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Thu Sep 27 20:52:40 -0700 2007</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+    <div id="diagram">
+      <map id="map" name="map">
+</map>
+<img src="../dot/f_0.png" usemap="#map" border="0" alt="dot/f_0.png">
+    </div>
+
+    <div id="description">
+      <h2>1.0.4</h2>
+<ul>
+<li>Underscore column names when dumping schemas (FieldId becomes field_id)
+
+</li>
+</ul>
+<h2>1.0.3</h2>
+<ul>
+<li>Add support for Visual Foxpro Integer and Datetime columns
+
+</li>
+</ul>
+<h2>1.0.2</h2>
+<ul>
+<li>Compatibility fix for Visual Foxpro memo files (ignore negative memo index
+values)
+
+</li>
+</ul>
+<h2>1.0.1</h2>
+<ul>
+<li>Fixes error when using the command-line interface [11984]
+
+</li>
+</ul>
+<h2>1.0.0</h2>
+<ul>
+<li>Renamed classes and refactored code in preparation for adding the ability
+to save records and create/compact databases.
+
+</li>
+<li>The Reader class has been renamed to Table
+
+</li>
+<li>Attributes are no longer accessed directly from the record. Use
+record.attribute[&#8216;column_name&#8217;] instead, or use the new
+attribute accessors detailed under Basic Usage.
+
+</li>
+</ul>
+<h2>0.5.4</h2>
+<ul>
+<li>Ignore deleted records in both memory modes
+
+</li>
+</ul>
+<h2>0.5.3</h2>
+<ul>
+<li>Added a standalone dbf utility (try dbf -h for help)
+
+</li>
+</ul>
+<h2>0.5.0 / 2007-05-25</h2>
+<ul>
+<li>New find method
+
+</li>
+<li>Full compatibility with the two flavors of memo file
+
+</li>
+<li>Two modes of operation:
+
+<ul>
+<li>In memory (default): All records are loaded into memory on the first
+request. Records are retrieved from memory for all subsequent requests.
+
+</li>
+<li>File I/O: All records are retrieved from disk on every request
+
+</li>
+</ul>
+</li>
+<li>Improved documentation and more usage examples
+
+</li>
+</ul>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

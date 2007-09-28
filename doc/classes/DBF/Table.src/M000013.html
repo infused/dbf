@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>schema (DBF::Table)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/dbf/table.rb, line 150</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">schema</span>(<span class="ruby-identifier">path</span> = <span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">s</span> = <span class="ruby-value str">&quot;ActiveRecord::Schema.define do\n&quot;</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;  create_table \&quot;#{File.basename(@data.path, &quot;.*&quot;)}\&quot; do |t|\n&quot;</span>
+      <span class="ruby-identifier">columns</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">column</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;    t.column \&quot;#{underscore(column.name)}\&quot;&quot;</span>
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">column</span>.<span class="ruby-identifier">type</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;N&quot;</span> <span class="ruby-comment cmt"># number</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">column</span>.<span class="ruby-identifier">decimal</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+            <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;, :float&quot;</span>
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;, :integer&quot;</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;D&quot;</span> <span class="ruby-comment cmt"># date</span>
+          <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;, :datetime&quot;</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;L&quot;</span> <span class="ruby-comment cmt"># boolean</span>
+          <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;, :boolean&quot;</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;M&quot;</span> <span class="ruby-comment cmt"># memo</span>
+          <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;, :text&quot;</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;, :string, :limit =&gt; #{column.length}&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;\n&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  end\nend&quot;</span>
+      
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">path</span>
+        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">path</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">s</span>)}
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">s</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

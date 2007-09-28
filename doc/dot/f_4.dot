@@ -1,0 +1,88 @@
+digraph TopLevel {
+    compound = true
+    bgcolor = lightcyan1
+    fontname = Arial
+    fontsize = 8
+    label = "TopLevel"
+    node [
+        fontname = Arial,
+        fontsize = 8,
+        color = black
+    ]
+
+    DBF__DBFError -> DBF__ColumnLengthError [
+
+    ]
+
+    StandardError [
+        URL = "classes/StandardError.html",
+        label = "StandardError"
+    ]
+
+    StandardError -> DBF__DBFError [
+
+    ]
+
+    subgraph cluster_DBF {
+        fillcolor = palegreen1
+        URL = "classes/DBF.html"
+        fontname = Arial
+        color = blue
+        label = "DBF"
+        style = filled
+        DBF [
+            shape = plaintext,
+            height = 0.01,
+            width = 0.01,
+            label = ""
+        ]
+
+        DBF__Column [
+            fontcolor = black,
+            URL = "classes/DBF/Column.html",
+            shape = ellipse,
+            color = palegoldenrod,
+            style = filled,
+            label = "Column"
+        ]
+
+        DBF__ColumnLengthError [
+            fontcolor = black,
+            URL = "classes/DBF/ColumnLengthError.html",
+            shape = ellipse,
+            color = palegoldenrod,
+            style = filled,
+            label = "ColumnLengthError"
+        ]
+
+        DBF__Table [
+            fontcolor = black,
+            URL = "classes/DBF/Table.html",
+            shape = ellipse,
+            color = palegoldenrod,
+            style = filled,
+            label = "Table"
+        ]
+
+        DBF__DBFError [
+            fontcolor = black,
+            URL = "classes/DBF/DBFError.html",
+            shape = ellipse,
+            color = palegoldenrod,
+            style = filled,
+            label = "DBFError"
+        ]
+
+        DBF__Record [
+            fontcolor = black,
+            URL = "classes/DBF/Record.html",
+            shape = ellipse,
+            color = palegoldenrod,
+            style = filled,
+            label = "Record"
+        ]
+
+    }
+
+}
+
