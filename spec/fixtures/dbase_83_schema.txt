@@ -1,19 +1,19 @@
 ActiveRecord::Schema.define do
   create_table "dbase_83" do |t|
-    t.column "ID", :integer
-    t.column "CATCOUNT", :integer
-    t.column "AGRPCOUNT", :integer
-    t.column "PGRPCOUNT", :integer
-    t.column "ORDER", :integer
-    t.column "CODE", :string, :limit => 50
-    t.column "NAME", :string, :limit => 100
-    t.column "THUMBNAIL", :string, :limit => 254
-    t.column "IMAGE", :string, :limit => 254
-    t.column "PRICE", :float
-    t.column "COST", :float
-    t.column "DESC", :text
-    t.column "WEIGHT", :float
-    t.column "TAXABLE", :boolean
-    t.column "ACTIVE", :boolean
+    t.column "id", :integer
+    t.column "catcount", :integer
+    t.column "agrpcount", :integer
+    t.column "pgrpcount", :integer
+    t.column "order", :integer
+    t.column "code", :string, :limit => 50
+    t.column "name", :string, :limit => 100
+    t.column "thumbnail", :string, :limit => 254
+    t.column "image", :string, :limit => 254
+    t.column "price", :float
+    t.column "cost", :float
+    t.column "desc", :text
+    t.column "weight", :float
+    t.column "taxable", :boolean
+    t.column "active", :boolean
   end
 end

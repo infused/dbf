@@ -151,7 +151,7 @@ module DBF
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{File.basename(@data.path, ".*")}\" do |t|\n"
       columns.each do |column|
-        s << "    t.column \"#{column.name}\""
+        s << "    t.column \"#{underscore(column.name)}\""
         case column.type
         when "N" # number
           if column.decimal > 0
@@ -262,6 +262,14 @@ module DBF
             @db_index << n
           end
         end
+      end
+      
+      def underscore(camel_cased_word)
+        camel_cased_word.to_s.gsub(/::/, '/').
+          gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+          gsub(/([a-z\d])([A-Z])/,'\1_\2').
+          tr("-", "_").
+          downcase
       end
   end
   

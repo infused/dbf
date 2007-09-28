@@ -1,4 +1,9 @@
+== 1.0.4
+
+* Underscore column names when dumping schemas (FieldId becomes field_id)
+
 == 1.0.3
+
 * Add support for Visual Foxpro Integer and Datetime columns
 
 == 1.0.2
