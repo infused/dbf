@@ -147,24 +147,7 @@ module DBF
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{File.basename(@data.path, ".*")}\" do |t|\n"
       columns.each do |column|
-        s << "    t.column \"#{underscore(column.name)}\""
-        case column.type
-        when "N" # number
-          if column.decimal > 0
-            s << ", :float"
-          else
-            s << ", :integer"
-          end
-        when "D" # date
-          s << ", :datetime"
-        when "L" # boolean
-          s << ", :boolean"
-        when "M" # memo
-          s << ", :text"
-        else
-          s << ", :string, :limit => #{column.length}"
-        end
-        s << "\n"
+        s << "    t.column #{column.schema_definition}"
       end
       s << "  end\nend"
       
@@ -258,14 +241,6 @@ module DBF
             @db_index << n
           end
         end
-      end
-      
-      def underscore(camel_cased_word)
-        camel_cased_word.to_s.gsub(/::/, '/').
-          gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-          gsub(/([a-z\d])([A-Z])/,'\1_\2').
-          tr("-", "_").
-          downcase
       end
       
       def all_values_match?(record, options)
