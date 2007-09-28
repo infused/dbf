@@ -29,31 +29,30 @@ module DBF
     
     def initialize_values(columns)
       columns.each do |column|
-        case column.type
+        @attributes[column.name] = case column.type
         when 'N' # number
-          @attributes[column.name] = column.decimal.zero? ? unpack_string(column).to_i : unpack_string(column).to_f
+          column.decimal.zero? ? unpack_string(column).to_i : unpack_string(column).to_f
         when 'D' # date
           raw = unpack_string(column).strip
           unless raw.empty?
+            parts = raw.match(DATE_REGEXP).captures.map {|n| n.to_i}
             begin
-              parts = raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i}
-              @attributes[column.name] = Time.gm(*parts)
+              Time.gm(*parts)
             rescue
-              parts = raw.match(DATE_REGEXP).to_a.slice(1,3).map {|n| n.to_i}
-              @attributes[column.name] = Date.new(*parts)
+              Date.new(*parts)
             end
           end
         when 'M' # memo
           starting_block = unpack_string(column).to_i
-          @attributes[column.name] = read_memo(starting_block)
+          read_memo(starting_block)
         when 'L' # logical
-          @attributes[column.name] = unpack_string(column) =~ /^(y|t)$/i ? true : false
+          unpack_string(column) =~ /^(y|t)$/i ? true : false
         when 'I' # integer
-          @attributes[column.name] = unpack_integer(column)
+          unpack_integer(column)
         when 'T' # datetime
-          @attributes[column.name] = unpack_datetime(column)
+          unpack_datetime(column)
         else
-          @attributes[column.name] = unpack_string(column).strip
+          unpack_string(column).strip
         end
       end
     end
