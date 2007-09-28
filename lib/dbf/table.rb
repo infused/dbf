@@ -185,8 +185,8 @@ module DBF
         @columns = []
         @column_count.times do
           name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
-          if length > 0 && name.strip.any?
-            @columns << Column.new(name, type, length, decimal)
+          if length > 0
+            @columns << Column.new(name.strip, type, length, decimal)
           end
         end
         # Reset the column count

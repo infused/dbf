@@ -23,4 +23,6 @@ module DBF
   MS_PER_HOUR = MS_PER_MINUTE * 60
   
   class DBFError < StandardError; end
+  class InvalidColumnName < DBFError; end
+  class InvalidColumnLength < DBFError; end
 end
