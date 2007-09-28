@@ -105,19 +105,15 @@ module DBF
     # for the record to be returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
     def find(command, options = {})
+      results = options.empty? ? records : records.select {|record| all_values_match?(record, options)}
+      
       case command
       when Fixnum
         record(command)
       when :all
-        return records if options.empty?
-        records.select do |record|
-          options.map {|key, value| record.attributes[key.to_s] == value}.all?
-        end
+        results
       when :first
-        return records.first if options.empty?
-        records.detect do |record|
-          options.map {|key, value| record.attributes[key.to_s] == value}.all?
-        end
+        results.first
       end
     end
     
@@ -270,6 +266,10 @@ module DBF
           gsub(/([a-z\d])([A-Z])/,'\1_\2').
           tr("-", "_").
           downcase
+      end
+      
+      def all_values_match?(record, options)
+        options.map {|key, value| record.attributes[key.to_s] == value}.all?
       end
   end
   
