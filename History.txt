@@ -1,3 +1,7 @@
+== 1.0.5
+
+* Strip non-ascii characters from column names
+
 == 1.0.4
 
 * Underscore column names when dumping schemas (FieldId becomes field_id)

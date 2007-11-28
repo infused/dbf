@@ -6,7 +6,7 @@ module DBF
 
     def initialize(name, type, length, decimal)
       raise ColumnLengthError, "field length must be greater than 0" unless length > 0
-      @name, @type, @length, @decimal = name.gsub(/\0/, ''), type, length, decimal
+      @name, @type, @length, @decimal = strip_non_ascii_chars(name), type, length, decimal
     end
     
     def schema_definition
@@ -38,6 +38,14 @@ module DBF
         gsub(/([a-z\d])([A-Z])/,'\1_\2').
         tr("-", "_").
         downcase
+    end
+    
+    def strip_non_ascii_chars(s)
+      clean = ''
+      s.each_byte do |char|
+        clean << char if char > 31 && char < 128
+      end
+      clean
     end
   end
   
