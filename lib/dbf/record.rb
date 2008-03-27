@@ -2,8 +2,6 @@ module DBF
   class Record
     attr_reader :attributes
     
-    @@accessors_defined = false
-    
     def initialize(table)
       @table, @data, @memo = table, table.data, table.memo
       @attributes = {}
@@ -15,14 +13,12 @@ module DBF
     private
     
     def define_accessors
-      return if @@accessors_defined
       @table.columns.each do |column|
         underscored_column_name = underscore(column.name)
         if @table.options[:accessors] && !respond_to?(underscored_column_name)
           self.class.send :define_method, underscored_column_name do
             @attributes[column.name]
           end
-          @@accessors_defined = true
         end
       end
     end
@@ -58,7 +54,7 @@ module DBF
     end
   
     def unpack_column(column)
-      @data.read(column.length).unpack("a#{column.length}")
+      @data.read(column.length).to_s.unpack("a#{column.length}")
     end
   
     def unpack_string(column)
