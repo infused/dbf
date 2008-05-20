@@ -20,11 +20,9 @@ module DBF
   
   MS_PER_SECOND = 1000
   MS_PER_MINUTE = MS_PER_SECOND * 60
-  MS_PER_HOUR = MS_PER_MINUTE * 60
+  MS_PER_HOUR   = MS_PER_MINUTE * 60
   
   class DBFError < StandardError; end
-  class InvalidColumnName < DBFError; end
-  class InvalidColumnLength < DBFError; end
   
   module Helpers
     def underscore(camel_cased_word)

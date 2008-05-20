@@ -3,11 +3,11 @@ require File.dirname(__FILE__) + "/../spec_helper"
 describe DBF::Record, "when initialized" do
   
   def standalone_record(binary_data)
-    table = mock
-    table.stubs(:data)
-    table.data.stubs(:read).returns(binary_data)
-    table.stubs(:memo).returns(nil)
-    table.stubs(:columns).returns([])
+    table = mock('table')
+    table.stub!(:memo).and_return(nil)
+    table.stub!(:columns).and_return([])
+    table.stub!(:data)
+    table.data.stub!(:read).and_return(binary_data)
     DBF::Record.new(table)
   end
 
@@ -40,7 +40,7 @@ describe DBF::Record, "when initialized" do
   it "should typecast datetime columns to DateTime" do
     binary_data = "Nl%\000\300Z\252\003"
     record = standalone_record(binary_data)
-    column = stub(:length => 8)
+    column = mock('column', :length => 8)
     
     record.instance_eval {unpack_datetime(column)}.to_s.should == "2002-10-10T17:04:56+00:00"
   end
@@ -48,7 +48,7 @@ describe DBF::Record, "when initialized" do
   it "should typecast integers to Fixnum" do
     binary_data = "\017\020\000\000"
     record = standalone_record(binary_data)
-    column = stub(:length => 4)
+    column = mock('column', :length => 4)
       
     record.instance_eval {unpack_integer(column)}.should == 4111
   end
