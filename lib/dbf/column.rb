@@ -10,8 +10,7 @@ module DBF
     end
     
     def schema_definition
-      "\"#{underscore(name)}\", " + 
-      case type
+      data_type = case type
       when "N" # number
         if decimal > 0
           ":float"
@@ -26,8 +25,9 @@ module DBF
         ":text"
       else
         ":string, :limit => #{length}"
-      end + 
-      "\n"
+      end
+      
+      "\"#{underscore(name)}\", #{data_type}\n"
     end
     
     private
