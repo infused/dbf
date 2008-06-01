@@ -1,4 +1,15 @@
 Autotest.add_hook :initialize do |autotest|
-  autotest.add_exception %r%^\./(?:doc|bin)%
-  %w{.svn .hg .git .dbf .dbt .fpt .txt .Rakefile .gemspec .autotest}.each {|exception| autotest.add_exception(exception)}
+  autotest.clear_mappings
+  
+  autotest.add_mapping(%r%^lib/dbf/(.*)\.rb$%) do |filename, m|
+    autotest.files_matching %r!spec/(unit|integration)/#{m[1]}_spec.rb!
+  end
+  
+  autotest.add_mapping(%r%^spec/(unit|integration)/.*\.rb$%) do |filename, m|
+    filename
+  end
+  
+  %w{.svn .hg .git .dbf .dbt .fpt .txt bin Rakefile .gemspec .autotest}.each  do |exception|
+    autotest.add_exception(exception)
+  end
 end
