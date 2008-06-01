@@ -161,6 +161,13 @@ describe DBF::Table do
       table.version_description.should == "dBase III with memo file"
     end
   end
+  
+  describe '#replace_extname' do
+    it 'should replace the extname' do
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table.send(:replace_extname, "dbase_83.dbf", 'fpt').should == 'dbase_83.fpt'
+    end
+  end
 
 end
 

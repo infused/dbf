@@ -160,18 +160,27 @@ module DBF
     private
     
       def open_memo(file)
-        %w(fpt FPT dbt DBT).each do |extension|
-          filename = file.sub(/#{File.extname(file)[1..-1]}$/, extension)
+        %w(fpt FPT dbt DBT).each do |extname|
+          filename = replace_extname(file, extname)
           if File.exists?(filename)
-            @memo_file_format = extension.downcase.to_sym
+            @memo_file_format = extname.downcase.to_sym
             return File.open(filename, 'rb')
           end
         end
         nil
       end
+      
+      def replace_extname(filename, extension)
+        filename.sub(/#{File.extname(filename)[1..-1]}$/, extension)
+      end
     
       def deleted_record?
-        @data.read(1).unpack('a') == ['*']
+        if @data.read(1).unpack('a') == ['*']
+          @data.rewind
+          true
+        else
+          false
+        end
       end
     
       def get_header_info
@@ -188,7 +197,7 @@ module DBF
             @columns << Column.new(name.strip, type, length, decimal)
           end
         end
-        # Reset the column count
+        # Reset the column count in case any were skipped
         @column_count = @columns.size
         
         @columns
