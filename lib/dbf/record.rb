@@ -78,7 +78,7 @@ module DBF
     def read_memo(start_block)
       return nil if start_block < 1
 
-      @table.memo_file_format == :fpt ? build_fpt_memo(start_block) : build_dpt_memo(start_block)
+      @table.memo_file_format == :fpt ? build_fpt_memo(start_block) : build_dbt_memo(start_block)
     end
     
     def build_fpt_memo(start_block)
@@ -95,7 +95,7 @@ module DBF
       memo_string
     end
     
-    def build_dpt_memo(start_block)
+    def build_dbt_memo(start_block)
       @memo.seek(start_block * memo_block_size)
       
       case @table.version
