@@ -1,0 +1,4 @@
+Autotest.add_hook :initialize do |autotest|
+  autotest.add_exception %r%^\./(?:doc|bin)%
+  %w{.svn .hg .git}.each {|exception| autotest.add_exception(exception)}
+end
