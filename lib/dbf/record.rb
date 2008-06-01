@@ -6,10 +6,10 @@ module DBF
     
     def initialize(table)
       @table, @data, @memo = table, table.data, table.memo
+      @memo_block_size = @table.memo_block_size
       @attributes = {}
       initialize_values(table.columns)
       define_accessors
-      self
     end
     
     private
@@ -17,7 +17,7 @@ module DBF
     def define_accessors
       @table.columns.each do |column|
         underscored_column_name = underscore(column.name)
-        if @table.options[:accessors] && !respond_to?(underscored_column_name)
+        unless respond_to?(underscored_column_name)
           self.class.send :define_method, underscored_column_name do
             @attributes[column.name]
           end
@@ -76,34 +76,52 @@ module DBF
     end
   
     def read_memo(start_block)
-      return nil if start_block <= 0 || @table.memo_block_size.nil?
-      @memo.seek(start_block * @table.memo_block_size)
-      if @table.memo_file_format == :fpt
-        memo_type, memo_size, memo_string = @memo.read(@table.memo_block_size).unpack("NNa56")
+      return nil if start_block < 1
+
+      @table.memo_file_format == :fpt ? build_fpt_memo(start_block) : build_dpt_memo(start_block)
+    end
+    
+    def build_fpt_memo(start_block)
+      @memo.seek(start_block * memo_block_size)
       
-        # skip the memo if it isn't text
-        return nil unless memo_type == 1
-        
-        memo_block_content_size = @table.memo_block_size - FPT_BLOCK_HEADER_SIZE
-        if memo_size > memo_block_content_size
-          memo_string << @memo.read(memo_size - @table.memo_block_size + FPT_BLOCK_HEADER_SIZE)
-        elsif memo_size > 0 and memo_size < memo_block_content_size
-          memo_string = memo_string[0, memo_size]
-        end
+      memo_type, memo_size, memo_string = @memo.read(memo_block_size).unpack("NNa56")
+      return nil unless memo_type == 1 and memo_size > 0
+      
+      if memo_size > memo_block_content_size
+        memo_string << @memo.read(memo_content_size(memo_size))
       else
-        case @table.version
-        when "83" # dbase iii
-          memo_string = ""
-          loop do
-            memo_string << block = @memo.read(512)
-            break if block.strip.size < 512
-          end
-        when "8b" # dbase iv
-          memo_type, memo_size = @memo.read(8).unpack("LL")
-          memo_string = @memo.read(memo_size)
-        end
+        memo_string = memo_string[0, memo_size]
       end
       memo_string
+    end
+    
+    def build_dpt_memo(start_block)
+      @memo.seek(start_block * memo_block_size)
+      
+      case @table.version
+      when "83" # dbase iii
+        memo_string = ""
+        loop do
+          memo_string << block = @memo.read(memo_block_size)
+          break if block.rstrip.size < memo_block_size
+        end
+      when "8b" # dbase iv
+        memo_type, memo_size = @memo.read(BLOCK_HEADER_SIZE).unpack("LL")
+        memo_string = @memo.read(memo_size)
+      end
+      memo_string
+    end
+    
+    def memo_block_size
+      @memo_block_size
+    end
+    
+    def memo_block_content_size
+      memo_block_size - BLOCK_HEADER_SIZE
+    end
+    
+    def memo_content_size(memo_size)
+      (memo_size - memo_block_size) + BLOCK_HEADER_SIZE
     end
     
   end

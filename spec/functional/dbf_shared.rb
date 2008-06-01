@@ -36,11 +36,9 @@ describe DBF, :shared => true do
   end
   
   specify "column read accessors should return the attribute after typecast" do
-    if @table.options[:accessors]
-      @table.columns do |column|
-        record = table.records.first
-        record.send(column.name).should == record[column.name]
-      end
+    @table.columns do |column|
+      record = table.records.first
+      record.send(column.name).should == record[column.name]
     end
   end
   

@@ -29,10 +29,9 @@ module DBF
     # Example:
     #   reader = DBF::Reader.new 'data.dbf'
     def initialize(filename, options = {})
-      @options = {:in_memory => true, :accessors => true}.merge(options)
+      @options = {:in_memory => true}.merge(options)
       
       @in_memory = @options[:in_memory]
-      @accessors = @options[:accessors]
       @data = File.open(filename, 'rb')
       @memo = open_memo(filename)
       reload!
@@ -199,6 +198,7 @@ module DBF
         @memo.rewind
         if @memo_file_format == :fpt
           @memo_next_available_block, @memo_block_size = @memo.read(FPT_HEADER_SIZE).unpack('N x2 n')
+          @memo_block_size = 0 if @memo_block_size.nil?
         else
           @memo_block_size = 512
           @memo_next_available_block = File.size(@memo.path) / @memo_block_size
