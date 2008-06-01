@@ -2,9 +2,8 @@ History.txt
 Manifest.txt
 README.txt
 Rakefile
-benchmarks/performance.rb
-benchmarks/seek_benchmark.rb
 bin/dbf
+dbf.gemspec
 lib/dbf.rb
 lib/dbf/column.rb
 lib/dbf/globals.rb
