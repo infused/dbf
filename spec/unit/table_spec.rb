@@ -168,6 +168,18 @@ describe DBF::Table do
       table.send(:replace_extname, "dbase_83.dbf", 'fpt').should == 'dbase_83.fpt'
     end
   end
+  
+  describe '#each' do
+    it 'should enumerate all records' do
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      records = []
+      table.each do |record|
+        records << record
+      end
+      
+      records.should == table.records
+    end
+  end
 
 end
 

@@ -1,6 +1,7 @@
 module DBF
 
   class Table
+    include Enumerable
     
     attr_reader :column_count           # The total number of columns (columns)
     attr_reader :columns                # An array of DBF::Column
@@ -60,6 +61,12 @@ module DBF
     end
     
     alias_method :rows, :records
+    
+    def each
+      records.each do |record|
+        yield(record)
+      end
+    end
     
     # Returns a DBF::Record (or nil if the record has been marked for deletion) for the record at <tt>index</tt>.
     def record(index)
