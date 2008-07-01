@@ -53,28 +53,21 @@ module DBF
     # An array of all the records contained in the database file.  Each record is an instance
     # of DBF::Record (or nil if the record is marked for deletion).
     def records
-      if options[:in_memory]
-        @records ||= get_all_records_from_file
-      else
-        get_all_records_from_file
-      end
+      @records ||= to_a
     end
     
     alias_method :rows, :records
     
     def each
-      records.each do |record|
-        yield(record)
+      record_count.times do |n|
+        seek_to_record(n)
+        yield DBF::Record.new(self) unless deleted_record?
       end
     end
     
-    # Returns a DBF::Record (or nil if the record has been marked for deletion) for the record at <tt>index</tt>.
+    # Returns a DBF::Record for the record at <tt>index</tt>.
     def record(index)
-      if options[:in_memory]
-        records[index]
-      else
-        get_record_from_file(index)
-      end
+      records[index]
     end
     
     # Find records using a simple ActiveRecord-like syntax.
@@ -222,15 +215,6 @@ module DBF
       def get_record_from_file(index)
         seek_to_record(@db_index[index])
         Record.new(self)
-      end
-      
-      def get_all_records_from_file
-        all_records = []
-        0.upto(@record_count - 1) do |n|
-          seek_to_record(n)
-          all_records << DBF::Record.new(self) unless deleted_record?
-        end
-        all_records
       end
     
       def build_db_index
