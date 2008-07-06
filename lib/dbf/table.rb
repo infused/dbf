@@ -53,7 +53,7 @@ module DBF
     def records
       self.to_a
     end
-    # alias_method :records, :to_a
+
     alias_method :rows, :records
     
     def each
