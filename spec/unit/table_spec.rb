@@ -24,10 +24,6 @@ describe DBF::Table do
       @table.memo_block_size.should == 512
     end
 
-    it "should default to loading all records into memory" do
-      @table.options[:in_memory].should be_true
-    end
-
     it "should determine the number of columns in each record" do
       @table.columns.size.should == 15
     end
@@ -40,37 +36,6 @@ describe DBF::Table do
       @table.version.should == "83"
     end
 
-    it "should set the in_memory option" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf", :in_memory => false
-      table.options[:in_memory].should be_false
-    end
-  end
-  
-  context "when the in_memory flag is false" do
-    it "should read the records from disk on every request" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf", :in_memory => false
-      table.should_receive(:get_all_records_from_file).exactly(3).times.and_return([])
-      3.times { table.records }
-    end
-  end
-  
-  context "when the in_memory flag is true" do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-    end
-
-    it "should build the records array from disk only on the first request" do
-      @table.should_receive(:get_all_records_from_file).at_most(:once).and_return([])
-      3.times { @table.records }
-    end
-
-    it "should read from the records array when using the record() method" do
-      @table.should_receive(:get_all_records_from_file).at_most(:once).and_return([])
-      @table.should_receive(:get_record_from_file).never
-      @table.should_receive(:records).exactly(2).times.and_return([])
-      @table.record(1)
-      @table.record(10)
-    end
   end
   
   describe "#find" do
@@ -91,7 +56,7 @@ describe DBF::Table do
       end
 
       it "should return matching records when used with options" do
-        @table.find(:all, "WEIGHT" => 0.0).should == @table.records.select {|r| r.attributes["WEIGHT"] == 0.0}
+        @table.find(:all, "WEIGHT" => 0.0).should == @table.select {|r| r.attributes["WEIGHT"] == 0.0}
       end
 
       it "with multiple options should search for all search terms as if using AND" do
@@ -119,13 +84,7 @@ describe DBF::Table do
   end
   
   describe "#reload" do
-    it "should reload all data" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.records
-      table.instance_eval("@records").should be_kind_of(Array)
-      table.reload!
-      table.instance_eval("@records").should be_nil
-    end
+    # TODO
   end
   
   describe "#column" do
@@ -176,8 +135,8 @@ describe DBF::Table do
       table.each do |record|
         records << record
       end
-      
-      records.should == table.records
+      records.map! { |r| r.attributes }
+      records.should == table.records.map {|r| r.attributes}
     end
   end
 

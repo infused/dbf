@@ -17,11 +17,9 @@ module DBF
     # Example:
     #   reader = DBF::Reader.new 'data.dbf'
     def initialize(filename, options = {})
-      @options = {:in_memory => true}.merge(options)
-      
-      @in_memory = @options[:in_memory]
       @data = File.open(filename, 'rb')
       @memo = open_memo(filename)
+      @options = options
       reload!
     end
     
@@ -53,28 +51,28 @@ module DBF
     # An array of all the records contained in the database file.  Each record is an instance
     # of DBF::Record (or nil if the record is marked for deletion).
     def records
-      if options[:in_memory]
-        @records ||= get_all_records_from_file
-      else
-        get_all_records_from_file
-      end
+      self.to_a
     end
-    
+    # alias_method :records, :to_a
     alias_method :rows, :records
     
     def each
-      records.each do |record|
-        yield(record)
+      0.upto(@record_count - 1) do |n|
+        seek_to_record(n)
+        unless deleted_record?
+          yield DBF::Record.new(self)
+        end
       end
     end
     
+    # def get_record_from_file(index)
+    #   seek_to_record(@db_index[index])
+    #   Record.new(self)
+    # end
+    
     # Returns a DBF::Record (or nil if the record has been marked for deletion) for the record at <tt>index</tt>.
     def record(index)
-      if options[:in_memory]
-        records[index]
-      else
-        get_record_from_file(index)
-      end
+      records[index]
     end
     
     # Find records using a simple ActiveRecord-like syntax.
@@ -151,6 +149,14 @@ module DBF
       end
     end
     
+    # Returns the record at <tt>index</tt> by seeking to the record in the
+    # physical database file. See the documentation for the records method for
+    # information on how these two methods differ.
+    def get_record_from_file(index)
+      seek_to_record(@db_index[index])
+      Record.new(self)
+    end
+    
     private
     
       def open_memo(file)
@@ -216,23 +222,6 @@ module DBF
         seek(index * @record_length)
       end
       
-      # Returns the record at <tt>index</tt> by seeking to the record in the
-      # physical database file. See the documentation for the records method for
-      # information on how these two methods differ.
-      def get_record_from_file(index)
-        seek_to_record(@db_index[index])
-        Record.new(self)
-      end
-      
-      def get_all_records_from_file
-        all_records = []
-        0.upto(@record_count - 1) do |n|
-          seek_to_record(n)
-          all_records << DBF::Record.new(self) unless deleted_record?
-        end
-        all_records
-      end
-    
       def build_db_index
         @db_index = []
         @deleted_records = []

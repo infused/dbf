@@ -12,6 +12,10 @@ module DBF
       define_accessors
     end
     
+    def ==(other)
+      other.respond_to?(:attributes) && other.attributes == attributes
+    end
+    
     private
     
     def define_accessors
