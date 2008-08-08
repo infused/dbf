@@ -6,8 +6,6 @@ module DBF
     
     def initialize(table)
       @table, @data, @memo = table, table.data, table.memo
-      @memo_block_size = @table.memo_block_size
-      @attributes = {}
       initialize_values(table.columns)
       define_accessors
     end
@@ -30,6 +28,7 @@ module DBF
     end
     
     def initialize_values(columns)
+      @attributes = {}
       columns.each do |column|
         @attributes[column.name] = case column.type
         when 'N' # number
@@ -56,6 +55,7 @@ module DBF
         else
           unpack_string(column).strip
         end
+        @attributes[underscore(column.name)] = @attributes[column.name]
       end
     end
   
@@ -117,7 +117,7 @@ module DBF
     end
     
     def memo_block_size
-      @memo_block_size
+      @memo_block_size ||= @table.memo_block_size
     end
     
     def memo_block_content_size

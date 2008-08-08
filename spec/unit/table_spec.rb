@@ -62,6 +62,22 @@ describe DBF::Table do
       it "with multiple options should search for all search terms as if using AND" do
         @table.find(:all, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should == []
       end
+      
+      it "should match original column names" do
+        @table.find(:all, "WEIGHT" => 0.0).should_not be_empty
+      end
+      
+      it "should match symbolized column names" do
+        @table.find(:all, :WEIGHT => 0.0).should_not be_empty
+      end
+      
+      it "should match downcased column names" do
+        @table.find(:all, "weight" => 0.0).should_not be_empty
+      end
+      
+      it "should match symbolized downcased column names" do
+        @table.find(:all, :weight => 0.0).should_not be_empty
+      end
     end
 
     describe "with :first" do
