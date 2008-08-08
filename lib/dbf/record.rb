@@ -56,6 +56,7 @@ module DBF
           unpack_string(column).strip
         end
         @attributes[underscore(column.name)] = @attributes[column.name]
+        @attributes
       end
     end
   
@@ -80,7 +81,7 @@ module DBF
     end
   
     def read_memo(start_block)
-      return nil if start_block < 1
+      return nil if !@table.has_memo_file? || start_block < 1
 
       @table.memo_file_format == :fpt ? build_fpt_memo(start_block) : build_dbt_memo(start_block)
     end
