@@ -12,12 +12,13 @@ describe DBF::Record do
     table.stub!(:memo).and_return(nil)
     table.stub!(:columns).and_return([])
     table.stub!(:data)
+    table.stub!(:has_memo_file?).and_return(true)
     table.data.stub!(:read).and_return(data)
     table
   end
   
   context "when initialized" do
-   it "should typecast number columns with decimals == 0 to Integer" do
+    it "should typecast number columns with decimals == 0 to Integer" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("ID").decimal.should == 0
@@ -46,14 +47,14 @@ describe DBF::Record do
     it "should typecast datetime columns to DateTime" do
       record = example_record("Nl%\000\300Z\252\003")
       column = mock('column', :length => 8)
-    
+  
       record.instance_eval {unpack_datetime(column)}.to_s.should == "2002-10-10T17:04:56+00:00"
     end
   
     it "should typecast integers to Fixnum" do
       record = example_record("\017\020\000\000")
       column = mock('column', :length => 4)
-      
+  
       record.instance_eval {unpack_integer(column)}.should == 4111
     end
   end
@@ -79,9 +80,19 @@ describe DBF::Record do
   
   describe '#read_memo' do
     it 'should return nil if start_block is less than 1' do
-      record = example_record
+      table = mock_table
+      record = DBF::Record.new(table)
+      
       record.send(:read_memo, 0).should be_nil
       record.send(:read_memo, -1).should be_nil
+    end
+    
+    it 'should return nil if memo file is missing' do
+      table = mock_table
+      table.should_receive(:has_memo_file?).and_return(false)
+      record = DBF::Record.new(table)
+      
+      record.send(:read_memo, 5).should be_nil
     end
 
   end
