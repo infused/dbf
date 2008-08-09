@@ -1,3 +1,9 @@
+== 1.0.6
+
+* DBF::Table now includes the Enumerable module
+* Return nil for memo values if the memo file is missing
+* Finder conditions now support the original and downcased/underscored column names
+
 == 1.0.5
 
 * Strip non-ascii characters from column names
