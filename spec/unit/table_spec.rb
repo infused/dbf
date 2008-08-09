@@ -53,14 +53,14 @@ describe DBF::Table, "when the in_memory flag is true" do
   end
   
   it "should build the records array from disk only on the first request" do
-    @table.expects(:get_all_records_from_file).at_most_once.returns([])
+    @table.should_receive(:get_all_records_from_file).at_most(:once).and_return([])
     3.times { @table.records }
   end
   
   it "should read from the records array when using the record() method" do
-    @table.expects(:get_all_records_from_file).at_most_once.returns([])
-    @table.expects(:get_record_from_file).never
-    @table.expects(:records).times(2).returns([])
+    @table.should_receive(:get_all_records_from_file).at_most(:once).and_return([])
+    @table.should_receive(:get_record_from_file).never
+    @table.should_receive(:records).exactly(2).times.and_return([])
     @table.record(1)
     @table.record(10)
   end
@@ -71,7 +71,7 @@ describe DBF::Table, "when the in_memory flag is false" do
   
   it "should read the records from disk on every request" do
     table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf", :in_memory => false
-    table.expects(:get_all_records_from_file).times(3).returns([])
+    table.should_receive(:get_all_records_from_file).exactly(3).times.and_return([])
     3.times { table.records }
   end
 end
