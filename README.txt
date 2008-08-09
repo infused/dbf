@@ -70,14 +70,6 @@ An example of migrating a DBF book table to ActiveRecord using a migration:
     end
   end
   
-== Large databases
-
-DBF::Table defaults to loading all records into memory. This may not be what
-you want, especially if the database is large. To disable this behavior, set
-the in_memory option to false during initialization.
-
-  table = DBF::Table.new("old_data.dbf", :in_memory => false)
-
 == Command-line utility
 
 A small command-line utility called dbf is installed along with the gem.
