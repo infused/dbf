@@ -1,31 +1,18 @@
 module DBF
 
   class Table
-    # The total number of columns (columns)
-    attr_reader :column_count
     
-    # An array of DBF::Column records
-    attr_reader :columns
+    attr_reader :column_count           # The total number of columns (columns)
+    attr_reader :columns                # An array of DBF::Column
+    attr_reader :version                # Internal dBase version number
+    attr_reader :last_updated           # Last updated datetime
+    attr_reader :memo_file_format       # :fpt or :dpt
+    attr_reader :memo_block_size        # The block size for memo records
+    attr_reader :options                # The options hash that was used to initialize the table
+    attr_reader :data                   # DBF file handle
+    attr_reader :memo                   # Memo file handle
     
-    # Internal dBase version number
-    attr_reader :version
-    
-    # Last updated datetime
-    attr_reader :last_updated
-    
-    # Either :fpt or :dpt
-    attr_reader :memo_file_format
-    
-    # The block size for memo records
-    attr_reader :memo_block_size
-    
-    # The options that were used when initializing DBF::Table.  This is a Hash.
-    attr_reader :options
-    
-    attr_reader :data
-    attr_reader :memo
-    
-    # Initialize a new DBF::Reader.
+    # Initializes a new DBF::Reader
     # Example:
     #   reader = DBF::Reader.new 'data.dbf'
     def initialize(filename, options = {})
@@ -56,8 +43,8 @@ module DBF
       @db_index.size
     end
     
-    # Returns an instance of DBF::Column for <b>column_name</b>.  <b>column_name</b>
-    # can be a symbol or a string.
+    # Returns an instance of DBF::Column for <b>column_name</b>.  The <b>column_name</b>
+    # can be a specified as either a symbol or string.
     def column(column_name)
       @columns.detect {|f| f.name == column_name.to_s}
     end
