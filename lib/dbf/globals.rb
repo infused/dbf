@@ -1,7 +1,7 @@
 module DBF
   DBF_HEADER_SIZE = 32
   FPT_HEADER_SIZE = 512
-  FPT_BLOCK_HEADER_SIZE = 8
+  BLOCK_HEADER_SIZE = 8
   DATE_REGEXP = /([\d]{4})([\d]{2})([\d]{2})/
   VERSION_DESCRIPTIONS = {
     "02" => "FoxBase",
