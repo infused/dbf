@@ -221,7 +221,7 @@ module DBF
       # information on how these two methods differ.
       def get_record_from_file(index)
         seek_to_record(@db_index[index])
-        deleted_record? ? nil : Record.new(self)
+        Record.new(self)
       end
       
       def get_all_records_from_file
