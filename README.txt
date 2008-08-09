@@ -14,11 +14,8 @@ Copyright (c) 2006-2008 Keith Morrison <keithm@infused.org, www.infused.org>
 
 * No external dependencies
 * Fields are type cast to the appropriate Ruby types
-* Date/Time fields are returned as either a Time or Date object.  Date 
-  will only be used if the date is out of range for Ruby's built in Time
-  class.
 * Ability to dump the database schema in the portable ActiveRecord::Schema
-  format.
+  format
 
 == Installation
   
@@ -29,7 +26,12 @@ Copyright (c) 2006-2008 Keith Morrison <keithm@infused.org, www.infused.org>
   require 'rubygems'
   require 'dbf'
 
-  table = DBF::Table.new("old_data.dbf")
+  table = DBF::Table.new("widgets.dbf")
+  
+  # Tables are enumerable
+  widget_ids = table.map { |row| row.id }
+  abc_names = table.select { |row| row.name =~ /^[a-cA-C] }
+  sorted = table.sort_by { |row| row.name }
   
   # Print the 'name' field from record number 4
   puts table.record(4).name
