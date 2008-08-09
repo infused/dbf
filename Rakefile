@@ -12,12 +12,12 @@ Hoe.new PKG_NAME, PKG_VERSION do |p|
   p.summary = "A small fast library for reading dBase, xBase, Clipper and FoxPro database files."
   p.description = p.paragraphs_of("README.txt", 1..3).join("\n\n")
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  p.url = "http://dbf.rubyforge.org"
+  p.url = "http://github.com/infused/dm-dbf/tree/master"
   p.need_tar = true
   p.need_zip = true
 end
 
-task :default => [:spec]
+task :default => :spec
 
 desc "Run specs"
 Spec::Rake::SpecTask.new :spec do |t|
@@ -28,4 +28,9 @@ desc "Run spec docs"
 Spec::Rake::SpecTask.new :specdoc do |t|
   t.spec_opts = ["-f specdoc"]
   t.spec_files = FileList['spec/**/*spec.rb']
+end
+
+desc "Generate gemspec"
+task :gemspec do |t|
+  `rake debug_gem > dbf.gemspec`
 end
