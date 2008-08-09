@@ -135,9 +135,11 @@ describe DBF::Table do
       table.each do |record|
         records << record
       end
+
       records.map! { |r| r.attributes }
       records.should == table.records.map {|r| r.attributes}
     end
+
   end
 
 end
