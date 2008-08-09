@@ -2,7 +2,7 @@
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files.  It is written completely in Ruby and has no external dependencies.
 
-Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org, www.infused.org>
+Copyright (c) 2006-2008 Keith Morrison <keithm@infused.org, www.infused.org>
 
 * Official project page: http://rubyforge.org/projects/dbf
 * API Documentation: http://dbf.rubyforge.org/docs
