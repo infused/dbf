@@ -15,6 +15,7 @@ Hoe.new PKG_NAME, PKG_VERSION do |p|
   p.url = "http://github.com/infused/dm-dbf/tree/master"
   p.need_tar = true
   p.need_zip = true
+  p.extra_deps << ['activesupport', '>= 2.1.0']
 end
 
 task :default => :spec

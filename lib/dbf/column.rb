@@ -29,7 +29,7 @@ module DBF
         ":string, :limit => #{length}"
       end
       
-      "\"#{underscore(name)}\", #{data_type}\n"
+      "\"#{name.underscore}\", #{data_type}\n"
     end
     
     private

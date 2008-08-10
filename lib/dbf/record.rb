@@ -18,7 +18,7 @@ module DBF
     
     def define_accessors
       @table.columns.each do |column|
-        underscored_column_name = underscore(column.name)
+        underscored_column_name = column.name.underscore
         unless respond_to?(underscored_column_name)
           self.class.send :define_method, underscored_column_name do
             @attributes[column.name]
@@ -30,33 +30,30 @@ module DBF
     def initialize_values(columns)
       @attributes = {}
       columns.each do |column|
-        @attributes[column.name] = case column.type
-        when 'N' # number
-          column.decimal.zero? ? unpack_string(column).to_i : unpack_string(column).to_f
-        when 'D' # date
-          raw = unpack_string(column).strip
-          unless raw.empty?
-            parts = raw.match(DATE_REGEXP).captures.map {|n| n.to_i}
-            begin
-              Time.gm(*parts)
-            rescue
-              Date.new(*parts)
-            end
-          end
-        when 'M' # memo
-          starting_block = unpack_string(column).to_i
-          read_memo(starting_block)
-        when 'L' # logical
-          unpack_string(column) =~ /^(y|t)$/i ? true : false
-        when 'I' # integer
-          unpack_integer(column)
-        when 'T' # datetime
-          unpack_datetime(column)
-        else
-          unpack_string(column).strip
-        end
-        @attributes[underscore(column.name)] = @attributes[column.name]
+        @attributes[column.name] = typecast_column(column)
+        @attributes[column.name.underscore] = @attributes[column.name]
         @attributes
+      end
+    end
+    
+    def typecast_column(column)
+      case column.type
+      when 'N' # number
+        column.decimal.zero? ? unpack_string(column).to_i : unpack_string(column).to_f
+      when 'D' # date
+        raw = unpack_string(column).strip
+        raw.to_time unless raw.blank?
+      when 'M' # memo
+        starting_block = unpack_string(column).to_i
+        read_memo(starting_block)
+      when 'L' # logical
+        unpack_string(column) =~ /^(y|t)$/i ? true : false
+      when 'I' # integer
+        unpack_integer(column)
+      when 'T' # datetime
+        unpack_datetime(column)
+      else
+        unpack_string(column).strip
       end
     end
   
