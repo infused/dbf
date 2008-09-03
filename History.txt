@@ -1,3 +1,7 @@
+== 1.0.7
+
+* Remove support for original column names.  All columns names are now downcased/underscored.
+
 == 1.0.6
 
 * DBF::Table now includes the Enumerable module
