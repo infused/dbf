@@ -1,13 +1,13 @@
 (in /Users/keithm/projects/dbf)
 Gem::Specification.new do |s|
   s.name = %q{dbf}
-  s.version = "1.0.6"
+  s.version = "1.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Morrison"]
-  s.date = %q{2008-06-30}
+  s.date = %q{2008-09-02}
   s.default_executable = %q{dbf}
-  s.description = %q{DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files.  It is written completely in Ruby and has no external dependencies.  Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org, www.infused.org>  * Official project page: http://rubyforge.org/projects/dbf * API Documentation: http://dbf.rubyforge.org/docs * To report bugs: http://www.rubyforge.org/tracker/?group_id=2009 * Questions: Email keithm@infused.org and put DBF somewhere in the subject line}
+  s.description = %q{DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files.  It is written completely in Ruby and has no external dependencies.  Copyright (c) 2006-2008 Keith Morrison <keithm@infused.org, www.infused.org>  * Official project page: http://rubyforge.org/projects/dbf * API Documentation: http://dbf.rubyforge.org/docs * To report bugs: http://www.rubyforge.org/tracker/?group_id=2009 * Questions: Email keithm@infused.org and put DBF somewhere in the subject line}
   s.email = %q{keithm@infused.org}
   s.executables = ["dbf"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.txt", "spec/fixtures/dbase_83_schema.txt"]
@@ -25,11 +25,14 @@ Gem::Specification.new do |s|
     s.specification_version = 2
 
     if current_version >= 3 then
-      s.add_runtime_dependency(%q<hoe>, [">= 1.6.0"])
+      s.add_runtime_dependency(%q<activesupport>, [">= 2.1.0"])
+      s.add_development_dependency(%q<hoe>, [">= 1.7.0"])
     else
-      s.add_dependency(%q<hoe>, [">= 1.6.0"])
+      s.add_dependency(%q<activesupport>, [">= 2.1.0"])
+      s.add_dependency(%q<hoe>, [">= 1.7.0"])
     end
   else
-    s.add_dependency(%q<hoe>, [">= 1.6.0"])
+    s.add_dependency(%q<activesupport>, [">= 2.1.0"])
+    s.add_dependency(%q<hoe>, [">= 1.7.0"])
   end
 end
