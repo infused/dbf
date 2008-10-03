@@ -5,9 +5,9 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Morrison"]
-  s.date = %q{2008-09-02}
+  s.date = %q{2008-10-03}
   s.default_executable = %q{dbf}
-  s.description = %q{DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files.  It is written completely in Ruby and has no external dependencies.  Copyright (c) 2006-2008 Keith Morrison <keithm@infused.org, www.infused.org>  * Official project page: http://rubyforge.org/projects/dbf * API Documentation: http://dbf.rubyforge.org/docs * To report bugs: http://www.rubyforge.org/tracker/?group_id=2009 * Questions: Email keithm@infused.org and put DBF somewhere in the subject line}
+  s.description = %q{DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files  Copyright (c) 2006-2008 Keith Morrison <keithm@infused.org, www.infused.org>  * Official project page: http://rubyforge.org/projects/dbf * API Documentation: http://dbf.rubyforge.org/docs * To report bugs: http://www.rubyforge.org/tracker/?group_id=2009 * Questions: Email keithm@infused.org and put DBF somewhere in the subject line}
   s.email = %q{keithm@infused.org}
   s.executables = ["dbf"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.txt", "spec/fixtures/dbase_83_schema.txt"]
