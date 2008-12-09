@@ -26,7 +26,10 @@ describe DBF::Column do
     it "should raise an error if length is greater than 0" do
       lambda { column = DBF::Column.new "ColumnName", "N", -1, 0 }.should raise_error(DBF::ColumnLengthError)
     end
-
+  end
+  
+  context "#type_cast" do
+    
   end
   
   context "#schema_definition" do
