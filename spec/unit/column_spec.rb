@@ -40,8 +40,13 @@ describe DBF::Column do
       column.schema_definition.should == "\"column_name\", :float\n"
     end
     
-    it "should define a datetime column if type is (D)ate" do
+    it "should define a date column if type is (D)ate" do
       column = DBF::Column.new "ColumnName", "D", 8, 0
+      column.schema_definition.should == "\"column_name\", :date\n"
+    end
+    
+    it "should define a datetime column if type is (D)ate" do
+      column = DBF::Column.new "ColumnName", "T", 16, 0
       column.schema_definition.should == "\"column_name\", :datetime\n"
     end
     
