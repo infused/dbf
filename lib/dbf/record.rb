@@ -1,7 +1,5 @@
 module DBF
   class Record
-    include Helpers
-    
     attr_reader :attributes
     
     def initialize(table)
