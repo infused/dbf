@@ -44,19 +44,19 @@ describe DBF::Record do
       table.records.all? {|record| record.attributes["webinclude"].should satisfy {|v| v == true || v == false}}
     end
   
-    it "should typecast datetime columns to DateTime" do
-      record = example_record("Nl%\000\300Z\252\003")
-      column = mock('column', :length => 8)
-  
-      record.instance_eval {unpack_datetime(column)}.to_s.should == "2002-10-10T17:04:56+00:00"
-    end
-  
-    it "should typecast integers to Fixnum" do
-      record = example_record("\017\020\000\000")
-      column = mock('column', :length => 4)
-  
-      record.instance_eval {unpack_integer(column)}.should == 4111
-    end
+    # it "should typecast datetime columns to DateTime" do
+    #   record = example_record("Nl%\000\300Z\252\003")
+    #   column = mock('column', :length => 8)
+    #   
+    #   record.instance_eval {unpack_datetime(column)}.to_s.should == "2002-10-10T17:04:56+00:00"
+    # end
+    #   
+    # it "should typecast integers to Fixnum" do
+    #   record = example_record("\017\020\000\000")
+    #   column = mock('column', :length => 4)
+    #   
+    #   record.instance_eval {unpack_integer(column)}.should == 4111
+    # end
   end
   
   describe '#memo_block_content_size' do
@@ -94,31 +94,6 @@ describe DBF::Record do
       
       record.send(:read_memo, 5).should be_nil
     end
-  end
-  
-  describe "#typecase_column" do
-    before do
-      @table = mock_table
-      @column = mock('column')
-      @column.stub!(:name).and_return('created')
-      @column.stub!(:length).and_return(8)
-      @column.stub!(:type).and_return('D')
-      @table.stub!(:columns).and_return([@column])
-      @record = DBF::Record.new(@table)
-    end
-    
-    describe 'when column is type D' do
-      it 'should return Time' do
-        @record.stub!(:unpack_string).and_return('20080606')
-        @record.send(:typecast_column, @column).should == Time.gm(2008, 6, 6)
-      end
-    
-      it 'should return Date if Time is out of range' do
-        @record.stub!(:unpack_string).and_return('19440606')
-        @record.send(:typecast_column, @column).should == Date.new(1944, 6, 6)
-      end
-    end
-    
   end
 
 end

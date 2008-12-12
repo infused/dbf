@@ -27,29 +27,14 @@ module DBF
     
     def initialize_values(columns)
       @attributes = columns.inject({}) do |hash, column|
-        hash[column.name.underscore] = typecast_column(column)
+        if column.type == 'M'
+          starting_block = unpack_string(column).to_i
+          hash[column.name.underscore] = read_memo(starting_block)
+        else
+          value = unpack_column(column)
+          hash[column.name.underscore] = column.type_cast(value)
+        end
         hash
-      end
-    end
-    
-    def typecast_column(column)
-      case column.type
-      when 'N' # number
-        column.decimal.zero? ? unpack_string(column).to_i : unpack_string(column).to_f
-      when 'D' # date
-        raw = unpack_string(column).strip
-        raw.to_time unless raw.blank?
-      when 'M' # memo
-        starting_block = unpack_string(column).to_i
-        read_memo(starting_block)
-      when 'L' # logical
-        unpack_string(column) =~ /^(y|t)$/i ? true : false
-      when 'I' # integer
-        unpack_integer(column)
-      when 'T' # datetime
-        unpack_datetime(column)
-      else
-        unpack_string(column).strip
       end
     end
   
@@ -59,18 +44,6 @@ module DBF
   
     def unpack_string(column)
       unpack_column(column).to_s
-    end
-    
-    def unpack_integer(column)
-      @data.read(column.length).unpack("v").first
-    end
-    
-    def unpack_datetime(column)
-      days, milliseconds = @data.read(column.length).unpack('l2')
-      hours = (milliseconds / MS_PER_HOUR).to_i
-      minutes = ((milliseconds - (hours * MS_PER_HOUR)) / MS_PER_MINUTE).to_i
-      seconds = ((milliseconds - (hours * MS_PER_HOUR) - (minutes * MS_PER_MINUTE)) / MS_PER_SECOND).to_i
-      DateTime.jd(days, hours, minutes, seconds)
     end
   
     def read_memo(start_block)

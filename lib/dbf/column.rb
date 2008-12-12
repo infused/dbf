@@ -10,31 +10,34 @@ module DBF
     end
     
     def type_cast(value)
-      case column.type
+      value = value.is_a?(Array) ? value.first : value
+      
+      case type
       when 'N' # number
-        column.decimal.zero? ? value.to_i : value.to_f
+        decimal.zero? ? unpack_integer(value) : value.to_f
       when 'D' # date
-        raw.to_time unless raw.blank?
-      when 'M' # memo
-        starting_block = value.to_i
-        # read_memo(starting_block)
+        value.to_date unless value.blank?
       when 'L' # logical
         value.strip =~ /^(y|t)$/i ? true : false
       when 'I' # integer
-        value.unpack('v').first
+        unpack_integer(value)
       when 'T' # datetime
-        unpack_datetime(value)
+        decode_datetime(value)
       else
         value.to_s.strip
       end
     end
     
-    def unpack_datetime(value)
+    def decode_datetime(value)
       days, milliseconds = value.unpack('l2')
       hours = (milliseconds / MS_PER_HOUR).to_i
       minutes = ((milliseconds - (hours * MS_PER_HOUR)) / MS_PER_MINUTE).to_i
       seconds = ((milliseconds - (hours * MS_PER_HOUR) - (minutes * MS_PER_MINUTE)) / MS_PER_SECOND).to_i
       DateTime.jd(days, hours, minutes, seconds)
+    end
+    
+    def unpack_integer(value)
+      value.unpack('v').first.to_i
     end
     
     def schema_definition
