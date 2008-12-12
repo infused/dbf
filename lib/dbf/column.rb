@@ -2,10 +2,8 @@ module DBF
   class ColumnLengthError < DBFError; end
   
   class Column
-    include Helpers
-    
     attr_reader :name, :type, :length, :decimal
-
+    
     def initialize(name, type, length, decimal)
       raise ColumnLengthError, "field length must be greater than 0" unless length > 0
       @name, @type, @length, @decimal = strip_non_ascii_chars(name), type, length, decimal
