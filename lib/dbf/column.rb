@@ -17,7 +17,11 @@ module DBF
         else
           ":integer"
         end
+      when "I" # integer
+        ":integer"
       when "D" # date
+        ":date"
+      when "T" # datetime
         ":datetime"
       when "L" # boolean
         ":boolean"
