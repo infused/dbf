@@ -21,18 +21,16 @@ module DBF
         underscored_column_name = column.name.underscore
         unless respond_to?(underscored_column_name)
           self.class.send :define_method, underscored_column_name do
-            @attributes[column.name]
+            @attributes[column.name.underscore]
           end
         end
       end
     end
     
     def initialize_values(columns)
-      @attributes = {}
-      columns.each do |column|
-        @attributes[column.name] = typecast_column(column)
-        @attributes[column.name.underscore] = @attributes[column.name]
-        @attributes
+      @attributes = columns.inject({}) do |hash, column|
+        hash[column.name.underscore] = typecast_column(column)
+        hash
       end
     end
     

@@ -236,7 +236,7 @@ module DBF
       end
       
       def all_values_match?(record, options)
-        options.map {|key, value| record.attributes[key.to_s] == value}.all?
+        options.map {|key, value| record.attributes[key.to_s.underscore] == value}.all?
       end
   end
   

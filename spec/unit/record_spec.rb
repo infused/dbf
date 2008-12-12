@@ -22,26 +22,26 @@ describe DBF::Record do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("ID").decimal.should == 0
-      table.records.all? {|record| record.attributes['ID'].should be_kind_of(Integer)}
+      table.records.all? {|record| record.attributes['id'].should be_kind_of(Integer)}
     end
   
     it "should typecast number columns with decimals > 0 to Float" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("COST").decimal.should == 2
-      table.records.all? {|record| record.attributes['COST'].should be_kind_of(Float)}
+      table.records.all? {|record| record.attributes['cost'].should be_kind_of(Float)}
     end
   
     it "should typecast memo columns to String" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("DESC").type.should == "M"
-      table.records.all? {|record| record.attributes['DESC'].should be_kind_of(String)}
+      table.records.all? {|record| record.attributes['desc'].should be_kind_of(String)}
     end
   
     it "should typecast logical columns to True or False" do
       table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
       table.column("WEBINCLUDE").type.should == "L"
-      table.records.all? {|record| record.attributes["WEBINCLUDE"].should satisfy {|v| v == true || v == false}}
+      table.records.all? {|record| record.attributes["webinclude"].should satisfy {|v| v == true || v == false}}
     end
   
     it "should typecast datetime columns to DateTime" do
