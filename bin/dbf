@@ -18,22 +18,22 @@ else
 
   # create an ActiveRecord::Schema
   if $a
-    reader = DBF::Table.new filename
-    puts reader.schema
+    table = DBF::Table.new filename
+    puts table.schema
   end
   
   if $s
-    reader = DBF::Table.new filename
+    table = DBF::Table.new filename
     puts
     puts "Database: #{filename}"
-    puts "Type: (#{reader.version}) #{reader.version_description}"
-    puts "Memo Type: #{reader.memo_file_format}" if reader.has_memo_file?
-    puts "Records: #{reader.record_count}"
+    puts "Type: (#{table.version}) #{table.version_description}"
+    puts "Memo Type: #{table.memo_file_format}" if table.has_memo_file?
+    puts "Records: #{table.record_count}"
     
     puts "\nFields:"
     puts "Name             Type       Length     Decimal"
     puts "-" * 78
-    reader.columns.each do |f|
+    table.columns.each do |f|
       puts "%-16s %-10s %-10s %-10s" % [f.name, f.type, f.length, f.decimal]
     end
   end
