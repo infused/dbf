@@ -110,9 +110,14 @@ describe DBF::Column do
   end
   
   context "#strip_non_ascii_chars" do
-    it "should strip characters below decimal 32 and above decimal 128" do
+    it "should strip characters below decimal 32 and above decimal 127" do
       column = DBF::Column.new "ColumnName", "N", 1, 0
       column.send(:strip_non_ascii_chars, "--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--").should == "---hello world---"
+    end
+
+    it "should truncate characters with decimal 0" do
+      column = DBF::Column.new "ColumnName", "N", 1, 0
+      column.send(:strip_non_ascii_chars, "--\x1F-\x68\x65\x6C\x6C\x6F \x00 world-\x80--").should == "---hello "
     end
   end
   

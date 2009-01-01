@@ -1,5 +1,6 @@
 module DBF
   class ColumnLengthError < DBFError; end
+  class ColumnNameError < DBFError; end
   
   class Column
     attr_reader :name, :type, :length, :decimal
@@ -70,7 +71,12 @@ module DBF
     def strip_non_ascii_chars(s)
       clean = ''
       s.each_byte do |char|
-        clean << char if char > 31 && char < 128
+        if char > 31 && char < 127
+          clean << char
+        else
+          raise ColumnNameError 'column name must not be empty' if clean.length == 0
+          return clean if char == 0
+        end
       end
       clean
     end
