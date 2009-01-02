@@ -1,3 +1,10 @@
+== 1.0.8
+
+* Truncate column names on NULL
+* Fix schema dump for date and datetime columns
+* Replace internal helpers with ActiveSupport
+* Always underscore attribute names
+
 == 1.0.7
 
 * Remove support for original column names.  All columns names are now downcased/underscored.
