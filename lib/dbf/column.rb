@@ -9,7 +9,7 @@ module DBF
       @name, @type, @length, @decimal = strip_non_ascii_chars(name), type, length, decimal
       
       raise ColumnLengthError, "field length must be greater than 0" unless length > 0
-      raise ColumnNameError, "column name cannot not be empty" if @name.length == 0
+      raise ColumnNameError, "column name cannot be empty" if @name.length == 0
     end
     
     def type_cast(value)
