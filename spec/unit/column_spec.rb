@@ -24,8 +24,13 @@ describe DBF::Column do
     end
   
     it "should raise an error if length is greater than 0" do
-      lambda { column = DBF::Column.new "ColumnName", "N", -1, 0 }.should raise_error(DBF::ColumnLengthError)
+      lambda { DBF::Column.new "ColumnName", "N", -1, 0 }.should raise_error(DBF::ColumnLengthError)
     end
+    
+    it "should raise error on emtpy column names" do
+      lambda { DBF::Column.new "\xFF\xFC", "N", 1, 0 }.should raise_error(DBF::ColumnNameError)
+    end
+    
   end
   
   context "#type_cast" do
@@ -110,14 +115,16 @@ describe DBF::Column do
   end
   
   context "#strip_non_ascii_chars" do
+    before do
+      @column = DBF::Column.new "ColumnName", "N", 1, 0
+    end
+    
     it "should strip characters below decimal 32 and above decimal 127" do
-      column = DBF::Column.new "ColumnName", "N", 1, 0
-      column.send(:strip_non_ascii_chars, "--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--").should == "---hello world---"
+      @column.strip_non_ascii_chars("--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--").should == "---hello world---"
     end
 
     it "should truncate characters with decimal 0" do
-      column = DBF::Column.new "ColumnName", "N", 1, 0
-      column.send(:strip_non_ascii_chars, "--\x1F-\x68\x65\x6C\x6C\x6F \x00 world-\x80--").should == "---hello "
+      @column.strip_non_ascii_chars("--\x1F-\x68\x65\x6C\x6C\x6F \x00 world-\x80--").should == "---hello "
     end
   end
   

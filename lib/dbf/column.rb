@@ -6,8 +6,10 @@ module DBF
     attr_reader :name, :type, :length, :decimal
     
     def initialize(name, type, length, decimal)
-      raise ColumnLengthError, "field length must be greater than 0" unless length > 0
       @name, @type, @length, @decimal = strip_non_ascii_chars(name), type, length, decimal
+      
+      raise ColumnLengthError, "field length must be greater than 0" unless length > 0
+      raise ColumnNameError, "column name cannot not be empty" if @name.length == 0
     end
     
     def type_cast(value)
@@ -66,19 +68,12 @@ module DBF
       "\"#{name.underscore}\", #{data_type}\n"
     end
     
-    private
-    
+    # strip all non-ascii and non-printable characters
     def strip_non_ascii_chars(s)
-      clean = ''
-      s.each_byte do |char|
-        if char > 31 && char < 127
-          clean << char
-        else
-          raise ColumnNameError 'column name must not be empty' if clean.length == 0
-          return clean if char == 0
-        end
-      end
-      clean
+      # truncate the string at the first null character
+      s = s[0, s.index("\x00")] if s.index("\x00")
+      
+      s.gsub(/[^\x20-\x7E]/,"")
     end
   end
   
