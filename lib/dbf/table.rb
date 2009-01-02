@@ -13,9 +13,9 @@ module DBF
     attr_reader :data                   # DBF file handle
     attr_reader :memo                   # Memo file handle
     
-    # Initializes a new DBF::Reader
+    # Initializes a new DBF::Table
     # Example:
-    #   reader = DBF::Reader.new 'data.dbf'
+    #   table = DBF::Table.new 'data.dbf'
     def initialize(filename, options = {})
       @data = File.open(filename, 'rb')
       @memo = open_memo(filename)
@@ -78,16 +78,16 @@ module DBF
     # Find records using a simple ActiveRecord-like syntax.
     #
     # Examples:
-    #   reader = DBF::Reader.new 'mydata.dbf'
+    #   table = DBF::Table.new 'mydata.dbf'
     #   
     #   # Find record number 5
-    #   reader.find(5)
+    #   table.find(5)
     #
     #   # Find all records for Keith Morrison
-    #   reader.find :all, :first_name => "Keith", :last_name => "Morrison"
+    #   table.find :all, :first_name => "Keith", :last_name => "Morrison"
     # 
     #   # Find first record
-    #   reader.find :first, :first_name => "Keith"
+    #   table.find :first, :first_name => "Keith"
     #
     # The <b>command</b> can be an id, :all, or :first.
     # <b>options</b> is optional and, if specified, should be a hash where the keys correspond
