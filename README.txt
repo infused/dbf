@@ -91,7 +91,7 @@ A small command-line utility called dbf is installed along with the gem.
 
 (The MIT Licence)
 
-Copyright (c) 2006-2008 Keith Morrison <keithm@infused.org>
+Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org, www.infused.org>
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
