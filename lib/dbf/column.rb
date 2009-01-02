@@ -33,10 +33,8 @@ module DBF
     
     def decode_datetime(value)
       days, milliseconds = value.unpack('l2')
-      hours = (milliseconds / MS_PER_HOUR).to_i
-      minutes = ((milliseconds - (hours * MS_PER_HOUR)) / MS_PER_MINUTE).to_i
-      seconds = ((milliseconds - (hours * MS_PER_HOUR) - (minutes * MS_PER_MINUTE)) / MS_PER_SECOND).to_i
-      DateTime.jd(days, hours, minutes, seconds)
+      seconds = milliseconds / 1000
+      DateTime.jd(days, seconds/3600, seconds/60 % 60, seconds % 60)
     end
     
     def unpack_integer(value)
