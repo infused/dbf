@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Morrison"]
-  s.date = %q{2009-01-02}
+  s.date = %q{2009-01-14}
   s.default_executable = %q{dbf}
   s.description = %q{DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files  Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org, www.infused.org>  * Official project page: http://rubyforge.org/projects/dbf * API Documentation: http://dbf.rubyforge.org/docs * To report bugs: http://www.rubyforge.org/tracker/?group_id=2009 * Questions: Email keithm@infused.org and put DBF somewhere in the subject line}
   s.email = %q{keithm@infused.org}
@@ -25,13 +25,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activesupport>, [">= 2.1.0"])
+      s.add_runtime_dependency(%q<fastercsv>, [">= 1.4.0"])
       s.add_development_dependency(%q<hoe>, [">= 1.8.2"])
     else
       s.add_dependency(%q<activesupport>, [">= 2.1.0"])
+      s.add_dependency(%q<fastercsv>, [">= 1.4.0"])
       s.add_dependency(%q<hoe>, [">= 1.8.2"])
     end
   else
     s.add_dependency(%q<activesupport>, [">= 2.1.0"])
+    s.add_dependency(%q<fastercsv>, [">= 1.4.0"])
     s.add_dependency(%q<hoe>, [">= 1.8.2"])
   end
 end

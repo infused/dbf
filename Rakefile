@@ -16,6 +16,7 @@ Hoe.new PKG_NAME, PKG_VERSION do |p|
   p.need_tar = true
   p.need_zip = true
   p.extra_deps << ['activesupport', '>= 2.1.0']
+  p.extra_deps << ['fastercsv', '>= 1.4.0']
 end
 
 task :default => :spec

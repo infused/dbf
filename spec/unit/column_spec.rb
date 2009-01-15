@@ -43,13 +43,13 @@ describe DBF::Column do
     it "should cast numbers with no decimals to Integer" do
       value = "135"
       column = DBF::Column.new "ColumnName", "N", 3, 0
-      column.type_cast(value).should == 13105
+      column.type_cast(value).should == 135
     end
     
     it "should cast :integer to Integer" do
       value = "135"
       column = DBF::Column.new "ColumnName", "I", 3, 0
-      column.type_cast(value).should == 13105
+      column.type_cast(value).should == 135
     end
     
     it "should cast boolean to True" do

@@ -3,18 +3,19 @@ require File.dirname(__FILE__) + "/../spec_helper"
 describe DBF::Record do
   
   def example_record(data = '')
-    DBF::Record.new(mock_table(data))
+    table = mock_table(data)
+    DBF::Record.new(table)
   end
   
   def mock_table(data = '')
-    table = mock('table')
-    table.stub!(:memo_block_size).and_return(8)
-    table.stub!(:memo).and_return(nil)
-    table.stub!(:columns).and_return([])
-    table.stub!(:data)
-    table.stub!(:has_memo_file?).and_return(true)
-    table.data.stub!(:read).and_return(data)
-    table
+    returning mock('table') do |table|
+      table.stub!(:memo_block_size).and_return(8)
+      table.stub!(:memo).and_return(nil)
+      table.stub!(:columns).and_return([])
+      table.stub!(:data)
+      table.stub!(:has_memo_file?).and_return(true)
+      table.data.stub!(:read).and_return(data)
+    end
   end
   
   context "when initialized" do
@@ -43,20 +44,6 @@ describe DBF::Record do
       table.column("WEBINCLUDE").type.should == "L"
       table.records.all? {|record| record.attributes["webinclude"].should satisfy {|v| v == true || v == false}}
     end
-  
-    # it "should typecast datetime columns to DateTime" do
-    #   record = example_record("Nl%\000\300Z\252\003")
-    #   column = mock('column', :length => 8)
-    #   
-    #   record.instance_eval {unpack_datetime(column)}.to_s.should == "2002-10-10T17:04:56+00:00"
-    # end
-    #   
-    # it "should typecast integers to Fixnum" do
-    #   record = example_record("\017\020\000\000")
-    #   column = mock('column', :length => 4)
-    #   
-    #   record.instance_eval {unpack_integer(column)}.should == 4111
-    # end
   end
   
   describe '#memo_block_content_size' do
@@ -93,6 +80,14 @@ describe DBF::Record do
       record = DBF::Record.new(table)
       
       record.send(:read_memo, 5).should be_nil
+    end
+  end
+  
+  describe '#to_a' do
+    it 'should return an ordered array of attribute values' do
+      table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
+      record = table.records[9]
+      record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, "0.100000000000000000", nil]
     end
   end
 

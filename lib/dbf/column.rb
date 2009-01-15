@@ -38,7 +38,7 @@ module DBF
     end
     
     def unpack_integer(value)
-      value.unpack('v').first.to_i
+      value.to_i
     end
     
     def schema_definition

@@ -1,10 +1,11 @@
 module DBF
   class Record
     attr_reader :attributes
+    delegate :columns, :to => :@table
     
     def initialize(table)
       @table, @data, @memo = table, table.data, table.memo
-      initialize_values(table.columns)
+      initialize_values
       define_accessors
     end
     
@@ -12,10 +13,19 @@ module DBF
       other.respond_to?(:attributes) && other.attributes == attributes
     end
     
+    def to_a
+      columns.map do |column|
+        underscored_column_name = column.name.underscore
+        value = @attributes[column.name.underscore]
+        
+        value.is_a?(String) ? value.strip : value
+      end
+    end
+    
     private
     
     def define_accessors
-      @table.columns.each do |column|
+      columns.each do |column|
         underscored_column_name = column.name.underscore
         unless respond_to?(underscored_column_name)
           self.class.send :define_method, underscored_column_name do
@@ -25,7 +35,7 @@ module DBF
       end
     end
     
-    def initialize_values(columns)
+    def initialize_values
       @attributes = columns.inject({}) do |hash, column|
         if column.type == 'M'
           starting_block = unpack_string(column).to_i

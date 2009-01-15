@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + "/../spec_helper"
+require 'fileutils'
 
 describe DBF::Table do
   
@@ -155,7 +156,27 @@ describe DBF::Table do
       records.map! { |r| r.attributes }
       records.should == table.records.map {|r| r.attributes}
     end
-
+  end
+  
+  describe '#to_csv' do
+    before do
+      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+    end
+    
+    after do
+      FileUtils.rm_f 'dbase_83.csv'
+      FileUtils.rm_f 'test.csv'
+    end
+    
+    it 'should create default dump.csv' do
+      @table.to_csv
+      File.exists?('dbase_83.csv').should be_true
+    end
+    
+    it 'should create custom csv file' do
+      @table.to_csv('test.csv')
+      File.exists?('test.csv').should be_true
+    end
   end
 
 end

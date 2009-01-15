@@ -65,11 +65,6 @@ module DBF
       end
     end
     
-    # def get_record_from_file(index)
-    #   seek_to_record(@db_index[index])
-    #   Record.new(self)
-    # end
-    
     # Returns a DBF::Record (or nil if the record has been marked for deletion) for the record at <tt>index</tt>.
     def record(index)
       records[index]
@@ -155,6 +150,16 @@ module DBF
     def get_record_from_file(index)
       seek_to_record(@db_index[index])
       Record.new(self)
+    end
+    
+    # Dumps all records into a CSV file
+    def to_csv(filename = nil)
+      filename = File.basename(@data.path, '.dbf') + '.csv' if filename.nil?
+      FasterCSV.open(filename, 'w', :force_quotes => true) do |csv|
+        records.each do |record|
+          csv << record.to_a
+        end
+      end
     end
     
     private
