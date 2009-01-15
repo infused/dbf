@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name = %q{dbf}
-  s.version = "1.0.8"
+  s.version = "1.0.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Morrison"]
-  s.date = %q{2009-01-14}
+  s.date = %q{2009-01-15}
   s.default_executable = %q{dbf}
   s.description = %q{DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files  Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org, www.infused.org>  * Official project page: http://rubyforge.org/projects/dbf * API Documentation: http://dbf.rubyforge.org/docs * To report bugs: http://www.rubyforge.org/tracker/?group_id=2009 * Questions: Email keithm@infused.org and put DBF somewhere in the subject line}
   s.email = %q{keithm@infused.org}

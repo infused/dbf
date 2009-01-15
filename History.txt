@@ -1,3 +1,8 @@
+== 1.0.9
+
+* Fix incorrect integer column values (only affecting some dbf files)
+* Add CSV export
+
 == 1.0.8
 
 * Truncate column names on NULL
