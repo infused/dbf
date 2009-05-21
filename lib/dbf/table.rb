@@ -155,7 +155,7 @@ module DBF
     # Dumps all records into a CSV file
     def to_csv(filename = nil)
       filename = File.basename(@data.path, '.dbf') + '.csv' if filename.nil?
-      FasterCSV.open(filename, 'w', :force_quotes => true) do |csv|
+      FCSV.open(filename, 'w', :force_quotes => true) do |csv|
         records.each do |record|
           csv << record.to_a
         end
