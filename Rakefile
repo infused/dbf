@@ -5,18 +5,19 @@ PKG_NAME = "dbf"
 PKG_VERSION = "1.0.9"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
-Hoe.new PKG_NAME, PKG_VERSION do |p|
-  p.rubyforge_name = PKG_NAME
-  p.author = "Keith Morrison"
-  p.email = "keithm@infused.org"
-  p.summary = "A small fast library for reading dBase, xBase, Clipper and FoxPro database files."
-  p.description = p.paragraphs_of("README.txt", 1..3).join("\n\n")
-  p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  p.url = "http://github.com/infused/dm-dbf/tree/master"
-  p.need_tar = true
-  p.need_zip = true
-  p.extra_deps << ['activesupport', '>= 2.1.0']
-  p.extra_deps << ['fastercsv', '>= 1.4.0']
+Hoe.spec PKG_NAME do |s|
+  s.version = PKG_VERSION
+  s.rubyforge_name = PKG_NAME
+  s.author = "Keith Morrison"
+  s.email = "keithm@infused.org"
+  s.summary = "A small fast library for reading dBase, xBase, Clipper and FoxPro database files."
+  s.description = s.paragraphs_of("README.txt", 1..3).join("\n\n")
+  s.changes = s.paragraphs_of("History.txt", 0..1).join("\n\n")
+  s.url = "http://github.com/infused/dm-dbf/tree/master"
+  s.need_tar = true
+  s.need_zip = true
+  s.extra_deps << ['activesupport', '>= 2.1.0']
+  s.extra_deps << ['fastercsv', '>= 1.4.0']
 end
 
 task :default => :spec
