@@ -2,11 +2,11 @@
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files
 
-Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org, www.infused.org>
+Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org>, <www.infused.org>
 
-* Official project page: http://rubyforge.org/projects/dbf
-* API Documentation: http://dbf.rubyforge.org/docs
-* To report bugs: http://www.rubyforge.org/tracker/?group_id=2009
+* Official project page: <http://rubyforge.org/projects/dbf>
+* API Documentation: <http://dbf.rubyforge.org/docs>
+* To report bugs: <http://www.rubyforge.org/tracker/?group_id=2009>
 * Questions: Email keithm@infused.org and put DBF somewhere in the subject
   line
 
