@@ -1,4 +1,4 @@
-= DBF
+# DBF
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files
 
@@ -10,84 +10,84 @@ Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org, www.infused.org>
 * Questions: Email keithm@infused.org and put DBF somewhere in the subject
   line
 
-== Features
+## Features
 
 * No external dependencies
 * Fields are type cast to the appropriate Ruby types
 * Ability to dump the database schema in the portable ActiveRecord::Schema
   format
 
-== Installation
+## Installation
   
-  gem install dbf
+    gem install dbf
   
-== Basic Usage
+## Basic Usage
 
-  require 'rubygems'
-  require 'dbf'
+    require 'rubygems'
+    require 'dbf'
 
-  table = DBF::Table.new("widgets.dbf")
-  
-  # Tables are enumerable
-  widget_ids = table.map { |row| row.id }
-  abc_names = table.select { |row| row.name =~ /^[a-cA-C] }
-  sorted = table.sort_by { |row| row.name }
-  
-  # Print the 'name' field from record number 4
-  puts table.record(4).name
+    table = DBF::Table.new("widgets.dbf")
 
-	# Attributes can also be accessed using the column name as a Hash key
-	puts table.record(4).attributes["name"]
-  
-  # Print the 'name' and 'address' fields from each record
-  table.records.each do |record|
-    puts record.name
-    puts record.email
-  end
+    # Tables are enumerable
+    widget_ids = table.map { |row| row.id }
+    abc_names = table.select { |row| row.name =~ /^[a-cA-C] }
+    sorted = table.sort_by { |row| row.name }
 
-  # Find records
-  table.find :all, :first_name => 'Keith'
-  table.find :all, :first_name => 'Keith', :last_name => 'Morrison'
-  table.find :first, :first_name => 'Keith'
-  table.find(10)
+    # Print the 'name' field from record number 4
+    puts table.record(4).name
+
+    # Attributes can also be accessed using the column name as a Hash key
+    puts table.record(4).attributes["name"]
   
-== Migrating to ActiveRecord
+    # Print the 'name' and 'address' fields from each record
+    table.records.each do |record|
+      puts record.name
+      puts record.email
+    end
+
+    # Find records
+    table.find :all, :first_name => 'Keith'
+    table.find :all, :first_name => 'Keith', :last_name => 'Morrison'
+    table.find :first, :first_name => 'Keith'
+    table.find(10)
+  
+## Migrating to ActiveRecord
 
 An example of migrating a DBF book table to ActiveRecord using a migration:
 
-  require 'dbf'
-  
-  class CreateBooks < ActiveRecord::Migration
-    def self.up
-      table = DBF::Table.new('db/dbf/books.dbf')
-      eval(table.schema)
+    require 'dbf'
 
-      table.records.each do |record|
-        Book.create(record.attributes)
+    class CreateBooks < ActiveRecord::Migration
+      def self.up
+        table = DBF::Table.new('db/dbf/books.dbf')
+        eval(table.schema)
+
+        table.records.each do |record|
+          Book.create(record.attributes)
+        end
+      end
+
+      def self.down
+        drop_table :books
       end
     end
-
-    def self.down
-      drop_table :books
-    end
-  end
   
-== Command-line utility
+## Command-line utility
 
 A small command-line utility called dbf is installed along with the gem.
 
-  $ dbf -h
-  usage: dbf [-h|-s|-a] filename
-    -h = print this message
-    -s = print summary information
-    -a = create an ActiveRecord::Schema
+    $ dbf -h
+    usage: dbf [-h|-s|-a] filename
+      -h = print this message
+      -s = print summary information
+      -a = create an ActiveRecord::Schema
   
-== Limitations and known bugs
+## Limitations and known bugs
   
 * DBF is read-only
 * Index files are not used
 
-== License
+## License
 
 (The MIT Licence)
 
