@@ -2,20 +2,16 @@
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files
 
-Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org>, <www.infused.org>
-
-* Official project page: <http://rubyforge.org/projects/dbf>
-* API Documentation: <http://dbf.rubyforge.org/docs>
-* To report bugs: <http://www.rubyforge.org/tracker/?group_id=2009>
-* Questions: Email keithm@infused.org and put DBF somewhere in the subject
-  line
+* Project page: <http://github.com/infused/dbf>
+* API Documentation: <http://rdoc.info/projects/infused/dbf>
+* Report bugs: <http://github.com/infused/dbf/issues>
+* Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the subject line
 
 ## Features
 
 * No external dependencies
 * Fields are type cast to the appropriate Ruby types
-* Ability to dump the database schema in the portable ActiveRecord::Schema
-  format
+* Ability to dump the database schema in the portable ActiveRecord::Schema format
 
 ## Installation
   
@@ -91,7 +87,7 @@ A small command-line utility called dbf is installed along with the gem.
 
 (The MIT Licence)
 
-Copyright (c) 2006-2009 Keith Morrison <keithm@infused.org, www.infused.org>
+Copyright (c) 2006-2009 Keith Morrison <mailto:keithm@infused.org>, <http://www.infused.org>
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
