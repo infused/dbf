@@ -26,7 +26,7 @@ DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro databas
 
     # Tables are enumerable
     widget_ids = table.map { |row| row.id }
-    abc_names = table.select { |row| row.name =~ /^[a-cA-C] }
+    abc_names = table.select { |row| row.name =~ /^[a-cA-C]/ }
     sorted = table.sort_by { |row| row.name }
 
     # Print the 'name' field from record number 4
