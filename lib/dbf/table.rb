@@ -3,7 +3,7 @@ module DBF
   class Table
     include Enumerable
     
-    attr_reader :column_count           # The total number of columns (columns)
+    attr_reader :column_count           # The total number of columns
     attr_reader :columns                # An array of DBF::Column
     attr_reader :version                # Internal dBase version number
     attr_reader :last_updated           # Last updated datetime
@@ -229,14 +229,9 @@ module DBF
       
       def build_db_index
         @db_index = []
-        @deleted_records = []
         0.upto(@record_count - 1) do |n|
           seek_to_record(n)
-          if deleted_record?
-            @deleted_records << n
-          else
-            @db_index << n
-          end
+          @db_index << n unless deleted_record?
         end
       end
       
