@@ -8,18 +8,20 @@ describe DBF::Record do
   end
   
   def mock_table(data = '')
+    @column1 = DBF::Column.new 'ColumnName', 'N', 1, 0
+    
     returning mock('table') do |table|
       table.stub!(:memo_block_size).and_return(8)
       table.stub!(:memo).and_return(nil)
-      table.stub!(:columns).and_return([])
-      table.stub!(:data)
+      table.stub!(:columns).and_return([@column1])
+      table.stub!(:data).and_return(data)
       table.stub!(:has_memo_file?).and_return(true)
       table.data.stub!(:read).and_return(data)
     end
   end
   
   context "when initialized" do
-    it "should typecast number columns with decimals == 0 to Integer" do
+    it "should typecast number columns no decimal places to Integer" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("ID").decimal.should == 0
@@ -88,6 +90,46 @@ describe DBF::Record do
       table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
       record = table.records[9]
       record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, "0.100000000000000000", nil]
+    end
+  end
+  
+  describe '#==' do
+    before do
+      @record = example_record
+    end
+    
+    it 'should be false if other does not have attributes' do
+      other = mock('object')
+      (@record == other).should be_false
+    end
+    
+    it 'should be true if other attributes match' do
+      attributes = {:x => 1, :y => 2}
+      @record.stub!(:attributes).and_return(attributes)
+      other = mock('object', :attributes => attributes)
+      (@record == other).should be_true
+    end
+  end
+  
+  describe 'unpack_column' do
+    before do
+      @record = example_record('abc')
+    end
+    
+    it 'should unpack the data' do
+      column = DBF::Column.new 'ColumnName', 'C', 3, 0
+      @record.send(:unpack_column, column).should == ['abc']
+    end
+  end
+  
+  describe 'unpack_string' do
+    before do
+      @record = example_record('abc')
+    end
+    
+    it 'should unpack the data and convert it to a String' do
+      column = DBF::Column.new 'ColumnName', 'C', 3, 0
+      @record.send(:unpack_string, column).should == 'abc'
     end
   end
 
