@@ -14,12 +14,7 @@ module DBF
     end
     
     def to_a
-      columns.map do |column|
-        underscored_column_name = column.name.underscore
-        value = @attributes[column.name.underscore]
-        
-        value.is_a?(String) ? value.strip : value
-      end
+      columns.map { |column| @attributes[column.name.underscore] }
     end
     
     private
@@ -79,7 +74,8 @@ module DBF
       when "83" # dbase iii
         memo_string = ""
         loop do
-          memo_string << block = @memo.read(memo_block_size)
+          block = @memo.read(memo_block_size)
+          memo_string << block
           break if block.rstrip.size < memo_block_size
         end
       when "8b" # dbase iv
