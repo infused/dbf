@@ -111,14 +111,13 @@ describe DBF::Record do
     end
   end
   
-  describe 'unpack_column' do
+  describe 'unpack_data' do
     before do
       @record = example_record('abc')
     end
     
     it 'should unpack the data' do
-      column = DBF::Column.new 'ColumnName', 'C', 3, 0
-      @record.send(:unpack_column, column).should == 'abc'
+      @record.send(:unpack_data, 3).should == 'abc'
     end
   end
   

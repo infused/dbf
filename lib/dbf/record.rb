@@ -41,19 +41,19 @@ module DBF
           starting_block = unpack_string(column).to_i
           hash[column.name.underscore] = read_memo(starting_block)
         else
-          value = unpack_column(column)
+          value = unpack_data(column.length)
           hash[column.name.underscore] = column.type_cast(value)
         end
         hash
       end
     end
   
-    def unpack_column(column)
-      @data.read(column.length).to_s.unpack("a#{column.length}").first
+    def unpack_data(length)
+      @data.read(length).unpack("a#{length}").first
     end
   
     def unpack_string(column)
-      unpack_column(column).to_s
+      unpack_data(column.length).to_s
     end
   
     def read_memo(start_block)
