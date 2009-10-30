@@ -120,16 +120,5 @@ describe DBF::Record do
       @record.send(:unpack_data, 3).should == 'abc'
     end
   end
-  
-  describe 'unpack_string' do
-    before do
-      @record = example_record('abc')
-    end
-    
-    it 'should unpack the data and convert it to a String' do
-      column = DBF::Column.new 'ColumnName', 'C', 3, 0
-      @record.send(:unpack_string, column).should == 'abc'
-    end
-  end
 
 end

@@ -38,7 +38,7 @@ module DBF
     def initialize_values
       @attributes = columns.inject({}) do |hash, column|
         if column.type == 'M'
-          starting_block = unpack_string(column).to_i
+          starting_block = unpack_data(column.length).to_i
           hash[column.name.underscore] = read_memo(starting_block)
         else
           value = unpack_data(column.length)
@@ -50,10 +50,6 @@ module DBF
   
     def unpack_data(length)
       @data.read(length).unpack("a#{length}").first
-    end
-  
-    def unpack_string(column)
-      unpack_data(column.length).to_s
     end
   
     def read_memo(start_block)
