@@ -118,7 +118,7 @@ describe DBF::Record do
     
     it 'should unpack the data' do
       column = DBF::Column.new 'ColumnName', 'C', 3, 0
-      @record.send(:unpack_column, column).should == ['abc']
+      @record.send(:unpack_column, column).should == 'abc'
     end
   end
   

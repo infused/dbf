@@ -13,15 +13,13 @@ module DBF
     end
     
     def type_cast(value)
-      value = value.is_a?(Array) ? value.first : value
-      
       case type
       when 'N' # number
-        decimal.zero? ? unpack_integer(value) : value.to_f
+        unpack_number(value)
       when 'D' # date
         value.to_date unless value.blank?
       when 'L' # logical
-        value.strip =~ /^(y|t)$/i ? true : false
+        boolean(value)
       when 'I' # integer
         unpack_integer(value)
       when 'T' # datetime
@@ -37,33 +35,39 @@ module DBF
       DateTime.jd(days, seconds/3600, seconds/60 % 60, seconds % 60)
     end
     
+    def unpack_number(value)
+      decimal.zero? ? unpack_integer(value) : value.to_f
+    end
+    
     def unpack_integer(value)
       value.to_i
     end
     
+    def boolean(value)
+      value.strip =~ /^(y|t)$/i ? true : false
+    end
+    
     def schema_definition
-      data_type = case type
-      when "N" # number
-        if decimal > 0
-          ":float"
-        else
-          ":integer"
-        end
-      when "I" # integer
+      "\"#{name.underscore}\", #{schema_data_type}\n"
+    end
+    
+    def schema_data_type
+      case type
+      when "N"
+        decimal > 0 ? ":float" : ":integer"
+      when "I"
         ":integer"
-      when "D" # date
+      when "D"
         ":date"
-      when "T" # datetime
+      when "T"
         ":datetime"
-      when "L" # boolean
+      when "L"
         ":boolean"
-      when "M" # memo
+      when "M"
         ":text"
       else
         ":string, :limit => #{length}"
       end
-      
-      "\"#{name.underscore}\", #{data_type}\n"
     end
     
     # strip all non-ascii and non-printable characters

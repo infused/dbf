@@ -49,7 +49,7 @@ module DBF
     end
   
     def unpack_column(column)
-      @data.read(column.length).to_s.unpack("a#{column.length}")
+      @data.read(column.length).to_s.unpack("a#{column.length}").first
     end
   
     def unpack_string(column)
