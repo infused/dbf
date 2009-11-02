@@ -22,27 +22,27 @@ describe DBF::Record do
   
   context "when initialized" do
     it "should typecast number columns no decimal places to Integer" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::EnumTable.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("ID").decimal.should == 0
       table.records.all? {|record| record.attributes['id'].should be_kind_of(Integer)}
     end
   
     it "should typecast number columns with decimals > 0 to Float" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::EnumTable.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("COST").decimal.should == 2
       table.records.all? {|record| record.attributes['cost'].should be_kind_of(Float)}
     end
   
     it "should typecast memo columns to String" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::EnumTable.new "#{DB_PATH}/dbase_83.dbf"
       table.column("DESC").type.should == "M"
       table.records.all? {|record| record.attributes['desc'].should be_kind_of(String)}
     end
   
     it "should typecast logical columns to True or False" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
+      table = DBF::EnumTable.new "#{DB_PATH}/dbase_30.dbf"
       table.column("WEBINCLUDE").type.should == "L"
       table.records.all? {|record| record.attributes["webinclude"].should satisfy {|v| v == true || v == false}}
     end
@@ -85,13 +85,13 @@ describe DBF::Record do
     end
   end
   
-  describe '#to_a' do
-    it 'should return an ordered array of attribute values' do
-      table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
-      record = table.records[9]
-      record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, "0.100000000000000000", nil]
-    end
-  end
+  # describe '#to_a' do
+  #   it 'should return an ordered array of attribute values' do
+  #     table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
+  #     record = table.records[9]
+  #     record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, "0.100000000000000000", nil]
+  #   end
+  # end
   
   describe '#==' do
     before do

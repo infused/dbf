@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/dbf_shared"
 
 describe DBF, "of type 30 (Visual FoxPro)" do
   before(:each) do
-    @table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
+    @table = DBF::EnumTable.new "#{DB_PATH}/dbase_30.dbf"
   end
   
   it_should_behave_like "DBF"
