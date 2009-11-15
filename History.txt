@@ -1,3 +1,8 @@
+== 1.1.0
+
+* Moved Enumerable features into separate DBF::EnumTable class. EnumTable is
+  not suitable for large databases because all records are loaded into memory.
+
 == 1.0.9
 
 * Fix incorrect integer column values (only affecting some dbf files)
