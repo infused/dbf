@@ -101,14 +101,6 @@ module DBF
       end
     end
     
-    # Returns the record at <tt>index</tt> by seeking to the record in the
-    # physical database file. See the documentation for the records method for
-    # information on how these two methods differ.
-    def get_record_from_file(index)
-      seek_to_record(@db_index[index])
-      Record.new(self)
-    end
-    
     # Dumps all records into a CSV file
     def to_csv(filename = nil)
       filename = File.basename(@data.path, '.dbf') + '.csv' if filename.nil?
@@ -192,9 +184,6 @@ module DBF
       end
     end
     
-    def all_values_match?(record, options)
-      options.map {|key, value| record.attributes[key.to_s.underscore] == value}.all?
-    end
   end
   
 end

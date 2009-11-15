@@ -56,6 +56,10 @@ module DBF
       end
     end
     
+    def all_values_match?(record, options)
+      options.all? {|key, value| record.attributes[key.to_s.underscore] == value}
+    end
+    
   end
   
 end
