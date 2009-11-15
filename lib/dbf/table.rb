@@ -10,6 +10,7 @@ module DBF
     attr_reader :options                # The options hash that was used to initialize the table
     attr_reader :data                   # DBF file handle
     attr_reader :memo                   # Memo file handle
+    attr_reader :record_count           # Total number of records
     
     # Initializes a new DBF::Table
     # Example:
@@ -27,17 +28,11 @@ module DBF
       get_header_info
       get_memo_header_info if @memo
       get_column_descriptors
-      build_db_index
     end
     
     # Returns true if there is a corresponding memo file
     def has_memo_file?
       @memo ? true : false
-    end
-    
-    # The total number of active records.
-    def record_count
-      @db_index.size
     end
     
     # Returns an instance of DBF::Column for <b>column_name</b>.  The <b>column_name</b>
@@ -53,12 +48,11 @@ module DBF
       end
     end
     
-    # Returns a DBF::Record (or nil if the record has been marked for deletion) for the record at <
+    # Returns the DBF::Record at the specified index
     def record(index)
       seek_to_record(index)
       DBF::Record.new(self)
     end
-    
     
     alias_method :row, :record
     
@@ -174,14 +168,6 @@ module DBF
   
     def seek_to_record(index)
       seek(index * @record_length)
-    end
-    
-    def build_db_index
-      @db_index = []
-      0.upto(@record_count - 1) do |n|
-        seek_to_record(n)
-        @db_index << n unless deleted_record?
-      end
     end
     
   end
