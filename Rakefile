@@ -8,7 +8,6 @@ require 'metric_fu'
 
 Jeweler::Tasks.new do |s|
   s.name = 'dbf'
-  s.version = '1.0.9'
   s.description = 'A small fast library for reading dBase, xBase, Clipper and FoxPro database files.'
   s.summary = 'Read xBase files'
   s.platform = Gem::Platform::RUBY
