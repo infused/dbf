@@ -126,30 +126,36 @@ module DBF
     # for the record to be returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
     def find(command, options = {})
-      # results = options.empty? ? records : records.select {|record| all_values_match?(record, options)}
-
       case command
       when Fixnum
         record(command)
       when :all
-        results = []
-        each do |record|
-          results << record if all_values_match?(record, options)
-        end
-        results
+        find_all(options)
       when :first
-        each do |record|
-          return record if all_values_match?(record, options)
-        end
-        nil
+        find_first(options)
       end
+    end
+    
+    private
+    
+    def find_all(options)
+      results = []
+      each do |record|
+        results << record if all_values_match?(record, options)
+      end
+      results
+    end
+    
+    def find_first(options)
+      each do |record|
+        return record if all_values_match?(record, options)
+      end
+      nil
     end
 
     def all_values_match?(record, options)
       options.all? {|key, value| record.attributes[key.to_s.underscore] == value}
     end
-    
-    private
     
     def open_memo(file)
       %w(fpt FPT dbt DBT).each do |extname|
