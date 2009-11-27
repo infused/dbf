@@ -22,29 +22,29 @@ describe DBF::Record do
   
   context "when initialized" do
     it "should typecast number columns no decimal places to Integer" do
-      table = DBF::EnumTable.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("ID").decimal.should == 0
-      table.records.all? {|record| record.attributes['id'].should be_kind_of(Integer)}
+      table.record(1).attributes['id'].should be_kind_of(Integer)
     end
   
     it "should typecast number columns with decimals > 0 to Float" do
-      table = DBF::EnumTable.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("ID").type.should == "N"
       table.column("COST").decimal.should == 2
-      table.records.all? {|record| record.attributes['cost'].should be_kind_of(Float)}
+      table.record(1).attributes['cost'].should be_kind_of(Float)
     end
   
     it "should typecast memo columns to String" do
-      table = DBF::EnumTable.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.column("DESC").type.should == "M"
-      table.records.all? {|record| record.attributes['desc'].should be_kind_of(String)}
+      table.record(1).attributes['desc'].should be_kind_of(String)
     end
   
     it "should typecast logical columns to True or False" do
-      table = DBF::EnumTable.new "#{DB_PATH}/dbase_30.dbf"
+      table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
       table.column("WEBINCLUDE").type.should == "L"
-      table.records.all? {|record| record.attributes["webinclude"].should satisfy {|v| v == true || v == false}}
+      table.record(1).attributes["webinclude"].should satisfy {|v| v == true || v == false}
     end
   end
   

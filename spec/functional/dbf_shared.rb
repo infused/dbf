@@ -7,7 +7,9 @@ describe DBF, :shared => true do
   end
 
   specify "records should be instances of DBF::Record" do
-    @table.records.all? {|record| record.should be_an_instance_of(DBF::Record)}
+    @table.each do |record|
+      record.should be_an_instance_of(DBF::Record)
+    end
   end
   
   specify "columns should be instances of DBF::Column" do

@@ -1,7 +1,6 @@
 == 1.1.0
 
-* Moved Enumerable features into separate DBF::EnumTable class. EnumTable is
-  not suitable for large databases because all records are loaded into memory.
+* Add support for large table that will not fit into memory
 
 == 1.0.9
 
