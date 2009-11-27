@@ -130,6 +130,14 @@ describe DBF::Table do
         @records = []
         @table.each {|record| @records << record}
       end
+      
+      it "should accept a block" do
+        records = []
+        @table.find(:all, :weight => 0.0) do |record|
+          records << record
+        end
+        records.should == @table.find(:all, :weight => 0.0)
+      end
 
       it "should return all records if options are empty" do
         @table.find(:all).should == @records

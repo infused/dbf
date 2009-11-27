@@ -125,12 +125,12 @@ module DBF
     # in the database.  If you specify more than one key, all values must match in order 
     # for the record to be returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
-    def find(command, options = {})
+    def find(command, options = {}, &block)
       case command
       when Fixnum
         record(command)
       when :all
-        find_all(options)
+        find_all(options, &block)
       when :first
         find_first(options)
       end
@@ -138,10 +138,16 @@ module DBF
     
     private
     
-    def find_all(options)
+    def find_all(options, &block)
       results = []
       each do |record|
-        results << record if all_values_match?(record, options)
+        if all_values_match?(record, options)
+          if block_given?
+            yield(record)
+          else
+            results << record
+          end
+        end
       end
       results
     end
