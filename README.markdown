@@ -12,6 +12,7 @@ DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro databas
 * No external dependencies
 * Fields are type cast to the appropriate Ruby types
 * Ability to dump the database schema in the portable ActiveRecord::Schema format
+* Ruby 1.9.1 compatible
 
 ## Installation
   
