@@ -102,7 +102,7 @@ A small command-line utility called dbf is installed along with the gem.
 ## Limitations and known bugs
   
 * DBF is read-only
-* Index files are not used
+* External index files are not used
 
 ## License
 
