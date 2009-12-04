@@ -11,6 +11,7 @@ DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro databas
 
 * No external dependencies
 * Fields are type cast to the appropriate Ruby types
+* ActiveRecord like finder methods
 * Ability to dump the database schema in the portable ActiveRecord::Schema format
 * Ruby 1.9.1 compatible
 
@@ -20,32 +21,51 @@ DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro databas
   
 ## Basic Usage
 
+Load a DBF file:
+
     require 'rubygems'
     require 'dbf'
 
     table = DBF::Table.new("widgets.dbf")
 
-    # Tables are enumerable
-    widget_ids = table.map { |row| row.id }
-    abc_names = table.select { |row| row.name =~ /^[a-cA-C]/ }
-    sorted = table.sort_by { |row| row.name }
+Enumerate all records
 
-    # Print the 'name' field from record number 4
-    puts table.record(4).name
-
-    # Attributes can also be accessed using the column name as a Hash key
-    puts table.record(4).attributes["name"]
-  
-    # Print the 'name' and 'address' fields from each record
     table.records.each do |record|
       puts record.name
       puts record.email
     end
+    
+Load a single record using <tt>records</tt> or <tt>find</tt>
 
-    # Find records
-    table.find :all, :first_name => 'Keith'
-    table.find :all, :first_name => 'Keith', :last_name => 'Morrison'
+    table.records(6)
+    table.find(6)
+
+Attributes can also be accessed through the attributes hash in original or
+underscored form or as an accessor method using the underscored name.
+
+    table.record(4).attributes["PhoneBook"]
+    table.record(4).attributes["phone_book"]
+    table.record(4).phone_book
+  
+Search for records using a simple hash format.  Multiple search criteria are
+ANDed. Use the block form of find if the resulting recordset could be large
+otherwise all records will be loaded into memory.
+    
+    # find all records with first_name equal to Keith
+    table.find(:all, :first_name => 'Keith') do |record|
+      puts record.last_name
+    end
+    
+    # find all records with first_name equal to Keith and last_name equal
+    # to Morrison
+    table.find(:all, :first_name => 'Keith', :last_name => 'Morrison') do |record|
+      puts record.last_name
+    end
+    
+    # find the first record with first_name equal to Keith
     table.find :first, :first_name => 'Keith'
+    
+    # find record number 10
     table.find(10)
   
 ## Migrating to ActiveRecord
@@ -59,7 +79,7 @@ An example of migrating a DBF book table to ActiveRecord using a migration:
         table = DBF::Table.new('db/dbf/books.dbf')
         eval(table.schema)
 
-        table.records.each do |record|
+        table.each do |record|
           Book.create(record.attributes)
         end
       end
