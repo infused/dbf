@@ -37,8 +37,15 @@ describe DBF, :shared => true do
   
   specify "column read accessors should return the attribute after typecast" do
     @table.columns do |column|
-      record = table.records.first
+      record = @table.records.first
       record.send(column.name).should == record[column.name]
+    end
+  end
+  
+  specify "column attributes should be accessible in underscored form" do
+    @table.columns do |column|
+      record = @table.records.first
+      record.send(column_name).should == record.send(column_name.underscore)
     end
   end
   

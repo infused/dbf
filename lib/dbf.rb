@@ -1,5 +1,5 @@
 require 'date'
-require 'activesupport'
+require 'active_support'
 
 if RUBY_VERSION > '1.9'    
  require 'csv'  
