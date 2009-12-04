@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Morrison"]
-  s.date = %q{2009-11-14}
+  s.date = %q{2009-12-04}
   s.default_executable = %q{dbf}
   s.description = %q{A small fast library for reading dBase, xBase, Clipper and FoxPro database files.}
   s.email = %q{keithm@infused.org}
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".autotest",
+     ".gitignore",
      "History.txt",
      "README.markdown",
      "Rakefile",
@@ -27,7 +28,6 @@ Gem::Specification.new do |s|
      "dbf.gemspec",
      "lib/dbf.rb",
      "lib/dbf/column.rb",
-     "lib/dbf/enum_table.rb",
      "lib/dbf/globals.rb",
      "lib/dbf/record.rb",
      "lib/dbf/table.rb",
@@ -49,7 +49,6 @@ Gem::Specification.new do |s|
      "spec/functional/format_f5_spec.rb",
      "spec/spec_helper.rb",
      "spec/unit/column_spec.rb",
-     "spec/unit/enum_table_spec.rb",
      "spec/unit/record_spec.rb",
      "spec/unit/table_spec.rb"
   ]
@@ -68,7 +67,6 @@ Gem::Specification.new do |s|
      "spec/functional/format_f5_spec.rb",
      "spec/spec_helper.rb",
      "spec/unit/column_spec.rb",
-     "spec/unit/enum_table_spec.rb",
      "spec/unit/record_spec.rb",
      "spec/unit/table_spec.rb"
   ]
