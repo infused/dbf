@@ -16,11 +16,9 @@ Jeweler::Tasks.new do |s|
   s.add_dependency('activesupport', ['>= 2.1.0'])
   s.add_dependency('fastercsv', ['>= 1.4.0'])
   s.homepage = 'http://github.com/infused/dbf'
-  s.rubyforge_project = 'dbf'
 end
 
 Jeweler::GemcutterTasks.new
-Jeweler::RubyforgeTasks.new
 
 task :default => :spec
 
