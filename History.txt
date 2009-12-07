@@ -2,9 +2,9 @@
 
 * Attributes are now accessible by original or underscored name
 
-== 1.0.11
+== 1.1.0
 
-* Minor performance improvements
+* Add support for large table that will not fit into memory
 
 == 1.0.9
 

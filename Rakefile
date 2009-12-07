@@ -27,6 +27,12 @@ Spec::Rake::SpecTask.new :spec do |t|
   t.spec_files = FileList['spec/**/*spec.rb']
 end
 
+desc "Run rcov"
+Spec::Rake::SpecTask.new :rcov do |t|
+  t.spec_files = FileList['spec/**/*spec.rb']
+  t.rcov = true
+end
+
 desc "Run spec docs"
 Spec::Rake::SpecTask.new :specdoc do |t|
   t.spec_opts = ["-f specdoc"]
