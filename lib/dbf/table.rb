@@ -7,7 +7,7 @@ module DBF
     attr_reader :last_updated           # Last updated datetime
     attr_reader :memo_file_format       # :fpt or :dpt
     attr_reader :memo_block_size        # The block size for memo records
-    attr_reader :options                # The options hash that was used to initialize the table
+    attr_reader :options                # The options hash used to initialize the table
     attr_reader :data                   # DBF file handle
     attr_reader :memo                   # Memo file handle
     attr_reader :record_count           # Total number of records
@@ -15,10 +15,9 @@ module DBF
     # Initializes a new DBF::Table
     # Example:
     #   table = DBF::Table.new 'data.dbf'
-    def initialize(filename, options = {})
+    def initialize(filename)
       @data = File.open(filename, 'rb')
       @memo = open_memo(filename)
-      @options = options
       reload!
     end
     
