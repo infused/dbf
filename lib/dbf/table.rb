@@ -15,9 +15,11 @@ module DBF
     # Initializes a new DBF::Table
     # Example:
     #   table = DBF::Table.new 'data.dbf'
-    def initialize(filename)
-      @data = File.open(filename, 'rb')
-      @memo = open_memo(filename)
+    #
+    # @param [String] path Path to the dbf file
+    def initialize(path)
+      @data = File.open(path, 'rb')
+      @memo = open_memo(path)
       reload!
     end
     
@@ -29,17 +31,25 @@ module DBF
       get_column_descriptors
     end
     
-    # Returns true if there is a corresponding memo file
+    # Checks if there is a memo file
+    #
+    # @return [Boolean]
     def has_memo_file?
       @memo ? true : false
     end
     
-    # Returns an instance of DBF::Column for <b>column_name</b>.  The <b>column_name</b>
-    # can be a specified as either a symbol or string.
+    # Retrieve a Column by name
+    # 
+    # @param [:to_s] column_name 
+    # @return [DBF::Column]
     def column(column_name)
       @columns.detect {|f| f.name == column_name.to_s}
     end
     
+    # Calls block once for each record in the table. The record may be nil
+    # if the record has been marked as deleted.
+    #
+    # @yield [nil, DBF::Record]
     def each
       0.upto(@record_count - 1) do |n|
         seek_to_record(n)
@@ -47,7 +57,10 @@ module DBF
       end
     end
     
-    # Returns the DBF::Record at the specified index
+    # Retrieve a record by index number
+    #
+    # @param [Fixnum] index
+    # @return [DBF::Record]
     def record(index)
       seek_to_record(index)
       deleted_record? ? nil : DBF::Record.new(self)
@@ -55,16 +68,18 @@ module DBF
     
     alias_method :row, :record
     
-    # Returns a description of the current database file.
+    # Human readable version description
+    #
+    # @return [String]
     def version_description
       VERSION_DESCRIPTIONS[version]
     end
     
-    # Returns a database schema in the portable ActiveRecord::Schema format.
+    # Generate an ActiveRecord::Schema
     # 
     # xBase data types are converted to generic types as follows:
-    # - Number columns are converted to :integer if there are no decimals, otherwise
-    #   they are converted to :float
+    # - Number columns with no decimals are converted to :integer
+    # - Number columns with decimals are converted to :float
     # - Date columns are converted to :datetime
     # - Logical columns are converted to :boolean
     # - Memo columns are converted to :text
@@ -79,6 +94,9 @@ module DBF
     #     t.column :age, :integer
     #     t.column :notes, :text
     #   end
+    #
+    # @param [optional String] path
+    # @return [String]
     def schema(path = nil)
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{File.basename(@data.path, ".*")}\" do |t|\n"
@@ -89,12 +107,14 @@ module DBF
       
       if path
         File.open(path, 'w') {|f| f.puts(s)}
-      else
-        s
       end
+        
+      s
     end
     
-    # Dumps all records into a CSV file
+    # Dumps all records to a CSV file
+    #
+    # @param [optional String] filename Defaults to basename of dbf file
     def to_csv(filename = nil)
       filename = File.basename(@data.path, '.dbf') + '.csv' if filename.nil?
       FCSV.open(filename, 'w', :force_quotes => true) do |csv|
@@ -124,6 +144,10 @@ module DBF
     # in the database.  If you specify more than one key, all values must match in order 
     # for the record to be returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
+    #
+    # @param [Fixnum, Symbol] command
+    # @param [optional, Hash] options
+    # @yield [optional, DBF::Record]
     def find(command, options = {}, &block)
       case command
       when Fixnum
