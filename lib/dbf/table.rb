@@ -1,5 +1,7 @@
 module DBF
 
+  # DBF::Table is the primary interface to a single DBF file and provides 
+  # methods for enumerating and searching the records.
   class Table
     attr_reader :column_count           # The total number of columns
     attr_reader :columns                # An array of DBF::Column
@@ -12,7 +14,7 @@ module DBF
     attr_reader :memo                   # Memo file handle
     attr_reader :record_count           # Total number of records
     
-    # Initializes a new DBF::Table
+    # Opens a DBF::Table
     # Example:
     #   table = DBF::Table.new 'data.dbf'
     #
@@ -40,7 +42,7 @@ module DBF
     
     # Retrieve a Column by name
     # 
-    # @param [:to_s] column_name 
+    # @param [String, Symbol] column_name 
     # @return [DBF::Column]
     def column(column_name)
       @columns.detect {|f| f.name == column_name.to_s}
@@ -112,12 +114,13 @@ module DBF
       s
     end
     
-    # Dumps all records to a CSV file
+    # Dumps all records to a CSV file.  If no filename is given then CSV is
+    # output to STDOUT.
     #
-    # @param [optional String] filename Defaults to basename of dbf file
-    def to_csv(filename = nil)
-      filename = File.basename(@data.path, '.dbf') + '.csv' if filename.nil?
-      FCSV.open(filename, 'w', :force_quotes => true) do |csv|
+    # @param [optional String] path Defaults to basename of dbf file
+    def to_csv(path = nil)
+      path = File.basename(@data.path, '.dbf') + '.csv' if path.nil?
+      FCSV.open(path, 'w', :force_quotes => true) do |csv|
         each do |record|
           csv << record.to_a
         end
@@ -138,7 +141,7 @@ module DBF
     #   # Find first record
     #   table.find :first, :first_name => "Keith"
     #
-    # The <b>command</b> can be an id, :all, or :first.
+    # The <b>command</b> may be a record index, :all, or :first.
     # <b>options</b> is optional and, if specified, should be a hash where the keys correspond
     # to column names in the database.  The values will be matched exactly with the value
     # in the database.  If you specify more than one key, all values must match in order 
@@ -146,7 +149,7 @@ module DBF
     # AND key2 = 'value2'".
     #
     # @param [Fixnum, Symbol] command
-    # @param [optional, Hash] options
+    # @param [optional, Hash] options Hash of search parameters
     # @yield [optional, DBF::Record]
     def find(command, options = {}, &block)
       case command
@@ -161,6 +164,11 @@ module DBF
     
     private
     
+    # Find all matching
+    #
+    # @param [Hash] options
+    # @yield [optional DBF::Record]
+    # @return [Array]
     def find_all(options, &block)
       results = []
       each do |record|
@@ -175,20 +183,33 @@ module DBF
       results
     end
     
+    # Find first matching
+    # 
+    # @param [Hash] options
+    # @return [DBF::Record, nil]
     def find_first(options)
       each do |record|
         return record if all_values_match?(record, options)
       end
       nil
     end
-
+    
+    # Do all search parameters match?
+    #
+    # @param [DBF::Record] record
+    # @param [Hash] options
+    # @return [Boolean]
     def all_values_match?(record, options)
       options.all? {|key, value| record.attributes[key.to_s.underscore] == value}
     end
     
-    def open_memo(file)
+    # Open memo file
+    #
+    # @params [String] path
+    # @return [File]
+    def open_memo(path)
       %w(fpt FPT dbt DBT).each do |extname|
-        filename = replace_extname(file, extname)
+        filename = replace_extname(path, extname)
         if File.exists?(filename)
           @memo_file_format = extname.downcase.to_sym
           return File.open(filename, 'rb')
@@ -197,20 +218,30 @@ module DBF
       nil
     end
     
-    def replace_extname(filename, extension)
-      filename.sub(/#{File.extname(filename)[1..-1]}$/, extension)
+    # Replace the file extension
+    #
+    # @param [String] path
+    # @param [String] extension
+    # @return [String]
+    def replace_extname(path, extension)
+      path.sub(/#{File.extname(path)[1..-1]}$/, extension)
     end
-  
+    
+    # Is record marked for deletion
+    #
+    # @return [Boolean]
     def deleted_record?
       @data.read(1).unpack('a') == ['*']
     end
-  
+    
+    # Determine database version, record count, header length and record length
     def get_header_info
       @data.rewind
       @version, @record_count, @header_length, @record_length = @data.read(DBF_HEADER_SIZE).unpack('H2 x3 V v2')
       @column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
     end
-  
+    
+    # Retrieves column information from the database
     def get_column_descriptors
       @columns = []
       @column_count.times do
@@ -224,7 +255,8 @@ module DBF
       
       @columns
     end
-  
+    
+    # Determines the memo block size and next available block
     def get_memo_header_info
       @memo.rewind
       if @memo_file_format == :fpt
@@ -235,11 +267,17 @@ module DBF
         @memo_next_available_block = File.size(@memo.path) / @memo_block_size
       end
     end
-  
+    
+    # Seek to a byte offset
+    # 
+    # @params [Fixnum] offset
     def seek(offset)
       @data.seek(@header_length + offset)
     end
   
+    # Seek to a record
+    #
+    # @param [Fixnum] index
     def seek_to_record(index)
       seek(index * @record_length)
     end

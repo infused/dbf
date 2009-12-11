@@ -1,24 +1,40 @@
 module DBF
+  
+  # An instance of DBF::Record represents a row in the DBF file 
   class Record
     attr_reader :attributes
+    attr_reader :memo_block_size
+    
     delegate :columns, :to => :@table
     
+    # Initialize a new DBF::Record
+    # 
+    # @param [DBF::Table] table
     def initialize(table)
       @table, @data, @memo = table, table.data, table.memo
+      @memo_block_size = @table.memo_block_size
       initialize_values
       define_accessors
     end
     
+    # Equality
+    #
+    # @param [DBF::Record] other
+    # @return [Boolean]
     def ==(other)
       other.respond_to?(:attributes) && other.attributes == attributes
     end
     
+    # Maps a row to an array of values
+    # 
+    # @return [Array]
     def to_a
       columns.map { |column| @attributes[column.name.underscore] }
     end
     
     private
     
+    # Defined attribute accessor methods
     def define_accessors
       columns.each do |column|
         underscored_column_name = column.name.underscore
@@ -30,6 +46,7 @@ module DBF
       end
     end
     
+    # Initialize values for a row
     def initialize_values
       @attributes = columns.inject({}) do |hash, column|
         if column.type == 'M'
@@ -44,17 +61,27 @@ module DBF
         hash
       end
     end
-  
+    
+    # Unpack raw data from database
+    # 
+    # @param [Fixnum] length
     def unpack_data(length)
       @data.read(length).unpack("a#{length}").first
     end
-  
+    
+    # Reads a memo from the memo file
+    # 
+    # @param [Fixnum] start_block
     def read_memo(start_block)
       return nil if !@table.has_memo_file? || start_block < 1
 
       @table.memo_file_format == :fpt ? build_fpt_memo(start_block) : build_dbt_memo(start_block)
     end
     
+    # Reconstructs a memo from an FPT memo file
+    #
+    # @param [Fixnum] start_block
+    # @return [String]
     def build_fpt_memo(start_block)
       @memo.seek(start_block * memo_block_size)
       
@@ -69,6 +96,10 @@ module DBF
       memo_string
     end
     
+    # Reconstucts a memo from an DBT memo file
+    # 
+    # @param [Fixnum] start_block
+    # @return [String]
     def build_dbt_memo(start_block)
       @memo.seek(start_block * memo_block_size)
       
@@ -87,14 +118,16 @@ module DBF
       memo_string
     end
     
-    def memo_block_size
-      @memo_block_size ||= @table.memo_block_size
-    end
-    
+    # The size in bytes of the content for each memo block
+    # 
+    # @return [Fixnum]
     def memo_block_content_size
       memo_block_size - BLOCK_HEADER_SIZE
     end
     
+    # The size in bytes of the entire memo
+    #
+    # @return [Fixnum]
     def memo_content_size(memo_size)
       (memo_size - memo_block_size) + BLOCK_HEADER_SIZE
     end
