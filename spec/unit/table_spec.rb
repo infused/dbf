@@ -123,6 +123,16 @@ describe DBF::Table do
       end
     end
     
+    describe 'with array of indexes' do
+      before do
+        @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      end
+      
+      it "should return the correct records" do
+        @table.find([1, 5, 10]).should == [@table.record(1), @table.record(5), @table.record(10)]
+      end
+    end
+    
     describe "with :all" do
       before do
         @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"

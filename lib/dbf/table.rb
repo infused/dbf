@@ -155,6 +155,8 @@ module DBF
       case command
       when Fixnum
         record(command)
+      when Array
+        command.map {|i| record(i)}
       when :all
         find_all(options, &block)
       when :first
