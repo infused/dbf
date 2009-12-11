@@ -31,6 +31,7 @@ desc "Run rcov"
 Spec::Rake::SpecTask.new :rcov do |t|
   t.spec_files = FileList['spec/**/*spec.rb']
   t.rcov = true
+  t.rcov_opts = ["--exclude ~\/.gem"]
 end
 
 desc "Run spec docs"
