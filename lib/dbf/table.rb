@@ -25,6 +25,12 @@ module DBF
       reload!
     end
     
+    # Closes the table and memo file
+    def close
+      @data.close
+      @memo.close if @memo
+    end
+    
     # Reloads the database and memo files
     def reload!
       @records = nil

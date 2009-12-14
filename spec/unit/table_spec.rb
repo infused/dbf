@@ -36,6 +36,17 @@ describe DBF::Table do
     end
   end
   
+  context "when closed" do
+    before do
+      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+    end
+    
+    it "should close the data file" do
+      @table.close
+      lambda { @table.record(1) }.should raise_error(IOError)
+    end
+  end
+  
   describe "#column" do
     it "should accept a string or symbol as input" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
