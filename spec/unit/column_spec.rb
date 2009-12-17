@@ -64,13 +64,19 @@ describe DBF::Column do
       column.type_cast(value).should == false
     end
     
-    it "should cast :datetime columns to DateTime" do
+    it "should cast datetime columns to DateTime" do
       value = "Nl%\000\300Z\252\003"
       column = DBF::Column.new "ColumnName", "T", 16, 0
       column.type_cast(value).should == "2002-10-10T17:04:56+00:00"
     end
     
-    it "should cast :date columns to Date" do
+    it "should cast invalid datetime columns to nil" do
+      value = "Nl%\000\000A\000\999"
+      column = DBF::Column.new "ColumnName", "T", 16, 0
+      column.type_cast(value).should be_nil
+    end
+    
+    it "should cast date columns to Date" do
       value = "20050712"
       column = DBF::Column.new "ColumnName", "D", 8, 0
       column.type_cast(value).should == Date.new(2005,7,12)

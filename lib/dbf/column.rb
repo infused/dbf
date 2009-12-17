@@ -48,7 +48,7 @@ module DBF
     def decode_datetime(value)
       days, milliseconds = value.unpack('l2')
       seconds = milliseconds / 1000
-      DateTime.jd(days, seconds/3600, seconds/60 % 60, seconds % 60)
+      DateTime.jd(days, seconds/3600, seconds/60 % 60, seconds % 60) rescue nil
     end
     
     # Decode a number value
