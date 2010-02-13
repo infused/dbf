@@ -120,6 +120,12 @@ module DBF
       s
     end
     
+    def to_a
+      records = []
+      each {|record| records << record if record}
+      records
+    end
+    
     # Dumps all records to a CSV file.  If no filename is given then CSV is
     # output to STDOUT.
     #
