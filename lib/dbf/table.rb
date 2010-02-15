@@ -188,7 +188,7 @@ module DBF
     def find_all(options, &block)
       results = []
       each do |record|
-        if all_values_match?(record, options)
+        if record && all_values_match?(record, options)
           if block_given?
             yield(record)
           else
@@ -205,7 +205,7 @@ module DBF
     # @return [DBF::Record, nil]
     def find_first(options)
       each do |record|
-        return record if all_values_match?(record, options)
+        return record if record && all_values_match?(record, options)
       end
       nil
     end
