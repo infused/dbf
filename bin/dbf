@@ -5,12 +5,14 @@ require 'dbf'
 
 $a ||= false
 $s ||= false
+$c ||= false
 
 if defined? $h then
-  puts "usage: #{File.basename(__FILE__)} [-h|-s|-a] filename"
+  puts "usage: #{File.basename(__FILE__)} [-h|-s|-a|-c] filename"
   puts "  -h = print this message"
   puts "  -s = print summary information"
   puts "  -a = create an ActiveRecord::Schema"
+  puts "  -c = create a csv file"
 else
 
   filename = ARGV.shift
@@ -37,4 +39,10 @@ else
       puts "%-16s %-10s %-10s %-10s" % [f.name, f.type, f.length, f.decimal]
     end
   end
+
+  if $c
+   table = DBF::Table.new filename
+   table.to_csv
+  end
+
 end
