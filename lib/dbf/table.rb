@@ -134,7 +134,7 @@ module DBF
     # @param [optional String] path Defaults to basename of dbf file
     def to_csv(path = nil)
       path = File.basename(@data.path, '.dbf') + '.csv' if path.nil?
-      FCSV.open(path, 'w', :force_quotes => true) do |csv|
+      FCSV.open(path, 'w') do |csv|
         each do |record|
           csv << record.to_a
         end
