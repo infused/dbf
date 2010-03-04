@@ -32,14 +32,14 @@ Load a DBF file:
 
 Enumerate all records
 
-    table.records.each do |record|
+    table.each do |record|
       puts record.name
       puts record.email
     end
     
-Load a single record using <tt>records</tt> or <tt>find</tt>
+Load a single record using <tt>record</tt> or <tt>find</tt>
 
-    table.records(6)
+    table.record(6)
     table.find(6)
 
 Attributes can also be accessed through the attributes hash in original or

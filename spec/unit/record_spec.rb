@@ -85,13 +85,13 @@ describe DBF::Record do
     end
   end
   
-  # describe '#to_a' do
-  #   it 'should return an ordered array of attribute values' do
-  #     table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
-  #     record = table.records[9]
-  #     record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, "0.100000000000000000", nil]
-  #   end
-  # end
+  describe '#to_a' do
+    it 'should return an ordered array of attribute values' do
+      table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
+      record = table.record(9)
+      record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, "0.100000000000000000", nil]
+    end
+  end
   
   describe '#==' do
     before do

@@ -88,6 +88,19 @@ describe DBF::Table do
     end
   end
   
+  describe '#to_a' do
+    before do
+      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      
+      @records = []
+      @table.each {|record| @records << record}
+    end
+    
+    it 'should return an array of records' do
+      @table.to_a.should == @records
+    end
+  end
+  
   describe '#to_csv' do
     before do
       @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
