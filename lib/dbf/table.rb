@@ -65,10 +65,12 @@ module DBF
       end
     end
     
-    # Retrieve a record by index number
+    # Retrieve a record by index number.
+    # The record will be nil if it has been deleted, but not yet pruned from
+    # the database.
     #
     # @param [Fixnum] index
-    # @return [DBF::Record]
+    # @return [DBF::Record, NilClass]
     def record(index)
       seek_to_record(index)
       deleted_record? ? nil : DBF::Record.new(self)
@@ -162,7 +164,7 @@ module DBF
     #
     # @param [Fixnum, Symbol] command
     # @param [optional, Hash] options Hash of search parameters
-    # @yield [optional, DBF::Record]
+    # @yield [optional, DBF::Record, NilClass]
     def find(command, options = {}, &block)
       case command
       when Fixnum

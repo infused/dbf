@@ -44,6 +44,8 @@ Load a single record using <tt>record</tt> or <tt>find</tt>
 
 Attributes can also be accessed through the attributes hash in original or
 underscored form or as an accessor method using the underscored name.
+(Note that record() will return nil if the requested record has been
+deleted and not yet pruned from the database)
 
     table.record(4).attributes["PhoneBook"]
     table.record(4).attributes["phone_book"]
@@ -55,7 +57,10 @@ otherwise all records will be loaded into memory.
     
     # find all records with first_name equal to Keith
     table.find(:all, :first_name => 'Keith') do |record|
-      puts record.last_name
+      # the record will be nil if deleted and not yet pruned from the database
+      if record
+        puts record.last_name
+      end
     end
     
     # find all records with first_name equal to Keith and last_name equal
