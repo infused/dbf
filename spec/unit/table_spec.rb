@@ -136,6 +136,21 @@ describe DBF::Table do
     end
   end
   
+  describe "#current_record" do
+    before do
+      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+    end
+    
+    it "should return nil for deleted records" do
+      @table.stub!(:deleted_record?).and_return(true)
+      @table.record(0).should be_nil
+    end
+    
+    it 'should return a DBF::Record' do
+      @table.record(0).should be_kind_of(DBF::Record)
+    end
+  end
+  
   describe "#find" do
     describe "with index" do
       before do

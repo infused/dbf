@@ -61,7 +61,7 @@ module DBF
     def each
       0.upto(@record_count - 1) do |n|
         seek_to_record(n)
-        yield deleted_record? ? nil : DBF::Record.new(self)
+        yield current_record
       end
     end
     
@@ -73,7 +73,7 @@ module DBF
     # @return [DBF::Record, NilClass]
     def record(index)
       seek_to_record(index)
-      deleted_record? ? nil : DBF::Record.new(self)
+      current_record
     end
     
     alias_method :row, :record
@@ -248,6 +248,10 @@ module DBF
     # @return [Boolean]
     def deleted_record?
       @data.read(1).unpack('a') == ['*']
+    end
+    
+    def current_record
+      deleted_record? ? nil : DBF::Record.new(self)
     end
     
     # Determine database version, record count, header length and record length
