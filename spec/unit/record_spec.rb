@@ -89,7 +89,7 @@ describe DBF::Record do
     it 'should return an ordered array of attribute values' do
       table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
       record = table.record(9)
-      record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, "0.100000000000000000", nil]
+      record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, 0.1, nil]
     end
   end
   

@@ -26,8 +26,10 @@ module DBF
     # @return [Fixnum, Float, Date, DateTime, Boolean, String] 
     def type_cast(value)
       case type
-      when 'N' # number
+      when 'N', 'F' # number
         unpack_number(value)
+      when 'F' # float
+        unpack_float(value)
       when 'D' # date
         value.to_date unless value.blank?
       when 'L' # logical
@@ -59,6 +61,14 @@ module DBF
       decimal.zero? ? unpack_integer(value) : value.to_f
     end
     
+    # Decode a float value
+    #
+    # @param [String] value
+    # @return [Float]
+    def unpack_float(value)
+      value.to_f
+    end
+    
     # Decode an integer
     #
     # @param [String] value
@@ -87,7 +97,7 @@ module DBF
     # @return [String]
     def schema_data_type
       case type
-      when "N"
+      when "N", "F"
         decimal > 0 ? ":float" : ":integer"
       when "I"
         ":integer"
