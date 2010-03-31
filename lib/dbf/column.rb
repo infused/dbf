@@ -26,7 +26,7 @@ module DBF
     # @return [Fixnum, Float, Date, DateTime, Boolean, String] 
     def type_cast(value)
       case type
-      when 'N', 'F' # number
+      when 'N' # number
         unpack_number(value)
       when 'F' # float
         unpack_float(value)

@@ -46,16 +46,16 @@ describe DBF::Column do
       column.type_cast(value).should == 135
     end
 
-    it "should cast float numbers with decimals to Float" do
+    it "should cast numbers with decimals to Float" do
       value = "13.5"
       column = DBF::Column.new "ColumnName", "N", 2, 1
       column.type_cast(value).should == 13.5
     end
     
-    it "should cast numbers with no decimals to Float" do
+    it "should cast float numbers to Float" do
       value = "135"
       column = DBF::Column.new "ColumnName", "F", 3, 0
-      column.type_cast(value).should == 135.0 && column.type_cast(value).should_not.kind_of?(Integer)
+      column.type_cast(value).should == 135.0
     end
     
     it "should cast :integer to Integer" do
