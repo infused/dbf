@@ -1,7 +1,10 @@
 == 1.2.1
 
-* Changes to 1.2.0 included (not documented in history)
 * Add support for F field type (Float)
+
+== 1.2.0
+
+* Add Table#to_a
 
 == 1.1.1
 
