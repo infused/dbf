@@ -1,3 +1,7 @@
+== 1.2.2
+
+* Handle invalid date fields
+
 == 1.2.1
 
 * Add support for F field type (Float)
