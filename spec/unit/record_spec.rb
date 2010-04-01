@@ -20,34 +20,6 @@ describe DBF::Record do
     end
   end
   
-  context "when initialized" do
-    it "should typecast number columns no decimal places to Integer" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.column("ID").type.should == "N"
-      table.column("ID").decimal.should == 0
-      table.record(1).attributes['id'].should be_kind_of(Integer)
-    end
-  
-    it "should typecast number columns with decimals > 0 to Float" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.column("ID").type.should == "N"
-      table.column("COST").decimal.should == 2
-      table.record(1).attributes['cost'].should be_kind_of(Float)
-    end
-  
-    it "should typecast memo columns to String" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.column("DESC").type.should == "M"
-      table.record(1).attributes['desc'].should be_kind_of(String)
-    end
-  
-    it "should typecast logical columns to True or False" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
-      table.column("WEBINCLUDE").type.should == "L"
-      table.record(1).attributes["webinclude"].should satisfy {|v| v == true || v == false}
-    end
-  end
-  
   describe '#memo_block_content_size' do
     it "should equal the difference between the table's memo_block_size and 8" do
       table = mock_table
@@ -68,20 +40,35 @@ describe DBF::Record do
   end
   
   describe '#read_memo' do
-    it 'should return nil if start_block is less than 1' do
-      table = mock_table
-      record = DBF::Record.new(table)
-      
-      record.send(:read_memo, 0).should be_nil
-      record.send(:read_memo, -1).should be_nil
+    before do
+      @table = mock_table
+      @record = DBF::Record.new(@table)
     end
     
-    it 'should return nil if memo file is missing' do
-      table = mock_table
-      table.should_receive(:has_memo_file?).and_return(false)
-      record = DBF::Record.new(table)
+    context 'with start_block of 0' do
+      specify { @record.send(:read_memo, 0).should be_nil }
+    end
+    
+    context 'with start_block less than 0' do
+      specify { @record.send(:read_memo, -1).should be_nil }
+    end
+    
+    context 'with valid start_block' do
+      before do
+        @table.stub!(:memo_file_format).and_return(:fpt)
+      end
       
-      record.send(:read_memo, 5).should be_nil
+      it 'should build the fpt memo' do
+        @record.should_receive(:build_fpt_memo)
+        @record.send(:read_memo, 1)
+      end 
+    end
+    
+    context 'with no memo file' do
+      specify do 
+        @table.should_receive(:has_memo_file?).and_return(false)
+        @record.send(:read_memo, 5).should be_nil
+      end
     end
   end
   

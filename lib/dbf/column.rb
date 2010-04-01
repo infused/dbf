@@ -28,18 +28,28 @@ module DBF
       case type
       when 'N' # number
         unpack_number(value)
+      when 'I' # integer
+        unpack_integer(value)
       when 'F' # float
         unpack_float(value)
       when 'D' # date
-        value.to_date unless value.blank?
-      when 'L' # logical
-        boolean(value)
-      when 'I' # integer
-        unpack_integer(value)
+        decode_date(value)
       when 'T' # datetime
         decode_datetime(value)
+      when 'L' # logical
+        boolean(value)
       else
         value.to_s.strip
+      end
+    end
+    
+    # Decode a Date value
+    #
+    # @param [String] value
+    # @return [Date]
+    def decode_date(value)
+      unless value.blank?
+        value.to_date rescue nil
       end
     end
     
