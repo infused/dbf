@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{dbf}
-  s.version = "1.2.1"
+  s.version = "1.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Morrison"]
-  s.date = %q{2010-03-30}
+  s.date = %q{2010-04-01}
   s.default_executable = %q{dbf}
   s.description = %q{A small fast library for reading dBase, xBase, Clipper and FoxPro database files.}
   s.email = %q{keithm@infused.org}
