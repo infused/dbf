@@ -1,3 +1,8 @@
+== 1.2.3
+
+* Small performance gain when unpacking values from the dbf file
+* Correctly handle FoxPro's integer data type
+
 == 1.2.2
 
 * Handle invalid date fields
