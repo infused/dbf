@@ -51,12 +51,14 @@ module DBF
       @attributes = columns.inject({}) do |hash, column|
         if column.type == 'M'
           starting_block = unpack_data(column.length).to_i
-          hash[column.name] = read_memo(starting_block)
-          hash[column.name.underscore] = read_memo(starting_block)
+          memo = read_memo(starting_block)
+          hash[column.name] = memo
+          hash[column.name.underscore] = memo
         else
           value = unpack_data(column.length)
-          hash[column.name] = column.type_cast(value)
-          hash[column.name.underscore] = column.type_cast(value)
+          type_cast_value = column.type_cast(value)
+          hash[column.name] = type_cast_value
+          hash[column.name.underscore] = type_cast_value
         end
         hash
       end

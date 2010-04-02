@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/../spec_helper"
 require File.dirname(__FILE__) + "/dbf_shared"
 
 describe DBF, "of type 30 (Visual FoxPro)" do
-  before(:each) do
+  before do
     @table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
   end
   

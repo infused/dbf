@@ -10,15 +10,15 @@ describe DBF::Column do
     it "should set the #name accessor" do
       @column.name.should == "ColumnName"
     end
-  
+    
     it "should set the #type accessor" do
       @column.type.should == "N"
     end
-  
+    
     it "should set the #length accessor" do
       @column.length.should == 1
     end
-  
+    
     it "should set the #decimal accessor" do
       @column.decimal.should == 0
     end
@@ -39,9 +39,10 @@ describe DBF::Column do
   context "#type_cast" do
     context 'with type N (number)' do
       context 'with 0 decimals' do
-        it "should cast value to Integer" do
+        it 'should cast value to Fixnum' do
           value = "135"
           column = DBF::Column.new "ColumnName", "N", 3, 0
+          column.type_cast(value).should be_a Fixnum
           column.type_cast(value).should == 135
         end
       end
@@ -50,6 +51,7 @@ describe DBF::Column do
         it "should cast value to Float" do
           value = "13.5"
           column = DBF::Column.new "ColumnName", "N", 2, 1
+          column.type_cast(value).should be_a Float
           column.type_cast(value).should == 13.5
         end
       end
@@ -59,15 +61,17 @@ describe DBF::Column do
       it "should cast value to Float" do
         value = "135"
         column = DBF::Column.new "ColumnName", "F", 3, 0
+        column.type_cast(value).should be_a Float
         column.type_cast(value).should == 135.0
       end
     end
     
     context 'with type I (integer)' do
-      it "should cast value to Integer" do
-        value = "135"
+      it "should cast value to Fixnum" do
+        value = "\203\171\001\000"
         column = DBF::Column.new "ColumnName", "I", 3, 0
-        column.type_cast(value).should == 135
+        column.type_cast(value).should be_a Fixnum
+        column.type_cast(value).should == 96643
       end
     end
     
@@ -75,12 +79,14 @@ describe DBF::Column do
       it "should cast 'y' to true" do
         value = "y"
         column = DBF::Column.new "ColumnName", "L", 1, 0
+        column.type_cast(value).should be_a TrueClass
         column.type_cast(value).should == true
       end
       
       it "should cast 'n' to false" do
         value = "n"
         column = DBF::Column.new "ColumnName", "L", 1, 0
+        column.type_cast(value).should be_a FalseClass
         column.type_cast(value).should == false
       end
     end

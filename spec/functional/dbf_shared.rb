@@ -21,7 +21,7 @@ describe DBF, :shared => true do
   end
   
   specify "column types should be valid" do
-    valid_column_types = %w(C N L D M F B G P Y T I V X @ O +)
+    valid_column_types = %w(C N L D M F B G P Y T I V X @ O + 0)
     @table.columns.all? {|column| valid_column_types.should include(column.type)}
   end
   

@@ -29,7 +29,7 @@ module DBF
       when 'N' # number
         unpack_number(value)
       when 'I' # integer
-        unpack_integer(value)
+        unpack_unsigned_long(value)
       when 'F' # float
         unpack_float(value)
       when 'D' # date
@@ -85,6 +85,14 @@ module DBF
     # @return [Fixnum]
     def unpack_integer(value)
       value.to_i
+    end
+    
+    # Decode an unsigned long
+    #
+    # @param [String] value
+    # @return [Fixnum]
+    def unpack_unsigned_long(value)
+      value.unpack('V')[0]
     end
     
     # Decode a boolean value
