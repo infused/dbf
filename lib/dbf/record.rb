@@ -50,8 +50,7 @@ module DBF
     def initialize_values
       @attributes = columns.inject({}) do |hash, column|
         if column.type == 'M'
-          starting_block = unpack_data(column.length).to_i
-          memo = read_memo(starting_block)
+          memo = read_memo(get_starting_block(column))
           hash[column.name] = memo
           hash[column.name.underscore] = memo
         else
@@ -63,7 +62,18 @@ module DBF
         hash
       end
     end
-    
+   
+    # Unpack starting block from database
+    #
+    # @param [Fixnum] length
+    def get_starting_block(column)
+      if @table.memo_file_format == :fpt && column.length == 4
+        @data.read(column.length).unpack("V")[0]
+      else
+        unpack_data(column.length).to_i
+      end
+    end
+
     # Unpack raw data from database
     # 
     # @param [Fixnum] length
