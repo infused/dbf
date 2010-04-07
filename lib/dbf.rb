@@ -1,4 +1,5 @@
 require 'date'
+gem 'activesupport', '=2.3.5'
 require 'active_support'
 
 if RUBY_VERSION > '1.9'    

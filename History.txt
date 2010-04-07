@@ -1,6 +1,7 @@
 == 1.2.5
 
 * Remove ruby warning switch
+* Requires activesupport version 2.3.5
 
 == 1.2.4
 
