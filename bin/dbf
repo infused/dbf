@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -ws
+#!/usr/bin/env ruby -s
 
 require 'rubygems'
 require 'dbf'
