@@ -9,13 +9,9 @@ database files
 * Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the 
   subject line
 
-## Features
+## Compatibility
 
-* Fields are type cast to the appropriate Ruby types 
-* ActiveRecord style finder methods 
-* Ability to dump the database schema in the portable ActiveRecord::Schema 
-  format 
-* Ruby 1.9.1 compatible
+DBF is tested to work with Ruby 1.8.6, 1.8.7, and 1.9.1
 
 ## Installation
   
@@ -25,7 +21,6 @@ database files
 
 Load a DBF file:
 
-    require 'rubygems'
     require 'dbf'
 
     table = DBF::Table.new("widgets.dbf")
@@ -103,10 +98,13 @@ A small command-line utility called dbf is installed along with the gem.
       
 ## dBase version support
 
-dbase version III, IV, and V files are supported very well. Support for FoxPro
-and Visual FoxPro specific datatypes is still pretty experimental.  If you have
-any insight into how some of these datatypes are implemented, please give me
-a shout.  FoxBase/dBase II files are not supported at this time.
+The basic dBase data types are generally supported well. Support for the
+advanced data types in dbase V and FoxPro are still experimental or not
+supported. If you have any insight into how any of unsupported data
+types are implemented, please give me a shout. FoxBase/dBase II files are not
+supported at this time.
+
+See docs/supported_types.markdown for a full list of supported column types.
 
 ## Limitations
 
