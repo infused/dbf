@@ -67,8 +67,8 @@ module DBF
     #
     # @param [Fixnum] length
     def get_starting_block(column)
-      if @table.memo_file_format == :fpt && column.length == 4
-        @data.read(column.length).unpack("V")[0]
+      if %w(30 31).include?(@table.version)
+        @data.read(column.length).unpack('V')[0]
       else
         unpack_data(column.length).to_i
       end
@@ -105,7 +105,7 @@ module DBF
       else
         memo_string = memo_string[0, memo_size]
       end
-      memo_string
+      memo_string.strip
     end
     
     # Reconstucts a memo from an DBT memo file
