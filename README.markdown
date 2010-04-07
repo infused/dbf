@@ -104,7 +104,8 @@ supported. If you have any insight into how any of unsupported data
 types are implemented, please give me a shout. FoxBase/dBase II files are not
 supported at this time.
 
-See docs/supported_types.markdown for a full list of supported column types.
+See [docs/supported_types.markdown](http://github.com/infused/dbf/blob/master/docs/supported_types.markdown) for a full
+list of supported column types.
 
 ## Limitations
 
