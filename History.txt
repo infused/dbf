@@ -1,3 +1,7 @@
+== 1.2.4
+
+* Add csv output option to dbf command-line utility
+
 == 1.2.3
 
 * Small performance gain when unpacking values from the dbf file
