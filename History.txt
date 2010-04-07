@@ -1,6 +1,7 @@
 == 1.2.4
 
 * Add csv output option to dbf command-line utility
+* Read Visual FoxPro memos
 
 == 1.2.3
 
