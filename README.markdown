@@ -63,12 +63,6 @@ otherwise all records will be loaded into memory.
       end
     end
     
-    # find all records with first_name equal to Keith and last_name equal
-    # to Morrison
-    table.find(:all, :first_name => 'Keith', :last_name => 'Morrison') do |record|
-      puts record.last_name
-    end
-    
     # find the first record with first_name equal to Keith
     table.find :first, :first_name => 'Keith'
     
@@ -105,11 +99,21 @@ A small command-line utility called dbf is installed along with the gem.
       -h = print this message
       -s = print summary information
       -a = create an ActiveRecord::Schema
-  
+      -c = create a csv file
+      
+## dBase version support
+
+dbase version III, IV, and V files are supported very well. Support for FoxPro
+and Visual FoxPro specific datatypes is still pretty experimental.  If you have
+any insight into how some of these datatypes are implemented, please give me
+a shout.  FoxBase/dBase II files are not supported at this time.
+
 ## Limitations
-  
+
 * DBF is read-only
 * index files are not utilized
+* No attempt is made to convert character sets based on the code page defined
+  in the dBase file
 
 ## License
 
