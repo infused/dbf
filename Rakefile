@@ -13,7 +13,7 @@ Jeweler::Tasks.new do |s|
   s.platform = Gem::Platform::RUBY
   s.authors = ['Keith Morrison']
   s.email = 'keithm@infused.org'
-  s.add_dependency('activesupport', ['= 2.3.5'])
+  s.add_dependency('activesupport', ['>= 2.3.5'])
   s.add_dependency('fastercsv', ['>= 1.4.0'])
   s.homepage = 'http://github.com/infused/dbf'
 end
