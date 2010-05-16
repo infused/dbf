@@ -11,7 +11,7 @@ database files
 
 ## Compatibility
 
-DBF is tested to work with Ruby 1.8.6, 1.8.7, and 1.9.1
+DBF is tested to work with Ruby 1.8.6, 1.8.7, 1.9.1 and 1.9.2-head (using ActiveSupport 2.3.5 and 3 beta 3).
 
 ## Installation
   
