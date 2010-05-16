@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + "/../spec_helper"
-require File.dirname(__FILE__) + "/dbf_shared"
+require File.expand_path(File.join(File.dirname(__FILE__), "../spec_helper"))
+require File.expand_path(File.join(File.dirname(__FILE__), "dbf_shared"))
 
 describe DBF, "of type 03 (dBase III without memo file)" do
   before do
