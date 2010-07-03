@@ -4,7 +4,6 @@ $: << File.join(PROJECT_ROOT, 'lib')
 require 'rubygems'
 require 'jeweler'
 require 'spec/rake/spectask'
-require 'metric_fu'
 
 Jeweler::Tasks.new do |s|
   s.name = 'dbf'
