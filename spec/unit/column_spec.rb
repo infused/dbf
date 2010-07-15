@@ -189,4 +189,18 @@ describe DBF::Column do
     end
   end
   
+  context '#decode_date' do
+    before do
+      @column = DBF::Column.new "ColumnName", "N", 1, 0
+    end
+    
+    it 'is nil if value is blank' do
+      @column.decode_date('').should be_nil
+    end
+    
+    it 'interperets spaces as zeros' do
+      @column.decode_date('2010 715').should == Date.parse('20100715')
+    end
+  end
+  
 end

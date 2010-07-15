@@ -48,9 +48,10 @@ module DBF
     # @param [String] value
     # @return [Date]
     def decode_date(value)
-      unless value.blank?
-        value.to_date rescue nil
-      end
+      return nil if value.blank?
+      value.is_a?(String) ? value.gsub(' ', '0').to_date : value.to_date
+    rescue
+      nil
     end
     
     # Decode a DateTime value
