@@ -121,7 +121,7 @@ module DBF
         loop do
           block = @memo.read(memo_block_size)
           memo_string << block
-          break if block.rstrip.size < memo_block_size
+          break if block.tr("\000",'').size < memo_block_size
         end
       when "8b" # dbase iv
         memo_type, memo_size = @memo.read(BLOCK_HEADER_SIZE).unpack("LL")
