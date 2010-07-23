@@ -11,7 +11,7 @@ database files
 
 ## Compatibility
 
-DBF is tested to work with Ruby 1.8.6, 1.8.7, 1.9.1 and 1.9.2-head (using ActiveSupport 2.3.5 and 3 beta 3).
+DBF is tested to work with Ruby 1.8.6, 1.8.7, 1.9.1 and 1.9.2
 
 ## Installation
   
@@ -38,21 +38,21 @@ Load a single record using <tt>record</tt> or <tt>find</tt>
     table.find(6)
 
 Attributes can also be accessed through the attributes hash in original or
-underscored form or as an accessor method using the underscored name.
-(Note that record() will return nil if the requested record has been
-deleted and not yet pruned from the database)
+underscored form or as an accessor method using the underscored name. (Note
+that record() will return nil if the requested record has been deleted and not
+yet pruned from the database)
 
     table.record(4).attributes["PhoneBook"]
     table.record(4).attributes["phone_book"]
     table.record(4).phone_book
   
-Search for records using a simple hash format.  Multiple search criteria are
-ANDed. Use the block form of find if the resulting recordset could be large
-otherwise all records will be loaded into memory.
+Search for records using a simple hash format. Multiple search criteria are
+ANDed. Use the block form if the resulting recordset could be large, otherwise
+all records will be loaded into memory.
     
     # find all records with first_name equal to Keith
     table.find(:all, :first_name => 'Keith') do |record|
-      # the record will be nil if deleted and not yet pruned from the database
+      # the record will be nil if deleted, but not yet pruned from the database
       if record
         puts record.last_name
       end
@@ -100,26 +100,23 @@ A small command-line utility called dbf is installed along with the gem.
 
 The basic dBase data types are generally supported well. Support for the
 advanced data types in dbase V and FoxPro are still experimental or not
-supported. If you have any insight into how any of unsupported data
-types are implemented, please give me a shout. FoxBase/dBase II files are not
-supported at this time.
+supported. If you have insight into how any of unsupported data types are
+implemented, please give me a shout. FoxBase/dBase II files are not supported
+at this time.
 
-See [docs/supported_types.markdown](http://github.com/infused/dbf/blob/master/docs/supported_types.markdown) for a full
-list of supported column types.
+See
+[docs/supported_types.markdown](http://github.com/infused/dbf/blob/master/docs/supported_types.markdown)
+for a full list of supported column types.
 
 ## Limitations
 
 * DBF is read-only
-* index files are not utilized
-* No attempt is made to convert character sets based on the code page defined
-  in the dBase file
+* Index files are not utilized
+* No character set conversions from the code page defined in the dBase file
 
 ## License
 
-(The MIT Licence)
-
-Copyright (c) 2006-2010 Keith Morrison <mailto:keithm@infused.org>, 
-<http://www.infused.org>.
+Copyright (c) 2006-2010 Keith Morrison <keithm@infused.org>
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
