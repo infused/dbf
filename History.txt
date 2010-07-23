@@ -1,3 +1,11 @@
+== 1.2.9
+
+* Retain trailing whitespace in memos
+
+== 1.2.8
+
+* Handle missing zeros in date values [#11]
+
 == 1.2.7
 
 * MIT License
