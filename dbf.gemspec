@@ -15,16 +15,15 @@ Gem::Specification.new do |s|
   
   s.executables = ['dbf']
   s.default_executable = 'dbf'
-  s.extra_rdoc_files = ['README.md']
+  s.rdoc_options = ['--charset=UTF-8']
+  s.extra_rdoc_files = ['README.md', 'CHANGELOG.md']
   s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*']
   s.test_files = Dir.glob('spec/**/*_spec.rb')
-  s.rdoc_options = ['--charset=UTF-8']
   s.require_paths = ['lib']
 
-  s.required_rubygems_version = s.required_rubygems_version = '>= 1.3.0'
+  s.required_rubygems_version = '>= 1.3.0'
   s.add_dependency('activesupport', ['>= 2.3.5'])
   s.add_dependency('fastercsv', ['>= 1.4.0'])
-  
   s.add_development_dependency('rspec', ['>= 1.3.0'])
 end
 
