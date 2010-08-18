@@ -59,10 +59,7 @@ module DBF
     #
     # @yield [nil, DBF::Record]
     def each
-      0.upto(@record_count - 1) do |n|
-        seek_to_record(n)
-        yield current_record
-      end
+      0.upto(@record_count - 1) {|index| yield record(index)}
     end
     
     # Retrieve a record by index number.
