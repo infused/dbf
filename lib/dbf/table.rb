@@ -35,7 +35,7 @@ module DBF
     def reload!
       @records = nil
       get_header_info
-      get_memo_header_info if @memo
+      get_memo_header_info
       get_column_descriptors
     end
     
@@ -270,13 +270,15 @@ module DBF
     
     # Determines the memo block size and next available block
     def get_memo_header_info
-      @memo.rewind
-      if @memo_file_format == :fpt
-        @memo_next_available_block, @memo_block_size = @memo.read(FPT_HEADER_SIZE).unpack('N x2 n')
-        @memo_block_size = 0 if @memo_block_size.nil?
-      else
-        @memo_block_size = 512
-        @memo_next_available_block = File.size(@memo.path) / @memo_block_size
+      if has_memo_file?
+        @memo.rewind
+        if @memo_file_format == :fpt
+          @memo_next_available_block, @memo_block_size = @memo.read(FPT_HEADER_SIZE).unpack('N x2 n')
+          @memo_block_size = 0 if @memo_block_size.nil?
+        else
+          @memo_block_size = 512
+          @memo_next_available_block = File.size(@memo.path) / @memo_block_size
+        end
       end
     end
     
