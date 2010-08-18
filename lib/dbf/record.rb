@@ -47,7 +47,7 @@ module DBF
     def define_accessors
       columns.each do |column|
         underscored_column_name = column.name.underscore
-        unless respond_to?(underscored_column_name)
+        unless self.class.method_defined?(underscored_column_name)
           self.class.send :define_method, underscored_column_name do
             @attributes[column.name.underscore]
           end
