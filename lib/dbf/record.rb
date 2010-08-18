@@ -2,10 +2,11 @@ module DBF
   
   # An instance of DBF::Record represents a row in the DBF file 
   class Record
+    attr_reader :table
     attr_reader :attributes
     attr_reader :memo_block_size
     
-    delegate :columns, :to => :@table
+    delegate :columns, :to => :table
     
     # Initialize a new DBF::Record
     # 
