@@ -189,9 +189,9 @@ module DBF
     def find_all(options, &block)
       results = []
       each do |record|
-        if record && all_values_match?(record, options)
+        if record.try(:match?, options)
           if block_given?
-            yield(record)
+            yield record
           else
             results << record
           end
@@ -206,18 +206,9 @@ module DBF
     # @return [DBF::Record, nil]
     def find_first(options)
       each do |record|
-        return record if record && all_values_match?(record, options)
+        return record if record.try(:match?, options)
       end
       nil
-    end
-    
-    # Do all search parameters match?
-    #
-    # @param [DBF::Record] record
-    # @param [Hash] options
-    # @return [Boolean]
-    def all_values_match?(record, options)
-      options.all? {|key, value| record.attributes[key.to_s.underscore] == value}
     end
     
     # Open memo file

@@ -32,6 +32,14 @@ module DBF
       columns.map { |column| @attributes[column.name.underscore] }
     end
     
+    # Do all search parameters match?
+    #
+    # @param [Hash] options
+    # @return [Boolean]
+    def match?(options)
+      options.all? {|key, value| attributes[key.to_s.underscore] == value}
+    end
+    
     private
     
     # Defined attribute accessor methods
