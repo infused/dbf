@@ -16,6 +16,7 @@ else
 end
 
 require 'dbf/globals'
+require 'dbf/attributes'
 require 'dbf/record'
 require 'dbf/column'
 require 'dbf/table'

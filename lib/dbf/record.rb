@@ -57,16 +57,11 @@ module DBF
     
     # Initialize values for a row
     def initialize_values
-      @attributes = columns.inject({}) do |hash, column|
+      @attributes = columns.inject(Attributes.new) do |hash, column|
         if column.type == 'M'
-          memo = read_memo(get_starting_block(column))
-          hash[column.name] = memo
-          hash[column.name.underscore] = memo
+          hash[column.name] = read_memo(get_starting_block(column))
         else
-          value = unpack_data(column.length)
-          type_cast_value = column.type_cast(value)
-          hash[column.name] = type_cast_value
-          hash[column.name.underscore] = type_cast_value
+          hash[column.name] = column.type_cast(unpack_data(column.length))
         end
         hash
       end
