@@ -1,7 +1,8 @@
 module DBF
-  
   # An instance of DBF::Record represents a row in the DBF file 
   class Record
+    BLOCK_HEADER_SIZE = 8
+    
     attr_reader :table
     attr_reader :attributes
     attr_reader :memo_block_size

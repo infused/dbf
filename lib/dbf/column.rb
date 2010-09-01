@@ -1,6 +1,6 @@
 module DBF
-  class ColumnLengthError < DBFError; end
-  class ColumnNameError < DBFError; end
+  class ColumnLengthError < StandardError; end
+  class ColumnNameError < StandardError; end
   
   # DBF::Column stores all the information about a column including its name,
   # type, length and number of decimal places (if any)

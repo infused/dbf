@@ -15,7 +15,6 @@ else
  require 'fastercsv'
 end
 
-require 'dbf/globals'
 require 'dbf/attributes'
 require 'dbf/record'
 require 'dbf/column'
