@@ -89,8 +89,7 @@ module DBF
     # @param [Fixnum] start_block
     def read_memo(start_block)
       return nil if !@table.has_memo_file? || start_block < 1
-
-      @table.memo_file_format == :fpt ? build_fpt_memo(start_block) : build_dbt_memo(start_block)
+      send "build_#{@table.memo_file_format}_memo", start_block
     end
     
     # Reconstructs a memo from an FPT memo file
