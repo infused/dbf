@@ -57,7 +57,7 @@ module DBF
     # Initialize values for a row
     def initialize_values
       @attributes = columns.inject(Attributes.new) do |hash, column|
-        if column.type == 'M'
+        if column.memo?
           hash[column.name] = read_memo(get_starting_block(column))
         else
           hash[column.name] = column.type_cast(unpack_data(column.length))

@@ -143,6 +143,10 @@ module DBF
       
       s.gsub(/[^\x20-\x7E]/,"")
     end
+    
+    def memo?
+      type == 'M'
+    end
   end
   
 end
