@@ -101,7 +101,7 @@ module DBF
       @memo.seek(start_block * memo_block_size)
       
       memo_type, memo_size, memo_string = @memo.read(memo_block_size).unpack("NNa*")
-      return nil unless memo_type == 1 and memo_size > 0
+      return nil unless memo_type == 1 && memo_size > 0
       
       if memo_size > memo_block_content_size
         memo_string << @memo.read(memo_content_size(memo_size))
