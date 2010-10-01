@@ -10,14 +10,14 @@ describe DBF::Record do
   def mock_table(data = '')
     @column1 = DBF::Column.new 'ColumnName', 'N', 1, 0
     
-    returning mock('table') do |table|
-      table.stub!(:memo_block_size).and_return(8)
-      table.stub!(:memo).and_return(nil)
-      table.stub!(:columns).and_return([@column1])
-      table.stub!(:data).and_return(data)
-      table.stub!(:has_memo_file?).and_return(true)
-      table.data.stub!(:read).and_return(data)
-    end
+    table = mock('table')
+    table.stub!(:memo_block_size).and_return(8)
+    table.stub!(:memo).and_return(nil)
+    table.stub!(:columns).and_return([@column1])
+    table.stub!(:data).and_return(data)
+    table.stub!(:has_memo_file?).and_return(true)
+    table.data.stub!(:read).and_return(data)
+    table
   end
   
   describe '#memo_block_content_size' do
