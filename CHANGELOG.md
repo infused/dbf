@@ -1,3 +1,20 @@
+## 1.3.0
+
+- Only load what's needed from activesupport 3.0
+- Updatate fastercsv dependency to 1.5.3
+- Remove use of 'returning' method
+- Remove jeweler in favor of manual gemspec creation
+- Move Table#all_values_match? to Record#match?
+- Add attr_reader for Record#table
+- Use method_defined? instead of respond_to? when defining attribute accessors
+- Move memo file check into get_memo_header_info
+- Remove unnecessary seek_to_record in Table#each
+- Add rake console task
+- New Attribute class
+- Add a helper method for memo column type
+- Move constants into the classes where they are used
+- Use bundler
+
 ## 1.2.9
 
 - Retain trailing whitespace in memos
