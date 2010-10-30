@@ -1,12 +1,12 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib/')
 require 'rubygems'
-require 'spec'
+require 'rspec'
 require 'dbf'
 require 'fileutils'
 
 DB_PATH = File.dirname(__FILE__) + '/fixtures' unless defined?(DB_PATH)
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   
 end
 

@@ -21,22 +21,9 @@ else
   task :gem => :gemspec
 end
 
-begin
-  require 'spec/rake/spectask'
-rescue LoadError
-  raise 'Run `gem install rspec` to be able to run specs'
-else
-  task :clear_tmp do
-    FileUtils.rm_rf(File.expand_path("../tmp", __FILE__))
-  end
-
-  desc "Run specs"
-  Spec::Rake::SpecTask.new do |t|
-    t.spec_files = FileList['spec/**/*_spec.rb']
-    t.spec_opts  = %w(-fs --color)
-    t.warning    = true
-  end
-  task :spec
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new :spec do |t|
+  t.rspec_opts = %w(-fs --color)
 end
 
 require 'rake'

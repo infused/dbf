@@ -1,4 +1,4 @@
-describe DBF, :shared => true do
+shared_examples_for 'DBF' do
   specify "sum of column lengths should equal record length specified in header" do
     header_record_length = @table.instance_eval {@record_length}
     sum_of_column_lengths = @table.columns.inject(1) {|sum, column| sum + column.length}
