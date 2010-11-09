@@ -31,7 +31,7 @@ module DBF
     # 
     # @return [Array]
     def to_a
-      columns.map { |column| @attributes[column.name.underscore] }
+      columns.map { |column| attributes[column.name.underscore] }
     end
     
     # Do all search parameters match?
@@ -49,7 +49,7 @@ module DBF
       columns.each do |column|
         unless self.class.method_defined?(column.name.underscore)
           self.class.send :define_method, column.name.underscore do
-            @attributes[column.name.underscore]
+            attributes[column.name.underscore]
           end
         end
       end
