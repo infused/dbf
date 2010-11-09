@@ -1,5 +1,5 @@
-require File.expand_path(File.join(File.dirname(__FILE__), "../spec_helper"))
-require File.expand_path(File.join(File.dirname(__FILE__), "dbf_shared"))
+require "spec_helper"
+require "dbf/dbf_shared"
 
 describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
   before do
