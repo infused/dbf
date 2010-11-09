@@ -98,7 +98,7 @@ module DBF
     # @param [Fixnum] start_block
     # @return [String]
     def build_fpt_memo(start_block)
-      @memo.seek(start_block * memo_block_size)
+      @memo.seek memo_offset(start_block)
       
       memo_type, memo_size, memo_string = @memo.read(memo_block_size).unpack("NNa*")
       return nil unless memo_type == 1 && memo_size > 0
@@ -116,7 +116,7 @@ module DBF
     # @param [Fixnum] start_block
     # @return [String]
     def build_dbt_memo(start_block)
-      @memo.seek(start_block * memo_block_size)
+      @memo.seek memo_offset(start_block)
       
       case @table.version
       when "83" # dbase iii
@@ -131,6 +131,14 @@ module DBF
         memo_string = @memo.read(memo_size)
       end
       memo_string
+    end
+    
+    # Calculate memo offset from start block
+    #
+    # @param [Fixnum] start_block
+    # @return [Fixnum]
+    def memo_offset(start_block)
+      start_block * memo_block_size
     end
     
     # The size in bytes of the content for each memo block
