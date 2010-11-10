@@ -2,6 +2,8 @@ module DBF
 
   # DBF::Table is the primary interface to a single DBF file and provides 
   # methods for enumerating and searching the records.
+  
+  # TODO set record_length to length of actual used column lengths
   class Table
     DBF_HEADER_SIZE = 32
     FPT_HEADER_SIZE = 512
