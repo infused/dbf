@@ -22,7 +22,6 @@ module DBF
     }
     
     attr_reader :column_count           # The total number of columns
-    attr_reader :columns                # An array of DBF::Column
     attr_reader :version                # Internal dBase version number
     attr_reader :last_updated           # Last updated datetime
     attr_reader :memo_file_format       # :fpt or :dpt
@@ -54,7 +53,7 @@ module DBF
       @records = nil
       get_header_info
       get_memo_header_info
-      get_column_descriptors
+      columns
     end
     
     # Checks if there is a memo file
@@ -69,7 +68,7 @@ module DBF
     # @param [String, Symbol] column_name 
     # @return [DBF::Column]
     def column(column_name)
-      @columns.detect {|f| f.name == column_name.to_s}
+      columns.detect {|f| f.name == column_name.to_s}
     end
     
     # Calls block once for each record in the table. The record may be nil
@@ -194,6 +193,22 @@ module DBF
       end
     end
     
+    # Retrieves column information from the database
+    def columns
+      return @columns if @columns
+      
+      @columns = []
+      @column_count.times do
+        name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
+        if length > 0
+          @columns << Column.new(name.strip, type, length, decimal)
+        end
+      end
+      # Reset the column count in case any were skipped
+      @column_count = @columns.size
+      @columns
+    end
+    
     private
     
     # Find all matching
@@ -266,21 +281,6 @@ module DBF
       @data.rewind
       @version, @record_count, @header_length, @record_length = @data.read(DBF_HEADER_SIZE).unpack('H2 x3 V v2')
       @column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
-    end
-    
-    # Retrieves column information from the database
-    def get_column_descriptors
-      @columns = []
-      @column_count.times do
-        name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
-        if length > 0
-          @columns << Column.new(name.strip, type, length, decimal)
-        end
-      end
-      # Reset the column count in case any were skipped
-      @column_count = @columns.size
-      
-      @columns
     end
     
     # Determines the memo block size and next available block
