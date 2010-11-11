@@ -9,7 +9,7 @@ module DBF
     # 
     # @param [DBF::Table] table
     def initialize(data, columns, version, memo)
-      @data, @columns, @version, @memo = data, columns, version, memo
+      @data, @columns, @version, @memo = StringIO.new(data), columns, version, memo
       initialize_values
       define_accessors
     end

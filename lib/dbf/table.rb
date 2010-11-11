@@ -253,7 +253,7 @@ module DBF
     end
     
     def current_record
-      deleted_record? ? nil : DBF::Record.new(data, columns, version, memo)
+      deleted_record? ? nil : DBF::Record.new(data.read(@record_length), columns, version, memo)
     end
     
     # Determine database version, record count, header length and record length
