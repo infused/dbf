@@ -6,15 +6,13 @@ module DBF
     attr_reader :table
     attr_reader :attributes
     attr_reader :memo_block_size
-    
-    delegate :columns, :to => :table
+    attr_reader :columns
     
     # Initialize a new DBF::Record
     # 
     # @param [DBF::Table] table
-    def initialize(table)
-      @table, @data, @memo = table, table.data, table.memo
-      @memo_block_size = @table.memo_block_size
+    def initialize(data, columns, version, has_memo_file, memo_block_size, memo_file_format, memo)
+      @data, @columns, @version, @has_memo_file, @memo_block_size, @memo_file_format, @memo = data, columns, version, has_memo_file, memo_block_size, memo_file_format, memo
       initialize_values
       define_accessors
     end
@@ -71,7 +69,7 @@ module DBF
     #
     # @param [Fixnum] length
     def get_starting_block(column)
-      if %w(30 31).include?(@table.version)
+      if %w(30 31).include?(@version)
         @data.read(column.length).unpack('V')[0]
       else
         unpack_data(column.length).to_i
@@ -89,8 +87,8 @@ module DBF
     # 
     # @param [Fixnum] start_block
     def read_memo(start_block)
-      return nil if !@table.has_memo_file? || start_block < 1
-      send "build_#{@table.memo_file_format}_memo", start_block
+      return nil if !@has_memo_file || start_block < 1
+      send "build_#{@memo_file_format}_memo", start_block
     end
     
     # Reconstructs a memo from an FPT memo file
@@ -118,7 +116,7 @@ module DBF
     def build_dbt_memo(start_block)
       @memo.seek memo_offset(start_block)
       
-      case @table.version
+      case @version
       when "83" # dbase iii
         memo_string = ""
         loop do
