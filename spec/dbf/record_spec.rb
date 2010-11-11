@@ -2,16 +2,6 @@ require "spec_helper"
 
 describe DBF::Record do
   
-  describe '#memo_content_size' do
-    it "should equal 8 plus the difference between memo_size and the table's memo_block_size" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
-      record = table.record(9)
-      record.should_receive(:memo_block_size).and_return(8)
-      
-      record.send(:memo_content_size, 1024).should == 1024
-    end
-  end
-  
   describe '#to_a' do
     it 'should return an ordered array of attribute values' do
       table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"

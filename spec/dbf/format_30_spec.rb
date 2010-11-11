@@ -17,7 +17,7 @@ describe DBF, "of type 30 (Visual FoxPro)" do
   end
   
   it "should report the correct memo type" do
-    @table.memo_file_format.should == :fpt
+    @table.memo.format.should == :fpt
   end
   
 end

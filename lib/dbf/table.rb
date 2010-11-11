@@ -6,7 +6,6 @@ module DBF
   # TODO set record_length to length of actual used column lengths
   class Table
     DBF_HEADER_SIZE = 32
-    FPT_HEADER_SIZE = 512
     
     VERSION_DESCRIPTIONS = {
       "02" => "FoxBase",
@@ -26,8 +25,6 @@ module DBF
     attr_reader :column_count           # The total number of columns
     attr_reader :version                # Internal dBase version number
     attr_reader :last_updated           # Last updated datetime
-    attr_reader :memo_file_format       # :fpt or :dpt
-    attr_reader :memo_block_size        # The block size for memo records
     attr_reader :options                # The options hash used to initialize the table
     attr_reader :data                   # DBF file handle
     attr_reader :memo                   # Memo file handle
@@ -40,6 +37,7 @@ module DBF
     # @param [String] path Path to the dbf file
     def initialize(path)
       @data = File.open(path, 'rb')
+      get_header_info
       @memo = open_memo(path)
       reload!
     end
@@ -47,14 +45,13 @@ module DBF
     # Closes the table and memo file
     def close
       @data.close
-      @memo.close if @memo
+      @memo.data.close if @memo
     end
     
     # Reloads the database and memo files
     def reload!
       @records = nil
       get_header_info
-      get_memo_header_info
       columns
     end
     
@@ -62,7 +59,7 @@ module DBF
     #
     # @return [Boolean]
     def has_memo_file?
-      @memo ? true : false
+      @memo && @memo.data ? true : false
     end
     
     # Retrieve a Column by name
@@ -213,6 +210,22 @@ module DBF
     
     private
     
+    # Open memo file
+    #
+    # @params [String] path
+    # @return [File]
+    def open_memo(path)
+      %w(fpt FPT dbt DBT).each do |extname|
+        filename = path.sub(/#{File.extname(path)[1..-1]}$/, extname)
+        if File.exists?(filename)
+          format = extname.downcase.to_sym
+          data = File.open(filename, 'rb')
+          return Memo.new(data, format, version)
+        end
+      end
+      nil
+    end
+    
     # Find all matching
     #
     # @param [Hash] options
@@ -243,30 +256,6 @@ module DBF
       nil
     end
     
-    # Open memo file
-    #
-    # @params [String] path
-    # @return [File]
-    def open_memo(path)
-      %w(fpt FPT dbt DBT).each do |extname|
-        filename = replace_extname(path, extname)
-        if File.exists?(filename)
-          @memo_file_format = extname.downcase.to_sym
-          return File.open(filename, 'rb')
-        end
-      end
-      nil
-    end
-    
-    # Replace the file extension
-    #
-    # @param [String] path
-    # @param [String] extension
-    # @return [String]
-    def replace_extname(path, extension)
-      path.sub(/#{File.extname(path)[1..-1]}$/, extension)
-    end
-    
     # Is record marked for deletion
     #
     # @return [Boolean]
@@ -275,7 +264,7 @@ module DBF
     end
     
     def current_record
-      deleted_record? ? nil : DBF::Record.new(data, columns, version, has_memo_file?, memo_block_size, memo_file_format, memo)
+      deleted_record? ? nil : DBF::Record.new(data, columns, version, memo)
     end
     
     # Determine database version, record count, header length and record length
@@ -283,20 +272,6 @@ module DBF
       @data.rewind
       @version, @record_count, @header_length, @record_length = @data.read(DBF_HEADER_SIZE).unpack('H2 x3 V v2')
       @column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
-    end
-    
-    # Determines the memo block size and next available block
-    def get_memo_header_info
-      if has_memo_file?
-        @memo.rewind
-        if @memo_file_format == :fpt
-          @memo_next_available_block, @memo_block_size = @memo.read(FPT_HEADER_SIZE).unpack('N x2 n')
-          @memo_block_size = 0 if @memo_block_size.nil?
-        else
-          @memo_block_size = 512
-          @memo_next_available_block = File.size(@memo.path) / @memo_block_size
-        end
-      end
     end
     
     # Seek to a byte offset

@@ -16,8 +16,4 @@ describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
     @table.should_not have_memo_file
   end
   
-  it "should have a nil memo_file_format" do
-    @table.memo_file_format.should be_nil
-  end
-  
 end

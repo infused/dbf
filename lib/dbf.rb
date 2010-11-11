@@ -23,4 +23,5 @@ end
 require 'dbf/attributes'
 require 'dbf/record'
 require 'dbf/column'
+require 'dbf/memo'
 require 'dbf/table'

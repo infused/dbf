@@ -12,15 +12,11 @@ describe DBF::Table do
 
     it "should load the memo file" do
       @table.has_memo_file?.should be_true
-      @table.instance_eval("@memo").should be_kind_of(File)
+      @table.memo.data.should be_kind_of(File)
     end
 
     it "should determine the memo file format" do
-      @table.memo_file_format.should == :dbt
-    end
-
-    it "should determine the correct memo block size" do
-      @table.memo_block_size.should == 512
+      @table.memo.format.should == :dbt
     end
 
     it "should determine the number of columns in each record" do
@@ -78,13 +74,6 @@ describe DBF::Table do
     it "should return a text description of the database type" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       table.version_description.should == "dBase III with memo file"
-    end
-  end
-  
-  describe '#replace_extname' do
-    it "should change the file extension" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.send(:replace_extname, 'dbase_83.dbf', 'fpt').should == 'dbase_83.fpt'
     end
   end
   

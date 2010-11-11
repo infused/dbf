@@ -17,7 +17,7 @@ describe DBF, "of type 8b (dBase IV with memo file)" do
   end
   
   it "should report the correct memo type" do
-    @table.memo_file_format.should == :dbt
+    @table.memo.format.should == :dbt
   end
   
 end
