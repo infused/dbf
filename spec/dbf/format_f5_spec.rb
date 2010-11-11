@@ -13,7 +13,7 @@ describe DBF, "of type f5 (FoxPro with memo file)" do
   end
   
   it "should have a memo file" do
-    @table.should have_memo_file
+    @table.memo.should be_kind_of(DBF::Memo)
   end
   
   it "should report the correct memo type" do

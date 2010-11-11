@@ -55,13 +55,6 @@ module DBF
       columns
     end
     
-    # Checks if there is a memo file
-    #
-    # @return [Boolean]
-    def has_memo_file?
-      @memo && @memo.data ? true : false
-    end
-    
     # Retrieve a Column by name
     # 
     # @param [String, Symbol] column_name 
@@ -199,9 +192,7 @@ module DBF
       @columns = []
       @column_count.times do
         name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
-        if length > 0
-          @columns << Column.new(name.strip, type, length, decimal)
-        end
+        @columns << Column.new(name.strip, type, length, decimal) if length > 0
       end
       # Reset the column count in case any were skipped
       @column_count = @columns.size
@@ -218,9 +209,7 @@ module DBF
       %w(fpt FPT dbt DBT).each do |extname|
         filename = path.sub(/#{File.extname(path)[1..-1]}$/, extname)
         if File.exists?(filename)
-          format = extname.downcase.to_sym
-          data = File.open(filename, 'rb')
-          return Memo.new(data, format, version)
+          return Memo.new(File.open(filename, 'rb'), extname.downcase.to_sym, version)
         end
       end
       nil

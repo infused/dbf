@@ -54,7 +54,7 @@ module DBF
     def initialize_values
       @attributes = columns.inject(Attributes.new) do |hash, column|
         if column.memo?
-          hash[column.name] = @memo.get(get_starting_block(column))
+          hash[column.name] = @memo.get(get_memo_start_block(column))
         else
           hash[column.name] = column.type_cast(unpack_data(column.length))
         end
@@ -65,9 +65,9 @@ module DBF
     # Unpack starting block from database
     #
     # @param [Fixnum] length
-    def get_starting_block(column)
+    def get_memo_start_block(column)
       if %w(30 31).include?(@version)
-        @data.read(column.length).unpack('V')[0]
+        @data.read(column.length).unpack('V').first
       else
         unpack_data(column.length).to_i
       end

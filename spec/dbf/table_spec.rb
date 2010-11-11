@@ -11,7 +11,7 @@ describe DBF::Table do
     end
 
     it "should load the memo file" do
-      @table.has_memo_file?.should be_true
+      @table.memo.should be_kind_of(DBF::Memo)
       @table.memo.data.should be_kind_of(File)
     end
 
