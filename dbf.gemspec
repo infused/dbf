@@ -22,8 +22,9 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.required_rubygems_version = '>= 1.3.0'
-  s.add_dependency('activesupport', ['= 3.0.0'])
-  s.add_dependency('fastercsv', ['= 1.5.3'])
-  s.add_development_dependency('rspec', ['>= 1.3.0'])
+  s.add_dependency 'activesupport', '3.0.1'
+  s.add_dependency 'fastercsv', '1.5.3'
+  s.add_development_dependency 'rspec', '2.1.0'
+  s.add_development_dependency 'metric_fu', '2.0.0'
 end
 

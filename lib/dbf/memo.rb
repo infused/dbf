@@ -7,7 +7,7 @@ module DBF
     attr_reader :data
     
     def initialize(data, format, version)
-      @data, @format, @version = data, format, version
+      @data, @format, @version = data, format.to_sym, version
       get_block_size
     end
     

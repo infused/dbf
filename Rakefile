@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'rubygems'
+require 'metric_fu'
 
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new :spec do |t|

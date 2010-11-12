@@ -1,5 +1,5 @@
 require 'date'
-gem 'activesupport', '=3.0.0'
+gem 'activesupport'
 require 'active_support/core_ext/object'
 require 'active_support/core_ext/date/conversions'
 require 'active_support/core_ext/time/conversions'
