@@ -52,14 +52,15 @@ module DBF
     
     # Initialize values for a row
     def initialize_values
-      @attributes = columns.inject(Attributes.new) do |hash, column|
+      @attributes = Attributes.new
+      columns.each do |column|
         if column.memo?
-          hash[column.name] = @memo.get(get_memo_start_block(column))
+          @attributes[column.name] = @memo.get(get_memo_start_block(column))
         else
-          hash[column.name] = column.type_cast(unpack_data(column.length))
+          @attributes[column.name] = column.type_cast(unpack_data(column.length))
         end
-        hash
       end
+      @attributes
     end
    
     # Unpack starting block from database
