@@ -1,7 +1,6 @@
 module DBF
   # An instance of DBF::Record represents a row in the DBF file 
   class Record
-    attr_reader :attributes
     attr_reader :columns
     
     # Initialize a new DBF::Record
@@ -9,7 +8,6 @@ module DBF
     # @param [DBF::Table] table
     def initialize(data, columns, version, memo)
       @data, @columns, @version, @memo = StringIO.new(data), columns, version, memo
-      init_attributes
       define_accessors
     end
     
@@ -36,6 +34,16 @@ module DBF
       options.all? {|key, value| attributes[key.to_s.underscore] == value}
     end
     
+    def attributes #nodoc
+      return @attributes if @attributes
+      
+      @attributes = Attributes.new
+      columns.each do |column|
+        @attributes[column.name] = init_attribute(column)
+      end
+      @attributes
+    end
+    
     private
     
     def define_accessors #nodoc
@@ -47,14 +55,6 @@ module DBF
           end
         end
       end
-    end
-    
-    def init_attributes #nodoc
-      @attributes = Attributes.new
-      columns.each do |column|
-        @attributes[column.name] = init_attribute(column)
-      end
-      @attributes
     end
     
     def init_attribute(column) #nodoc
