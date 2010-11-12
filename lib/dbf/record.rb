@@ -34,7 +34,7 @@ module DBF
       options.all? {|key, value| attributes[key.to_s.underscore] == value}
     end
     
-    def attributes #nodoc
+    def attributes
       return @attributes if @attributes
       
       @attributes = Attributes.new

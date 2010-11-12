@@ -172,17 +172,19 @@ describe DBF::Column do
     end
   end
   
-  context "#strip_non_ascii_chars" do
+  context "#name" do
     before do
       @column = DBF::Column.new "ColumnName", "N", 1, 0
     end
     
-    it "strips characters below decimal 32 and above decimal 127" do
-      @column.strip_non_ascii_chars("--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--").should == "---hello world---"
+    it "contains only ASCII characters" do
+      column = DBF::Column.new "--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--", "N", 1, 0
+      column.name.should == "---hello world---"
     end
 
-    it "truncates characters with decimal 0" do
-      @column.strip_non_ascii_chars("--\x1F-\x68\x65\x6C\x6C\x6F \x00 world-\x80--").should == "---hello "
+    it "is truncated at the null character" do
+      column = DBF::Column.new "--\x1F-\x68\x65\x6C\x6C\x6F \x00 world-\x80--", "N", 1, 0
+      column.name.should == "---hello "
     end
   end
   
@@ -192,11 +194,11 @@ describe DBF::Column do
     end
     
     it 'is nil if value is blank' do
-      @column.decode_date('').should be_nil
+      @column.send(:decode_date, '').should be_nil
     end
     
     it 'interperets spaces as zeros' do
-      @column.decode_date('2010 715').should == Date.parse('20100715')
+      @column.send(:decode_date, '2010 715').should == Date.parse('20100715')
     end
   end
   

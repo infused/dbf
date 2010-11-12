@@ -5,6 +5,8 @@ module DBF
   
   # TODO set record_length to length of actual used column lengths
   class Table
+    include Enumerable
+    
     DBF_HEADER_SIZE = 32
     
     VERSION_DESCRIPTIONS = {
@@ -39,28 +41,12 @@ module DBF
       @data = File.open(path, 'rb')
       get_header_info
       @memo = open_memo(path)
-      reload!
     end
     
     # Closes the table and memo file
     def close
+      @memo.data && @memo.data.close
       @data.close
-      @memo.data.close if @memo
-    end
-    
-    # Reloads the database and memo files
-    def reload!
-      @records = nil
-      get_header_info
-      columns
-    end
-    
-    # Retrieve a Column by name
-    # 
-    # @param [String, Symbol] column_name 
-    # @return [DBF::Column]
-    def column(column_name)
-      columns.detect {|f| f.name == column_name.to_s}
     end
     
     # Calls block once for each record in the table. The record may be nil
@@ -68,7 +54,7 @@ module DBF
     #
     # @yield [nil, DBF::Record]
     def each
-      0.upto(@record_count - 1) {|index| yield record(index)}
+      @record_count.times {|i| yield record(i)}
     end
     
     # Retrieve a record by index number.
@@ -111,27 +97,15 @@ module DBF
     #     t.column :notes, :text
     #   end
     #
-    # @param [optional String] path
     # @return [String]
-    def schema(path = nil)
+    def schema
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{File.basename(@data.path, ".*")}\" do |t|\n"
       columns.each do |column|
         s << "    t.column #{column.schema_definition}"
       end
-      s << "  end\nend"
-      
-      if path
-        File.open(path, 'w') {|f| f.puts(s)}
-      end
-        
+      s << "  end\nend"        
       s
-    end
-    
-    def to_a
-      records = []
-      each {|record| records << record if record}
-      records
     end
     
     # Dumps all records to a CSV file.  If no filename is given then CSV is
@@ -142,9 +116,7 @@ module DBF
       path = File.basename(@data.path, '.dbf') + '.csv' if path.nil?
       FCSV.open(path, 'w', :force_quotes => true) do |csv|
         csv << columns.map {|c| c.name}
-        each do |record|
-          csv << record.to_a
-        end
+        each {|record| csv << record.to_a}
       end
     end
     
@@ -189,6 +161,7 @@ module DBF
     def columns
       return @columns if @columns
       
+      @data.seek(DBF_HEADER_SIZE)
       @columns = []
       @column_count.times do
         name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
@@ -201,11 +174,7 @@ module DBF
     
     private
     
-    # Open memo file
-    #
-    # @params [String] path
-    # @return [File]
-    def open_memo(path)
+    def open_memo(path) #nodoc
       %w(fpt FPT dbt DBT).each do |extname|
         filename = path.sub(/#{File.extname(path)[1..-1]}$/, extname)
         if File.exists?(filename)
@@ -215,40 +184,23 @@ module DBF
       nil
     end
     
-    # Find all matching
-    #
-    # @param [Hash] options
-    # @yield [optional DBF::Record]
-    # @return [Array]
-    def find_all(options, &block)
-      results = []
-      each do |record|
+    def find_all(options) #nodoc
+      map do |record|
         if record.try(:match?, options)
-          if block_given?
-            yield record
-          else
-            results << record
-          end
+          yield record if block_given?
+          record
         end
-      end
-      results
+      end.compact
     end
     
-    # Find first matching
-    # 
-    # @param [Hash] options
-    # @return [DBF::Record, nil]
-    def find_first(options)
+    def find_first(options) #nodoc
       each do |record|
         return record if record.try(:match?, options)
       end
       nil
     end
     
-    # Is record marked for deletion
-    #
-    # @return [Boolean]
-    def deleted_record?
+    def deleted_record? #nodoc
       @data.read(1).unpack('a') == ['*']
     end
     
@@ -256,25 +208,18 @@ module DBF
       deleted_record? ? nil : DBF::Record.new(data.read(@record_length), columns, version, memo)
     end
     
-    # Determine database version, record count, header length and record length
-    def get_header_info
+    def get_header_info #nodoc
       @data.rewind
       @version, @record_count, @header_length, @record_length = @data.read(DBF_HEADER_SIZE).unpack('H2 x3 V v2')
       @column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
     end
     
-    # Seek to a byte offset
-    # 
-    # @params [Fixnum] offset
-    def seek(offset)
-      @data.seek(@header_length + offset)
+    def seek(offset) #nodoc
+      @data.seek @header_length + offset
     end
   
-    # Seek to a record
-    #
-    # @param [Fixnum] index
-    def seek_to_record(index)
-      seek(index * @record_length)
+    def seek_to_record(index) #nodoc
+      seek index * @record_length
     end
     
   end

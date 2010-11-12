@@ -43,24 +43,6 @@ describe DBF::Table do
     end
   end
   
-  describe "#column" do
-    it "should accept a string or symbol as input" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.column(:IMAGE).should be_kind_of(DBF::Column)
-      table.column("IMAGE").should be_kind_of(DBF::Column)
-    end
-    
-    it "should return a DBF::Field object when the column_name exists" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.column(:IMAGE).should be_kind_of(DBF::Column)
-    end
-  
-    it "should return nil when the column_name does not exist" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.column(:NOTANIMAGE).should be_nil
-    end
-  end
-  
   describe "#schema" do
     it "should match the test schema fixture" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
