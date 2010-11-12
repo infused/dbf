@@ -12,12 +12,4 @@ describe DBF, "of type 30 (Visual FoxPro)" do
     @table.version.should == "30"
   end
   
-  it "should have a memo file" do
-    @table.memo.should be_kind_of(DBF::Memo)
-  end
-  
-  it "should report the correct memo type" do
-    @table.memo.format.should == :fpt
-  end
-  
 end

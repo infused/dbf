@@ -12,8 +12,4 @@ describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
     @table.version.should == "31"
   end
   
-  it "should not have a memo file" do
-    @table.memo.should be_nil
-  end
-  
 end

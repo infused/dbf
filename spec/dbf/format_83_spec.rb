@@ -12,12 +12,4 @@ describe DBF, "of type 83 (dBase III with memo file)" do
     @table.version.should == "83"
   end
   
-  it "should have a memo file" do
-    @table.memo.should be_kind_of(DBF::Memo)
-  end
-  
-  it "should report the correct memo type" do
-    @table.memo.format.should == :dbt
-  end
-  
 end

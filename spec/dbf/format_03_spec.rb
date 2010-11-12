@@ -12,8 +12,4 @@ describe DBF, "of type 03 (dBase III without memo file)" do
     @table.version.should == "03"
   end
   
-  it "should not have a memo file" do
-    @table.memo.should be_nil
-  end
-  
 end

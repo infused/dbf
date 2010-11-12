@@ -3,37 +3,28 @@ module DBF
     BLOCK_HEADER_SIZE = 8
     FPT_HEADER_SIZE = 512
     
-    attr_reader :format
-    attr_reader :data
-    
     def initialize(data, format, version)
       @data, @format, @version = data, format.to_sym, version
-      get_block_size
     end
     
     def get(start_block)
-      send "build_#{format}_memo", start_block if start_block > 0
+      send "build_#{@format}_memo", start_block if start_block > 0
+    end
+    
+    def close
+      @data.close
     end
     
     private
     
-    def get_block_size #nodoc
-      data.rewind
-      if format == :fpt
-        @memo_block_size = data.read(FPT_HEADER_SIZE).unpack('x6n').first || 0
-      else
-        @memo_block_size = 512
-      end
-    end
-    
     def build_fpt_memo(start_block) #nodoc
-      data.seek memo_offset(start_block)
+      @data.seek offset(start_block)
       
-      memo_type, memo_size, memo_string = data.read(@memo_block_size).unpack("NNa*")
+      memo_type, memo_size, memo_string = @data.read(block_size).unpack("NNa*")
       return nil unless memo_type == 1 && memo_size > 0
       
-      if memo_size > memo_block_content_size
-        memo_string << data.read(memo_content_size(memo_size))
+      if memo_size > block_content_size
+        memo_string << @data.read(content_size(memo_size))
       else
         memo_string = memo_string[0, memo_size]
       end
@@ -41,33 +32,47 @@ module DBF
     end
     
     def build_dbt_memo(start_block) #nodoc
-      data.seek memo_offset(start_block)
-      
       case @version
       when "83" # dbase iii
-        memo_string = ""
-        loop do
-          block = data.read(@memo_block_size)
-          memo_string << block
-          break if block.tr("\000",'').size < @memo_block_size
-        end
+        build_dbt_83_memo(start_block)
       when "8b" # dbase iv
-        memo_size = data.read(BLOCK_HEADER_SIZE).unpack("x4L").first
-        memo_string = data.read(memo_size)
+        build_dbt_8b_memo(start_block)
+      end
+    end
+    
+    def build_dbt_83_memo(start_block)
+      @data.seek offset(start_block)
+      memo_string = ""
+      loop do
+        block = @data.read(block_size)
+        memo_string << block
+        break if block.tr("\000",'').size < block_size
       end
       memo_string
     end
     
-    def memo_offset(start_block) #nodoc
-      start_block * @memo_block_size
+    def build_dbt_8b_memo(start_block)
+      @data.seek offset(start_block)
+      @data.read(@data.read(BLOCK_HEADER_SIZE).unpack("x4L").first)
+    end
+    
+    def offset(start_block) #nodoc
+      start_block * block_size
     end
 
-    def memo_content_size(memo_size) #nodoc
-      (memo_size - @memo_block_size) + BLOCK_HEADER_SIZE
+    def content_size(memo_size) #nodoc
+      (memo_size - block_size) + BLOCK_HEADER_SIZE
     end
 
-    def memo_block_content_size #nodoc
-      @memo_block_size - BLOCK_HEADER_SIZE
+    def block_content_size #nodoc
+      @block_content_size ||= block_size - BLOCK_HEADER_SIZE
+    end
+    
+    def block_size #nodoc
+      @block_size ||= begin
+        @data.rewind
+        @format == :fpt ? @data.read(FPT_HEADER_SIZE).unpack('x6n').first || 0 : 512
+      end
     end
     
   end

@@ -24,12 +24,7 @@ module DBF
       "fb" => "FoxPro without memo file"
     }
     
-    attr_reader :column_count           # The total number of columns
     attr_reader :version                # Internal dBase version number
-    attr_reader :last_updated           # Last updated datetime
-    attr_reader :options                # The options hash used to initialize the table
-    attr_reader :data                   # DBF file handle
-    attr_reader :memo                   # Memo file handle
     attr_reader :record_count           # Total number of records
     
     # Opens a DBF::Table
@@ -45,7 +40,7 @@ module DBF
     
     # Closes the table and memo file
     def close
-      @memo.data && @memo.data.close
+      @memo && @memo.close
       @data.close
     end
     
@@ -205,7 +200,7 @@ module DBF
     end
     
     def current_record
-      deleted_record? ? nil : DBF::Record.new(data.read(@record_length), columns, version, memo)
+      deleted_record? ? nil : DBF::Record.new(@data.read(@record_length), columns, version, @memo)
     end
     
     def get_header_info #nodoc

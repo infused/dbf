@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'rubygems'
-require 'metric_fu'
 
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new :spec do |t|
@@ -23,4 +22,10 @@ task :default => :spec
 desc "Open an irb session preloaded with this library"
 task :console do
   sh "irb -rubygems -I lib -r dbf.rb"
+end
+
+require 'metric_fu'
+MetricFu::Configuration.run do |config|
+  config.rcov[:test_files] = ['spec/**/*_spec.rb']  
+  config.rcov[:rcov_opts] << "-Ispec"
 end

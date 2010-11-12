@@ -50,8 +50,8 @@ module DBF
     private
     
     def decode_date(value) #nodoc
-      return nil if value.blank?
-      value.is_a?(String) ? value.gsub(' ', '0').try(:to_date) : value.to_date
+      value.gsub!(' ', '0')
+      value.blank? ? nil : value.to_date
     rescue
       nil
     end
@@ -102,7 +102,8 @@ module DBF
     end
     
     def clean(s) #nodoc
-      s = s[0, s.index("\x00")] if s.index("\x00")
+      first_null = s.index("\x00")
+      s = s[0, first_null] if first_null
       s.gsub(/[^\x20-\x7E]/, "")
     end
     

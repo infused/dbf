@@ -6,19 +6,6 @@ describe DBF::Table do
       @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
     end
 
-    it "should load the data file" do
-      @table.data.should be_kind_of(File)
-    end
-
-    it "should load the memo file" do
-      @table.memo.should be_kind_of(DBF::Memo)
-      @table.memo.data.should be_kind_of(File)
-    end
-
-    it "should determine the memo file format" do
-      @table.memo.format.should == :dbt
-    end
-
     it "should determine the number of columns in each record" do
       @table.columns.size.should == 15
     end
