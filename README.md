@@ -11,7 +11,7 @@ database files
 
 ## Compatibility
 
-DBF is tested to work with Ruby 1.8.6, 1.8.7, 1.9.1 and 1.9.2
+DBF works with Ruby 1.8.6, 1.8.7, and 1.9.2
 
 ## Installation
   
@@ -23,46 +23,46 @@ Load a DBF file:
 
     require 'dbf'
 
-    table = DBF::Table.new("widgets.dbf")
+    widgets = DBF::Table.new("widgets.dbf")
 
 Enumerate all records
 
-    table.each do |record|
-      puts record.name
-      puts record.email
+    widgets.each do |record|
+      puts widget.name
+      puts widget.email
     end
     
 Load a single record using <tt>record</tt> or <tt>find</tt>
 
-    table.record(6)
-    table.find(6)
+    widget.record(6)
+    widget.find(6)
 
 Attributes can also be accessed through the attributes hash in original or
 underscored form or as an accessor method using the underscored name. (Note
 that record() will return nil if the requested record has been deleted and not
 yet pruned from the database)
 
-    table.record(4).attributes["PhoneBook"]
-    table.record(4).attributes["phone_book"]
-    table.record(4).phone_book
+    widget.record(4).attributes["SlotNumber"]
+    widget.record(4).attributes["slot_number"]
+    widget.record(4).slot_number
   
 Search for records using a simple hash format. Multiple search criteria are
 ANDed. Use the block form if the resulting recordset could be large, otherwise
 all records will be loaded into memory.
     
-    # find all records with first_name equal to Keith
-    table.find(:all, :first_name => 'Keith') do |record|
+    # find all records with slot_number equal to s42
+    widgets.find(:all, :slot_number => 's42') do |widget|
       # the record will be nil if deleted, but not yet pruned from the database
-      if record
-        puts record.last_name
+      if widget
+        puts widget.serial_number
       end
     end
     
-    # find the first record with first_name equal to Keith
-    table.find :first, :first_name => 'Keith'
+    # find the first record with slot_number equal to s42
+    widgets.find :first, :slot_number => 's42'
     
     # find record number 10
-    table.find(10)
+    widgets.find(10)
   
 ## Migrating to ActiveRecord
 
@@ -100,7 +100,7 @@ A small command-line utility called dbf is installed along with the gem.
 
 The basic dBase data types are generally supported well. Support for the
 advanced data types in dbase V and FoxPro are still experimental or not
-supported. If you have insight into how any of unsupported data types are
+supported. If you have insight into how any of the unsupported data types are
 implemented, please give me a shout. FoxBase/dBase II files are not supported
 at this time.
 
