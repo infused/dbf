@@ -3,35 +3,33 @@ require "spec_helper"
 describe DBF::Column do
   
   context "when initialized" do
-    before do
-      @column = DBF::Column.new "ColumnName", "N", 1, 0
-    end
+    let(:column) { DBF::Column.new "ColumnName", "N", 1, 0 }
     
     it "sets the #name accessor" do
-      @column.name.should == "ColumnName"
+      column.name.should == "ColumnName"
     end
     
     it "sets the #type accessor" do
-      @column.type.should == "N"
+      column.type.should == "N"
     end
     
     it "sets the #length accessor" do
-      @column.length.should == 1
+      column.length.should == 1
     end
     
     it "sets the #decimal accessor" do
-      @column.decimal.should == 0
+      column.decimal.should == 0
     end
     
-    context 'with length of 0' do
+    describe 'with length of 0' do
       specify { lambda { DBF::Column.new "ColumnName", "N", 0, 0 }.should raise_error(DBF::ColumnLengthError) }
     end
     
-    context 'with length less than 0' do
+    describe 'with length less than 0' do
       specify { lambda { DBF::Column.new "ColumnName", "N", -1, 0 }.should raise_error(DBF::ColumnLengthError) }
     end
     
-    context 'with empty column name' do
+    describe 'with empty column name' do
       specify { lambda { DBF::Column.new "\xFF\xFC", "N", 1, 0 }.should raise_error(DBF::ColumnNameError) }
     end
   end
@@ -75,60 +73,57 @@ describe DBF::Column do
     end
     
     context 'with type L (logical/boolean)' do
+      let(:column) { DBF::Column.new "ColumnName", "L", 1, 0 }
+      
       it "casts 'y' to true" do
-        value = "y"
-        column = DBF::Column.new "ColumnName", "L", 1, 0
-        column.type_cast(value).should == true
+        column.type_cast('y').should == true
       end
       
-      it "casts 'n' to false" do
-        value = "n"
-        column = DBF::Column.new "ColumnName", "L", 1, 0
-        column.type_cast(value).should == false
+      it "casts 't' to true" do
+        column.type_cast('t').should == true
+      end
+      
+      it "casts value other than 't' or 'y' to false" do
+        column.type_cast('n').should == false
       end
     end
     
     context 'with type T (datetime)' do
+      let(:column) { DBF::Column.new "ColumnName", "T", 16, 0 }
+      
       context 'with valid datetime' do
         it "casts to DateTime" do
-          value = "Nl%\000\300Z\252\003"
-          column = DBF::Column.new "ColumnName", "T", 16, 0
-          column.type_cast(value).should == "2002-10-10T17:04:56+00:00"
+          column.type_cast("Nl%\000\300Z\252\003").should == "2002-10-10T17:04:56+00:00"
         end
       end
       
       context 'with invalid datetime' do
         it "casts to nil" do
-          value = "Nl%\000\000A\000\999"
-          column = DBF::Column.new "ColumnName", "T", 16, 0
-          column.type_cast(value).should be_nil
+          column.type_cast("Nl%\000\000A\000\999").should be_nil
         end
       end
     end
     
     context 'with type D (date)' do
+      let(:column) { DBF::Column.new "ColumnName", "D", 8, 0 }
+      
       context 'with valid date' do
         it "casts to Date" do
-          value = "20050712"
-          column = DBF::Column.new "ColumnName", "D", 8, 0
-          column.type_cast(value).should == Date.new(2005,7,12)
+          column.type_cast("20050712").should == Date.new(2005,7,12)
         end
       end
       
       context 'with invalid date' do
         it "casts to nil" do
-          value = "0"
-          column = DBF::Column.new "ColumnName", "D", 8, 0
-          column.type_cast(value).should be_nil
+          column.type_cast("0").should be_nil
         end
       end
     end
     
     context 'with type M (memo)' do
       it "casts to string" do
-        value = 'abc'
         column = DBF::Column.new "ColumnName", "M", 3, 0
-        column.type_cast(value).should be_a String
+        column.type_cast('abc').should be_a String
       end
     end
   end
@@ -172,11 +167,7 @@ describe DBF::Column do
     end
   end
   
-  context "#name" do
-    before do
-      @column = DBF::Column.new "ColumnName", "N", 1, 0
-    end
-    
+  context "#name" do    
     it "contains only ASCII characters" do
       column = DBF::Column.new "--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--", "N", 1, 0
       column.name.should == "---hello world---"
@@ -189,16 +180,14 @@ describe DBF::Column do
   end
   
   context '#decode_date' do
-    before do
-      @column = DBF::Column.new "ColumnName", "N", 1, 0
-    end
+    let(:column) { DBF::Column.new "ColumnName", "N", 1, 0 }
     
     it 'is nil if value is blank' do
-      @column.send(:decode_date, '').should be_nil
+      column.send(:decode_date, '').should be_nil
     end
     
     it 'interperets spaces as zeros' do
-      @column.send(:decode_date, '2010 715').should == Date.parse('20100715')
+      column.send(:decode_date, '2010 715').should == Date.parse('20100715')
     end
   end
   

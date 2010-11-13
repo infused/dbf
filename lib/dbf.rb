@@ -7,6 +7,7 @@ require 'active_support/core_ext/date_time/conversions'
 require 'active_support/core_ext/string/conversions'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/enumerable'
 
 if RUBY_VERSION > '1.9'    
  require 'csv'  

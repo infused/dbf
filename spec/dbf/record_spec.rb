@@ -21,8 +21,7 @@ describe DBF::Record do
     end
     
     it 'should be false if other does not have attributes' do
-      other = mock('object')
-      (@record == other).should be_false
+      (@record == mock('other')).should be_false
     end
     
     it 'should be true if other attributes match' do

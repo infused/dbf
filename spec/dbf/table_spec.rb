@@ -1,32 +1,18 @@
 require "spec_helper"
 
-describe DBF::Table do
-  context "when initialized" do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-    end
-
-    it "should determine the number of columns in each record" do
-      @table.columns.size.should == 15
-    end
-
-    it "should determine the number of records in the database" do
-      @table.record_count.should == 67
-    end
-
-    it "should determine the database version" do
-      @table.version.should == "83"
-    end
-  end
-  
+describe DBF::Table do  
   context "when closed" do
     before do
       @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      @table.close
     end
     
     it "should close the data file" do
-      @table.close
-      lambda { @table.record(1) }.should raise_error(IOError)
+      @table.instance_eval { @data }.should be_closed
+    end
+    
+    it "should close the memo file" do
+      @table.instance_eval { @memo }.instance_eval { @data }.should be_closed
     end
   end
   
@@ -36,26 +22,6 @@ describe DBF::Table do
       control_schema = File.read(File.dirname(__FILE__) + '/../fixtures/dbase_83_schema.txt')
 
       table.schema.should == control_schema
-    end
-  end
-  
-  describe "#version_description" do
-    it "should return a text description of the database type" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.version_description.should == "dBase III with memo file"
-    end
-  end
-  
-  describe '#to_a' do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      
-      @records = []
-      @table.each {|record| @records << record}
-    end
-    
-    it 'should return an array of records' do
-      @table.to_a.should == @records
     end
   end
   
@@ -73,22 +39,21 @@ describe DBF::Table do
       @table.to_csv
       File.exists?('dbase_83.csv').should be_true
     end
-    
-    it 'should create custom csv file' do
-      @table.to_csv('test.csv')
-      File.exists?('test.csv').should be_true
+
+    describe 'when path param passed' do
+      it 'should create custom csv file' do
+        @table.to_csv('test.csv')
+        File.exists?('test.csv').should be_true
+      end
     end
   end
   
   describe "#record" do
     before do
       @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      
-      @records = []
-      @table.each {|record| @records << record}
     end
     
-    it "should nullify deleted records" do
+    it "return nil for deleted records" do
       @table.stub!(:deleted_record?).and_return(true)
       @table.record(5).should be_nil
     end
@@ -102,10 +67,6 @@ describe DBF::Table do
     it "should return nil for deleted records" do
       @table.stub!(:deleted_record?).and_return(true)
       @table.record(0).should be_nil
-    end
-    
-    it 'should return a DBF::Record' do
-      @table.record(0).should be_kind_of(DBF::Record)
     end
   end
   
@@ -133,9 +94,6 @@ describe DBF::Table do
     describe "with :all" do
       before do
         @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-        
-        @records = []
-        @table.each {|record| @records << record}
       end
       
       it "should accept a block" do
@@ -147,11 +105,11 @@ describe DBF::Table do
       end
 
       it "should return all records if options are empty" do
-        @table.find(:all).should == @records
+        @table.find(:all).should == @table.to_a
       end
 
       it "should return matching records when used with options" do
-        @table.find(:all, "WEIGHT" => 0.0).should == @records.select {|r| r.attributes["weight"] == 0.0}
+        @table.find(:all, "WEIGHT" => 0.0).should == @table.select {|r| r.attributes["weight"] == 0.0}
       end
 
       it "should AND multiple search terms" do
@@ -178,17 +136,14 @@ describe DBF::Table do
     describe "with :first" do
       before do
         @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-        
-        @records = []
-        @table.each {|record| @records << record}
       end
 
       it "should return the first record if options are empty" do
-        @table.find(:first).should == @records.first
+        @table.find(:first).should == @table.first
       end
 
       it "should return the first matching record when used with options" do
-        @table.find(:first, "CODE" => "C").should == @records[5]
+        @table.find(:first, "CODE" => "C").should == @table.record(5)
       end
 
       it "should AND multiple search terms" do
