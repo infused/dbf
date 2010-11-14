@@ -108,8 +108,8 @@ module DBF
     #
     # @param [optional String] path Defaults to basename of dbf file
     def to_csv(path = nil)
-      path = File.basename(@data.path, '.dbf') + '.csv' if path.nil?
-      FCSV.open(path, 'w', :force_quotes => true) do |csv|
+      path = default_csv_path unless path
+      csv_class.open(path, 'w', :force_quotes => true) do |csv|
         csv << columns.map {|c| c.name}
         each {|record| csv << record.to_a}
       end
@@ -215,6 +215,14 @@ module DBF
   
     def seek_to_record(index) #nodoc
       seek index * @record_length
+    end
+    
+    def csv_class #nodoc
+      CSV.const_defined?(:Reader) ? FCSV : CSV
+    end
+    
+    def default_csv_path #nodoc
+      File.basename(@data.path, '.dbf') + '.csv'
     end
     
   end

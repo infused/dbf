@@ -9,16 +9,9 @@ require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/enumerable'
 
-if RUBY_VERSION > '1.9'    
- require 'csv'  
- unless defined? FCSV
-   class Object  
-     FCSV = CSV 
-     alias_method :FCSV, :CSV
-   end  
- end
-else
- require 'fastercsv'
+require 'csv'
+if CSV.const_defined? :Reader
+  require 'fastercsv'
 end
 
 require 'dbf/attributes'
