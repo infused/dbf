@@ -37,7 +37,7 @@ module DBF
     end
     
     def memo?
-      type == 'M'
+      @memo ||= type == 'M'
     end
     
     # Schema definition
@@ -45,6 +45,10 @@ module DBF
     # @return [String]
     def schema_definition
       "\"#{name.underscore}\", #{schema_data_type}\n"
+    end
+    
+    def underscored_name
+      @underscored_name ||= name.underscore
     end
     
     private
