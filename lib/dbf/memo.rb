@@ -3,12 +3,18 @@ module DBF
     BLOCK_HEADER_SIZE = 8
     FPT_HEADER_SIZE = 512
     
-    def initialize(data, format, version)
-      @data, @format, @version = data, format.to_sym, version
+    def initialize(data, version)
+      @data, @version = data, version
     end
     
     def get(start_block)
-      send "build_#{@format}_memo", start_block if start_block > 0
+      if start_block > 0
+        if format_fpt?
+          build_fpt_memo start_block 
+        else
+          build_dbt_memo start_block
+        end
+      end
     end
     
     def close
@@ -16,6 +22,10 @@ module DBF
     end
     
     private
+    
+    def format_fpt? #nodoc
+      File.extname(@data.path) =~ /fpt/i
+    end
     
     def build_fpt_memo(start_block) #nodoc
       @data.seek offset(start_block)
@@ -28,7 +38,7 @@ module DBF
       else
         memo_string = memo_string[0, memo_size]
       end
-      memo_string.strip
+      memo_string
     end
     
     def build_dbt_memo(start_block) #nodoc
@@ -43,11 +53,10 @@ module DBF
     def build_dbt_83_memo(start_block)
       @data.seek offset(start_block)
       memo_string = ""
-      loop do
-        block = @data.read(block_size)
+      begin
+        block = @data.read(block_size).gsub(/(\000|\032)/, '')
         memo_string << block
-        break if block.tr("\000",'').size < block_size
-      end
+      end until block.size < block_size
       memo_string
     end
     
@@ -71,7 +80,7 @@ module DBF
     def block_size #nodoc
       @block_size ||= begin
         @data.rewind
-        @format == :fpt ? @data.read(FPT_HEADER_SIZE).unpack('x6n').first || 0 : 512
+        format_fpt? ? @data.read(FPT_HEADER_SIZE).unpack('x6n').first || 0 : 512
       end
     end
     

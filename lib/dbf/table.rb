@@ -173,7 +173,7 @@ module DBF
       %w(fpt FPT dbt DBT).each do |extname|
         filename = path.sub(/#{File.extname(path)[1..-1]}$/, extname)
         if File.exists?(filename)
-          return Memo.new(File.open(filename, 'rb'), extname.downcase.to_sym, version)
+          return Memo.new(File.open(filename, 'rb'), version)
         end
       end
       nil
