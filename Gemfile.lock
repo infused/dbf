@@ -38,7 +38,7 @@ GEM
     main (4.3.0)
       arrayfields (>= 4.7.4)
       fattr (>= 2.1.0)
-    metric_fu (2.0.0)
+    metric_fu (2.0.1)
       Saikuro (>= 1.1.0)
       activesupport (>= 2.0.0)
       chronic (~> 0.2.3)
@@ -87,5 +87,5 @@ DEPENDENCIES
   activesupport (= 3.0.1)
   dbf!
   fastercsv (= 1.5.3)
-  metric_fu (= 2.0.0)
+  metric_fu (= 2.0.1)
   rspec (= 2.1.0)
