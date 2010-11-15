@@ -59,19 +59,19 @@ module DBF
     end
     
     def init_attribute(column) #nodoc
-      column.memo? ? @memo.get(get_memo_start_block(column)) : column.type_cast(unpack_data(column.length))
+      column.memo? ? @memo.get(get_memo_start_block(column)) : column.type_cast(unpack_data(column))
     end
    
     def get_memo_start_block(column) #nodoc
       if %w(30 31).include?(@version)
         @data.read(column.length).unpack('V').first
       else
-        unpack_data(column.length).to_i
+        unpack_data(column).to_i
       end
     end
 
-    def unpack_data(length) #nodoc
-      @data.read(length).unpack("a#{length}").first
+    def unpack_data(column) #nodoc
+      @data.read(column.length).unpack("a#{column.length}").first
     end
     
   end
