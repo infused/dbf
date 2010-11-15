@@ -31,5 +31,15 @@ describe DBF::Record do
       (@record == other).should be_true
     end
   end
+  
+  describe 'column accessors' do
+    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"}
+    
+    it 'should define accessor methods for each column' do
+      record = table.find(0)
+      record.should respond_to(:character)
+      record.character.should == 'One'
+    end
+  end
 
 end

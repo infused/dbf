@@ -49,7 +49,11 @@ module DBF
     def define_accessors #nodoc
       columns.each do |column|
         unless self.class.method_defined? column.underscored_name
-          self.class.class_eval "def #{column.underscored_name}; attributes[name]; end"
+          self.class.class_eval <<-END
+            def #{column.underscored_name}
+              attributes['#{column.underscored_name}']
+            end
+          END
         end
       end
     end
