@@ -158,12 +158,11 @@ module DBF
       
       @data.seek(DBF_HEADER_SIZE)
       @columns = []
-      @column_count.times do
+      column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
+      column_count.times do
         name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
         @columns << Column.new(name.strip, type, length, decimal) if length > 0
       end
-      # Reset the column count in case any were skipped
-      @column_count = @columns.size
       @columns
     end
     
@@ -206,7 +205,6 @@ module DBF
     def get_header_info #nodoc
       @data.rewind
       @version, @record_count, @header_length, @record_length = @data.read(DBF_HEADER_SIZE).unpack('H2 x3 V v2')
-      @column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
     end
     
     def seek(offset) #nodoc

@@ -72,10 +72,6 @@ describe DBF, "of type 03 (dBase III without memo file)" do
     @table.version_description.should == "dBase III without memo file"
   end
   
-  it "should determine the number of columns" do
-    @table.instance_eval {@column_count}.should == 31
-  end
-
   it "should determine the number of records" do
     @table.record_count.should == 14
   end
@@ -94,10 +90,6 @@ describe DBF, "of type 30 (Visual FoxPro)" do
   
   it "should report the correct version description" do
     @table.version_description.should == "Visual FoxPro"
-  end
-  
-  it "should determine the number of columns" do
-    @table.instance_eval {@column_count}.should == 153
   end
 
   it "should determine the number of records" do
@@ -120,10 +112,6 @@ describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
     @table.version_description.should == "Visual FoxPro with AutoIncrement field"
   end
   
-  it "should determine the number of columns" do
-    @table.instance_eval {@column_count}.should == 19
-  end
-
   it "should determine the number of records" do
     @table.record_count.should == 77
   end
@@ -144,10 +132,6 @@ describe DBF, "of type 83 (dBase III with memo file)" do
     @table.version_description.should == "dBase III with memo file"
   end
   
-  it "should determine the number of columns" do
-    @table.instance_eval {@column_count}.should == 15
-  end
-
   it "should determine the number of records" do
     @table.record_count.should == 67
   end
@@ -168,10 +152,6 @@ describe DBF, "of type 8b (dBase IV with memo file)" do
     @table.version_description.should == "dBase IV with memo file"
   end
   
-  it "should determine the number of columns" do
-    @table.instance_eval {@column_count}.should == 6
-  end
-
   it "should determine the number of records" do
     @table.record_count.should == 10
   end
@@ -192,10 +172,6 @@ describe DBF, "of type f5 (FoxPro with memo file)" do
     @table.version_description.should == "FoxPro with memo file"
   end
   
-  it "should determine the number of columns" do
-    @table.instance_eval {@column_count}.should == 59
-  end
-
   it "should determine the number of records" do
     @table.record_count.should == 975
   end
