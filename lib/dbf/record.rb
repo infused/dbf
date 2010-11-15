@@ -1,8 +1,6 @@
 module DBF
   # An instance of DBF::Record represents a row in the DBF file 
   class Record
-    attr_reader :columns
-    
     # Initialize a new DBF::Record
     # 
     # @param [DBF::Table] table
@@ -23,7 +21,7 @@ module DBF
     # 
     # @return [Array]
     def to_a
-      columns.map { |column| attributes[column.name.underscore] }
+      @columns.map { |column| attributes[column.name.underscore] }
     end
     
     # Do all search parameters match?
@@ -38,7 +36,7 @@ module DBF
       return @attributes if @attributes
       
       @attributes = Attributes.new
-      columns.each do |column|
+      @columns.each do |column|
         @attributes[column.name] = init_attribute(column)
       end
       @attributes
@@ -47,7 +45,7 @@ module DBF
     private
     
     def define_accessors #nodoc
-      columns.each do |column|
+      @columns.each do |column|
         unless self.class.method_defined? column.underscored_name
           self.class.class_eval <<-END
             def #{column.underscored_name}
