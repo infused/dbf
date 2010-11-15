@@ -51,7 +51,7 @@ module DBF
         unless self.class.method_defined? column.underscored_name
           self.class.class_eval <<-END
             def #{column.underscored_name}
-              attributes['#{column.underscored_name}']
+              @#{column.underscored_name} ||= attributes['#{column.underscored_name}']
             end
           END
         end
