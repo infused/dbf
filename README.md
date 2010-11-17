@@ -32,19 +32,18 @@ Enumerate all records
       puts widget.email
     end
     
-Load a single record using <tt>record</tt> or <tt>find</tt>
+Load a single record using <tt>find</tt>
 
-    widget.record(6)
     widget.find(6)
 
 Attributes can also be accessed through the attributes hash in original or
 underscored form or as an accessor method using the underscored name. (Note
-that record() will return nil if the requested record has been deleted and not
+that find() will return nil if the requested record has been deleted and not
 yet pruned from the database)
 
-    widget.record(4).attributes["SlotNumber"]
-    widget.record(4).attributes["slot_number"]
-    widget.record(4).slot_number
+    widget.find(4).attributes["SlotNumber"]
+    widget.find(4).attributes["slot_number"]
+    widget.find(4).slot_number
   
 Search for records using a simple hash format. Multiple search criteria are
 ANDed. Use the block form if the resulting recordset could be large, otherwise
