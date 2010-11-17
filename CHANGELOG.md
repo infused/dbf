@@ -1,3 +1,8 @@
+## 1.5.0
+
+- Significant internal restructuring and performance improvements. Initial
+  testing shows 4x faster performance.
+
 ## 1.3.0
 
 - Only load what's needed from activesupport 3.0
