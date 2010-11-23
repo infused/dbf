@@ -28,7 +28,7 @@ module DBF
       case type
         when 'N' then unpack_number(value)
         when 'I' then unpack_unsigned_long(value)
-        when 'F' then unpack_float(value)
+        when 'F' then value.to_f
         when 'D' then decode_date(value)
         when 'T' then decode_datetime(value)
         when 'L' then boolean(value)
@@ -67,15 +67,7 @@ module DBF
     end
     
     def unpack_number(value) #nodoc
-      decimal.zero? ? unpack_integer(value) : value.to_f
-    end
-    
-    def unpack_float(value) #nodoc
-      value.to_f
-    end
-    
-    def unpack_integer(value) #nodoc
-      value.to_i
+      decimal.zero? ? value.to_i : value.to_f
     end
     
     def unpack_unsigned_long(value) #nodoc
