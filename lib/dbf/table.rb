@@ -153,16 +153,17 @@ module DBF
     
     # Retrieves column information from the database
     def columns
-      return @columns if @columns
-      
-      @data.seek(DBF_HEADER_SIZE)
-      @columns = []
-      column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
-      column_count.times do
-        name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
-        @columns << Column.new(name.strip, type, length, decimal) if length > 0
+      @columns ||= begin
+        column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
+   
+        @data.seek(DBF_HEADER_SIZE)
+        columns = []
+        column_count.times do
+          name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
+          columns << Column.new(name.strip, type, length, decimal) if length > 0
+        end
+        columns
       end
-      @columns
     end
     
     private
