@@ -187,10 +187,7 @@ module DBF
     end
     
     def find_first(options) #nodoc
-      each do |record|
-        return record if record.try(:match?, options)
-      end
-      nil
+      detect {|record| record.try(:match?, options)}
     end
     
     def deleted_record? #nodoc
