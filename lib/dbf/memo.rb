@@ -50,7 +50,7 @@ module DBF
       end
     end
     
-    def build_dbt_83_memo(start_block)
+    def build_dbt_83_memo(start_block) #nodoc
       @data.seek offset(start_block)
       memo_string = ""
       begin
@@ -60,7 +60,7 @@ module DBF
       memo_string
     end
     
-    def build_dbt_8b_memo(start_block)
+    def build_dbt_8b_memo(start_block) #nodoc
       @data.seek offset(start_block)
       @data.read(@data.read(BLOCK_HEADER_SIZE).unpack("x4L").first)
     end
