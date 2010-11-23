@@ -47,6 +47,8 @@ module DBF
         build_dbt_83_memo(start_block)
       when "8b" # dbase iv
         build_dbt_8b_memo(start_block)
+      else
+        nil
       end
     end
     
