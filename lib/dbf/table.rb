@@ -108,8 +108,7 @@ module DBF
     #
     # @param [optional String] path Defaults to basename of dbf file
     def to_csv(path = nil)
-      path = default_csv_path unless path
-      csv_class.open(path, 'w', :force_quotes => true) do |csv|
+      csv_class.open(path || default_csv_path, 'w', :force_quotes => true) do |csv|
         csv << columns.map {|c| c.name}
         each {|record| csv << record.to_a}
       end
