@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.executables = ['dbf']
   s.default_executable = 'dbf'
   s.rdoc_options = ['--charset=UTF-8']
-  s.extra_rdoc_files = ['README.md', 'CHANGELOG.md']
+  s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'MIT-LICENSE']
   s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*']
   s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.require_paths = ['lib']
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '~> 3.0.0'
   s.add_dependency 'i18n', '~> 0.4.2'
   s.add_dependency 'fastercsv', '1.5.3'
-  s.add_development_dependency 'rspec', '2.2.0'
+  s.add_development_dependency 'rspec', '2.4.0'
   s.add_development_dependency 'metric_fu', '2.0.1'
 end
 
