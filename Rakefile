@@ -24,8 +24,8 @@ task :console do
   sh "irb -rubygems -I lib -r dbf.rb"
 end
 
-require 'metric_fu'
-MetricFu::Configuration.run do |config|
-  config.rcov[:test_files] = ['spec/**/*_spec.rb']  
-  config.rcov[:rcov_opts] << "-Ispec"
-end
+# require 'metric_fu'
+# MetricFu::Configuration.run do |config|
+#   config.rcov[:test_files] = ['spec/**/*_spec.rb']  
+#   config.rcov[:rcov_opts] << "-Ispec"
+# end
