@@ -44,7 +44,7 @@ module DBF
     #
     # @return [String]
     def schema_definition
-      "\"#{name.underscore}\", #{schema_data_type}\n"
+      "\"#{underscored_name}\", #{schema_data_type}\n"
     end
     
     def underscored_name
