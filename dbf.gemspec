@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '~> 3.0.0'
   s.add_dependency 'i18n', '~> 0.5.0'
   s.add_dependency 'fastercsv', '1.5.4'
-  s.add_development_dependency 'rspec', '2.4.0'
+  s.add_development_dependency 'rspec', '2.5.0'
   # s.add_development_dependency 'metric_fu', '2.0.1'
 end
 
