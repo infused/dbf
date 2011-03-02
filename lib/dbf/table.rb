@@ -195,7 +195,7 @@ module DBF
       @data.read(1).unpack('a') == ['*']
     end
     
-    def current_record
+    def current_record #nodoc
       deleted_record? ? nil : DBF::Record.new(@data.read(@record_length), columns, version, @memo)
     end
     
