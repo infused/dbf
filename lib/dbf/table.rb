@@ -33,8 +33,7 @@ module DBF
     #   table = DBF::Table.new 'data.dbf'
     #
     # @param [String] path Path to the dbf file
-    def initialize(path, encoding=nil)
-      @encoding = encoding if "".respond_to? :encoding
+    def initialize(path)
       @data = File.open(path, 'rb')
       get_header_info
       @memo = open_memo(path)
@@ -203,7 +202,9 @@ module DBF
 
     def get_header_info #nodoc
       @data.rewind
-      @version, @record_count, @header_length, @record_length = @data.read(DBF_HEADER_SIZE).unpack('H2 x3 V v2')
+      @version, @record_count, @header_length, @record_length, encoding_key =
+        @data.read(DBF_HEADER_SIZE).unpack("H2 x3 V v2 x17H2")
+      @encoding = self.class.encodings[encoding_key] if "".respond_to? :encoding
     end
 
     def seek(offset) #nodoc
@@ -222,6 +223,9 @@ module DBF
       File.basename(@data.path, '.dbf') + '.csv'
     end
 
+    def self.encodings
+      @encodings ||= YAML.load_file(File.expand_path("../encodings.yml", __FILE__))
+    end
   end
 
 end

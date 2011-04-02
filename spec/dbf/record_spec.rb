@@ -42,13 +42,14 @@ describe DBF::Record do
     end
   end
 
-  describe 'column data for table with specified source encoding' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf", "cp1251"}
+  describe 'column data for table' do
+    let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf"}
 
-    it 'should encodes to default system encoding' do
+    let(:record) { table.find(0) }
+    it 'should automatically encodes to default system encoding' do
       if "".respond_to? :encoding
-        record = table.find(0)
         record.name.encoding.should == Encoding.default_external
+        record.name.encode("UTF-8").unpack("H4").should == ["d0b0"] # russian a
       end
     end
   end
