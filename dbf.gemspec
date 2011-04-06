@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.description = 'A small fast library for reading dBase, xBase, Clipper and FoxPro database files.'
   
   s.executables = ['dbf']
-  s.default_executable = 'dbf'
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'MIT-LICENSE']
   s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*']
