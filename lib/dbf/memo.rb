@@ -3,6 +3,10 @@ module DBF
     BLOCK_HEADER_SIZE = 8
     FPT_HEADER_SIZE = 512
     
+    def self.open(filename, version)
+      self.new File.open(filename, 'rb'), version
+    end
+    
     def initialize(data, version)
       @data, @version = data, version
     end
