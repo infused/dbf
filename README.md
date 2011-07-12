@@ -28,8 +28,8 @@ Load a DBF file:
 Enumerate all records
 
     widgets.each do |record|
-      puts widget.name
-      puts widget.email
+      puts record.name
+      puts record.email
     end
     
 Load a single record using <tt>find</tt>
