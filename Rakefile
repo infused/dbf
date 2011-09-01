@@ -8,7 +8,7 @@ RSpec::Core::RakeTask.new :spec do |t|
 end
 
 require 'rake'
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new { |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title    = "DBF - A small fast library for reading dBase, xBase, Clipper and FoxPro database files."
