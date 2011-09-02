@@ -21,7 +21,7 @@ module DBF
     # 
     # @return [Array]
     def to_a
-      @columns.map { |column| attributes[column.name.underscore] }
+      @columns.map { |column| attributes[Util.underscore(column.name)] }
     end
     
     # Do all search parameters match?
@@ -29,7 +29,7 @@ module DBF
     # @param [Hash] options
     # @return [Boolean]
     def match?(options)
-      options.all? {|key, value| attributes[key.to_s.underscore] == value}
+      options.all? {|key, value| attributes[Util.underscore(key.to_s)] == value}
     end
     
     def attributes

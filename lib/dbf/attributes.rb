@@ -1,6 +1,6 @@
 class Attributes < Hash
   def []=(key, value)
     merge!(key => value)
-    merge!(key.underscore => value)
+    merge!(Util.underscore(key) => value)
   end
 end

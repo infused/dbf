@@ -48,14 +48,14 @@ module DBF
     end
 
     def underscored_name
-      @underscored_name ||= name.underscore
+      @underscored_name ||= Util.underscore(name)
     end
 
     private
 
     def decode_date(value) #nodoc
       value.gsub!(' ', '0')
-      value.blank? ? nil : value.to_date
+      value !~ /\S/ ? nil : Date.parse(value)
     rescue
       nil
     end

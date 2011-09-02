@@ -93,7 +93,7 @@ describe DBF::Column do
       
       context 'with valid datetime' do
         it "casts to DateTime" do
-          column.type_cast("Nl%\000\300Z\252\003").should == "2002-10-10T17:04:56+00:00"
+          column.type_cast("Nl%\000\300Z\252\003").should == DateTime.parse("2002-10-10T17:04:56+00:00")
         end
       end
       

@@ -3,7 +3,7 @@ require "spec_helper"
 shared_examples_for 'DBF' do
   specify "sum of column lengths should equal record length specified in header plus one" do
     header_record_length = @table.instance_eval {@record_length}
-    sum_of_column_lengths = 1 + @table.columns.sum {|column| column.length}
+    sum_of_column_lengths = @table.columns.inject(1) {|sum, column| sum += column.length}
     
     header_record_length.should == sum_of_column_lengths
   end
@@ -51,7 +51,7 @@ shared_examples_for 'DBF' do
   specify "column attributes should be accessible in underscored form" do
     @table.columns do |column|
       record = @table.records.first
-      record.send(column_name).should == record.send(column_name.underscore)
+      record.send(column_name).should == record.send(Util.underscore(column_name))
     end
   end
   
