@@ -1,3 +1,6 @@
+## 1.6.0
+  - remove activesupport gem dependency
+
 ## 1.5.0
 
 - Significant internal restructuring and performance improvements. Initial
