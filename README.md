@@ -69,11 +69,14 @@ An example of migrating a DBF book table to ActiveRecord using a migration:
 
     require 'dbf'
 
+    class Book < ActiveRecord::Base; end
+    
     class CreateBooks < ActiveRecord::Migration
       def self.up
         table = DBF::Table.new('db/dbf/books.dbf')
         eval(table.schema)
-
+        
+        Book.reset_column_information
         table.each do |record|
           Book.create(record.attributes)
         end
@@ -94,6 +97,14 @@ A small command-line utility called dbf is installed along with the gem.
       -s = print summary information
       -a = create an ActiveRecord::Schema
       -c = create a csv file
+      
+Create an executable ActiveRecord schema:
+    
+    dbf -a books.dbf > books_schema.rb
+    
+Dump all records to a CSV file:
+
+    dbf -c books.dbf
       
 ## dBase version support
 
