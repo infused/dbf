@@ -19,7 +19,7 @@ DBF works with Ruby 1.8.6, 1.8.7, and 1.9.2
   
 ## Basic Usage
 
-Load a DBF file:
+Open a DBF file:
 
     require 'dbf'
 
@@ -32,7 +32,7 @@ Enumerate all records
       puts record.email
     end
     
-Load a single record using <tt>find</tt>
+Find a single record
 
     widget.find(6)
 
