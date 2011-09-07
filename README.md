@@ -122,7 +122,6 @@ for a full list of supported column types.
 
 * DBF is read-only
 * Index files are not utilized
-* No character set conversions from the code page defined in the dBase file
 
 ## License
 
