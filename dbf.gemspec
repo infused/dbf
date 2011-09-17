@@ -21,8 +21,14 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.required_rubygems_version = '>= 1.3.0'
-  s.add_dependency 'fastercsv', '1.5.4'
-  s.add_development_dependency 'rspec', '2.6.0'
-  # s.add_development_dependency 'metric_fu', '2.0.1'
+  s.add_dependency 'fastercsv', '~> 1.5.4'
+  s.add_development_dependency 'rspec', '~> 2.6.0'
+
+  if RUBY_VERSION.to_f >= 1.9
+    s.add_development_dependency 'ruby-debug19'
+  else
+    s.add_development_dependency 'ruby-debug'
+  end
+  # s.add_development_dependency 'metric_fu'
 end
 
