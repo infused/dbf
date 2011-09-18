@@ -11,7 +11,7 @@ database files
 
 ## Compatibility
 
-DBF works with Ruby 1.8.6, 1.8.7, and 1.9.2
+DBF is tested to work with MRI Ruby 1.8.6, 1.8.7, 1.9.2 and Jruby 1.6.2
 
 ## Installation
   
