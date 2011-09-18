@@ -1,15 +1,5 @@
-Autotest.add_hook :initialize do |autotest|
-  autotest.clear_mappings
-  
-  autotest.add_mapping(%r%^lib/dbf/(.*)\.rb$%) do |filename, m|
-    autotest.files_matching %r!spec/(unit|functional)/#{m[1]}_spec.rb!
-  end
-  
-  autotest.add_mapping(%r%^spec/(unit|functional)/.*\.rb$%) do |filename, m|
-    filename
-  end
-  
-  %w{.svn .hg .git .dbf .dbt .fpt .txt bin Rakefile .gemspec .autotest}.each  do |exception|
-    autotest.add_exception(exception)
-  end
-end
+require 'autotest/growl'
+require 'autotest/fsevent'
+
+Autotest.add_discovery { 'rspec2' }
+
