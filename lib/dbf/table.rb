@@ -58,8 +58,8 @@ module DBF
     # @param [Fixnum] index
     # @return [DBF::Record, NilClass]
     def record(index)
-      seek_to_record(index)
-      current_record
+      seek(index * @record_length)
+      deleted_record? ? nil : DBF::Record.new(@data.read(@record_length), columns, version, @memo)
     end
 
     alias_method :row, :record
@@ -194,10 +194,6 @@ module DBF
       @data.read(1).unpack('a') == ['*']
     end
 
-    def current_record #nodoc
-      deleted_record? ? nil : DBF::Record.new(@data.read(@record_length), columns, version, @memo)
-    end
-
     def get_header_info #nodoc
       @data.rewind
       @version, @record_count, @header_length, @record_length, encoding_key =
@@ -207,10 +203,6 @@ module DBF
 
     def seek(offset) #nodoc
       @data.seek @header_length + offset
-    end
-
-    def seek_to_record(index) #nodoc
-      seek index * @record_length
     end
 
     def csv_class #nodoc
