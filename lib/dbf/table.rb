@@ -1,3 +1,5 @@
+require 'yaml'
+
 module DBF
 
   # DBF::Table is the primary interface to a single DBF file and provides
@@ -214,7 +216,7 @@ module DBF
     end
 
     def self.encodings
-      @encodings ||= YAML.load_file(File.expand_path("../encodings.yml", __FILE__))
+      @encodings ||= YAML.load File.read(File.expand_path("../encodings.yml", __FILE__))
     end
   end
 
