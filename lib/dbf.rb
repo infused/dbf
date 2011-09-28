@@ -1,5 +1,6 @@
 require 'date'
 
+require 'yaml'
 require 'csv'
 if CSV.const_defined? :Reader
   require 'fastercsv'

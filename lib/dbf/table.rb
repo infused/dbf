@@ -1,5 +1,3 @@
-require 'yaml'
-
 module DBF
 
   # DBF::Table is the primary interface to a single DBF file and provides
