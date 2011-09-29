@@ -1,3 +1,6 @@
+## 1.6.2
+  - add Table#filename method
+
 ## 1.6.1
   - fix YAML issue when using MRI version > 1.9.1
   - remove Table#seek_to_index and Table#current_record private methods

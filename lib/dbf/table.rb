@@ -42,6 +42,10 @@ module DBF
       @memo && @memo.close
       @data.close
     end
+    
+    def filename
+      File.basename @data.path
+    end
 
     # Calls block once for each record in the table. The record may be nil
     # if the record has been marked as deleted.

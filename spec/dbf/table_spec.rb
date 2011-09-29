@@ -152,5 +152,14 @@ describe DBF::Table do
     end
   end
 
+  describe "filename" do
+    before do
+      @table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
+    end
+    
+    it 'should be dbase_03.dbf' do
+      @table.filename.should == "dbase_03.dbf"
+    end
+  end
 end
 
