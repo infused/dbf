@@ -168,6 +168,10 @@ module DBF
         columns
       end
     end
+    
+    def supports_encoding?
+      "".respond_to? :encoding
+    end
 
     private
 
@@ -202,7 +206,7 @@ module DBF
       @data.rewind
       @version, @record_count, @header_length, @record_length, encoding_key =
         @data.read(DBF_HEADER_SIZE).unpack("H2 x3 V v2 x17H2")
-      @encoding = self.class.encodings[encoding_key] if "".respond_to? :encoding
+      @encoding = self.class.encodings[encoding_key] if supports_encoding?
     end
 
     def seek(offset) #nodoc

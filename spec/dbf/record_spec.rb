@@ -47,7 +47,7 @@ describe DBF::Record do
 
     let(:record) { table.find(0) }
     it 'should automatically encodes to default system encoding' do
-      if "".respond_to? :encoding
+      if table.supports_encoding?
         record.name.encoding.should == Encoding.default_external
         record.name.encode("UTF-8").unpack("H4").should == ["d0b0"] # russian a
       end
