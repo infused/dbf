@@ -176,13 +176,8 @@ module DBF
     private
 
     def open_memo(path) #nodoc
-      %w(fpt FPT dbt DBT).each do |extname|
-        filename = path.sub(/#{File.extname(path)[1..-1]}$/, extname)
-        if File.exists?(filename)
-          return Memo.open(filename, version)
-        end
-      end
-      nil
+      files = Dir.glob("#{File.dirname(path)}/#{File.basename(path, '.*')}*.{fpt,FPT,dbt,DBT}")
+      files.any? ? Memo.open(files.first, version) : nil
     end
 
     def find_all(options) #nodoc
