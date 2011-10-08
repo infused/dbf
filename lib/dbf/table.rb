@@ -222,7 +222,7 @@ module DBF
     end
 
     def self.encodings
-      @encodings ||= YAML.load File.read(File.expand_path("../encodings.yml", __FILE__))
+      @encodings ||= YAML.load_file File.expand_path("../encodings.yml", __FILE__)
     end
   end
 
