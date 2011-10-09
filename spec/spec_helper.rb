@@ -1,8 +1,6 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib/')
-require 'rubygems'
-require 'rspec'
 require 'dbf'
-require 'fileutils'
+require 'rspec'
 
 DB_PATH = File.dirname(__FILE__) + '/fixtures' unless defined?(DB_PATH)
 
