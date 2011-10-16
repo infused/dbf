@@ -1,5 +1,12 @@
 ## 1.6.2
   - add Table#filename method
+  - Rakefile now loads gems with bundler
+  - add Table#supports_encoding?
+  - simplify encodings.yml loader
+  - add rake and rdoc as development dependencies
+  - simplify open_memo file search logic
+  - remove unnecessary requires in spec helper
+  - fix cli summary
 
 ## 1.6.1
   - fix YAML issue when using MRI version > 1.9.1
