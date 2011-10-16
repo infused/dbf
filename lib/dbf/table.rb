@@ -36,6 +36,14 @@ module DBF
       get_header_info
       @memo = open_memo(path)
     end
+    
+    def has_memo_file?
+      @memo && memo_file_format
+    end
+    
+    def memo_file_format
+      @memo.format if has_memo_file?
+    end
 
     # Closes the table and memo file
     def close

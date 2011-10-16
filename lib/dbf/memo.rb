@@ -11,6 +11,10 @@ module DBF
       @data, @version = data, version
     end
     
+    def format
+      File.extname(@data.path)        
+    end
+    
     def get(start_block)
       if start_block > 0
         if format_fpt?
