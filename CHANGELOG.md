@@ -1,3 +1,6 @@
+# 1.6.3
+  - Replace invalid chars with 'unicode replacement character' (U+FFFD)
+
 ## 1.6.2
   - add Table#filename method
   - Rakefile now loads gems with bundler
