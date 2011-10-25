@@ -79,7 +79,7 @@ module DBF
     end
 
     def encode_string(value)
-      @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external) : value
+      @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external, :undef => :replace, :invalid => :replace) : value
     end
 
     def schema_data_type #nodoc
