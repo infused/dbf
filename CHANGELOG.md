@@ -1,3 +1,6 @@
+# 1.6.5
+  - experimental support for visual foxpro double (b) data type
+
 # 1.6.3
   - Replace invalid chars with 'unicode replacement character' (U+FFFD)
 
