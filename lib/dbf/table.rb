@@ -168,11 +168,7 @@ module DBF
 
     # Retrieves column information from the database
     def columns
-      column_class = FOXPRO_VERSIONS.include?(version) ? FoxproColumn : Column
-      
       @columns ||= begin
-        column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
-
         @data.seek(DBF_HEADER_SIZE)
         columns = []
         column_count.times do
@@ -190,6 +186,14 @@ module DBF
     end
 
     private
+    
+    def column_class
+      @column_class ||= FOXPRO_VERSIONS.include?(version) ? FoxproColumn : Column
+    end
+    
+    def column_count
+      @column_count ||= (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
+    end
 
     def open_memo(path) #nodoc
       files = Dir.glob("#{File.dirname(path)}/#{File.basename(path, '.*')}*.{fpt,FPT,dbt,DBT}")

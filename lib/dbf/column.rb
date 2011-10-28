@@ -105,10 +105,10 @@ module DBF
       end
     end
 
-    def clean(s) #nodoc
-      first_null = s.index("\x00")
-      s = s[0, first_null] if first_null
-      s.gsub(/[^\x20-\x7E]/, "")
+    def clean(value) #nodoc
+      first_null = value.index("\x00")
+      value = value[0, first_null] if first_null
+      value.gsub(/[^\x20-\x7E]/, "")
     end
 
   end
