@@ -174,7 +174,7 @@ module DBF
         column_count.times do
           name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
           if length > 0
-            columns << column_class.new(name.strip, type, length, decimal, @encoding)
+            columns << column_class.new(name.strip, type, length, decimal, version, @encoding)
           end
         end
         columns

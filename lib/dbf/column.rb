@@ -13,8 +13,8 @@ module DBF
     # @param [String] type
     # @param [Fixnum] length
     # @param [Fixnum] decimal
-    def initialize(name, type, length, decimal, encoding=nil)
-      @name, @type, @length, @decimal, @encoding = clean(name), type, length, decimal, encoding
+    def initialize(name, type, length, decimal, version, encoding=nil)
+      @name, @type, @length, @decimal, @version, @encoding = clean(name), type, length, decimal, version, encoding
 
       raise ColumnLengthError, "field length must be greater than 0" unless length > 0
       raise ColumnNameError, "column name cannot be empty" if @name.length == 0
@@ -100,6 +100,12 @@ module DBF
         ":boolean"
       when "M"
         ":text"
+      when "B"
+        if DBF::Table::FOXPRO_VERSIONS.include?(@version)
+          decimal > 0 ? ":float" : ":integer"
+        else
+          ":text"
+        end
       else
         ":string, :limit => #{length}"
       end
