@@ -1,6 +1,10 @@
 require "spec_helper"
 
 describe DBF::Table do  
+  # specify do
+  #   DBF::Table::FOXPRO_VERSIONS.should == %w(30 31 f5 fb)
+  # end
+  
   context "when closed" do
     before do
       @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"

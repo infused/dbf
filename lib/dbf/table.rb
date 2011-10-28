@@ -21,6 +21,10 @@ module DBF
       "f5" => "FoxPro with memo file",
       "fb" => "FoxPro without memo file"
     }
+    
+    FOXPRO_VERSIONS = VERSION_DESCRIPTIONS.map do |version, description| 
+      version if description =~ /FoxPro/
+    end.compact
 
     attr_reader   :version              # Internal dBase version number
     attr_reader   :record_count         # Total number of records
@@ -164,6 +168,8 @@ module DBF
 
     # Retrieves column information from the database
     def columns
+      column_class = FOXPRO_VERSIONS.include?(version) ? FoxproColumn : Column
+      
       @columns ||= begin
         column_count = (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
 
@@ -171,7 +177,9 @@ module DBF
         columns = []
         column_count.times do
           name, type, length, decimal = @data.read(32).unpack('a10 x a x4 C2')
-          columns << Column.new(name.strip, type, length, decimal, @encoding) if length > 0
+          if length > 0
+            columns << column_class.new(name.strip, type, length, decimal, @encoding)
+          end
         end
         columns
       end

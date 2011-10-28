@@ -16,10 +16,6 @@ shared_examples_for 'DBF' do
     @table.count.should == @table.record_count
   end
   
-  specify "columns should be instances of DBF::Column" do
-    @table.columns.all? {|column| column.should be_an_instance_of(DBF::Column)}
-  end
-  
   specify "column names should not be blank" do
     @table.columns.all? {|column| column.name.should_not be_empty}
   end
@@ -54,7 +50,12 @@ shared_examples_for 'DBF' do
       record.send(column_name).should == record.send(Util.underscore(column_name))
     end
   end
-  
+end
+
+shared_examples_for 'Foxpro DBF' do
+  specify "columns should be instances of DBF::FoxproColumn" do
+    @table.columns.all? {|column| column.should be_an_instance_of(DBF::FoxproColumn)}
+  end
 end
 
 describe DBF, "of type 03 (dBase III without memo file)" do
@@ -163,6 +164,7 @@ describe DBF, "of type f5 (FoxPro with memo file)" do
   end
   
   it_should_behave_like "DBF"
+  it_should_behave_like "Foxpro DBF"
   
   it "should report the correct version number" do
     @table.version.should == "f5"

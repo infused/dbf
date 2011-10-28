@@ -32,6 +32,7 @@ module DBF
         when 'D' then decode_date(value)
         when 'T' then decode_datetime(value)
         when 'L' then boolean(value)
+        when 'B' then unpack_binary(value)
         else          encode_string(value.to_s).strip
       end
     end
@@ -72,6 +73,9 @@ module DBF
 
     def unpack_unsigned_long(value) #nodoc
       value.unpack('V')[0]
+    end
+    
+    def unpack_binary(value) #nodoc
     end
 
     def boolean(value) #nodoc
