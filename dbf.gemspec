@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = '>= 1.3.0'
   s.add_dependency 'fastercsv', '~> 1.5.4'
-  s.add_development_dependency 'rspec', '~> 2.6.0'
+  s.add_development_dependency 'rspec', '~> 2.7.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
   s.add_development_dependency 'rdoc', '~> 3.9.0'
 
