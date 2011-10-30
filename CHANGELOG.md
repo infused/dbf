@@ -1,5 +1,8 @@
+# 1.6.6
+  - add binary data type support to ActiveRecord schema output
+  
 # 1.6.5
-  - experimental support for visual foxpro double (b) data type
+  - support for visual foxpro double (b) data type
 
 # 1.6.3
   - Replace invalid chars with 'unicode replacement character' (U+FFFD)
