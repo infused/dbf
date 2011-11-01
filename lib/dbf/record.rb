@@ -5,7 +5,9 @@ module DBF
     # 
     # @param [DBF::Table] table
     def initialize(data, columns, version, memo)
-      @data, @columns, @version, @memo = StringIO.new(data), columns, version, memo
+      @data = StringIO.new(data)
+      @columns, @version, @memo = columns, version, memo
+      @column_names = @columns.map {|column| column.underscored_name}
       define_accessors
     end
     
@@ -21,7 +23,7 @@ module DBF
     # 
     # @return [Array]
     def to_a
-      @columns.map { |column| attributes[Util.underscore(column.name)] }
+      @column_names.map { |name| attributes[name] }
     end
     
     # Do all search parameters match?
@@ -32,6 +34,7 @@ module DBF
       options.all? {|key, value| attributes[Util.underscore(key.to_s)] == value}
     end
     
+    # @return [Hash]
     def attributes
       return @attributes if @attributes
       
@@ -45,20 +48,22 @@ module DBF
     private
     
     def define_accessors #nodoc
-      @columns.each do |column|
-        name = column.underscored_name
-        unless respond_to? name
-          self.class.class_eval <<-END
-            def #{name}
-              @#{name} ||= attributes['#{name}']
-            end
-          END
-        end
+      @column_names.each do |name|
+        next if respond_to? name
+        self.class.class_eval <<-END
+          def #{name}
+            @#{name} ||= attributes['#{name}']
+          end
+        END
       end
     end
     
     def init_attribute(column) #nodoc
-      column.memo? ? @memo.get(get_memo_start_block(column)) : column.type_cast(unpack_data(column))
+      if column.memo?
+        @memo.get get_memo_start_block(column)
+      else
+        column.type_cast unpack_data(column)
+      end
     end
    
     def get_memo_start_block(column) #nodoc

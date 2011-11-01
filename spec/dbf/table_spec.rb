@@ -1,9 +1,9 @@
 require "spec_helper"
 
 describe DBF::Table do  
-  # specify do
-  #   DBF::Table::FOXPRO_VERSIONS.should == %w(30 31 f5 fb)
-  # end
+  specify 'foxpro versions' do
+    DBF::Table::FOXPRO_VERSIONS.keys.should == %w(30 31 f5 fb)
+  end
   
   context "when closed" do
     before do
@@ -23,16 +23,13 @@ describe DBF::Table do
   describe "#schema" do
     it "should match the test schema fixture" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      control_schema = File.read(File.dirname(__FILE__) + '/../fixtures/dbase_83_schema.txt')
-
+      control_schema = File.read("#{DB_PATH}/dbase_83_schema.txt")
       table.schema.should == control_schema
     end
   end
   
   describe '#to_csv' do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-    end
+    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
     
     after do
       FileUtils.rm_f 'dbase_83.csv'
@@ -40,13 +37,13 @@ describe DBF::Table do
     end
     
     it 'should create default dump.csv' do
-      @table.to_csv
+      table.to_csv
       File.exists?('dbase_83.csv').should be_true
     end
 
     describe 'when path param passed' do
       it 'should create custom csv file' do
-        @table.to_csv('test.csv')
+        table.to_csv('test.csv')
         File.exists?('test.csv').should be_true
       end
     end
@@ -163,6 +160,18 @@ describe DBF::Table do
     
     it 'should be dbase_03.dbf' do
       @table.filename.should == "dbase_03.dbf"
+    end
+  end
+  
+  describe 'has_memo_file?' do
+    describe 'without a memo file' do
+      let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
+      specify { table.has_memo_file?.should be_false }
+    end
+    
+    describe 'with a memo file' do
+      let(:table) { DBF::Table.new "#{DB_PATH}/dbase_30.dbf" }
+      specify { table.has_memo_file?.should be_true }
     end
   end
 end

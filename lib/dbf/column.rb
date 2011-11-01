@@ -101,7 +101,7 @@ module DBF
       when "M"
         ":text"
       when "B"
-        if DBF::Table::FOXPRO_VERSIONS.include?(@version)
+        if DBF::Table::FOXPRO_VERSIONS.keys.include?(@version)
           decimal > 0 ? ":float" : ":integer"
         else
           ":text"

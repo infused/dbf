@@ -7,7 +7,7 @@ module DBF
 
     DBF_HEADER_SIZE = 32
 
-    VERSION_DESCRIPTIONS = {
+    VERSIONS = {
       "02" => "FoxBase",
       "03" => "dBase III without memo file",
       "04" => "dBase IV without memo file",
@@ -22,9 +22,7 @@ module DBF
       "fb" => "FoxPro without memo file"
     }
     
-    FOXPRO_VERSIONS = VERSION_DESCRIPTIONS.map do |version, description| 
-      version if description =~ /FoxPro/
-    end.compact
+    FOXPRO_VERSIONS = VERSIONS.select {|k,v| v =~ /FoxPro/}
 
     attr_reader   :version              # Internal dBase version number
     attr_reader   :record_count         # Total number of records
@@ -41,20 +39,20 @@ module DBF
       @memo = open_memo(path)
     end
     
+    # @return [TrueClass, FalseClass]
     def has_memo_file?
-      @memo && memo_file_format
-    end
-    
-    def memo_file_format
-      @memo.format if has_memo_file?
+      !!@memo
     end
 
     # Closes the table and memo file
+    #
+    # @return [TrueClass, FalseClass]
     def close
       @memo && @memo.close
-      @data.close
+      @data.close && @data.closed?
     end
     
+    # @return String
     def filename
       File.basename @data.path
     end
@@ -75,7 +73,9 @@ module DBF
     # @return [DBF::Record, NilClass]
     def record(index)
       seek(index * @record_length)
-      deleted_record? ? nil : DBF::Record.new(@data.read(@record_length), columns, version, @memo)
+      if !deleted_record?
+        DBF::Record.new(@data.read(@record_length), columns, version, @memo)
+      end
     end
 
     alias_method :row, :record
@@ -84,7 +84,7 @@ module DBF
     #
     # @return [String]
     def version_description
-      VERSION_DESCRIPTIONS[version]
+      VERSIONS[version]
     end
 
     # Generate an ActiveRecord::Schema
@@ -187,16 +187,22 @@ module DBF
 
     private
     
-    def column_class
-      @column_class ||= FOXPRO_VERSIONS.include?(version) ? FoxproColumn : Column
+    def column_class #nodoc
+      @column_class ||= if FOXPRO_VERSIONS.keys.include?(version)
+        FoxproColumn
+      else 
+        Column
+      end
     end
     
-    def column_count
+    def column_count #nodoc
       @column_count ||= (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
     end
 
     def open_memo(path) #nodoc
-      files = Dir.glob("#{File.dirname(path)}/#{File.basename(path, '.*')}*.{fpt,FPT,dbt,DBT}")
+      dirname = File.dirname(path)
+      basename = File.basename(path, '.*')
+      files = Dir.glob("#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}")
       files.any? ? Memo.open(files.first, version) : nil
     end
 
@@ -236,7 +242,7 @@ module DBF
       File.basename(@data.path, '.dbf') + '.csv'
     end
 
-    def self.encodings
+    def self.encodings #nodoc
       @encodings ||= YAML.load_file File.expand_path("../encodings.yml", __FILE__)
     end
   end
