@@ -1,3 +1,6 @@
+# 1.6.7
+  - memo columns return nil when no memo file found
+
 # 1.6.6
   - add binary data type support to ActiveRecord schema output
   
