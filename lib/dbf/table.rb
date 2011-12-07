@@ -121,12 +121,11 @@ module DBF
     # Dumps all records to a CSV file.  If no filename is given then CSV is
     # output to STDOUT.
     #
-    # @param [optional String] path Defaults to basename of dbf file
+    # @param [optional String] path Defaults to STDOUT
     def to_csv(path = nil)
-      csv_class.open(path || default_csv_path, 'w', :force_quotes => true) do |csv|
-        csv << columns.map {|c| c.name}
-        each {|record| csv << record.to_a}
-      end
+      csv = csv_class.new((path ? File.open(path, 'w') : $stdout), :force_quotes => true)
+      csv << columns.map {|c| c.name}
+      each {|record| csv << record.to_a}
     end
 
     # Find records using a simple ActiveRecord-like syntax.
@@ -236,10 +235,6 @@ module DBF
 
     def csv_class #nodoc
       CSV.const_defined?(:Reader) ? FCSV : CSV
-    end
-
-    def default_csv_path #nodoc
-      File.basename(@data.path, '.dbf') + '.csv'
     end
 
     def self.encodings #nodoc
