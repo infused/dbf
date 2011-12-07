@@ -32,13 +32,19 @@ describe DBF::Table do
     let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
     
     after do
-      FileUtils.rm_f 'dbase_83.csv'
       FileUtils.rm_f 'test.csv'
     end
     
-    it 'should create default dump.csv' do
-      table.to_csv
-      File.exists?('dbase_83.csv').should be_true
+    describe 'when no path param passed' do
+      it 'should dump to STDOUT' do
+        begin
+          $stdout = StringIO.new
+          table.to_csv
+          $stdout.string.should_not be_empty
+        ensure
+          $stdout = STDOUT
+        end
+      end
     end
 
     describe 'when path param passed' do
