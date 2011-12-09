@@ -2,6 +2,7 @@ module DBF
   class Memo
     BLOCK_HEADER_SIZE = 8
     FPT_HEADER_SIZE = 512
+    FPT_FORMAT_VERSIONS = DBF::Table::FOXPRO_VERSIONS.keys
     
     def self.open(filename, version)
       self.new File.open(filename, 'rb'), version
@@ -12,7 +13,7 @@ module DBF
     end
     
     def format
-      File.extname(@data.path)        
+      format_fpt? ? 'fpt' : 'dbt'
     end
     
     def get(start_block)
@@ -32,7 +33,7 @@ module DBF
     private
     
     def format_fpt? #nodoc
-      File.extname(@data.path) =~ /fpt/i
+      FPT_FORMAT_VERSIONS.include?(@version)
     end
     
     def build_fpt_memo(start_block) #nodoc

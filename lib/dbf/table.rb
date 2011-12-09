@@ -29,14 +29,25 @@ module DBF
     attr_accessor :encoding             # Source encoding (for ex. :cp1251)
 
     # Opens a DBF::Table
-    # Example:
+    # Examples:
+    #   # working with a file stored on the filesystem
     #   table = DBF::Table.new 'data.dbf'
     #
-    # @param [String] path Path to the dbf file
-    def initialize(path)
-      @data = File.open(path, 'rb')
+    #   # working with a misnamed memo file
+    #   table = DBF::Table.new 'data.dbf', 'memo.dbt'
+    #
+    #   # working with a dbf in memory
+    #   table = DBF::Table.new StringIO.new(dbf_data)
+    #
+    #   # working with a dbf and memo in memory
+    #   table = DBF::Table.new StringIO.new(dbf_data), StringIO.new(memo_data)
+    #
+    # @param [String, StringIO] data Path to the dbf file or a StringIO object
+    # @param [optional String, StringIO] memo Path to the memo file or a StringIO object
+    def initialize(data, memo = nil)
+      @data = open_data(data)
       get_header_info
-      @memo = open_memo(path)
+      @memo = open_memo(data, memo)
     end
     
     # @return [TrueClass, FalseClass]
@@ -198,11 +209,23 @@ module DBF
       @column_count ||= (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
     end
 
-    def open_memo(path) #nodoc
-      dirname = File.dirname(path)
-      basename = File.basename(path, '.*')
-      files = Dir.glob("#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}")
-      files.any? ? Memo.open(files.first, version) : nil
+    def open_data(data)
+      data.is_a?(StringIO) ? data : File.open(data, 'rb')
+    end
+
+    def open_memo(data, memo = nil) #nodoc
+      if memo.is_a? StringIO
+        DBF::Memo.new(memo, version)
+      elsif memo
+        DBF::Memo.open(memo, version)
+      elsif !data.is_a? StringIO
+        dirname = File.dirname(data)
+        basename = File.basename(data, '.*')
+        files = Dir.glob("#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}")
+        files.any? ? DBF::Memo.open(files.first, version) : nil
+      else
+        nil
+      end
     end
 
     def find_all(options) #nodoc
