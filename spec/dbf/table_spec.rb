@@ -4,6 +4,27 @@ describe DBF::Table do
   specify 'foxpro versions' do
     DBF::Table::FOXPRO_VERSIONS.keys.should == %w(30 31 f5 fb)
   end
+
+  describe '#initialize' do
+    it 'should accept a DBF filename' do
+      expect { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }.to_not raise_error
+    end
+
+    it 'should accept a DBF and Memo filename' do
+      expect { DBF::Table.new "#{DB_PATH}/dbase_83.dbf", "#{DB_PATH}/dbase_83.dbt" }.to_not raise_error
+    end
+
+    it 'should accept an io-like data object' do
+      data = StringIO.new File.read("#{DB_PATH}/dbase_83.dbf")
+      expect { DBF::Table.new data }.to_not raise_error
+    end
+
+    it 'should accept an io-like data and memo object' do
+      data = StringIO.new File.read("#{DB_PATH}/dbase_83.dbf")
+      memo = StringIO.new File.read("#{DB_PATH}/dbase_83.dbt")
+      expect { DBF::Table.new data, memo }.to_not raise_error
+    end
+  end
   
   context "when closed" do
     before do
