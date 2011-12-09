@@ -22,7 +22,12 @@ module DBF
       "fb" => "FoxPro without memo file"
     }
     
-    FOXPRO_VERSIONS = VERSIONS.select {|k,v| v =~ /FoxPro/}
+    FOXPRO_VERSIONS = {
+      "30" => "Visual FoxPro",
+      "31" => "Visual FoxPro with AutoIncrement field",
+      "f5" => "FoxPro with memo file",
+      "fb" => "FoxPro without memo file"
+    }
 
     attr_reader   :version              # Internal dBase version number
     attr_reader   :record_count         # Total number of records
