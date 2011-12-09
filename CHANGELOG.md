@@ -1,3 +1,6 @@
+# 1.7.1
+  - Fix Table.FOXPRO_VERSIONS breakage on Ruby 1.8
+
 # 1.7.0
   - allow DBF::Table to work with dbf data in memory
   - allow DBF::Table#to_csv to write to STDOUT
