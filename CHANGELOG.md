@@ -1,3 +1,7 @@
+# 1.7.0
+  - allow DBF::Table to work with dbf data in memory
+  - allow DBF::Table#to_csv to write to STDOUT
+
 # 1.6.7
   - memo columns return nil when no memo file found
 
