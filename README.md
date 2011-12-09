@@ -104,7 +104,7 @@ Create an executable ActiveRecord schema:
     
 Dump all records to a CSV file:
 
-    dbf -c books.dbf
+    dbf -c books.dbf > books.csv
       
 ## dBase version support
 
