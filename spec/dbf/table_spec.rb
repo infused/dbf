@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe DBF::Table do  
   specify 'foxpro versions' do
-    DBF::Table::FOXPRO_VERSIONS.keys.should == %w(30 31 f5 fb)
+    DBF::Table::FOXPRO_VERSIONS.keys.sort.should == %w(30 31 f5 fb)
   end
 
   describe '#initialize' do
