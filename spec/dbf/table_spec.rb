@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe DBF::Table do  
   specify 'foxpro versions' do
-    DBF::Table::FOXPRO_VERSIONS.keys.should == %w(30 31 f5 fb)
+    DBF::Table::FOXPRO_VERSIONS.keys.sort.should == %w(30 31 f5 fb).sort
   end
 
   describe '#initialize' do
@@ -167,7 +167,7 @@ describe DBF::Table do
       end
 
       it "should return the first record if options are empty" do
-        @table.find(:first).should == @table.first
+        @table.find(:first).should == @table.record(0)
       end
 
       it "should return the first matching record when used with options" do

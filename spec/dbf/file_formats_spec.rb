@@ -13,7 +13,7 @@ shared_examples_for 'DBF' do
   end
   
   specify "record count should be the same as reported in the header" do
-    @table.count.should == @table.record_count
+    @table.entries.size.should == @table.record_count
   end
   
   specify "column names should not be blank" do
