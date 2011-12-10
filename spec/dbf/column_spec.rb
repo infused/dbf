@@ -40,7 +40,7 @@ describe DBF::Column do
         it 'casts value to Fixnum' do
           value = '135'
           column = DBF::Column.new "ColumnName", "N", 3, 0, "30"
-          column.type_cast(value).should be_a Fixnum
+          column.type_cast(value).should be_a(Fixnum)
           column.type_cast(value).should == 135
         end
       end
@@ -49,7 +49,7 @@ describe DBF::Column do
         it 'casts value to Float' do
           value = '13.5'
           column = DBF::Column.new "ColumnName", "N", 2, 1, "30"
-          column.type_cast(value).should be_a Float
+          column.type_cast(value).should be_a(Float)
           column.type_cast(value).should == 13.5
         end
       end
@@ -59,7 +59,7 @@ describe DBF::Column do
       it 'casts value to Float' do
         value = '135'
         column = DBF::Column.new "ColumnName", "F", 3, 0, "30"
-        column.type_cast(value).should be_a Float
+        column.type_cast(value).should be_a(Float)
         column.type_cast(value).should == 135.0
       end
     end
@@ -123,7 +123,7 @@ describe DBF::Column do
     context 'with type M (memo)' do
       it "casts to string" do
         column = DBF::Column.new "ColumnName", "M", 3, 0, "30"
-        column.type_cast('abc').should be_a String
+        column.type_cast('abc').should be_a(String)
       end
     end
   end
