@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   if RUBY_VERSION == '1.8.6'
     s.add_development_dependency 'rdoc', '~> 2.5.0'
   else
-    s.add_development_dependency 'rdoc'
+    s.add_development_dependency 'rdoc', '~> 3.11'
   end
 
   if RUBY_VERSION.to_f >= 1.9
