@@ -22,11 +22,16 @@ Gem::Specification.new do |s|
   s.add_dependency 'fastercsv', '~> 1.5.4'
   s.add_development_dependency 'rspec', '~> 2.7.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
-  s.add_development_dependency 'rdoc', '~> 3.9.0'
+  
+  if RUBY_VERSION == '1.8.6'
+    s.add_development_dependency 'rdoc', '~> 2.5.0'
+  else
+    s.add_development_dependency 'rdoc'
+  end
 
   if RUBY_VERSION.to_f >= 1.9
     s.add_development_dependency 'ruby-debug19'
-  else
+  elsif RUBY_VERSION != '1.8.6'
     s.add_development_dependency 'ruby-debug'
   end
   # s.add_development_dependency 'metric_fu'
