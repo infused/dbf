@@ -199,14 +199,30 @@ module DBF
     def supports_encoding?
       "".respond_to? :encoding
     end
+    
+    def foxpro?
+      FOXPRO_VERSIONS.keys.include? @version
+    end
 
     private
     
     def column_class #nodoc
-      @column_class ||= if FOXPRO_VERSIONS.keys.include?(version)
+      @column_class ||= if foxpro?
         FoxproColumn
-      else 
+      else
         Column
+      end
+    end
+    
+    def memo_class #nodoc
+      @memo_class ||= if foxpro?
+        FoxproMemo
+      else
+        if @version == "83"
+          Dbase3Memo
+        else
+          Dbase4Memo
+        end
       end
     end
     
@@ -220,14 +236,14 @@ module DBF
 
     def open_memo(data, memo = nil) #nodoc
       if memo.is_a? StringIO
-        DBF::Memo.new(memo, version)
+        memo_class.new(memo, version)
       elsif memo
-        DBF::Memo.open(memo, version)
+        memo_class.open(memo, version)
       elsif !data.is_a? StringIO
         dirname = File.dirname(data)
         basename = File.basename(data, '.*')
         files = Dir.glob("#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}")
-        files.any? ? DBF::Memo.open(files.first, version) : nil
+        files.any? ? memo_class.open(files.first, version) : nil
       else
         nil
       end
