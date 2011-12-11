@@ -208,20 +208,20 @@ module DBF
     
     def column_class #nodoc
       @column_class ||= if foxpro?
-        FoxproColumn
+        Column::Foxpro
       else
-        Column
+        Column::Dbase
       end
     end
     
     def memo_class #nodoc
       @memo_class ||= if foxpro?
-        FoxproMemo
+        Memo::Foxpro
       else
         if @version == "83"
-          Dbase3Memo
+          Memo::Dbase3
         else
-          Dbase4Memo
+          Memo::Dbase4
         end
       end
     end

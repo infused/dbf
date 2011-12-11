@@ -54,7 +54,7 @@ end
 
 shared_examples_for 'Foxpro DBF' do
   specify "columns should be instances of DBF::FoxproColumn" do
-    @table.columns.all? {|column| column.should be_an_instance_of(DBF::FoxproColumn)}
+    @table.columns.all? {|column| column.should be_an_instance_of(DBF::Column::Foxpro)}
   end
 end
 
