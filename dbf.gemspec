@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.executables = ['dbf']
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'MIT-LICENSE']
-  s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*']
+  s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*', 'dbf.gemspec']
   s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.require_paths = ['lib']
 
@@ -29,11 +29,11 @@ Gem::Specification.new do |s|
     s.add_development_dependency 'rdoc', '~> 3.11'
   end
 
-  if RUBY_VERSION.to_f >= 1.9
-    s.add_development_dependency 'ruby-debug19'
-  elsif RUBY_VERSION != '1.8.6'
-    s.add_development_dependency 'ruby-debug'
-  end
+  # if RUBY_VERSION.to_f >= 1.9
+  #   s.add_development_dependency 'ruby-debug19'
+  # elsif RUBY_VERSION != '1.8.6'
+  #   s.add_development_dependency 'ruby-debug'
+  # end
   # s.add_development_dependency 'metric_fu'
 end
 
