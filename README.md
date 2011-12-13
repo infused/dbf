@@ -17,6 +17,8 @@ DBF is tested to work with the following versions of ruby:
 * JRuby 1.6.2, 1.6.3, 1.6.4, and 1.6.5
 * REE 1.8.6, 1.8.7
 
+[![Build Status](https://secure.travis-ci.org/infused/dbf.png)](http://travis-ci.org/infused/dbf)
+
 ## Installation
   
     gem install dbf
