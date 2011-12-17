@@ -21,7 +21,7 @@ module DBF
       "f5" => "FoxPro with memo file",
       "fb" => "FoxPro without memo file"
     }
-    
+
     FOXPRO_VERSIONS = {
       "30" => "Visual FoxPro",
       "31" => "Visual FoxPro with AutoIncrement field",
@@ -54,7 +54,7 @@ module DBF
       get_header_info
       @memo = open_memo(data, memo)
     end
-    
+
     # @return [TrueClass, FalseClass]
     def has_memo_file?
       !!@memo
@@ -67,7 +67,7 @@ module DBF
       @memo && @memo.close
       @data.close && @data.closed?
     end
-    
+
     # @return String
     def filename
       File.basename @data.path
@@ -195,17 +195,17 @@ module DBF
         columns
       end
     end
-    
+
     def supports_encoding?
       "".respond_to? :encoding
     end
-    
+
     def foxpro?
       FOXPRO_VERSIONS.keys.include? @version
     end
 
     private
-    
+
     def column_class #nodoc
       @column_class ||= if foxpro?
         Column::Foxpro
@@ -213,7 +213,7 @@ module DBF
         Column::Dbase
       end
     end
-    
+
     def memo_class #nodoc
       @memo_class ||= if foxpro?
         Memo::Foxpro
@@ -225,7 +225,7 @@ module DBF
         end
       end
     end
-    
+
     def column_count #nodoc
       @column_count ||= (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
     end

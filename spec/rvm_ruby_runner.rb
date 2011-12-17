@@ -1,4 +1,4 @@
-class RvmRubyRunner  
+class RvmRubyRunner
   def self.run(ruby_string)
     output = `rvm use #{ruby_string}@dbf --create; bundle install; rspec`
     puts output if ENV['DEBUG=1']

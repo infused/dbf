@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/infused/dbf'
   s.summary = 'Read xBase files'
   s.description = 'A small fast library for reading dBase, xBase, Clipper and FoxPro database files.'
-  
+
   s.executables = ['dbf']
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'MIT-LICENSE']
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'fastercsv', '~> 1.5.4'
   s.add_development_dependency 'rspec', '~> 2.7.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
-  
+
   if RUBY_VERSION == '1.8.6'
     s.add_development_dependency 'rdoc', '~> 2.5.0'
   else
