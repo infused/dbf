@@ -227,7 +227,7 @@ module DBF
     end
     
     def column_count #nodoc
-      @column_count ||= (@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE
+      @column_count ||= ((@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE).to_i
     end
 
     def open_data(data)
