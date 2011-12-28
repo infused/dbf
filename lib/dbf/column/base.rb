@@ -2,7 +2,7 @@ module DBF
   module Column
     class LengthError < StandardError; end
     class NameError < StandardError; end
-    
+
     class Base
       attr_reader :name, :type, :length, :decimal
 
@@ -116,7 +116,7 @@ module DBF
         value.gsub(/[^\x20-\x7E]/, "")
       end
 
-      
+
     end
   end
 end
