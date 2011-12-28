@@ -230,7 +230,7 @@ module DBF
       @column_count ||= ((@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE).to_i
     end
 
-    def open_data(data)
+    def open_data(data) #nodoc
       data.is_a?(StringIO) ? data : File.open(data, 'rb')
     end
 

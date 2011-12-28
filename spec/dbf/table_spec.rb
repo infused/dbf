@@ -201,5 +201,18 @@ describe DBF::Table do
       specify { table.has_memo_file?.should be_true }
     end
   end
+
+  describe 'mathn bug workaround for' do
+    describe 'column_count' do
+      let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
+
+      it 'returns an integer' do
+        lambda do
+          require 'mathn'
+          table.send(:column_count)
+        end.call.should == 31
+      end
+    end
+  end
 end
 
