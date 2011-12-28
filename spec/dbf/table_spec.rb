@@ -202,7 +202,7 @@ describe DBF::Table do
     end
   end
 
-  describe 'mathn bug workaround for' do
+  describe 'when requiring mathn' do
     describe 'column_count' do
       let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
 

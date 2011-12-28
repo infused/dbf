@@ -62,8 +62,8 @@ module DBF
 
       def decode_datetime(value) #nodoc
         days, milliseconds = value.unpack('l2')
-        seconds = milliseconds / 1000
-        DateTime.jd(days, seconds/3600, seconds/60 % 60, seconds % 60) rescue nil
+        seconds = (milliseconds / 1000).to_i
+        DateTime.jd(days, (seconds/3600).to_i, (seconds/60).to_i % 60, seconds % 60) rescue nil
       end
 
       def unpack_number(value) #nodoc

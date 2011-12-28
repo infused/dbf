@@ -97,6 +97,15 @@ describe DBF::Column::Dbase do
         end
       end
       
+      context 'when requiring mathn' do
+        it "casts to DateTime" do
+          lambda do
+            require 'mathn'
+            column.type_cast("Nl%\000\300Z\252\003")
+          end.call.should == DateTime.parse("2002-10-10T17:04:56+00:00")
+        end
+      end
+      
       context 'with invalid datetime' do
         it "casts to nil" do
           column.type_cast("Nl%\000\000A\000\999").should be_nil

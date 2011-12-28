@@ -1,5 +1,5 @@
 # 1.7.2
-  - Fix column_count integer division under Ruby 1.8 when requiring mathn
+  - Fix integer division under Ruby 1.8 when requiring mathn
     standard library (see http://bugs.ruby-lang.org/issues/2121)
 
 # 1.7.1
