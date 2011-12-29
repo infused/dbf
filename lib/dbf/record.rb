@@ -3,7 +3,10 @@ module DBF
   class Record
     # Initialize a new DBF::Record
     # 
-    # @param [DBF::Table] table
+    # @data [String, StringIO] data
+    # @columns [Column]
+    # @version [String]
+    # @memo [DBF::Memo]
     def initialize(data, columns, version, memo)
       @data = StringIO.new(data)
       @columns, @version, @memo = columns, version, memo
@@ -23,7 +26,7 @@ module DBF
     # 
     # @return [Array]
     def to_a
-      @column_names.map { |name| attributes[name] }
+      @column_names.map {|name| attributes[name]}
     end
     
     # Do all search parameters match?
@@ -36,13 +39,11 @@ module DBF
     
     # @return [Hash]
     def attributes
-      return @attributes if @attributes
-      
-      @attributes = Attributes.new
-      @columns.each do |column|
-        @attributes[column.name] = init_attribute(column)
+      @attributes ||= begin
+        attributes = Attributes.new
+        @columns.each {|column| attributes[column.name] = init_attribute(column)}
+        attributes
       end
-      @attributes
     end
     
     private
@@ -60,7 +61,7 @@ module DBF
     
     def init_attribute(column) #nodoc
       if column.memo?
-        @memo.get get_memo_start_block(column) if @memo
+        @memo.get get_memo_start_block(column)
       else
         column.type_cast unpack_data(column)
       end

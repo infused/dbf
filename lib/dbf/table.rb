@@ -197,7 +197,7 @@ module DBF
     end
     
     def supports_encoding?
-      "".respond_to? :encoding
+      String.new.respond_to? :encoding
     end
     
     def foxpro?
@@ -268,9 +268,12 @@ module DBF
 
     def get_header_info #nodoc
       @data.rewind
-      @version, @record_count, @header_length, @record_length, encoding_key =
-        @data.read(DBF_HEADER_SIZE).unpack("H2 x3 V v2 x17H2")
-      @encoding = self.class.encodings[encoding_key] if supports_encoding?
+      @version, @record_count, @header_length, @record_length, @encoding_key = read_header
+      @encoding = self.class.encodings[@encoding_key] if supports_encoding?
+    end
+    
+    def read_header #nodoc
+      @data.read(DBF_HEADER_SIZE).unpack("H2 x3 V v2 x17H2")
     end
 
     def seek(offset) #nodoc
@@ -278,7 +281,7 @@ module DBF
     end
 
     def csv_class #nodoc
-      CSV.const_defined?(:Reader) ? FCSV : CSV
+      @csv_class ||= CSV.const_defined?(:Reader) ? FCSV : CSV
     end
 
     def self.encodings #nodoc

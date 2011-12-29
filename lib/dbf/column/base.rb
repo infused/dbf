@@ -81,7 +81,7 @@ module DBF
         value.strip =~ /^(y|t)$/i ? true : false
       end
 
-      def encode_string(value)
+      def encode_string(value) #nodoc
         @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external, :undef => :replace, :invalid => :replace) : value
       end
 
@@ -116,7 +116,6 @@ module DBF
         value.gsub(/[^\x20-\x7E]/, "")
       end
 
-      
     end
   end
 end
