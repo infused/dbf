@@ -1,4 +1,4 @@
-# DBF
+# DBF [![Build Status](https://secure.travis-ci.org/infused/dbf.png)](http://travis-ci.org/infused/dbf)
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro
 database files
@@ -17,8 +17,6 @@ DBF is tested to work with the following versions of ruby:
 * JRuby 1.6.2, 1.6.3, 1.6.4, and 1.6.5
 * REE 1.8.6, 1.8.7
 
-[![Build Status](https://secure.travis-ci.org/infused/dbf.png)](http://travis-ci.org/infused/dbf)
-
 ## Installation
   
     gem install dbf
@@ -28,7 +26,6 @@ DBF is tested to work with the following versions of ruby:
 Open a DBF file:
 
     require 'dbf'
-
     widgets = DBF::Table.new("widgets.dbf")
 
 Enumerate all records
@@ -121,7 +118,7 @@ implemented, please give me a shout. FoxBase/dBase II files are not supported
 at this time.
 
 See
-[docs/supported_types.markdown](http://github.com/infused/dbf/blob/master/docs/supported_types.markdown)
+[doc/supported_types.markdown](docs/supported_types.markdown)
 for a full list of supported column types.
 
 ## Limitations
@@ -131,7 +128,7 @@ for a full list of supported column types.
 
 ## License
 
-Copyright (c) 2006-2011 Keith Morrison <keithm@infused.org>
+Copyright (c) 2006-2012 Keith Morrison <keithm@infused.org>
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
