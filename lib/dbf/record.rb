@@ -51,11 +51,9 @@ module DBF
     def define_accessors #nodoc
       @column_names.each do |name|
         next if respond_to? name
-        self.class.class_eval <<-END
-          def #{name}
-            @#{name} ||= attributes['#{name}']
-          end
-        END
+        self.class.send(:define_method, name) do
+          attributes[name]
+        end
       end
     end
     
