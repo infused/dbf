@@ -202,16 +202,18 @@ describe DBF::Table do
     end
   end
 
-  describe 'when requiring mathn' do
-    describe 'column_count' do
-      let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
+  describe 'columns' do
+    before do
+      @table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
+    end
 
-      it 'returns an integer' do
-        lambda do
-          require 'mathn'
-          table.send(:column_count)
-        end.call.should == 31
-      end
+    it 'should have correct size' do
+      @table.columns.size.should == 31
+    end
+
+    it 'should have correct names' do
+      @table.columns.first.name.should == 'Point_ID'
+      @table.columns[29].name.should == 'Easting'
     end
   end
 end
