@@ -1,3 +1,6 @@
+# 1.7.3
+  - find_all/find_first should ignore deleted records
+
 # 1.7.2
   - Fix integer division under Ruby 1.8 when requiring mathn
     standard library (see http://bugs.ruby-lang.org/issues/2121)
