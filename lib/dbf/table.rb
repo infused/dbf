@@ -254,7 +254,7 @@ module DBF
 
     def find_all(options) #nodoc
       map do |record|
-        if record.match? options
+        if record && record.match?(options)
           yield record if block_given?
           record
         end
@@ -262,7 +262,7 @@ module DBF
     end
 
     def find_first(options) #nodoc
-      detect {|record| record.match? options}
+      detect {|record| record && record.match?(options)}
     end
 
     def deleted_record? #nodoc
