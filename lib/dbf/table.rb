@@ -62,6 +62,10 @@ module DBF
       !!@memo
     end
 
+    def memo_file_format
+      version
+    end
+
     # Closes the table and memo file
     #
     # @return [TrueClass, FalseClass]
