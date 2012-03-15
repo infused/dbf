@@ -1,3 +1,6 @@
+# 1.7.5
+  - fixes FoxPro currency (Y) fields
+
 # 1.7.4
   - Replace Memo Type with Memo File boolean in command-line utility summary output
 
