@@ -48,6 +48,11 @@ module DBF
         "\"#{underscored_name}\", #{schema_data_type}\n"
       end
 
+      def index_definition(table)
+        index = (underscored_name().end_with? "id")
+        index ? "add_index \"#{table}\", [\"#{underscored_name}\"]\n" : ""
+      end
+
       def underscored_name
         @underscored_name ||= Util.underscore(name)
       end
