@@ -27,7 +27,7 @@ module DBF
         case type
           when 'N' then unpack_number(value)
           when 'I' then unpack_unsigned_long(value)
-          when 'Y' then value.to_f
+          when 'Y' then unpack_unsigned_long(value)/10000.0
           when 'F' then value.to_f
           when 'D' then decode_date(value)
           when 'T' then decode_datetime(value)
