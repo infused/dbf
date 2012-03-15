@@ -93,7 +93,7 @@ module DBF
         when "I"
           ":integer"
         when "Y"
-          ":decimal, :precision => 15, :scale => 4"
+          ":decimal, :precision => #{length+decimal}, :scale => #{decimal}"
         when "D"
           ":date"
         when "T"
