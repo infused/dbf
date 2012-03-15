@@ -1,3 +1,6 @@
+# 1.7.4
+  - Replace Memo Type with Memo File boolean in command-line utility summary output
+
 # 1.7.3
   - find_all/find_first should ignore deleted records
 
