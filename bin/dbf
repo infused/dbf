@@ -29,7 +29,7 @@ else
     puts
     puts "Database: #{filename}"
     puts "Type: (#{table.version}) #{table.version_description}"
-    puts "Memo Type: #{table.memo_file_format}" if table.has_memo_file?
+    puts "Memo File: #{table.has_memo_file? ? 'true' : false}"
     puts "Records: #{table.record_count}"
     
     puts "\nFields:"
