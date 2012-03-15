@@ -27,6 +27,7 @@ module DBF
         case type
           when 'N' then unpack_number(value)
           when 'I' then unpack_unsigned_long(value)
+          when 'Y' then value.to_f
           when 'F' then value.to_f
           when 'D' then decode_date(value)
           when 'T' then decode_datetime(value)
@@ -91,6 +92,8 @@ module DBF
           decimal > 0 ? ":float" : ":integer"
         when "I"
           ":integer"
+        when "Y"
+          ":decimal, :precision => 15, :scale => 4"
         when "D"
           ":date"
         when "T"
