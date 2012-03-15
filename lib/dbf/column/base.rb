@@ -28,6 +28,7 @@ module DBF
           when 'N' then unpack_number(value)
           when 'I' then unpack_unsigned_long(value)
           when 'F' then value.to_f
+          when 'Y' then unpack_unsigned_long(value)/10000.0
           when 'D' then decode_date(value)
           when 'T' then decode_datetime(value)
           when 'L' then boolean(value)
@@ -91,6 +92,8 @@ module DBF
           decimal > 0 ? ":float" : ":integer"
         when "I"
           ":integer"
+        when "Y"
+          ":decimal, :precision => 15, :scale => 4"
         when "D"
           ":date"
         when "T"
