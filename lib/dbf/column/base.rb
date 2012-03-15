@@ -27,6 +27,7 @@ module DBF
         case type
           when 'N' then unpack_number(value)
           when 'I' then unpack_unsigned_long(value)
+          when 'Y' then unpack_unsigned_long(value)/10000.0
           when 'F' then value.to_f
           when 'D' then decode_date(value)
           when 'T' then decode_datetime(value)
@@ -45,6 +46,11 @@ module DBF
       # @return [String]
       def schema_definition
         "\"#{underscored_name}\", #{schema_data_type}\n"
+      end
+
+      def index_definition(table)
+        index = (underscored_name().end_with? "id")
+        index ? "add_index \"#{table}\", [\"#{underscored_name}\"]\n" : ""
       end
 
       def underscored_name
@@ -91,6 +97,8 @@ module DBF
           decimal > 0 ? ":float" : ":integer"
         when "I"
           ":integer"
+        when "Y"
+          ":decimal, :precision => #{length+decimal}, :scale => #{decimal}"
         when "D"
           ":date"
         when "T"

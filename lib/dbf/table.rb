@@ -62,6 +62,10 @@ module DBF
       !!@memo
     end
 
+    def memo_file_format
+      version
+    end
+
     # Closes the table and memo file
     #
     # @return [TrueClass, FalseClass]
@@ -132,7 +136,11 @@ module DBF
       columns.each do |column|
         s << "    t.column #{column.schema_definition}"
       end
-      s << "  end\nend"
+      s << "  end\n"
+      columns.each do |column|
+        s << "  #{column.index_definition(File.basename(@data.path, ".*"))}"
+      end
+      s << "\nend"
       s
     end
 
