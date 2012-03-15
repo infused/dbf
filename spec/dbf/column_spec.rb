@@ -137,6 +137,14 @@ describe DBF::Column::Dbase do
     end
   end
   
+  context 'with type Y (currency)' do
+    let(:column) { DBF::Column::Dbase.new "ColumnName", "Y", 8, 4, "31" }
+    
+    it 'casts to float' do
+      column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00").should == 18.0
+    end
+  end
+  
   context "#schema_definition" do
     context 'with type N (number)' do
       it "outputs an integer column" do
