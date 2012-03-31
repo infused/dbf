@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   if RUBY_VERSION.to_f < 1.9
     s.add_dependency 'fastercsv', '~> 1.5.4'
   end
-  s.add_development_dependency 'rspec', '~> 2.8.0'
+  s.add_development_dependency 'rspec', '~> 2.9.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
   
   if RUBY_VERSION == RUBY_VERSION.to_f >= 1.9
