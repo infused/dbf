@@ -6,7 +6,6 @@ if CSV.const_defined? :Reader
 end
 
 require 'dbf/util'
-require 'dbf/attributes'
 require 'dbf/record'
 require 'dbf/column/base'
 require 'dbf/column/dbase'

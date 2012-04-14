@@ -26,7 +26,7 @@ module DBF
     # 
     # @return [Array]
     def to_a
-      @column_names.map {|name| attributes[name]}
+      @columns.map {|column| attributes[column.name]}
     end
     
     # Do all search parameters match?
@@ -34,25 +34,32 @@ module DBF
     # @param [Hash] options
     # @return [Boolean]
     def match?(options)
-      options.all? {|key, value| attributes[Util.underscore(key.to_s)] == value}
+      options.all? {|key, value| self[key] == value}
+    end
+
+    # Reads attributes by column name
+    def [](key)
+      key = key.to_s
+      if attributes.has_key?(key)
+        attributes[key]
+      elsif index = @column_names.index(key)
+        attributes[@columns[index].name]
+      end
     end
     
     # @return [Hash]
     def attributes
-      @attributes ||= begin
-        attributes = Attributes.new
-        @columns.each {|column| attributes[column.name] = init_attribute(column)}
-        attributes
-      end
+      @attributes ||= Hash[@columns.map {|column| [column.name, init_attribute(column)]}]
     end
     
     private
     
     def define_accessors #nodoc
-      @column_names.each do |name|
+      @columns.each do |column|
+        name = column.underscored_name
         next if respond_to? name
         self.class.send(:define_method, name) do
-          attributes[name]
+          attributes[column.name]
         end
       end
     end
