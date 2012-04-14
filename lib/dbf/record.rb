@@ -56,8 +56,8 @@ module DBF
     end
 
     def method_missing(method, *args)
-      if column_names.include?(method.to_s)
-        self.[](method, *args)
+      if index = column_names.index(method.to_s)
+        attributes[@columns[index].name]
       else
         super
       end
