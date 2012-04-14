@@ -36,20 +36,6 @@ shared_examples_for 'DBF' do
   specify "column decimals should be instances of Fixnum" do
     @table.columns.all? {|column| column.decimal.should be_an_instance_of(Fixnum)}
   end
-  
-  specify "column read accessors should return the attribute after typecast" do
-    @table.columns do |column|
-      record = @table.records.first
-      record.send(column.name).should == record[column.name]
-    end
-  end
-  
-  specify "column attributes should be accessible in underscored form" do
-    @table.columns do |column|
-      record = @table.records.first
-      record.send(column_name).should == record.send(Util.underscore(column_name))
-    end
-  end
 end
 
 shared_examples_for 'Foxpro DBF' do

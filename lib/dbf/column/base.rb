@@ -48,8 +48,16 @@ module DBF
         "\"#{underscored_name}\", #{schema_data_type}\n"
       end
 
+      def self.underscore_name(string)
+        string.gsub(/::/, '/').
+          gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+          gsub(/([a-z\d])([A-Z])/,'\1_\2').
+          tr('-', '_').
+          downcase
+      end
+
       def underscored_name
-        @underscored_name ||= Util.underscore(name)
+        @underscored_name ||= self.class.underscore_name(name)
       end
 
       private

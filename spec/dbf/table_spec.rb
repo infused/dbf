@@ -137,7 +137,7 @@ describe DBF::Table do
       end
 
       it "should return matching records when used with options" do
-        @table.find(:all, "WEIGHT" => 0.0).should == @table.select {|r| r.attributes["weight"] == 0.0}
+        @table.find(:all, "WEIGHT" => 0.0).should == @table.select {|r| r["weight"] == 0.0}
       end
 
       it "should AND multiple search terms" do

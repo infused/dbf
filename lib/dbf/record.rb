@@ -10,8 +10,6 @@ module DBF
     def initialize(data, columns, version, memo)
       @data = StringIO.new(data)
       @columns, @version, @memo = columns, version, memo
-      @column_names = @columns.map {|column| column.underscored_name}
-      define_accessors
     end
     
     # Equality
@@ -26,7 +24,7 @@ module DBF
     # 
     # @return [Array]
     def to_a
-      @column_names.map {|name| attributes[name]}
+      @columns.map {|column| attributes[column.name]}
     end
     
     # Do all search parameters match?
@@ -34,27 +32,41 @@ module DBF
     # @param [Hash] options
     # @return [Boolean]
     def match?(options)
-      options.all? {|key, value| attributes[Util.underscore(key.to_s)] == value}
+      options.all? {|key, value| self[key] == value}
+    end
+
+    # Reads attributes by column name
+    def [](key)
+      key = key.to_s
+      if attributes.has_key?(key)
+        attributes[key]
+      elsif index = column_names.index(key)
+        attributes[@columns[index].name]
+      end
     end
     
     # @return [Hash]
     def attributes
-      @attributes ||= begin
-        attributes = Attributes.new
-        @columns.each {|column| attributes[column.name] = init_attribute(column)}
-        attributes
-      end
+      @attributes ||= Hash[@columns.map {|column| [column.name, init_attribute(column)]}]
     end
     
-    private
-    
-    def define_accessors #nodoc
-      @column_names.each do |name|
-        next if respond_to? name
-        self.class.send(:define_method, name) do
-          attributes[name]
-        end
+    def respond_to?(method, *args)
+      return true if column_names.include?(method.to_s)
+      super
+    end
+
+    def method_missing(method, *args)
+      if index = column_names.index(method.to_s)
+        attributes[@columns[index].name]
+      else
+        super
       end
+    end
+
+    private
+
+    def column_names
+      @column_names ||= @columns.map {|column| column.underscored_name}
     end
     
     def init_attribute(column) #nodoc
