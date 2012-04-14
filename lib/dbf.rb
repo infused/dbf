@@ -5,7 +5,6 @@ if CSV.const_defined? :Reader
   require 'fastercsv'
 end
 
-require 'dbf/util'
 require 'dbf/record'
 require 'dbf/column/base'
 require 'dbf/column/dbase'
