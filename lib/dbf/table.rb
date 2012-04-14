@@ -272,7 +272,7 @@ module DBF
     def get_header_info #nodoc
       @data.rewind
       @version, @record_count, @header_length, @record_length, @encoding_key = read_header
-      @encoding = self.class.encodings[@encoding_key] if supports_encoding?
+      @encoding = ENCODINGS[@encoding_key] if supports_encoding?
     end
     
     def read_header #nodoc
@@ -285,10 +285,6 @@ module DBF
 
     def csv_class #nodoc
       @csv_class ||= CSV.const_defined?(:Reader) ? FCSV : CSV
-    end
-
-    def self.encodings #nodoc
-      @encodings ||= YAML.load_file File.expand_path("../encodings.yml", __FILE__)
     end
   end
 
