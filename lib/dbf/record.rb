@@ -10,8 +10,6 @@ module DBF
     def initialize(data, columns, version, memo)
       @data = StringIO.new(data)
       @columns, @version, @memo = columns, version, memo
-      @column_names = @columns.map {|column| column.underscored_name}
-      define_accessors
     end
     
     # Equality
@@ -42,7 +40,7 @@ module DBF
       key = key.to_s
       if attributes.has_key?(key)
         attributes[key]
-      elsif index = @column_names.index(key)
+      elsif index = column_names.index(key)
         attributes[@columns[index].name]
       end
     end
@@ -53,14 +51,16 @@ module DBF
     end
     
     private
+
+    def column_names
+      @column_names ||= @columns.map {|column| column.underscored_name}
+    end
     
-    def define_accessors #nodoc
-      @columns.each do |column|
-        name = column.underscored_name
-        next if respond_to? name
-        self.class.send(:define_method, name) do
-          attributes[column.name]
-        end
+    def method_missing(method, *args)
+      if column_names.include?(method.to_s)
+        self.[](method, *args)
+      else
+        super
       end
     end
     

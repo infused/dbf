@@ -34,11 +34,20 @@ describe DBF::Record do
 
   describe 'column accessors' do
     let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"}
+    let(:record) { table.find(0) }
 
-    it 'should define accessor methods for each column' do
-      record = table.find(0)
-      record.should respond_to(:character)
+    it 'should have dynamic accessors for the columns' do
+      #record.should respond_to(:character)
       record.character.should == 'One'
+      record.float.should == 1.23456789012346
+      record.logical.should == true
+    end
+
+    it 'should not define accessor methods on the base class' do
+      second_table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
+      second_record = second_table.find(0)
+      record.character.should == 'One'
+      lambda { second_record.character }.should raise_error(NoMethodError)
     end
   end
 
