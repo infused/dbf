@@ -50,18 +50,23 @@ module DBF
       @attributes ||= Hash[@columns.map {|column| [column.name, init_attribute(column)]}]
     end
     
-    private
-
-    def column_names
-      @column_names ||= @columns.map {|column| column.underscored_name}
+    def respond_to?(method, *args)
+      return true if column_names.include?(method.to_s)
+      super
     end
-    
+
     def method_missing(method, *args)
       if column_names.include?(method.to_s)
         self.[](method, *args)
       else
         super
       end
+    end
+
+    private
+
+    def column_names
+      @column_names ||= @columns.map {|column| column.underscored_name}
     end
     
     def init_attribute(column) #nodoc

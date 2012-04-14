@@ -37,7 +37,7 @@ describe DBF::Record do
     let(:record) { table.find(0) }
 
     it 'should have dynamic accessors for the columns' do
-      #record.should respond_to(:character)
+      record.should respond_to(:character)
       record.character.should == 'One'
       record.float.should == 1.23456789012346
       record.logical.should == true
