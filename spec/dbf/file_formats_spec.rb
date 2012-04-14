@@ -47,7 +47,7 @@ shared_examples_for 'DBF' do
   specify "column attributes should be accessible in underscored form" do
     @table.columns do |column|
       record = @table.records.first
-      record.send(column_name).should == record.send(Util.underscore(column_name))
+      record.send(column_name).should == record.send(DBF::Util.underscore(column_name))
     end
   end
 end
