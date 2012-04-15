@@ -1,3 +1,7 @@
+# 1.7.6
+  - #42 Fixes encoding of memos
+  - #43 Improve handling of record attributes
+
 # 1.7.5
   - fixes FoxPro currency (Y) fields
 
