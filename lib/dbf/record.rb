@@ -70,11 +70,12 @@ module DBF
     end
     
     def init_attribute(column) #nodoc
-      if column.memo?
+      value = if column.memo?
         @memo.get get_memo_start_block(column)
       else
-        column.type_cast unpack_data(column)
+        unpack_data(column)
       end
+      column.type_cast value
     end
    
     def get_memo_start_block(column) #nodoc
