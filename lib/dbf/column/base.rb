@@ -33,6 +33,7 @@ module DBF
           when 'T' then decode_datetime(value)
           when 'L' then boolean(value)
           when 'B' then unpack_binary(value)
+          when 'M' then decode_memo(value)
           else          encode_string(value.to_s).strip
         end
       end
@@ -73,6 +74,10 @@ module DBF
         days, milliseconds = value.unpack('l2')
         seconds = (milliseconds / 1000).to_i
         DateTime.jd(days, (seconds/3600).to_i, (seconds/60).to_i % 60, seconds % 60) rescue nil
+      end
+      
+      def decode_memo(value) #nodoc
+        encode_string(value) if value
       end
 
       def unpack_number(value) #nodoc
