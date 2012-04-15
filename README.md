@@ -39,14 +39,14 @@ Find a single record
 
     widget.find(6)
 
-Attributes can also be accessed through the attributes hash in original or
-underscored form or as an accessor method using the underscored name. (Note
-that find() will return nil if the requested record has been deleted and not
-yet pruned from the database)
+Attributes can also be accessed through the attributes hash or the record
+object using either the original or underscored attribute name. Note that
+find() will return nil if the requested record has been deleted and not yet
+pruned from the database.
 
     widget.find(4).attributes["SlotNumber"]
-    widget.find(4).attributes["slot_number"]
-    widget.find(4).slot_number
+    widget.find(4)["SlotNumber"]
+    widget.find(4)[:slot_number]
   
 Search for records using a simple hash format. Multiple search criteria are
 ANDed. Use the block form if the resulting recordset could be large, otherwise
