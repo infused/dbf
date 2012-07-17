@@ -193,12 +193,18 @@ describe DBF::Table do
   describe 'has_memo_file?' do
     describe 'without a memo file' do
       let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
-      specify { table.has_memo_file?.should be_false }
+      
+      it 'returns false' do
+        table.has_memo_file?.should be_false
+      end
     end
     
     describe 'with a memo file' do
       let(:table) { DBF::Table.new "#{DB_PATH}/dbase_30.dbf" }
-      specify { table.has_memo_file?.should be_true }
+      
+      it 'returns true' do
+        table.has_memo_file?.should be_true
+      end
     end
   end
 

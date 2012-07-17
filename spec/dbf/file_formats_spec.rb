@@ -9,7 +9,7 @@ shared_examples_for 'DBF' do
   end
 
   specify "records should be instances of DBF::Record" do
-    @table.all? {|record| record.should be_an_instance_of(DBF::Record)}
+    @table.all? {|record| record.is_a?(DBF::Record)}.should be_true
   end
   
   specify "record count should be the same as reported in the header" do
@@ -17,30 +17,30 @@ shared_examples_for 'DBF' do
   end
   
   specify "column names should not be blank" do
-    @table.columns.all? {|column| column.name.should_not be_empty}
+    @table.columns.all? {|column| !column.name.empty?}.should be_true
   end
   
   specify "column types should be valid" do
     valid_column_types = %w(C N L D M F B G P Y T I V X @ O + 0)
-    @table.columns.all? {|column| valid_column_types.should include(column.type)}
+    @table.columns.all? {|column| valid_column_types.include?(column.type)}.should be_true
   end
   
   specify "column lengths should be instances of Fixnum" do
-    @table.columns.all? {|column| column.length.should be_an_instance_of(Fixnum)}
+    @table.columns.all? {|column| column.length.is_a?(Fixnum)}.should be_true
   end
   
   specify "column lengths should be larger than 0" do
-    @table.columns.all? {|column| column.length.should > 0}
+    @table.columns.all? {|column| column.length > 0}.should be_true
   end
   
   specify "column decimals should be instances of Fixnum" do
-    @table.columns.all? {|column| column.decimal.should be_an_instance_of(Fixnum)}
+    @table.columns.all? {|column| column.decimal.is_a?(Fixnum)}.should be_true
   end
 end
 
 shared_examples_for 'Foxpro DBF' do
   specify "columns should be instances of DBF::FoxproColumn" do
-    @table.columns.all? {|column| column.should be_an_instance_of(DBF::Column::Foxpro)}
+    @table.columns.all? {|column| column.is_a?(DBF::Column::Foxpro)}.should be_true
   end
 end
 

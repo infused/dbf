@@ -14,21 +14,21 @@ describe DBF::Record do
     end
   end
 
-  describe '#==' do
-    before do
+  describe '#==' do    
+    let :record do
       table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
-      @record = table.record(9)
+      table.record(9)
     end
 
     it 'should be false if other does not have attributes' do
-      (@record == mock('other')).should be_false
+      (record == mock('other')).should be_false
     end
 
     it 'should be true if other attributes match' do
       attributes = {:x => 1, :y => 2}
-      @record.stub!(:attributes).and_return(attributes)
+      record.stub!(:attributes).and_return(attributes)
       other = mock('object', :attributes => attributes)
-      (@record == other).should be_true
+      (record == other).should be_true
     end
   end
 
