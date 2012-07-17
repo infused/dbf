@@ -12,5 +12,11 @@ if RUBY_VERSION == "1.8.6"
 end
 
 RSpec.configure do |config|
-  
+  def ruby_supports_mathn?
+    begin
+      require 'mathn'
+    rescue UnsupportedLibraryError
+      false
+    end
+  end
 end
