@@ -6,20 +6,20 @@ describe DBF::Table do
   end
 
   describe '#initialize' do
-    it 'should accept a DBF filename' do
+    it 'accepts a DBF filename' do
       expect { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }.to_not raise_error
     end
 
-    it 'should accept a DBF and Memo filename' do
+    it 'accepts a DBF and Memo filename' do
       expect { DBF::Table.new "#{DB_PATH}/dbase_83.dbf", "#{DB_PATH}/dbase_83.dbt" }.to_not raise_error
     end
 
-    it 'should accept an io-like data object' do
+    it 'accepts an io-like data object' do
       data = StringIO.new File.read("#{DB_PATH}/dbase_83.dbf")
       expect { DBF::Table.new data }.to_not raise_error
     end
 
-    it 'should accept an io-like data and memo object' do
+    it 'accepts an io-like data and memo object' do
       data = StringIO.new File.read("#{DB_PATH}/dbase_83.dbf")
       memo = StringIO.new File.read("#{DB_PATH}/dbase_83.dbt")
       expect { DBF::Table.new data, memo }.to_not raise_error
@@ -27,17 +27,16 @@ describe DBF::Table do
   end
   
   context "when closed" do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      @table.close
+    it "closes the data and memo files" do
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table.close
+      table.should be_closed
     end
     
-    it "should close the data file" do
-      @table.instance_eval { @data }.should be_closed
-    end
-    
-    it "should close the memo file" do
-      @table.instance_eval { @memo }.instance_eval { @data }.should be_closed
+    it "closes the data" do
+      table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
+      table.close
+      table.should be_closed
     end
   end
   
@@ -77,149 +76,122 @@ describe DBF::Table do
   end
   
   describe "#record" do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-    end
-    
     it "return nil for deleted records" do
-      @table.stub!(:deleted_record?).and_return(true)
-      @table.record(5).should be_nil
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table.stub!(:deleted_record?).and_return(true)
+      table.record(5).should be_nil
     end
   end
   
   describe "#current_record" do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-    end
-    
     it "should return nil for deleted records" do
-      @table.stub!(:deleted_record?).and_return(true)
-      @table.record(0).should be_nil
+      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table.stub!(:deleted_record?).and_return(true)
+      table.record(0).should be_nil
     end
   end
   
   describe "#find" do
+    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
+    
     describe "with index" do
-      before do
-        @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      end
-      
       it "should return the correct record" do
-        @table.find(5).should == @table.record(5)
+        table.find(5).should == table.record(5)
       end
     end
     
-    describe 'with array of indexes' do
-      before do
-        @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      end
-      
+    describe 'with array of indexes' do      
       it "should return the correct records" do
-        @table.find([1, 5, 10]).should == [@table.record(1), @table.record(5), @table.record(10)]
+        table.find([1, 5, 10]).should == [table.record(1), table.record(5), table.record(10)]
       end
     end
     
     describe "with :all" do
-      before do
-        @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      end
-      
       it "should accept a block" do
         records = []
-        @table.find(:all, :weight => 0.0) do |record|
+        table.find(:all, :weight => 0.0) do |record|
           records << record
         end
-        records.should == @table.find(:all, :weight => 0.0)
+        records.should == table.find(:all, :weight => 0.0)
       end
 
       it "should return all records if options are empty" do
-        @table.find(:all).should == @table.to_a
+        table.find(:all).should == table.to_a
       end
 
       it "should return matching records when used with options" do
-        @table.find(:all, "WEIGHT" => 0.0).should == @table.select {|r| r["weight"] == 0.0}
+        table.find(:all, "WEIGHT" => 0.0).should == table.select {|r| r["weight"] == 0.0}
       end
 
       it "should AND multiple search terms" do
-        @table.find(:all, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should == []
+        table.find(:all, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should == []
       end
       
       it "should match original column names" do
-        @table.find(:all, "WEIGHT" => 0.0).should_not be_empty
+        table.find(:all, "WEIGHT" => 0.0).should_not be_empty
       end
       
       it "should match symbolized column names" do
-        @table.find(:all, :WEIGHT => 0.0).should_not be_empty
+        table.find(:all, :WEIGHT => 0.0).should_not be_empty
       end
       
       it "should match downcased column names" do
-        @table.find(:all, "weight" => 0.0).should_not be_empty
+        table.find(:all, "weight" => 0.0).should_not be_empty
       end
       
       it "should match symbolized downcased column names" do
-        @table.find(:all, :weight => 0.0).should_not be_empty
+        table.find(:all, :weight => 0.0).should_not be_empty
       end
     end
     
     describe "with :first" do
-      before do
-        @table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      end
-
       it "should return the first record if options are empty" do
-        @table.find(:first).should == @table.record(0)
+        table.find(:first).should == table.record(0)
       end
 
       it "should return the first matching record when used with options" do
-        @table.find(:first, "CODE" => "C").should == @table.record(5)
+        table.find(:first, "CODE" => "C").should == table.record(5)
       end
 
       it "should AND multiple search terms" do
-        @table.find(:first, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should be_nil
+        table.find(:first, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should be_nil
       end
     end
   end
 
   describe "filename" do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
-    end
-    
     it 'should be dbase_03.dbf' do
-      @table.filename.should == "dbase_03.dbf"
+      table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
+      table.filename.should == "dbase_03.dbf"
     end
   end
   
   describe 'has_memo_file?' do
     describe 'without a memo file' do
-      let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
-      
       it 'returns false' do
+        table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
         table.has_memo_file?.should be_false
       end
     end
     
     describe 'with a memo file' do
-      let(:table) { DBF::Table.new "#{DB_PATH}/dbase_30.dbf" }
-      
       it 'returns true' do
+        table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf" 
         table.has_memo_file?.should be_true
       end
     end
   end
 
   describe 'columns' do
-    before do
-      @table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
-    end
+    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
 
     it 'should have correct size' do
-      @table.columns.size.should == 31
+      table.columns.size.should == 31
     end
 
     it 'should have correct names' do
-      @table.columns.first.name.should == 'Point_ID'
-      @table.columns[29].name.should == 'Easting'
+      table.columns.first.name.should == 'Point_ID'
+      table.columns[29].name.should == 'Easting'
     end
   end
 end

@@ -47,7 +47,7 @@ describe DBF::Record do
       second_table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
       second_record = second_table.find(0)
       record.character.should == 'One'
-      lambda { second_record.character }.should raise_error(NoMethodError)
+      expect { second_record.character }.to raise_error(NoMethodError)
     end
   end
 

@@ -66,8 +66,17 @@ module DBF
     #
     # @return [TrueClass, FalseClass]
     def close
+      @data.close
       @memo && @memo.close
-      @data.close && @data.closed?
+    end
+    
+    # @return [TrueClass, FalseClass]
+    def closed?
+      if @memo
+        @data.closed? && @memo.closed?
+      else
+        @data.closed?
+      end
     end
     
     # @return String

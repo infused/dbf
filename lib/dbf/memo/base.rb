@@ -18,7 +18,11 @@ module DBF
       end
     
       def close
-        @data.close
+        @data.close && @data.closed?
+      end
+      
+      def closed?
+        @data.closed?
       end
     
       private

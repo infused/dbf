@@ -22,15 +22,21 @@ describe DBF::Column::Dbase do
     end
     
     describe 'with length of 0' do
-      specify { lambda { DBF::Column::Dbase.new "ColumnName", "N", 0, 0, "30" }.should raise_error(DBF::Column::LengthError) }
+      it 'raises DBF::Column::LengthError' do
+        expect { DBF::Column::Dbase.new "ColumnName", "N", 0, 0, "30" }.to raise_error(DBF::Column::LengthError)
+      end
     end
     
     describe 'with length less than 0' do
-      specify { lambda { DBF::Column::Dbase.new "ColumnName", "N", -1, 0, "30" }.should raise_error(DBF::Column::LengthError) }
+      it 'raises DBF::Column::LengthError' do
+        expect { DBF::Column::Dbase.new "ColumnName", "N", -1, 0, "30" }.to raise_error(DBF::Column::LengthError)
+      end
     end
     
     describe 'with empty column name' do
-      specify { lambda { DBF::Column::Dbase.new "\xFF\xFC", "N", 1, 0, "30" }.should raise_error(DBF::Column::NameError) }
+      it 'raises DBF::Column::NameError' do
+        expect { DBF::Column::Dbase.new "\xFF\xFC", "N", 1, 0, "30" }.to raise_error(DBF::Column::NameError)
+      end
     end
   end
   
@@ -100,7 +106,7 @@ describe DBF::Column::Dbase do
       if ruby_supports_mathn?
         context 'when requiring mathn' do
           it "casts to DateTime" do
-            lambda do
+            expect do
               require 'mathn'
               column.type_cast("Nl%\000\300Z\252\003")
             end.call.should == DateTime.parse("2002-10-10T17:04:56+00:00")
@@ -167,12 +173,6 @@ describe DBF::Column::Dbase do
         context "when decimal is 0" do
           column = DBF::Column::Dbase.new "ColumnName", "B", 1, 0, "f5"
           column.schema_definition.should == "\"column_name\", :integer\n"
-        end
-      end
-      
-      context "when non-Foxpro dbf" do
-        it "outputs a text column" do
-          
         end
       end
     end
