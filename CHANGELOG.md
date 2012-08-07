@@ -1,7 +1,6 @@
-# 1.7.7
+# 2.0.0
   - #44 Require FasterCSV gem on all platforms
-
-# 1.7.6
+  - Remove rdoc development dependency
   - #42 Fixes encoding of memos
   - #43 Improve handling of record attributes
 
