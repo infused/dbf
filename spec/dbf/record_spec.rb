@@ -62,4 +62,19 @@ describe DBF::Record do
       end
     end
   end
+  
+  describe '#attributes' do
+    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"}
+    let(:record) { table.find(0) }
+    
+    it 'is a hash of attribute name/value pairs' do
+      record.attributes.should be_a(Hash)
+      record.attributes['CHARACTER'] == 'One'
+    end
+    
+    it 'has only original field names as keys' do
+      original_field_names = %w(CHARACTER DATE FLOAT LOGICAL MEMO NUMERICAL)
+      record.attributes.keys.sort.should == original_field_names
+    end
+  end
 end
