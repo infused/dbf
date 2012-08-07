@@ -37,16 +37,22 @@ Enumerate all records
     
 Find a single record
 
-    widget.find(6)
+    widget = widgets.find(6)
+    
+Note that find() will return nil if the requested record has been deleted
+and not yet pruned from the database.
 
-Attributes can also be accessed through the attributes hash or the record
-object using either the original or underscored attribute name. Note that
-find() will return nil if the requested record has been deleted and not yet
-pruned from the database.
+The value for a attribute can be accessed via element reference in one of three
+ways
 
-    widget.find(4).attributes["SlotNumber"]
-    widget.find(4)["SlotNumber"]
-    widget.find(4)[:slot_number]
+    widget["SlotNumber"]   # original field name in dbf file
+    widget['slot_number']  # underscored field name string
+    widget[:slot_number]   # underscored field name symbol
+    
+Get a hash of all attributes. The keys are the original column names.
+
+    widgets.attributes
+    => {"Name" => "Thing1", "SlotNumber" => 1}
   
 Search for records using a simple hash format. Multiple search criteria are
 ANDed. Use the block form if the resulting recordset could be large, otherwise
@@ -81,7 +87,7 @@ An example of migrating a DBF book table to ActiveRecord using a migration:
         
         Book.reset_column_information
         table.each do |record|
-          Book.create(record.attributes)
+          Book.create(:title => record.title, :author => record.author)
         end
       end
 
