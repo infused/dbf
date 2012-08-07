@@ -23,12 +23,6 @@ Gem::Specification.new do |s|
   
   s.add_development_dependency 'rspec', '~> 2.9.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
-  
-  if RUBY_VERSION == RUBY_VERSION.to_f >= 1.9
-    s.add_development_dependency 'rdoc', '~> 2.5.0'
-  else
-    s.add_development_dependency 'rdoc', '~> 3.11'
-  end
 
   # if RUBY_VERSION.to_f >= 1.9
   #   s.add_development_dependency 'ruby-debug19'

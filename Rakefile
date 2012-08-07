@@ -11,16 +11,6 @@ RSpec::Core::RakeTask.new :specdoc do |t|
   t.rspec_opts = %w(-fl)
 end
 
-require 'rake'
-require 'rdoc/task'
-Rake::RDocTask.new { |rdoc|
-  rdoc.rdoc_dir = 'doc'
-  rdoc.title    = "DBF - A small fast library for reading dBase, xBase, Clipper and FoxPro database files."
-  rdoc.options << '--line-numbers'
-  rdoc.template = "#{ENV['template']}.rb" if ENV['template']
-  rdoc.rdoc_files.include('README.md', 'docs/supported_types.markdown', 'lib/**/*.rb')
-}
-
 task :default => :spec
 
 desc "Open an irb session preloaded with this library"
