@@ -1,3 +1,6 @@
+# 1.7.7
+  - #44 Require FasterCSV gem on all platforms
+
 # 1.7.6
   - #42 Fixes encoding of memos
   - #43 Improve handling of record attributes
