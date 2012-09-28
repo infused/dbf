@@ -1,3 +1,6 @@
+# 2.0.1
+  - Add experimental support for character encodings under Ruby 1.8
+
 # 2.0.0
   - #44 Require FasterCSV gem on all platforms
   - Remove rdoc development dependency

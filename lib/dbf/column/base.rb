@@ -96,7 +96,15 @@ module DBF
       end
 
       def encode_string(value) #nodoc
-        @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external, :undef => :replace, :invalid => :replace) : value
+        if @encoding
+          if String.new.respond_to?(:encoding)
+            value.force_encoding(@encoding).encode(Encoding.default_external, :undef => :replace, :invalid => :replace)
+          else
+            Iconv.conv('UTF-8', @encoding, value)
+          end
+        else
+          value
+        end
       end
 
       def schema_data_type #nodoc

@@ -209,7 +209,14 @@ module DBF
     end
     
     def supports_encoding?
-      String.new.respond_to? :encoding
+      String.new.respond_to?(:encoding)
+    end
+    
+    def supports_iconv?
+      require 'iconv'
+      true
+    rescue
+      false
     end
     
     def foxpro?
@@ -281,7 +288,7 @@ module DBF
     def get_header_info #nodoc
       @data.rewind
       @version, @record_count, @header_length, @record_length, @encoding_key = read_header
-      @encoding = ENCODINGS[@encoding_key] if supports_encoding?
+      @encoding = ENCODINGS[@encoding_key] if supports_encoding? || supports_iconv?
     end
     
     def read_header #nodoc
