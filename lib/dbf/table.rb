@@ -49,11 +49,17 @@ module DBF
     #   # working with a dbf and memo in memory
     #   table = DBF::Table.new StringIO.new(dbf_data), StringIO.new(memo_data)
     #
+    #   # working with a dbf overriding specified in the dbf encoding
+    #   table = DBF::Table.new 'data.dbf', nil, 'cp437'
+    #   table = DBF::Table.new 'data.dbf', 'memo.dbt', Encoding::US_ASCII
+    #
     # @param [String, StringIO] data Path to the dbf file or a StringIO object
     # @param [optional String, StringIO] memo Path to the memo file or a StringIO object
-    def initialize(data, memo = nil)
+    # @param [optional String, Encoding] encoding Name of the encoding or an Encoding object
+    def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
       get_header_info
+      @encoding = encoding if encoding && @encoding
       @memo = open_memo(data, memo)
     end
     

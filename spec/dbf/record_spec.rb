@@ -52,13 +52,27 @@ describe DBF::Record do
   end
 
   describe 'column data for table' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf"}
+    describe 'using specified in dbf encoding' do
+      let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf"}
 
-    let(:record) { table.find(0) }
-    it 'should automatically encodes to default system encoding' do
-      if table.supports_encoding?
-        record.name.encoding.should == Encoding.default_external
-        record.name.encode("UTF-8").unpack("H4").should == ["d0b0"] # russian a
+      let(:record) { table.find(0) }
+      it 'should automatically encodes to default system encoding' do
+        if table.supports_encoding?
+          record.name.encoding.should == Encoding.default_external
+          record.name.encode("UTF-8").unpack("H4").should == ["d0b0"] # russian a
+        end
+      end
+    end
+
+    describe 'overriding specified in dbf encoding' do
+      let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf", nil, 'cp866'}
+
+      let(:record) { table.find(0) }
+      it 'should transcode from manually specified encoding to default system encoding' do
+        if table.supports_encoding?
+          record.name.encoding.should == Encoding.default_external
+          record.name.encode("UTF-8").unpack("H4").should == ["d180"] # russian а encoded in cp1251 and read as if it was encoded in cp866
+        end
       end
     end
   end
