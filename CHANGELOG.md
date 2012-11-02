@@ -1,3 +1,6 @@
+# 2.0.2
+  - Allow overriding the character encoding specified in the file
+
 # 2.0.1
   - Add experimental support for character encodings under Ruby 1.8
 
