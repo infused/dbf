@@ -14,8 +14,9 @@ database files
 DBF is tested to work with the following versions of ruby:
 
 * MRI Ruby 1.8.6, 1.8.7, 1.9.1, 1.9.2 and 1.9.3
-* JRuby 1.6.2, 1.6.3, 1.6.4, and 1.6.5
+* JRuby 1.6.x, 1.7.x
 * REE 1.8.6, 1.8.7
+* Rubinius (1.8 mode)
 
 ## Installation
   
