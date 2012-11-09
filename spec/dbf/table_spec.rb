@@ -41,7 +41,7 @@ describe DBF::Table do
   end
   
   describe "#schema" do
-    it "should match the test schema fixture" do
+    it "matches the test schema fixture" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
       control_schema = File.read("#{DB_PATH}/dbase_83_schema.txt")
       table.schema.should == control_schema
@@ -56,7 +56,7 @@ describe DBF::Table do
     end
     
     describe 'when no path param passed' do
-      it 'should dump to STDOUT' do
+      it 'writes to STDOUT' do
         begin
           $stdout = StringIO.new
           table.to_csv
@@ -68,7 +68,7 @@ describe DBF::Table do
     end
 
     describe 'when path param passed' do
-      it 'should create custom csv file' do
+      it 'creates a custom csv file' do
         table.to_csv('test.csv')
         File.exists?('test.csv').should be_true
       end
@@ -95,19 +95,19 @@ describe DBF::Table do
     let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
     
     describe "with index" do
-      it "should return the correct record" do
+      it "returns the correct record" do
         table.find(5).should == table.record(5)
       end
     end
     
     describe 'with array of indexes' do      
-      it "should return the correct records" do
+      it "returns the correct records" do
         table.find([1, 5, 10]).should == [table.record(1), table.record(5), table.record(10)]
       end
     end
     
     describe "with :all" do
-      it "should accept a block" do
+      it "accepts a block" do
         records = []
         table.find(:all, :weight => 0.0) do |record|
           records << record
@@ -115,11 +115,11 @@ describe DBF::Table do
         records.should == table.find(:all, :weight => 0.0)
       end
 
-      it "should return all records if options are empty" do
+      it "returns all records if options are empty" do
         table.find(:all).should == table.to_a
       end
 
-      it "should return matching records when used with options" do
+      it "returns matching records when used with options" do
         table.find(:all, "WEIGHT" => 0.0).should == table.select {|r| r["weight"] == 0.0}
       end
 
@@ -131,36 +131,36 @@ describe DBF::Table do
         table.find(:all, "WEIGHT" => 0.0).should_not be_empty
       end
       
-      it "should match symbolized column names" do
+      it "matches symbolized column names" do
         table.find(:all, :WEIGHT => 0.0).should_not be_empty
       end
       
-      it "should match downcased column names" do
+      it "matches downcased column names" do
         table.find(:all, "weight" => 0.0).should_not be_empty
       end
       
-      it "should match symbolized downcased column names" do
+      it "matches symbolized downcased column names" do
         table.find(:all, :weight => 0.0).should_not be_empty
       end
     end
     
     describe "with :first" do
-      it "should return the first record if options are empty" do
+      it "returns the first record if options are empty" do
         table.find(:first).should == table.record(0)
       end
 
-      it "should return the first matching record when used with options" do
+      it "returns the first matching record when used with options" do
         table.find(:first, "CODE" => "C").should == table.record(5)
       end
 
-      it "should AND multiple search terms" do
+      it "ANDs multiple search terms" do
         table.find(:first, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg").should be_nil
       end
     end
   end
 
   describe "filename" do
-    it 'should be dbase_03.dbf' do
+    it 'is dbase_03.dbf' do
       table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
       table.filename.should == "dbase_03.dbf"
     end
@@ -168,14 +168,14 @@ describe DBF::Table do
   
   describe 'has_memo_file?' do
     describe 'without a memo file' do
-      it 'returns false' do
+      it 'is false' do
         table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
         table.has_memo_file?.should be_false
       end
     end
     
     describe 'with a memo file' do
-      it 'returns true' do
+      it 'is true' do
         table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf" 
         table.has_memo_file?.should be_true
       end

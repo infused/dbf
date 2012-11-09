@@ -19,17 +19,22 @@ describe DBF::Record do
       table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
       table.record(9)
     end
-
-    it 'should be false if other does not have attributes' do
-      (record == mock('other')).should be_false
+    
+    describe 'when other does not have attributes' do
+      it 'is false' do
+        (record == mock('other')).should be_false
+      end
     end
 
-    it 'should be true if other attributes match' do
-      attributes = {:x => 1, :y => 2}
-      record.stub!(:attributes).and_return(attributes)
-      other = mock('object', :attributes => attributes)
-      (record == other).should be_true
+    describe 'if other attributes match' do
+      it 'is true' do
+        attributes = {:x => 1, :y => 2}
+        record.stub!(:attributes).and_return(attributes)
+        other = mock('object', :attributes => attributes)
+        (record == other).should be_true
+      end
     end
+    
   end
 
   describe 'column accessors' do
