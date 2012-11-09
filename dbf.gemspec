@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 1.3.0'
   s.add_dependency 'fastercsv', '~> 1.5.4'
   
-  s.add_development_dependency 'rspec', '~> 2.9.0'
+  s.add_development_dependency 'rspec', '~> 2.11.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
 
   # if RUBY_VERSION.to_f >= 1.9
