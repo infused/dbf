@@ -1,3 +1,6 @@
+# 2.0.3
+  - set encoding if table encoding is nil
+
 # 2.0.2
   - Allow overriding the character encoding specified in the file
 
