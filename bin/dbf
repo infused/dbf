@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby -s
 
-require 'rubygems'
 require 'dbf'
 
 $a ||= false
