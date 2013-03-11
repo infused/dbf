@@ -1,5 +1,3 @@
-Encoding.default_external='UTF-8' if defined? Encoding
-
 require "spec_helper"
 
 describe DBF::Record do
