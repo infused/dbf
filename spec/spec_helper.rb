@@ -1,6 +1,8 @@
 require 'dbf'
 require 'rspec'
 
+Encoding.default_external = "UTF-8" if defined?(Encoding)
+
 DB_PATH = File.dirname(__FILE__) + '/fixtures' unless defined?(DB_PATH)
 
 if RUBY_VERSION == "1.8.6"
