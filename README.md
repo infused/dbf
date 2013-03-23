@@ -1,4 +1,8 @@
-# DBF [![Build Status](https://secure.travis-ci.org/infused/dbf.png)](http://travis-ci.org/infused/dbf)
+# DBF
+[![Build Status](https://secure.travis-ci.org/infused/dbf.png)](http://travis-ci.org/infused/dbf)
+[![Gem Version](https://badge.fury.io/rb/dbf.png)](http://badge.fury.io/rb/dbf)
+[![Code Climate](https://codeclimate.com/github/infused/dbf.png)](https://codeclimate.com/github/infused/dbf)
+[![Dependency Status](https://gemnasium.com/infused/dbf.png)](https://gemnasium.com/infused/dbf)
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro
 database files
@@ -6,7 +10,7 @@ database files
 * Project page: <http://github.com/infused/dbf>
 * API Documentation: <http://rubydoc.info/github/infused/dbf/frames>
 * Report bugs: <http://github.com/infused/dbf/issues>
-* Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the 
+* Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the
   subject line
 
 ## Compatibility
@@ -19,9 +23,9 @@ DBF is tested to work with the following versions of ruby:
 * Rubinius (1.8 mode)
 
 ## Installation
-  
+
     gem install dbf
-  
+
 ## Basic Usage
 
 Open a DBF file:
@@ -35,11 +39,11 @@ Enumerate all records
       puts record.name
       puts record.email
     end
-    
+
 Find a single record
 
     widget = widgets.find(6)
-    
+
 Note that find() will return nil if the requested record has been deleted
 and not yet pruned from the database.
 
@@ -49,16 +53,16 @@ ways
     widget["SlotNumber"]   # original field name in dbf file
     widget['slot_number']  # underscored field name string
     widget[:slot_number]   # underscored field name symbol
-    
+
 Get a hash of all attributes. The keys are the original column names.
 
     widgets.attributes
     => {"Name" => "Thing1", "SlotNumber" => 1}
-  
+
 Search for records using a simple hash format. Multiple search criteria are
 ANDed. Use the block form if the resulting recordset could be large, otherwise
 all records will be loaded into memory.
-    
+
     # find all records with slot_number equal to s42
     widgets.find(:all, :slot_number => 's42') do |widget|
       # the record will be nil if deleted, but not yet pruned from the database
@@ -66,13 +70,13 @@ all records will be loaded into memory.
         puts widget.serial_number
       end
     end
-    
+
     # find the first record with slot_number equal to s42
     widgets.find :first, :slot_number => 's42'
-    
+
     # find record number 10
     widgets.find(10)
-  
+
 ## Migrating to ActiveRecord
 
 An example of migrating a DBF book table to ActiveRecord using a migration:
@@ -80,12 +84,12 @@ An example of migrating a DBF book table to ActiveRecord using a migration:
     require 'dbf'
 
     class Book < ActiveRecord::Base; end
-    
+
     class CreateBooks < ActiveRecord::Migration
       def self.up
         table = DBF::Table.new('db/dbf/books.dbf')
         eval(table.schema)
-        
+
         Book.reset_column_information
         table.each do |record|
           Book.create(:title => record.title, :author => record.author)
@@ -96,7 +100,7 @@ An example of migrating a DBF book table to ActiveRecord using a migration:
         drop_table :books
       end
     end
-  
+
 ## Command-line utility
 
 A small command-line utility called dbf is installed along with the gem.
@@ -107,15 +111,15 @@ A small command-line utility called dbf is installed along with the gem.
       -s = print summary information
       -a = create an ActiveRecord::Schema
       -c = create a csv file
-      
+
 Create an executable ActiveRecord schema:
-    
+
     dbf -a books.dbf > books_schema.rb
-    
+
 Dump all records to a CSV file:
 
     dbf -c books.dbf > books.csv
-      
+
 ## dBase version support
 
 The basic dBase data types are generally supported well. Support for the
