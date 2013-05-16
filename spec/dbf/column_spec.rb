@@ -7,20 +7,20 @@ describe DBF::Column::Dbase do
   context "when initialized" do
     let(:column) { DBF::Column::Dbase.new "ColumnName", "N", 1, 0, "30" }
 
-    it "sets the #name accessor" do
-      column.name.should == "ColumnName"
+    it "sets :name accessor" do
+      expect(column.name).to eq "ColumnName"
     end
 
-    it "sets the #type accessor" do
-      column.type.should == "N"
+    it "sets :type accessor" do
+      expect(column.type).to eq "N"
     end
 
     it "sets the #length accessor" do
-      column.length.should == 1
+      expect(column.length).to eq 1
     end
 
     it "sets the #decimal accessor" do
-      column.decimal.should == 0
+      expect(column.decimal).to eq 0
     end
 
     describe 'with length of 0' do
@@ -48,8 +48,8 @@ describe DBF::Column::Dbase do
         it 'casts value to Fixnum' do
           value = '135'
           column = DBF::Column::Dbase.new "ColumnName", "N", 3, 0, "30"
-          column.type_cast(value).should be_a(Fixnum)
-          column.type_cast(value).should == 135
+          expect(column.type_cast(value)).to be_a(Fixnum)
+          expect(column.type_cast(value)).to eq 135
         end
       end
 
@@ -57,8 +57,8 @@ describe DBF::Column::Dbase do
         it 'casts value to Float' do
           value = '13.5'
           column = DBF::Column::Dbase.new "ColumnName", "N", 2, 1, "30"
-          column.type_cast(value).should be_a(Float)
-          column.type_cast(value).should == 13.5
+          expect(column.type_cast(value)).to be_a(Float)
+          expect(column.type_cast(value)).to eq 13.5
         end
       end
     end
@@ -67,8 +67,8 @@ describe DBF::Column::Dbase do
       it 'casts value to Float' do
         value = '135'
         column = DBF::Column::Dbase.new "ColumnName", "F", 3, 0, "30"
-        column.type_cast(value).should be_a(Float)
-        column.type_cast(value).should == 135.0
+        expect(column.type_cast(value)).to be_a(Float)
+        expect(column.type_cast(value)).to eq 135.0
       end
     end
 
@@ -76,7 +76,7 @@ describe DBF::Column::Dbase do
       it "casts value to Fixnum" do
         value = "\203\171\001\000"
         column = DBF::Column::Dbase.new "ColumnName", "I", 3, 0, "30"
-        column.type_cast(value).should == 96643
+        expect(column.type_cast(value)).to eq 96643
       end
     end
 
@@ -84,15 +84,15 @@ describe DBF::Column::Dbase do
       let(:column) { DBF::Column::Dbase.new "ColumnName", "L", 1, 0, "30" }
 
       it "casts 'y' to true" do
-        column.type_cast('y').should == true
+        expect(column.type_cast('y')).to eq true
       end
 
       it "casts 't' to true" do
-        column.type_cast('t').should == true
+        expect(column.type_cast('t')).to eq true
       end
 
       it "casts value other than 't' or 'y' to false" do
-        column.type_cast('n').should == false
+        expect(column.type_cast('n')).to eq false
       end
     end
 
@@ -101,24 +101,25 @@ describe DBF::Column::Dbase do
 
       context 'with valid datetime' do
         it "casts to DateTime" do
-          column.type_cast("Nl%\000\300Z\252\003").should == DateTime.parse("2002-10-10T17:04:56+00:00")
+          expect(column.type_cast("Nl%\000\300Z\252\003")).to eq DateTime.parse("2002-10-10T17:04:56+00:00")
         end
       end
 
       if ruby_supports_mathn?
         context 'when requiring mathn' do
           it "casts to DateTime" do
-            lambda {
+            with_mathn = lambda do
               require 'mathn'
               column.type_cast("Nl%\000\300Z\252\003")
-            }.call.should == DateTime.parse("2002-10-10T17:04:56+00:00")
+            end
+            expect(with_mathn.call).to eq DateTime.parse("2002-10-10T17:04:56+00:00")
           end
         end
       end
 
       context 'with invalid datetime' do
         it "casts to nil" do
-          column.type_cast("Nl%\000\000A\000\999").should be_nil
+          expect(column.type_cast("Nl%\000\000A\000\999")).to be_nil
         end
       end
     end
@@ -128,13 +129,13 @@ describe DBF::Column::Dbase do
 
       context 'with valid date' do
         it "casts to Date" do
-          column.type_cast("20050712").should == Date.new(2005,7,12)
+          expect(column.type_cast("20050712")).to eq Date.new(2005,7,12)
         end
       end
 
       context 'with invalid date' do
         it "casts to nil" do
-          column.type_cast("0").should be_nil
+          expect(column.type_cast("0")).to be_nil
         end
       end
     end
@@ -142,7 +143,7 @@ describe DBF::Column::Dbase do
     context 'with type M (memo)' do
       it "casts to string" do
         column = DBF::Column::Dbase.new "ColumnName", "M", 3, 0, "30"
-        column.type_cast('abc').should be_a(String)
+        expect(column.type_cast('abc')).to be_a(String)
       end
     end
   end
@@ -151,7 +152,7 @@ describe DBF::Column::Dbase do
     let(:column) { DBF::Column::Dbase.new "ColumnName", "Y", 8, 4, "31" }
 
     it 'casts to float' do
-      column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00").should == 18.0
+      expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to eq 18.0
     end
   end
 
@@ -159,7 +160,7 @@ describe DBF::Column::Dbase do
     context 'with type N (number)' do
       it "outputs an integer column" do
         column = DBF::Column::Dbase.new "ColumnName", "N", 1, 0, "30"
-        column.schema_definition.should == "\"column_name\", :integer\n"
+        expect(column.schema_definition).to eq "\"column_name\", :integer\n"
       end
     end
 
@@ -168,57 +169,59 @@ describe DBF::Column::Dbase do
         context "when decimal is greater than 0" do
           it "outputs an float column" do
             column = DBF::Column::Dbase.new "ColumnName", "B", 1, 2, "f5"
-            column.schema_definition.should == "\"column_name\", :float\n"
+            expect(column.schema_definition).to eq "\"column_name\", :float\n"
           end
         end
 
         context "when decimal is 0" do
-          column = DBF::Column::Dbase.new "ColumnName", "B", 1, 0, "f5"
-          column.schema_definition.should == "\"column_name\", :integer\n"
+          it "outputs an integer column" do
+            column = DBF::Column::Dbase.new "ColumnName", "B", 1, 0, "f5"
+            expect(column.schema_definition).to eq "\"column_name\", :integer\n"
+          end
         end
       end
     end
 
     it "defines a float colmn if type is (N)umber with more than 0 decimals" do
       column = DBF::Column::Dbase.new "ColumnName", "N", 1, 2, "30"
-      column.schema_definition.should == "\"column_name\", :float\n"
+      expect(column.schema_definition).to eq "\"column_name\", :float\n"
     end
 
     it "defines a date column if type is (D)ate" do
       column = DBF::Column::Dbase.new "ColumnName", "D", 8, 0, "30"
-      column.schema_definition.should == "\"column_name\", :date\n"
+      expect(column.schema_definition).to eq "\"column_name\", :date\n"
     end
 
     it "defines a datetime column if type is (D)ate" do
       column = DBF::Column::Dbase.new "ColumnName", "T", 16, 0, "30"
-      column.schema_definition.should == "\"column_name\", :datetime\n"
+      expect(column.schema_definition).to eq "\"column_name\", :datetime\n"
     end
 
     it "defines a boolean column if type is (L)ogical" do
       column = DBF::Column::Dbase.new "ColumnName", "L", 1, 0, "30"
-      column.schema_definition.should == "\"column_name\", :boolean\n"
+      expect(column.schema_definition).to eq "\"column_name\", :boolean\n"
     end
 
     it "defines a text column if type is (M)emo" do
       column = DBF::Column::Dbase.new "ColumnName", "M", 1, 0, "30"
-      column.schema_definition.should == "\"column_name\", :text\n"
+      expect(column.schema_definition).to eq "\"column_name\", :text\n"
     end
 
     it "defines a string column with length for any other data types" do
       column = DBF::Column::Dbase.new "ColumnName", "X", 20, 0, "30"
-      column.schema_definition.should == "\"column_name\", :string, :limit => 20\n"
+      expect(column.schema_definition).to eq "\"column_name\", :string, :limit => 20\n"
     end
   end
 
   context "#name" do
     it "contains only ASCII characters" do
       column = DBF::Column::Dbase.new "--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--", "N", 1, 0, "30"
-      column.name.should == "---hello world---"
+      expect(column.name).to eq "---hello world---"
     end
 
     it "is truncated at the null character" do
       column = DBF::Column::Dbase.new "--\x1F-\x68\x65\x6C\x6C\x6F \x00 world-\x80--", "N", 1, 0, "30"
-      column.name.should == "---hello "
+      expect(column.name).to eq "---hello "
     end
   end
 
@@ -226,11 +229,11 @@ describe DBF::Column::Dbase do
     let(:column) { DBF::Column::Dbase.new "ColumnName", "N", 1, 0, "30" }
 
     it 'is nil if value is blank' do
-      column.send(:decode_date, '').should be_nil
+      expect(column.send(:decode_date, '')).to be_nil
     end
 
     it 'interperets spaces as zeros' do
-      column.send(:decode_date, '2010 715').should == Date.parse('20100715')
+      expect(column.send(:decode_date, '2010 715')).to eq Date.parse('20100715')
     end
   end
 

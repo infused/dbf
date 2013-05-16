@@ -7,22 +7,22 @@ describe DBF::Record do
       table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
 
       record = table.record(0)
-      record.to_a.should == ["One", 1.0, Date.new(1970, 1, 1), true, 1.23456789012346, "First memo\r\n\037 \037 \037 \037 "]
+      expect(record.to_a).to eq ["One", 1.0, Date.new(1970, 1, 1), true, 1.23456789012346, "First memo\r\n\037 \037 \037 \037 "]
 
       record = table.record(9)
-      record.to_a.should == ["Ten records stored in this database", 10.0, nil, false, 0.1, nil]
+      expect(record.to_a).to eq ["Ten records stored in this database", 10.0, nil, false, 0.1, nil]
     end
   end
 
-  describe '#==' do    
+  describe '#==' do
     let :record do
       table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
       table.record(9)
     end
-    
+
     describe 'when other does not have attributes' do
       it 'is false' do
-        (record == mock('other')).should be_false
+        expect((record == mock('other'))).to be_false
       end
     end
 
@@ -31,10 +31,10 @@ describe DBF::Record do
         attributes = {:x => 1, :y => 2}
         record.stub!(:attributes).and_return(attributes)
         other = mock('object', :attributes => attributes)
-        (record == other).should be_true
+        expect((record == other)).to be_true
       end
     end
-    
+
   end
 
   describe 'column accessors' do
@@ -42,16 +42,16 @@ describe DBF::Record do
     let(:record) { table.find(0) }
 
     it 'should have dynamic accessors for the columns' do
-      record.should respond_to(:character)
-      record.character.should == 'One'
-      record.float.should == 1.23456789012346
-      record.logical.should == true
+      expect(record).to respond_to(:character)
+      expect(record.character).to eq 'One'
+      expect(record.float).to eq 1.23456789012346
+      expect(record.logical).to eq true
     end
 
     it 'should not define accessor methods on the base class' do
       second_table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
       second_record = second_table.find(0)
-      record.character.should == 'One'
+      expect(record.character).to eq 'One'
       expect { second_record.character }.to raise_error(NoMethodError)
     end
   end
@@ -63,8 +63,8 @@ describe DBF::Record do
       let(:record) { table.find(0) }
       it 'should automatically encodes to default system encoding' do
         if table.supports_encoding?
-          record.name.encoding.should == Encoding.default_external
-          record.name.encode("UTF-8").unpack("H4").should == ["d0b0"] # russian a
+          expect(record.name.encoding).to eq Encoding.default_external
+          expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d0b0"] # russian a
         end
       end
     end
@@ -75,25 +75,25 @@ describe DBF::Record do
       let(:record) { table.find(0) }
       it 'should transcode from manually specified encoding to default system encoding' do
         if table.supports_encoding?
-          record.name.encoding.should == Encoding.default_external
-          record.name.encode("UTF-8").unpack("H4").should == ["d180"] # russian а encoded in cp1251 and read as if it was encoded in cp866
+          expect(record.name.encoding).to eq Encoding.default_external
+          expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d180"] # russian а encoded in cp1251 and read as if it was encoded in cp866
         end
       end
     end
   end
-  
+
   describe '#attributes' do
     let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"}
     let(:record) { table.find(0) }
-    
+
     it 'is a hash of attribute name/value pairs' do
-      record.attributes.should be_a(Hash)
+      expect(record.attributes).to be_a(Hash)
       record.attributes['CHARACTER'] == 'One'
     end
-    
+
     it 'has only original field names as keys' do
       original_field_names = %w(CHARACTER DATE FLOAT LOGICAL MEMO NUMERICAL)
-      record.attributes.keys.sort.should == original_field_names
+      expect(record.attributes.keys.sort).to eq original_field_names
     end
   end
 end
