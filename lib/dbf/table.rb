@@ -15,15 +15,18 @@ module DBF
       "07" => "Visual Objects 1.x",
       "30" => "Visual FoxPro",
       "31" => "Visual FoxPro with AutoIncrement field",
+      "43" => "dBASE IV SQL table files, no memo",
+      "63" => "dBASE IV SQL system files, no memo",
       "7b" => "dBase IV with memo file",
       "83" => "dBase III with memo file",
       "87" => "Visual Objects 1.x with memo file",
       "8b" => "dBase IV with memo file",
       "8e" => "dBase IV with SQL table",
+      "cb" => "dBASE IV SQL table files, with memo",
       "f5" => "FoxPro with memo file",
       "fb" => "FoxPro without memo file"
     }
-    
+
     FOXPRO_VERSIONS = {
       "30" => "Visual FoxPro",
       "31" => "Visual FoxPro with AutoIncrement field",
@@ -62,7 +65,7 @@ module DBF
       @encoding = encoding || @encoding
       @memo = open_memo(data, memo)
     end
-    
+
     # @return [TrueClass, FalseClass]
     def has_memo_file?
       !!@memo
@@ -75,7 +78,7 @@ module DBF
       @data.close
       @memo && @memo.close
     end
-    
+
     # @return [TrueClass, FalseClass]
     def closed?
       if @memo
@@ -84,7 +87,7 @@ module DBF
         @data.closed?
       end
     end
-    
+
     # @return String
     def filename
       File.basename @data.path
@@ -213,24 +216,24 @@ module DBF
         columns
       end
     end
-    
+
     def supports_encoding?
       String.new.respond_to?(:encoding)
     end
-    
+
     def supports_iconv?
       require 'iconv'
       true
     rescue
       false
     end
-    
+
     def foxpro?
       FOXPRO_VERSIONS.keys.include? @version
     end
 
     private
-    
+
     def column_class #nodoc
       @column_class ||= if foxpro?
         Column::Foxpro
@@ -238,7 +241,7 @@ module DBF
         Column::Dbase
       end
     end
-    
+
     def memo_class #nodoc
       @memo_class ||= if foxpro?
         Memo::Foxpro
@@ -250,7 +253,7 @@ module DBF
         end
       end
     end
-    
+
     def column_count #nodoc
       @column_count ||= ((@header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE).to_i
     end
@@ -296,7 +299,7 @@ module DBF
       @version, @record_count, @header_length, @record_length, @encoding_key = read_header
       @encoding = ENCODINGS[@encoding_key] if supports_encoding? || supports_iconv?
     end
-    
+
     def read_header #nodoc
       @data.read(DBF_HEADER_SIZE).unpack("H2 x3 V v2 x17H2")
     end
