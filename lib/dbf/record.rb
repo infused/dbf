@@ -79,15 +79,13 @@ module DBF
     end
 
     def memo_start_block(column) #nodoc
-      if %w(30 31).include?(@version)
-        @data.read(column.length).unpack('V').first
-      else
-        unpack_data(column).to_i
-      end
+      format = 'V' if %w(30 31).include?(@version)
+      unpack_data(column, format).to_i
     end
 
-    def unpack_data(column) #nodoc
-      @data.read(column.length).unpack("a#{column.length}").first
+    def unpack_data(column, format=nil) #nodoc
+      format ||= "a#{column.length}"
+      @data.read(column.length).unpack(format).first
     end
 
   end
