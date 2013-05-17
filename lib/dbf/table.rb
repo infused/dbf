@@ -61,7 +61,7 @@ module DBF
     # @param [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
-      get_header_info
+      @version, @record_count, @header_length, @record_length, @encoding_key, @encoding = get_header_info
       @encoding = encoding || @encoding
       @memo = open_memo(data, memo)
     end
@@ -296,8 +296,9 @@ module DBF
 
     def get_header_info #nodoc
       @data.rewind
-      @version, @record_count, @header_length, @record_length, @encoding_key = read_header
-      @encoding = ENCODINGS[@encoding_key] if supports_encoding? || supports_iconv?
+      version, record_count, header_length, record_length, encoding_key = read_header
+      encoding = ENCODINGS[encoding_key] if supports_encoding? || supports_iconv?
+      [version, record_count, header_length, record_length, encoding_key, encoding]
     end
 
     def read_header #nodoc
