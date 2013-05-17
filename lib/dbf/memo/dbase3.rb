@@ -5,9 +5,9 @@ module DBF
         @data.seek offset(start_block)
         memo_string = ""
         begin
-          block = @data.read(block_size).gsub(/(\000|\032)/, '')
+          block = @data.read(BLOCK_SIZE).gsub(/(\000|\032)/, '')
           memo_string << block
-        end until block.size < block_size
+        end until block.size < BLOCK_SIZE
         memo_string
       end
     end
