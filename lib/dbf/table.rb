@@ -62,7 +62,7 @@ module DBF
     def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
       @version, @record_count, @header_length, @record_length, @encoding_key, @encoding = get_header_info
-      @encoding = encoding || @encoding
+      @encoding = encoding if encoding
       @memo = open_memo(data, memo)
     end
 
