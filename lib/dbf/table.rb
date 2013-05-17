@@ -235,11 +235,7 @@ module DBF
     private
 
     def column_class #nodoc
-      @column_class ||= if foxpro?
-        Column::Foxpro
-      else
-        Column::Dbase
-      end
+      @column_class ||= foxpro? ? Column::Foxpro : Column::Dbase
     end
 
     def memo_class #nodoc
@@ -268,13 +264,17 @@ module DBF
       elsif memo
         memo_class.open(memo, version)
       elsif !data.is_a? StringIO
-        dirname = File.dirname(data)
-        basename = File.basename(data, '.*')
-        files = Dir.glob("#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}")
+        files = Dir.glob(memo_search_path(data))
         files.any? ? memo_class.open(files.first, version) : nil
       else
         nil
       end
+    end
+
+    def memo_search_path(io) #nodoc
+      dirname = File.dirname(io)
+      basename = File.basename(io, '.*')
+      "#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}"
     end
 
     def find_all(options) #nodoc
