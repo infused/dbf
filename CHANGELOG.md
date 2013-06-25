@@ -1,3 +1,6 @@
+# 2.0.4
+  - memo fields return nil if memo file is missing
+
 # 2.0.3
   - set encoding if table encoding is nil
 
@@ -38,7 +41,7 @@
 
 # 1.6.6
   - add binary data type support to ActiveRecord schema output
-  
+
 # 1.6.5
   - support for visual foxpro double (b) data type
 
