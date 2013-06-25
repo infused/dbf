@@ -22,15 +22,15 @@ else
     table = DBF::Table.new filename
     puts table.schema
   end
-  
+
   if $s
     table = DBF::Table.new filename
     puts
     puts "Database: #{filename}"
     puts "Type: (#{table.version}) #{table.version_description}"
-    puts "Memo File: #{table.has_memo_file? ? 'true' : false}"
+    puts "Memo File: #{table.has_memo_file? ? 'true' : 'false'}"
     puts "Records: #{table.record_count}"
-    
+
     puts "\nFields:"
     puts "Name             Type       Length     Decimal"
     puts "-" * 78

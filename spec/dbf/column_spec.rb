@@ -145,6 +145,11 @@ describe DBF::Column::Dbase do
         column = DBF::Column::Dbase.new "ColumnName", "M", 3, 0, "30"
         expect(column.type_cast('abc')).to be_a(String)
       end
+
+      it 'casts nil to nil' do
+        column = DBF::Column::Dbase.new "ColumnName", "M", 3, 0, "30"
+        expect(column.type_cast(nil)).to be_nil
+      end
     end
   end
 

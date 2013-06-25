@@ -71,7 +71,7 @@ module DBF
 
     def init_attribute(column) #nodoc
       value = if column.memo?
-        @memo.get memo_start_block(column)
+        @memo && @memo.get(memo_start_block(column))
       else
         unpack_data(column)
       end
