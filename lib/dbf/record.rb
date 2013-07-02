@@ -51,8 +51,11 @@ module DBF
     end
 
     def respond_to?(method, *args)
-      return true if column_names.include?(method.to_s)
-      super
+      if column_names.include?(method.to_s)
+        true
+      else
+        super
+      end
     end
 
     def method_missing(method, *args)

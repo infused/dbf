@@ -29,7 +29,7 @@ module DBF
       private
 
       def offset(start_block) #nodoc
-        start_block * BLOCK_SIZE
+        start_block * block_size
       end
 
       def content_size(memo_size) #nodoc
@@ -38,6 +38,10 @@ module DBF
 
       def block_content_size #nodoc
         @block_content_size ||= block_size - BLOCK_HEADER_SIZE
+      end
+
+      def block_size
+        BLOCK_SIZE
       end
     end
   end

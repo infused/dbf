@@ -151,4 +151,8 @@ describe DBF, "of type f5 (FoxPro with memo file)" do
   it "should determine the number of records" do
     expect(table.record_count).to eq 975
   end
+
+  it "reads memo data" do
+    expect(table.record(3).obse).to match(/\Ajos.*pare\.\Z/m)
+  end
 end
