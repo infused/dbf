@@ -1,3 +1,6 @@
+# 2.0.5
+  - use correct FoxPro memo block size
+
 # 2.0.4
   - memo fields return nil if memo file is missing
 
