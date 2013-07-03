@@ -76,7 +76,7 @@ module DBF
       end
 
       def decode_memo(value) #nodoc
-        encode_string(value) if value
+        value && encode_string(value)
       end
 
       def unpack_number(value) #nodoc
