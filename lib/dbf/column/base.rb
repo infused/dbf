@@ -1,6 +1,9 @@
 module DBF
   module Column
+    # Raised if length is less than 1
     class LengthError < StandardError; end
+
+    # Raised if name is empty
     class NameError < StandardError; end
 
     class Base
