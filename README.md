@@ -77,6 +77,19 @@ all records will be loaded into memory.
     # find record number 10
     widgets.find(10)
 
+## Encodings (Code Pages)
+
+dBase supports encoding non-english characters in different formats.
+Unfortunately, the format used is not always set, so you may have to specify it
+manually. For example, you have a DBF file from Russia and you are getting bad
+data. Try using the 'Russion OEM' encoding:
+
+  table = DBF::Table.new('dbf/books.dbf', nil, 'cp866')
+
+See
+[doc/encodings.csv](docs/encodings.csv)
+for a full list of supported encodings.
+
 ## Migrating to ActiveRecord
 
 An example of migrating a DBF book table to ActiveRecord using a migration:
