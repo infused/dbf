@@ -87,7 +87,7 @@ data. Try using the 'Russion OEM' encoding:
   table = DBF::Table.new('dbf/books.dbf', nil, 'cp866')
 
 See
-[doc/encodings.csv](docs/encodings.csv)
+[doc/supported_encodings.csv](docs/supported_encodings.csv)
 for a full list of supported encodings.
 
 ## Migrating to ActiveRecord
