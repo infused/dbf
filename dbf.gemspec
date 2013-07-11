@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/infused/dbf'
   s.summary = 'Read xBase files'
   s.description = 'A small fast library for reading dBase, xBase, Clipper and FoxPro database files.'
+  s.license = 'MIT'
 
   s.executables = ['dbf']
   s.rdoc_options = ['--charset=UTF-8']
