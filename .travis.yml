@@ -12,3 +12,6 @@ rvm:
 branches:
   only:
     - master
+git:
+  depth: 150
+
