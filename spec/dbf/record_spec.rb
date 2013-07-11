@@ -30,15 +30,15 @@ describe DBF::Record do
 
     describe 'when other does not have attributes' do
       it 'is false' do
-        expect((record == mock('other'))).to be_false
+        expect((record == double('other'))).to be_false
       end
     end
 
     describe 'if other attributes match' do
       it 'is true' do
         attributes = {:x => 1, :y => 2}
-        record.stub!(:attributes).and_return(attributes)
-        other = mock('object', :attributes => attributes)
+        record.stub(:attributes).and_return(attributes)
+        other = double('object', :attributes => attributes)
         expect((record == other)).to be_true
       end
     end

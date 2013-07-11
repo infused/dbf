@@ -78,7 +78,7 @@ describe DBF::Table do
   describe "#record" do
     it "return nil for deleted records" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.stub!(:deleted_record?).and_return(true)
+      table.stub(:deleted_record?).and_return(true)
       expect(table.record(5)).to be_nil
     end
   end
@@ -86,7 +86,7 @@ describe DBF::Table do
   describe "#current_record" do
     it "should return nil for deleted records" do
       table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      table.stub!(:deleted_record?).and_return(true)
+      table.stub(:deleted_record?).and_return(true)
       expect(table.record(0)).to be_nil
     end
   end
