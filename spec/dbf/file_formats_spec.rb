@@ -84,28 +84,6 @@ describe DBF, "of type 30 (Visual FoxPro)" do
   end
 end
 
-describe DBF, "of type 30 (Visual FoxPro) x" do
-  let(:table) { DBF::Table.new "#{DB_PATH}/dir_alumnos.dbf" }
-
-  it_should_behave_like "DBF"
-
-  it "should report the correct version number" do
-    expect(table.version).to eq "30"
-  end
-
-  it "should report the correct version description" do
-    expect(table.version_description).to eq "Visual FoxPro"
-  end
-
-  it "should determine the number of records" do
-    expect(table.record_count).to eq 2803
-  end
-
-  it "reads memo data" do
-    expect(table.record(2764).telf).to eq '0261-2018788'
-  end
-end
-
 describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
   let(:table) { DBF::Table.new "#{DB_PATH}/dbase_31.dbf" }
 
