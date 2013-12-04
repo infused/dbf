@@ -1,12 +1,11 @@
-#!/usr/bin/env ruby -s
+#!/usr/bin/env ruby
 
 require 'dbf'
+require 'optparse'
 
-$a ||= false
-$s ||= false
-$c ||= false
+params = ARGV.getopts('h', 's', 'a', 'c')
 
-if defined? $h then
+if params['h'] then
   puts "usage: #{File.basename(__FILE__)} [-h|-s|-a|-c] filename"
   puts "  -h = print this message"
   puts "  -s = print summary information"
@@ -18,12 +17,12 @@ else
   abort "You must supply a filename on the command line" unless filename
 
   # create an ActiveRecord::Schema
-  if $a
+  if params['a']
     table = DBF::Table.new filename
     puts table.schema
   end
 
-  if $s
+  if params['s']
     table = DBF::Table.new filename
     puts
     puts "Database: #{filename}"
@@ -39,7 +38,7 @@ else
     end
   end
 
-  if $c
+  if params['c']
    table = DBF::Table.new filename
    table.to_csv
   end
