@@ -1,3 +1,6 @@
+# 2.0.7
+  - fix the dbf binary on some linux systems
+
 # 2.0.6
   - build_memo returns nil on errors
 
