@@ -56,7 +56,7 @@ ways
 
 Get a hash of all attributes. The keys are the original column names.
 
-    widgets.attributes
+    widget.attributes
     => {"Name" => "Thing1", "SlotNumber" => 1}
 
 Search for records using a simple hash format. Multiple search criteria are
