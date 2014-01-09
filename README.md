@@ -24,25 +24,33 @@ DBF is tested to work with the following versions of ruby:
 
 ## Installation
 
-    gem install dbf
+```
+gem install dbf
+```
 
 ## Basic Usage
 
 Open a DBF file:
 
-    require 'dbf'
-    widgets = DBF::Table.new("widgets.dbf")
+```ruby
+require 'dbf'
+widgets = DBF::Table.new("widgets.dbf")
+```
 
 Enumerate all records
 
-    widgets.each do |record|
-      puts record.name
-      puts record.email
-    end
+```ruby
+widgets.each do |record|
+  puts record.name
+  puts record.email
+end
+```
 
 Find a single record
 
-    widget = widgets.find(6)
+```ruby
+widget = widgets.find(6)
+```
 
 Note that find() will return nil if the requested record has been deleted
 and not yet pruned from the database.
@@ -50,32 +58,38 @@ and not yet pruned from the database.
 The value for a attribute can be accessed via element reference in one of three
 ways
 
-    widget["SlotNumber"]   # original field name in dbf file
-    widget['slot_number']  # underscored field name string
-    widget[:slot_number]   # underscored field name symbol
+```ruby
+widget["SlotNumber"]   # original field name in dbf file
+widget['slot_number']  # underscored field name string
+widget[:slot_number]   # underscored field name symbol
+```
 
 Get a hash of all attributes. The keys are the original column names.
 
-    widget.attributes
-    => {"Name" => "Thing1", "SlotNumber" => 1}
+```ruby
+widget.attributes
+# => {"Name" => "Thing1", "SlotNumber" => 1}
+```
 
 Search for records using a simple hash format. Multiple search criteria are
 ANDed. Use the block form if the resulting recordset could be large, otherwise
 all records will be loaded into memory.
 
-    # find all records with slot_number equal to s42
-    widgets.find(:all, :slot_number => 's42') do |widget|
-      # the record will be nil if deleted, but not yet pruned from the database
-      if widget
-        puts widget.serial_number
-      end
-    end
+```ruby
+# find all records with slot_number equal to s42
+widgets.find(:all, :slot_number => 's42') do |widget|
+  # the record will be nil if deleted, but not yet pruned from the database
+  if widget
+    puts widget.serial_number
+  end
+end
 
-    # find the first record with slot_number equal to s42
-    widgets.find :first, :slot_number => 's42'
+# find the first record with slot_number equal to s42
+widgets.find :first, :slot_number => 's42'
 
-    # find record number 10
-    widgets.find(10)
+# find record number 10
+widgets.find(10)
+```
 
 ## Encodings (Code Pages)
 
@@ -84,7 +98,9 @@ Unfortunately, the format used is not always set, so you may have to specify it
 manually. For example, you have a DBF file from Russia and you are getting bad
 data. Try using the 'Russion OEM' encoding:
 
-  table = DBF::Table.new('dbf/books.dbf', nil, 'cp866')
+```ruby
+table = DBF::Table.new('dbf/books.dbf', nil, 'cp866')
+```
 
 See
 [doc/supported_encodings.csv](docs/supported_encodings.csv)
@@ -94,25 +110,27 @@ for a full list of supported encodings.
 
 An example of migrating a DBF book table to ActiveRecord using a migration:
 
-    require 'dbf'
+```ruby
+require 'dbf'
 
-    class Book < ActiveRecord::Base; end
+class Book < ActiveRecord::Base; end
 
-    class CreateBooks < ActiveRecord::Migration
-      def self.up
-        table = DBF::Table.new('db/dbf/books.dbf')
-        eval(table.schema)
+class CreateBooks < ActiveRecord::Migration
+  def self.up
+    table = DBF::Table.new('db/dbf/books.dbf')
+    eval(table.schema)
 
-        Book.reset_column_information
-        table.each do |record|
-          Book.create(:title => record.title, :author => record.author)
-        end
-      end
-
-      def self.down
-        drop_table :books
-      end
+    Book.reset_column_information
+    table.each do |record|
+      Book.create(:title => record.title, :author => record.author)
     end
+  end
+
+  def self.down
+    drop_table :books
+  end
+end
+```
 
 ## Command-line utility
 
