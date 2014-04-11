@@ -195,4 +195,3 @@ describe DBF::Table do
     end
   end
 end
-
