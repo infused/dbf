@@ -108,7 +108,7 @@ module DBF
     # @param [Fixnum] index
     # @return [DBF::Record, NilClass]
     def record(index)
-      seek(index * header.record_length)
+      seek_to_record(index)
       if !deleted_record?
         DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
       end
@@ -310,6 +310,10 @@ module DBF
 
     def seek(offset) #nodoc
       @data.seek header.header_length + offset
+    end
+
+    def seek_to_record(index) #nodoc
+      seek(index * header.record_length)
     end
 
     def csv_class #nodoc
