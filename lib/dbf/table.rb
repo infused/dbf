@@ -1,4 +1,6 @@
 module DBF
+  class FileNotFoundError < StandardError
+  end
 
   # DBF::Table is the primary interface to a single DBF file and provides
   # methods for enumerating and searching the records.
@@ -59,11 +61,15 @@ module DBF
     # @param [optional String, StringIO] memo Path to the memo file or a StringIO object
     # @param [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil)
-      @data = open_data(data)
-      @data.rewind
-      @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding? || supports_iconv?)
-      @encoding = encoding || header.encoding
-      @memo = open_memo(data, memo)
+      begin
+        @data = open_data(data)
+        @data.rewind
+        @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding? || supports_iconv?)
+        @encoding = encoding || header.encoding
+        @memo = open_memo(data, memo)
+      rescue StandardError => error
+        raise DBF::FileNotFoundError.new('file not found: ')
+      end
     end
 
     # @return [TrueClass, FalseClass]
@@ -318,6 +324,7 @@ module DBF
 
     def csv_class #nodoc
       @csv_class ||= CSV.const_defined?(:Reader) ? FCSV : CSV
+
     end
   end
 

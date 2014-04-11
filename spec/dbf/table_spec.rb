@@ -6,8 +6,12 @@ describe DBF::Table do
   end
 
   describe '#initialize' do
-    it 'accepts a DBF filename' do
+    it 'accepts a path to an existing dbf file' do
       expect { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }.to_not raise_error
+    end
+
+    it 'raises a DBF::FileNotFound error if file does not exist' do
+      expect { DBF::Table.new "x" }.to raise_error(DBF::FileNotFoundError)
     end
 
     it 'accepts a DBF and Memo filename' do
