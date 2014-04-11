@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'bundler/setup';
 Bundler.setup(:default, :development)
 
@@ -17,9 +16,3 @@ desc "Open an irb session preloaded with this library"
 task :console do
   sh "irb -rubygems -I lib -r dbf.rb"
 end
-
-# require 'metric_fu'
-# MetricFu::Configuration.run do |config|
-#   config.rcov[:test_files] = ['spec/**/*_spec.rb']
-#   config.rcov[:rcov_opts] << "-Ispec"
-# end
