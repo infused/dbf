@@ -4,6 +4,7 @@ describe DBF::Record do
 
   describe '#to_a' do
     let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
+
     it 'should return an ordered array of attribute values' do
       record = table.record(0)
       expect(record.to_a).to eq [87, 2, 0, 0, 87, "1", "Assorted Petits Fours", "graphics/00000001/t_1.jpg", "graphics/00000001/1.jpg", 0.0, 0.0, "Our Original assortment...a little taste of heaven for everyone.  Let us\r\nselect a special assortment of our chocolate and pastel favorites for you.\r\nEach petit four is its own special hand decorated creation. Multi-layers of\r\nmoist cake with combinations of specialty fillings create memorable cake\r\nconfections. Varietes include; Luscious Lemon, Strawberry Hearts, White\r\nChocolate, Mocha Bean, Roasted Almond, Triple Chocolate, Chocolate Hazelnut,\r\nGrand Orange, Plum Squares, Milk chocolate squares, and Raspberry Blanc.", 5.51, true, true]
@@ -23,23 +24,25 @@ describe DBF::Record do
   end
 
   describe '#==' do
-    let :record do
-      table = DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"
-      table.record(9)
-    end
+    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf" }
+    let(:record) { table.record(9) }
 
     describe 'when other does not have attributes' do
-      it 'is false' do
+      it 'returns false' do
         expect((record == double('other'))).to be_false
       end
     end
 
     describe 'if other attributes match' do
-      it 'is true' do
-        attributes = {:x => 1, :y => 2}
+      let(:attributes) { {:x => 1, :y => 2} }
+      let(:other) { double('object', :attributes => attributes) }
+
+      before do
         record.stub(:attributes).and_return(attributes)
-        other = double('object', :attributes => attributes)
-        expect((record == other)).to be_true
+      end
+
+      it 'returns true' do
+        expect(record == other).to be_true
       end
     end
 
@@ -49,26 +52,20 @@ describe DBF::Record do
     let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"}
     let(:record) { table.find(0) }
 
-    it 'should have dynamic accessors for the columns' do
-      expect(record).to respond_to(:character)
-      expect(record.character).to eq 'One'
-      expect(record.float).to eq 1.23456789012346
-      expect(record.logical).to eq true
-    end
+    %w(character numerical date logical float memo).each do |column_name|
 
-    it 'should not define accessor methods on the base class' do
-      second_table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
-      second_record = second_table.find(0)
-      expect(record.character).to eq 'One'
-      expect { second_record.character }.to raise_error(NoMethodError)
+      it "defines accessor method for '#{column_name}' column" do
+        expect(record).to respond_to(column_name.to_sym)
+      end
+
     end
   end
 
   describe 'column data for table' do
     describe 'using specified in dbf encoding' do
       let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf"}
-
       let(:record) { table.find(0) }
+
       it 'should automatically encodes to default system encoding' do
         if table.supports_encoding?
           expect(record.name.encoding).to eq Encoding.default_external
@@ -79,8 +76,8 @@ describe DBF::Record do
 
     describe 'overriding specified in dbf encoding' do
       let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf", nil, 'cp866'}
-
       let(:record) { table.find(0) }
+
       it 'should transcode from manually specified encoding to default system encoding' do
         if table.supports_encoding?
           expect(record.name.encoding).to eq Encoding.default_external
