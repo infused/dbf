@@ -7,7 +7,7 @@ describe DBF::Table do
 
   describe '#initialize' do
     it 'accepts a path to an existing dbf file' do
-      expect { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }.to_not raise_error
+      expect { DBF::Table.new fixture_path('dbase_83.dbf') }.to_not raise_error
     end
 
     it 'raises a DBF::FileNotFound error if file does not exist' do
@@ -15,30 +15,30 @@ describe DBF::Table do
     end
 
     it 'accepts a DBF and Memo filename' do
-      expect { DBF::Table.new "#{DB_PATH}/dbase_83.dbf", "#{DB_PATH}/dbase_83.dbt" }.to_not raise_error
+      expect { DBF::Table.new fixture_path('dbase_83.dbf'), fixture_path('dbase_83.dbt') }.to_not raise_error
     end
 
     it 'accepts an io-like data object' do
-      data = StringIO.new File.read("#{DB_PATH}/dbase_83.dbf")
+      data = StringIO.new File.read(fixture_path('dbase_83.dbf'))
       expect { DBF::Table.new data }.to_not raise_error
     end
 
     it 'accepts an io-like data and memo object' do
-      data = StringIO.new File.read("#{DB_PATH}/dbase_83.dbf")
-      memo = StringIO.new File.read("#{DB_PATH}/dbase_83.dbt")
+      data = StringIO.new File.read(fixture_path('dbase_83.dbf'))
+      memo = StringIO.new File.read(fixture_path('dbase_83.dbt'))
       expect { DBF::Table.new data, memo }.to_not raise_error
     end
   end
 
   context "when closed" do
     it "closes the data and memo files" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::Table.new fixture_path('dbase_83.dbf')
       table.close
       expect(table).to be_closed
     end
 
     it "closes the data" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
+      table = DBF::Table.new fixture_path('dbase_30.dbf')
       table.close
       expect(table).to be_closed
     end
@@ -46,14 +46,14 @@ describe DBF::Table do
 
   describe "#schema" do
     it "matches the test schema fixture" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
-      control_schema = File.read("#{DB_PATH}/dbase_83_schema.txt")
+      table = DBF::Table.new fixture_path('dbase_83.dbf')
+      control_schema = File.read(fixture_path('dbase_83_schema.txt'))
       expect(table.schema).to eq control_schema
     end
   end
 
   describe '#to_csv' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
+    let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
 
     after do
       FileUtils.rm_f 'test.csv'
@@ -81,7 +81,7 @@ describe DBF::Table do
 
   describe "#record" do
     it "return nil for deleted records" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::Table.new fixture_path('dbase_83.dbf')
       table.stub(:deleted_record?).and_return(true)
       expect(table.record(5)).to be_nil
     end
@@ -89,14 +89,14 @@ describe DBF::Table do
 
   describe "#current_record" do
     it "should return nil for deleted records" do
-      table = DBF::Table.new "#{DB_PATH}/dbase_83.dbf"
+      table = DBF::Table.new fixture_path('dbase_83.dbf')
       table.stub(:deleted_record?).and_return(true)
       expect(table.record(0)).to be_nil
     end
   end
 
   describe "#find" do
-    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
+    let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
 
     describe "with index" do
       it "returns the correct record" do
@@ -165,7 +165,7 @@ describe DBF::Table do
 
   describe "filename" do
     it 'is dbase_03.dbf' do
-      table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
+      table = DBF::Table.new fixture_path('dbase_03.dbf')
       expect(table.filename).to eq "dbase_03.dbf"
     end
   end
@@ -173,21 +173,21 @@ describe DBF::Table do
   describe 'has_memo_file?' do
     describe 'without a memo file' do
       it 'is false' do
-        table = DBF::Table.new "#{DB_PATH}/dbase_03.dbf"
+        table = DBF::Table.new fixture_path('dbase_03.dbf')
         expect(table.has_memo_file?).to be_false
       end
     end
 
     describe 'with a memo file' do
       it 'is true' do
-        table = DBF::Table.new "#{DB_PATH}/dbase_30.dbf"
+        table = DBF::Table.new fixture_path('dbase_30.dbf')
         expect(table.has_memo_file?).to be_true
       end
     end
   end
 
   describe 'columns' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
+    let(:table) { DBF::Table.new fixture_path('dbase_03.dbf') }
 
     it 'should have correct size' do
       expect(table.columns.size).to eq 31

@@ -3,7 +3,7 @@ require "spec_helper"
 describe DBF::Record do
 
   describe '#to_a' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
+    let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
 
     it 'should return an ordered array of attribute values' do
       record = table.record(0)
@@ -14,7 +14,7 @@ describe DBF::Record do
     end
 
     describe 'with missing memo file' do
-      let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83_missing_memo.dbf" }
+      let(:table) { DBF::Table.new fixture_path('dbase_83_missing_memo.dbf') }
 
       it 'returns nil values for memo fields' do
         record = table.record(0)
@@ -24,7 +24,7 @@ describe DBF::Record do
   end
 
   describe '#==' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf" }
+    let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
     let(:record) { table.record(9) }
 
     describe 'when other does not have attributes' do
@@ -49,7 +49,7 @@ describe DBF::Record do
   end
 
   describe 'column accessors' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"}
+    let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
     let(:record) { table.find(0) }
 
     %w(character numerical date logical float memo).each do |column_name|
@@ -63,7 +63,7 @@ describe DBF::Record do
 
   describe 'column data for table' do
     describe 'using specified in dbf encoding' do
-      let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf"}
+      let(:table) { DBF::Table.new fixture_path('cp1251.dbf') }
       let(:record) { table.find(0) }
 
       it 'should automatically encodes to default system encoding' do
@@ -75,7 +75,7 @@ describe DBF::Record do
     end
 
     describe 'overriding specified in dbf encoding' do
-      let(:table) { DBF::Table.new "#{DB_PATH}/cp1251.dbf", nil, 'cp866'}
+      let(:table) { DBF::Table.new fixture_path('cp1251.dbf'), nil, 'cp866'}
       let(:record) { table.find(0) }
 
       it 'should transcode from manually specified encoding to default system encoding' do
@@ -88,7 +88,7 @@ describe DBF::Record do
   end
 
   describe '#attributes' do
-    let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf"}
+    let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
     let(:record) { table.find(0) }
 
     it 'is a hash of attribute name/value pairs' do

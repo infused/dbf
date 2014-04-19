@@ -45,7 +45,7 @@ shared_examples_for 'Foxpro DBF' do
 end
 
 describe DBF, "of type 03 (dBase III without memo file)" do
-  let(:table) { DBF::Table.new "#{DB_PATH}/dbase_03.dbf" }
+  let(:table) { DBF::Table.new fixture_path('dbase_03.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -63,7 +63,7 @@ describe DBF, "of type 03 (dBase III without memo file)" do
 end
 
 describe DBF, "of type 30 (Visual FoxPro)" do
-  let(:table) { DBF::Table.new "#{DB_PATH}/dbase_30.dbf" }
+  let(:table) { DBF::Table.new fixture_path('dbase_30.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -85,7 +85,7 @@ describe DBF, "of type 30 (Visual FoxPro)" do
 end
 
 describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
-  let(:table) { DBF::Table.new "#{DB_PATH}/dbase_31.dbf" }
+  let(:table) { DBF::Table.new fixture_path('dbase_31.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -103,7 +103,7 @@ describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
 end
 
 describe DBF, "of type 83 (dBase III with memo file)" do
-  let(:table) { DBF::Table.new "#{DB_PATH}/dbase_83.dbf" }
+  let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -121,7 +121,7 @@ describe DBF, "of type 83 (dBase III with memo file)" do
 end
 
 describe DBF, "of type 8b (dBase IV with memo file)" do
-  let(:table) { DBF::Table.new "#{DB_PATH}/dbase_8b.dbf" }
+  let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -139,7 +139,7 @@ describe DBF, "of type 8b (dBase IV with memo file)" do
 end
 
 describe DBF, "of type f5 (FoxPro with memo file)" do
-  let(:table) { DBF::Table.new "#{DB_PATH}/dbase_f5.dbf" }
+  let(:table) { DBF::Table.new fixture_path('dbase_f5.dbf') }
 
   it_should_behave_like "DBF"
   it_should_behave_like "Foxpro DBF"

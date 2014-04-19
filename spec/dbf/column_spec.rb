@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe DBF::Column::Dbase do
-
   context "when initialized" do
     let(:column) { DBF::Column::Dbase.new "ColumnName", "N", 1, 0, "30" }
 

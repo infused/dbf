@@ -21,3 +21,7 @@ RSpec.configure do |config|
     end
   end
 end
+
+def fixture_path(filename)
+  "#{DB_PATH}/#{filename}"
+end
