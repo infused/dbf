@@ -64,7 +64,7 @@ module DBF
       begin
         @data = open_data(data)
         @data.rewind
-        @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding? || supports_iconv?)
+        @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding?)
         @encoding = encoding || header.encoding
         @memo = open_memo(data, memo)
       rescue StandardError => error
@@ -227,10 +227,11 @@ module DBF
         @data.seek(DBF_HEADER_SIZE)
         columns = []
         while !["\0", "\r"].include?(first_byte = @data.read(1))
-          column_data = first_byte + @data.read(31)
+          column_data = first_byte + @data.read(DBF_HEADER_SIZE - 1)
           name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
+          name.strip!
           if length > 0
-            columns << column_class.new(name.strip, type, length, decimal, version, encoding)
+            columns << column_class.new(self, name, type, length, decimal)
           end
         end
         columns
@@ -238,7 +239,11 @@ module DBF
     end
 
     def supports_encoding?
-      String.new.respond_to?(:encoding)
+      supports_string_encoding? || supports_iconv?
+    end
+
+    def supports_string_encoding?
+      ''.respond_to?(:encoding)
     end
 
     def supports_iconv?
@@ -324,7 +329,6 @@ module DBF
 
     def csv_class #nodoc
       @csv_class ||= CSV.const_defined?(:Reader) ? FCSV : CSV
-
     end
   end
 

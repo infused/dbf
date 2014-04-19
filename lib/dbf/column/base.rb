@@ -7,7 +7,7 @@ module DBF
     class NameError < StandardError; end
 
     class Base
-      attr_reader :name, :type, :length, :decimal
+      attr_reader :table, :name, :type, :length, :decimal
 
       # Initialize a new DBF::Column
       #
@@ -15,11 +15,17 @@ module DBF
       # @param [String] type
       # @param [Fixnum] length
       # @param [Fixnum] decimal
-      def initialize(name, type, length, decimal, version, encoding=nil)
-        @name, @type, @length, @decimal, @version, @encoding = clean(name), type, length, decimal, version, encoding
+      def initialize(table, name, type, length, decimal)
+        @table = table
+        @name = clean(name)
+        @type = type
+        @length = length
+        @decimal = decimal
+        @version = table.version
+        @encoding = table.encoding
 
         raise LengthError, "field length must be greater than 0" unless length > 0
-        raise NameError, "column name cannot be empty" if @name.length == 0
+        raise NameError, "column name cannot be empty" if @name.empty?
       end
 
       # Cast value to native type
@@ -40,6 +46,9 @@ module DBF
         end
       end
 
+      # Returns true if the column is a memo
+      #
+      # @return [Boolean]
       def memo?
         @memo ||= type == 'M'
       end
@@ -51,16 +60,20 @@ module DBF
         "\"#{underscored_name}\", #{schema_data_type}\n"
       end
 
-      def self.underscore_name(string)
-        string.gsub(/::/, '/').
-          gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-          gsub(/([a-z\d])([A-Z])/,'\1_\2').
-          tr('-', '_').
-          downcase
-      end
-
+      # Underscored name
+      #
+      # This is the column name converted to underscore format.
+      # For example, MyColumn will be returned as my_column.
+      #
+      # @return [String]
       def underscored_name
-        @underscored_name ||= self.class.underscore_name(name)
+        @underscored_name ||= begin
+          name.gsub(/::/, '/').
+            gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+            gsub(/([a-z\d])([A-Z])/,'\1_\2').
+            tr('-', '_').
+            downcase
+        end
       end
 
       private
@@ -95,10 +108,10 @@ module DBF
       end
 
       def encode_string(value) #nodoc
-        if @encoding
-          if String.new.respond_to?(:encoding)
+        if @encoding && table.supports_encoding?
+          if table.supports_string_encoding?
             value.force_encoding(@encoding).encode(Encoding.default_external, :undef => :replace, :invalid => :replace)
-          else
+          elsif table.supports_iconv?
             Iconv.conv('UTF-8', @encoding, value)
           end
         else

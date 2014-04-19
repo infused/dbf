@@ -67,7 +67,7 @@ describe DBF::Record do
       let(:record) { table.find(0) }
 
       it 'should automatically encodes to default system encoding' do
-        if table.supports_encoding?
+        if table.supports_string_encoding?
           expect(record.name.encoding).to eq Encoding.default_external
           expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d0b0"] # russian a
         end
@@ -79,7 +79,7 @@ describe DBF::Record do
       let(:record) { table.find(0) }
 
       it 'should transcode from manually specified encoding to default system encoding' do
-        if table.supports_encoding?
+        if table.supports_string_encoding?
           expect(record.name.encoding).to eq Encoding.default_external
           expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d180"] # russian а encoded in cp1251 and read as if it was encoded in cp866
         end
