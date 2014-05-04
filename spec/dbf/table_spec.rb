@@ -159,13 +159,13 @@ describe DBF::Table do
     end
   end
 
-  describe "filename" do
+  describe "#filename" do
     it 'returns the filename as a string' do
       expect(table.filename).to eq "dbase_83.dbf"
     end
   end
 
-  describe 'has_memo_file?' do
+  describe '#has_memo_file?' do
     describe 'without a memo file' do
       it 'is false' do
         table = DBF::Table.new fixture_path('dbase_03.dbf')
@@ -180,11 +180,17 @@ describe DBF::Table do
     end
   end
 
-  describe 'columns' do
-    it 'should be an array of Columns' do
+  describe '#columns' do
+    it 'is an array of Columns' do
       expect(table.columns).to be_an(Array)
       expect(table.columns).to_not be_empty
       expect(table.columns.all? {|c| c.class == DBF::Column::Dbase}).to be_true
+    end
+  end
+
+  describe '#column_names' do
+    it 'is an array of all column names' do
+      expect(table.column_names).to eq ["ID", "CATCOUNT", "AGRPCOUNT", "PGRPCOUNT", "ORDER", "CODE", "NAME", "THUMBNAIL", "IMAGE", "PRICE", "COST", "DESC", "WEIGHT", "TAXABLE", "ACTIVE"]
     end
   end
 end

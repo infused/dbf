@@ -221,20 +221,18 @@ module DBF
       end
     end
 
-    # Retrieves column information from the database
+    # All columns
+    #
+    # @return [DBF::Column::Dbase, DBF::Column::Foxpro]
     def columns
-      @columns ||= begin
-        @data.seek(DBF_HEADER_SIZE)
-        columns = []
-        while !["\0", "\r"].include?(first_byte = @data.read(1))
-          column_data = first_byte + @data.read(DBF_HEADER_SIZE - 1)
-          name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
-          if length > 0
-            columns << column_class.new(self, name, type, length, decimal)
-          end
-        end
-        columns
-      end
+      @columns ||= build_columns
+    end
+
+    # Column names
+    #
+    # @return [String]
+    def column_names
+      columns.map { |column| column.name }
     end
 
     # Is string encoding supported?
@@ -250,6 +248,19 @@ module DBF
     end
 
     private
+
+    def build_columns #nodoc
+      columns = []
+      @data.seek(DBF_HEADER_SIZE)
+      while !["\0", "\r"].include?(first_byte = @data.read(1))
+        column_data = first_byte + @data.read(DBF_HEADER_SIZE - 1)
+        name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
+        if length > 0
+          columns << column_class.new(self, name, type, length, decimal)
+        end
+      end
+      columns
+    end
 
     def supports_iconv? #nodoc
       require 'iconv'
