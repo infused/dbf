@@ -223,7 +223,7 @@ module DBF
 
     # All columns
     #
-    # @return [DBF::Column::Dbase, DBF::Column::Foxpro]
+    # @return [Array]
     def columns
       @columns ||= build_columns
     end

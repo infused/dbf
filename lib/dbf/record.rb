@@ -36,6 +36,8 @@ module DBF
     end
 
     # Reads attributes by column name
+    #
+    # @param [String, Symbol] key
     def [](key)
       key = key.to_s
       if attributes.has_key?(key)
@@ -45,11 +47,18 @@ module DBF
       end
     end
 
+    # Record attributes
+    #
     # @return [Hash]
     def attributes
       @attributes ||= Hash[@columns.map {|column| [column.name, init_attribute(column)]}]
     end
 
+    # Overrides standard Object.respond_to? to return true if a
+    # matching column name is found.
+    #
+    # @param [String, Symbol] method
+    # @return [Boolean]
     def respond_to?(method, *args)
       if column_names.include?(method.to_s)
         true
@@ -58,15 +67,14 @@ module DBF
       end
     end
 
-    def method_missing(method, *args)
-      if index = column_names.index(method.to_s)
+    private
+
+    def method_missing(method, *args) #nodoc
         attributes[@columns[index].name]
       else
         super
       end
     end
-
-    private
 
     def column_names
       @column_names ||= @columns.map {|column| column.underscored_name}
