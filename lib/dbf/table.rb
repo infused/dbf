@@ -238,6 +238,7 @@ module DBF
       end
     end
 
+
     def supports_encoding?
       supports_string_encoding? || supports_iconv?
     end
@@ -246,18 +247,18 @@ module DBF
       ''.respond_to?(:encoding)
     end
 
-    def supports_iconv?
+    private
+
+    def supports_iconv? #nodoc
       require 'iconv'
       true
     rescue
       false
     end
 
-    def foxpro?
+    def foxpro? #nodoc
       FOXPRO_VERSIONS.keys.include? version
     end
-
-    private
 
     def column_class #nodoc
       @column_class ||= foxpro? ? Column::Foxpro : Column::Dbase
