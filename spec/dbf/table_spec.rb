@@ -1,60 +1,60 @@
 require "spec_helper"
 
 describe DBF::Table do
+  let(:dbf_path) { fixture_path('dbase_83.dbf') }
+  let(:memo_path) { fixture_path('dbase_83.dbt') }
+  let(:table) { DBF::Table.new dbf_path }
+
   specify 'foxpro versions' do
     expect(DBF::Table::FOXPRO_VERSIONS.keys.sort).to eq %w(30 31 f5 fb).sort
   end
 
   describe '#initialize' do
-    it 'accepts a path to an existing dbf file' do
-      expect { DBF::Table.new fixture_path('dbase_83.dbf') }.to_not raise_error
+    describe 'when given a path to an existing dbf file' do
+      it 'does not raise an error' do
+        expect { DBF::Table.new dbf_path }.to_not raise_error
+      end
     end
 
-    it 'raises a DBF::FileNotFound error if file does not exist' do
-      expect { DBF::Table.new "x" }.to raise_error(DBF::FileNotFoundError)
+    describe 'when given a path to a non-existent dbf file' do
+      it 'raises a DBF::FileNotFound error' do
+        expect { DBF::Table.new "x" }.to raise_error(DBF::FileNotFoundError)
+      end
     end
 
-    it 'accepts a DBF and Memo filename' do
-      expect { DBF::Table.new fixture_path('dbase_83.dbf'), fixture_path('dbase_83.dbt') }.to_not raise_error
+    describe 'when given paths to existing dbf and memo files' do
+      it 'does not raise an error' do
+        expect { DBF::Table.new dbf_path, memo_path }.to_not raise_error
+      end
     end
 
     it 'accepts an io-like data object' do
-      data = StringIO.new File.read(fixture_path('dbase_83.dbf'))
+      data = StringIO.new File.read(dbf_path)
       expect { DBF::Table.new data }.to_not raise_error
     end
 
     it 'accepts an io-like data and memo object' do
-      data = StringIO.new File.read(fixture_path('dbase_83.dbf'))
-      memo = StringIO.new File.read(fixture_path('dbase_83.dbt'))
+      data = StringIO.new File.read(dbf_path)
+      memo = StringIO.new File.read(memo_path)
       expect { DBF::Table.new data, memo }.to_not raise_error
     end
   end
 
-  context "when closed" do
-    it "closes the data and memo files" do
-      table = DBF::Table.new fixture_path('dbase_83.dbf')
+  context "#close" do
+    it "closes the io" do
       table.close
-      expect(table).to be_closed
-    end
-
-    it "closes the data" do
-      table = DBF::Table.new fixture_path('dbase_30.dbf')
-      table.close
-      expect(table).to be_closed
+      expect { table.record(1) }.to raise_error(IOError)
     end
   end
 
   describe "#schema" do
     it "matches the test schema fixture" do
-      table = DBF::Table.new fixture_path('dbase_83.dbf')
       control_schema = File.read(fixture_path('dbase_83_schema.txt'))
       expect(table.schema).to eq control_schema
     end
   end
 
   describe '#to_csv' do
-    let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
-
     after do
       FileUtils.rm_f 'test.csv'
     end
@@ -81,7 +81,6 @@ describe DBF::Table do
 
   describe "#record" do
     it "return nil for deleted records" do
-      table = DBF::Table.new fixture_path('dbase_83.dbf')
       table.stub(:deleted_record?).and_return(true)
       expect(table.record(5)).to be_nil
     end
@@ -89,15 +88,12 @@ describe DBF::Table do
 
   describe "#current_record" do
     it "should return nil for deleted records" do
-      table = DBF::Table.new fixture_path('dbase_83.dbf')
       table.stub(:deleted_record?).and_return(true)
       expect(table.record(0)).to be_nil
     end
   end
 
   describe "#find" do
-    let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
-
     describe "with index" do
       it "returns the correct record" do
         expect(table.find(5)).to eq table.record(5)
@@ -164,9 +160,8 @@ describe DBF::Table do
   end
 
   describe "filename" do
-    it 'is dbase_03.dbf' do
-      table = DBF::Table.new fixture_path('dbase_03.dbf')
-      expect(table.filename).to eq "dbase_03.dbf"
+    it 'returns the filename as a string' do
+      expect(table.filename).to eq "dbase_83.dbf"
     end
   end
 
@@ -180,22 +175,16 @@ describe DBF::Table do
 
     describe 'with a memo file' do
       it 'is true' do
-        table = DBF::Table.new fixture_path('dbase_30.dbf')
         expect(table.has_memo_file?).to be_true
       end
     end
   end
 
   describe 'columns' do
-    let(:table) { DBF::Table.new fixture_path('dbase_03.dbf') }
-
-    it 'should have correct size' do
-      expect(table.columns.size).to eq 31
-    end
-
-    it 'should have correct names' do
-      expect(table.columns.first.name).to eq 'Point_ID'
-      expect(table.columns[29].name).to eq 'Easting'
+    it 'should be an array of Columns' do
+      expect(table.columns).to be_an(Array)
+      expect(table.columns).to_not be_empty
+      expect(table.columns.all? {|c| c.class == DBF::Column::Dbase}).to be_true
     end
   end
 end
