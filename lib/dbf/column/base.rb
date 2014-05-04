@@ -147,6 +147,7 @@ module DBF
       end
 
       def clean(value) #nodoc
+        value.strip!
         first_null = value.index("\x00")
         value = value[0, first_null] if first_null
         value.gsub(/[^\x20-\x7E]/, "")
