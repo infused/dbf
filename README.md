@@ -8,7 +8,7 @@ DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro
 database files
 
 * Project page: <http://github.com/infused/dbf>
-* API Documentation: <http://rubydoc.info/github/infused/dbf/frames>
+* API Documentation: <http://rubydoc.info/github/infused/dbf/>
 * Report bugs: <http://github.com/infused/dbf/issues>
 * Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the
   subject line
