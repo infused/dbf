@@ -237,11 +237,14 @@ module DBF
       end
     end
 
-
+    # Is string encoding supported?
+    # String encoding is always supported in Ruby 1.9+.
+    # Ruby 1.8.x requires that Ruby be compiled with iconv support.
     def supports_encoding?
       supports_string_encoding? || supports_iconv?
     end
 
+    # Does String support encoding?  Should be true in Ruby 1.9+
     def supports_string_encoding?
       ''.respond_to?(:encoding)
     end
