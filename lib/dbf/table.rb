@@ -247,6 +247,13 @@ module DBF
       ''.respond_to?(:encoding)
     end
 
+    def supports_iconv? #nodoc
+      require 'iconv'
+      true
+    rescue
+      false
+    end
+
     private
 
     def build_columns #nodoc
@@ -262,12 +269,6 @@ module DBF
       columns
     end
 
-    def supports_iconv? #nodoc
-      require 'iconv'
-      true
-    rescue
-      false
-    end
 
     def foxpro? #nodoc
       FOXPRO_VERSIONS.keys.include? version
