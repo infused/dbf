@@ -42,7 +42,7 @@ module DBF
       key = key.to_s
       if attributes.has_key?(key)
         attributes[key]
-      elsif index = column_names.index(key)
+      elsif index = underscored_column_names.index(key)
         attributes[@columns[index].name]
       end
     end
@@ -60,7 +60,7 @@ module DBF
     # @param [String, Symbol] method
     # @return [Boolean]
     def respond_to?(method, *args)
-      if column_names.include?(method.to_s)
+      if underscored_column_names.include?(method.to_s)
         true
       else
         super
@@ -70,14 +70,15 @@ module DBF
     private
 
     def method_missing(method, *args) #nodoc
+      if index = underscored_column_names.index(method.to_s)
         attributes[@columns[index].name]
       else
         super
       end
     end
 
-    def column_names
-      @column_names ||= @columns.map {|column| column.underscored_name}
+    def underscored_column_names # nodoc
+      @underscored_column_names ||= @columns.map {|column| column.underscored_name}
     end
 
     def init_attribute(column) #nodoc
