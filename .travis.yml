@@ -17,3 +17,4 @@ git:
   depth: 150
 bundler_args: --without development
 script: bundle exec rspec
+gemfile: Gemfile.travis
