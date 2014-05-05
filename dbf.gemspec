@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.executables = ['dbf']
   s.rdoc_options = ['--charset=UTF-8']
-  s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'MIT-LICENSE']
+  s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'LICENSE']
   s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*', 'dbf.gemspec']
   s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.require_paths = ['lib']
