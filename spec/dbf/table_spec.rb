@@ -18,7 +18,7 @@ describe DBF::Table do
 
     describe 'when given a path to a non-existent dbf file' do
       it 'raises a DBF::FileNotFound error' do
-        expect { DBF::Table.new "x" }.to raise_error(DBF::FileNotFoundError)
+        expect { DBF::Table.new "x" }.to raise_error(DBF::FileNotFoundError, 'file not found: x')
       end
     end
 
