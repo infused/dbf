@@ -64,6 +64,12 @@ widget['slot_number']  # underscored field name string
 widget[:slot_number]   # underscored field name symbol
 ```
 
+Attributes can also be accessed as method using the underscored field name
+
+```ruby
+widget.slot_number
+```
+
 Get a hash of all attributes. The keys are the original column names.
 
 ```ruby
