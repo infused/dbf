@@ -74,21 +74,21 @@ describe DBF::Table do
     describe 'when path param passed' do
       it 'creates a custom csv file' do
         table.to_csv('test.csv')
-        expect(File.exists?('test.csv')).to be_true
+        expect(File.exists?('test.csv')).to be_truthy
       end
     end
   end
 
   describe "#record" do
     it "return nil for deleted records" do
-      table.stub(:deleted_record?).and_return(true)
+      allow(table).to receive(:deleted_record?).and_return(true)
       expect(table.record(5)).to be_nil
     end
   end
 
   describe "#current_record" do
     it "should return nil for deleted records" do
-      table.stub(:deleted_record?).and_return(true)
+      allow(table).to receive(:deleted_record?).and_return(true)
       expect(table.record(0)).to be_nil
     end
   end
@@ -124,7 +124,7 @@ describe DBF::Table do
       end
 
       it "should AND multiple search terms" do
-        expect(table.find(:all, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg")).to eq []
+        expect(table.find(:all, "ID" => 30, :IMAGE => "graphics/00000001/TBC01.jpg")).to be_empty
       end
 
       it "should match original column names" do
@@ -169,13 +169,13 @@ describe DBF::Table do
     describe 'without a memo file' do
       it 'is false' do
         table = DBF::Table.new fixture_path('dbase_03.dbf')
-        expect(table.has_memo_file?).to be_false
+        expect(table.has_memo_file?).to be_falsey
       end
     end
 
     describe 'with a memo file' do
       it 'is true' do
-        expect(table.has_memo_file?).to be_true
+        expect(table.has_memo_file?).to be_truthy
       end
     end
   end
@@ -184,13 +184,14 @@ describe DBF::Table do
     it 'is an array of Columns' do
       expect(table.columns).to be_an(Array)
       expect(table.columns).to_not be_empty
-      expect(table.columns.all? {|c| c.class == DBF::Column::Dbase}).to be_true
+      expect(table.columns.all? {|c| c.class == DBF::Column::Dbase}).to be_truthy
     end
   end
 
   describe '#column_names' do
     it 'is an array of all column names' do
-      expect(table.column_names).to eq ["ID", "CATCOUNT", "AGRPCOUNT", "PGRPCOUNT", "ORDER", "CODE", "NAME", "THUMBNAIL", "IMAGE", "PRICE", "COST", "DESC", "WEIGHT", "TAXABLE", "ACTIVE"]
+      correct_column_names = ["ID", "CATCOUNT", "AGRPCOUNT", "PGRPCOUNT", "ORDER", "CODE", "NAME", "THUMBNAIL", "IMAGE", "PRICE", "COST", "DESC", "WEIGHT", "TAXABLE", "ACTIVE"]
+      expect(table.column_names).to eq correct_column_names
     end
   end
 end

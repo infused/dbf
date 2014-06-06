@@ -9,7 +9,9 @@ shared_examples_for 'DBF' do
   end
 
   specify "records should be instances of DBF::Record" do
-    expect(table.all? {|record| record.is_a?(DBF::Record)}).to be_true
+    table.each do |record|
+      expect(record).to be_kind_of(DBF::Record)
+    end
   end
 
   specify "record count should be the same as reported in the header" do
@@ -17,30 +19,42 @@ shared_examples_for 'DBF' do
   end
 
   specify "column names should not be blank" do
-    expect(table.columns.all? {|column| !column.name.empty?}).to be_true
+    table.columns.each do |column|
+      expect(column.name).not_to be_empty
+    end
   end
 
   specify "column types should be valid" do
     valid_column_types = %w(C N L D M F B G P Y T I V X @ O + 0)
-    expect(table.columns.all? {|column| valid_column_types.include?(column.type)}).to be_true
+    table.columns.each do |column|
+      expect(valid_column_types).to include(column.type)
+    end
   end
 
   specify "column lengths should be instances of Fixnum" do
-    expect(table.columns.all? {|column| column.length.is_a?(Fixnum)}).to be_true
+    table.columns.each do |column|
+      expect(column.length).to be_kind_of(Fixnum)
+    end
   end
 
   specify "column lengths should be larger than 0" do
-    expect(table.columns.all? {|column| column.length > 0}).to be_true
+    table.columns.each do |column|
+      expect(column.length).to be > 0
+    end
   end
 
   specify "column decimals should be instances of Fixnum" do
-    expect(table.columns.all? {|column| column.decimal.is_a?(Fixnum)}).to be_true
+    table.columns.each do |column|
+      expect(column.decimal).to be_kind_of(Fixnum)
+    end
   end
 end
 
 shared_examples_for 'Foxpro DBF' do
   specify "columns should be instances of DBF::FoxproColumn" do
-    expect(table.columns.all? {|column| column.is_a?(DBF::Column::Foxpro)}).to be_true
+    table.columns.each do |column|
+      expect(column).to be_kind_of(DBF::Column::Foxpro)
+    end
   end
 end
 

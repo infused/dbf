@@ -29,7 +29,7 @@ describe DBF::Record do
 
     describe 'when other does not have attributes' do
       it 'returns false' do
-        expect((record == double('other'))).to be_false
+        expect((record == double('other'))).to be_falsey
       end
     end
 
@@ -38,11 +38,11 @@ describe DBF::Record do
       let(:other) { double('object', :attributes => attributes) }
 
       before do
-        record.stub(:attributes).and_return(attributes)
+        allow(record).to receive(:attributes).and_return(attributes)
       end
 
       it 'returns true' do
-        expect(record == other).to be_true
+        expect(record == other).to be_truthy
       end
     end
 
@@ -69,7 +69,9 @@ describe DBF::Record do
       it 'should automatically encodes to default system encoding' do
         if table.supports_string_encoding?
           expect(record.name.encoding).to eq Encoding.default_external
-          expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d0b0"] # russian a
+
+          # russian a
+          expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d0b0"]
         end
       end
     end
@@ -81,7 +83,9 @@ describe DBF::Record do
       it 'should transcode from manually specified encoding to default system encoding' do
         if table.supports_string_encoding?
           expect(record.name.encoding).to eq Encoding.default_external
-          expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d180"] # russian а encoded in cp1251 and read as if it was encoded in cp866
+
+          # russian а encoded in cp1251 and read as if it was encoded in cp866
+          expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d180"]
         end
       end
     end
