@@ -1,8 +1,8 @@
 # DBF
-[![Version](http://img.shields.io/gem/v/dbf.svg)](http://badge.fury.io/rb/dbf)
-[![Build Status](http://img.shields.io/travis/infused/dbf/master.svg)](http://travis-ci.org/infused/dbf)
-[![Code Quality](http://img.shields.io/codeclimate/github/infused/dbf.svg)](https://codeclimate.com/github/infused/dbf)
-[![Dependency Status](http://img.shields.io/gemnasium/infused/dbf.svg)](https://gemnasium.com/infused/dbf)
+[![Version](http://img.shields.io/gem/v/dbf.svg?style=flat)](https://rubygems.org/gems/dbf)
+[![Build Status](http://img.shields.io/travis/infused/dbf/master.svg?style=flat)](http://travis-ci.org/infused/dbf)
+[![Code Quality](http://img.shields.io/codeclimate/github/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
+[![Dependency Status](http://img.shields.io/gemnasium/infused/dbf.svg?style=flat)](https://gemnasium.com/infused/dbf)
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro
 database files

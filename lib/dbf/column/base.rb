@@ -127,7 +127,7 @@ module DBF
       end
 
       def encoding_args #nodoc
-        [Encoding.default_external, :undef => :replace, :invalid => :replace]
+        [Encoding.default_external, {:undef => :replace, :invalid => :replace}]
       end
 
       def schema_data_type #nodoc
