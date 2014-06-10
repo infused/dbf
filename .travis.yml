@@ -16,5 +16,5 @@ branches:
 git:
   depth: 150
 bundler_args: --without development
-script: bundle exec rspec
+script: CODECLIMATE_REPO_TOKEN=2877e253fb18735180e9c3f5faf075c3190b63fd720dc2a282751a4d50290fa8 bundle exec rspec
 gemfile: Gemfile.travis
