@@ -24,8 +24,13 @@ module DBF
         @version = table.version
         @encoding = table.encoding
 
-        raise LengthError, "field length must be greater than 0" unless length > 0
-        raise NameError, "column name cannot be empty" if @name.empty?
+        unless length > 0
+          raise LengthError, "field length must be greater than 0"
+        end
+
+        if @name.empty?
+          raise NameError, "column name cannot be empty"
+        end
       end
 
       # Cast value to native type
@@ -86,9 +91,11 @@ module DBF
       end
 
       def decode_datetime(value) #nodoc
-        days, milliseconds = value.unpack('l2')
-        seconds = (milliseconds / 1000).to_i
-        DateTime.jd(days, (seconds/3600).to_i, (seconds/60).to_i % 60, seconds % 60) rescue nil
+        days, msecs = value.unpack('l2')
+        secs = (msecs / 1000).to_i
+        DateTime.jd(days, (secs/3600).to_i, (secs/60).to_i % 60, secs % 60)
+      rescue
+        nil
       end
 
       def decode_memo(value) #nodoc
@@ -110,13 +117,17 @@ module DBF
       def encode_string(value) #nodoc
         if @encoding && table.supports_encoding?
           if table.supports_string_encoding?
-            value.force_encoding(@encoding).encode(Encoding.default_external, :undef => :replace, :invalid => :replace)
+            value.force_encoding(@encoding).encode(*encoding_args)
           elsif table.supports_iconv?
             Iconv.conv('UTF-8', @encoding, value)
           end
         else
           value
         end
+      end
+
+      def encoding_args #nodoc
+        [Encoding.default_external, :undef => :replace, :invalid => :replace]
       end
 
       def schema_data_type #nodoc
