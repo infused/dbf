@@ -171,6 +171,6 @@ describe DBF, "of type f5 (FoxPro with memo file)" do
   end
 
   it "reads memo data" do
-    expect(table.record(3).obse).to match(/\Ajos.*pare\.\Z/m)
+    expect(table.record(3).datn.to_s).to eq '1870-06-30'
   end
 end

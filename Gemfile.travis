@@ -5,5 +5,5 @@ gem 'rubysl', :platform => :rbx
 
 group :test do
   gem 'rspec'
-  gem 'codeclimate-test-reporter', :require => false
+  gem 'codeclimate-test-reporter', :require => false, :platform => :ruby
 end
