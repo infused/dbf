@@ -77,6 +77,7 @@ describe DBF::Column::Dbase do
       it "casts value to Fixnum" do
         value = "\203\171\001\000"
         column = DBF::Column::Dbase.new table, "ColumnName", "I", 3, 0
+        expect(column.type_cast(value)).to be_a(Fixnum)
         expect(column.type_cast(value)).to eq 96643
       end
     end
@@ -85,15 +86,15 @@ describe DBF::Column::Dbase do
       let(:column) { DBF::Column::Dbase.new table, "ColumnName", "L", 1, 0 }
 
       it "casts 'y' to true" do
-        expect(column.type_cast('y')).to eq true
+        expect(column.type_cast('y')).to be true
       end
 
       it "casts 't' to true" do
-        expect(column.type_cast('t')).to eq true
+        expect(column.type_cast('t')).to be true
       end
 
       it "casts value other than 't' or 'y' to false" do
-        expect(column.type_cast('n')).to eq false
+        expect(column.type_cast('n')).to be false
       end
     end
 
@@ -102,6 +103,7 @@ describe DBF::Column::Dbase do
 
       context 'with valid datetime' do
         it "casts to DateTime" do
+          expect(column.type_cast("Nl%\000\300Z\252\003")).to be_a(DateTime)
           expect(column.type_cast("Nl%\000\300Z\252\003")).to eq DateTime.parse("2002-10-10T17:04:56+00:00")
         end
       end
@@ -113,6 +115,7 @@ describe DBF::Column::Dbase do
               require 'mathn'
               column.type_cast("Nl%\000\300Z\252\003")
             end
+            expect(with_mathn.call).to be_a(DateTime)
             expect(with_mathn.call).to eq DateTime.parse("2002-10-10T17:04:56+00:00")
           end
         end
@@ -120,6 +123,7 @@ describe DBF::Column::Dbase do
 
       context 'with invalid datetime' do
         it "casts to nil" do
+          expect(column.type_cast("Nl%\000\000A\000\999")).to be_a(NilClass)
           expect(column.type_cast("Nl%\000\000A\000\999")).to be_nil
         end
       end
@@ -130,12 +134,14 @@ describe DBF::Column::Dbase do
 
       context 'with valid date' do
         it "casts to Date" do
+          expect(column.type_cast("20050712")).to be_a(Date)
           expect(column.type_cast("20050712")).to eq Date.new(2005,7,12)
         end
       end
 
       context 'with invalid date' do
         it "casts to nil" do
+          expect(column.type_cast("0")).to be_a(NilClass)
           expect(column.type_cast("0")).to be_nil
         end
       end
@@ -145,10 +151,12 @@ describe DBF::Column::Dbase do
       it "casts to string" do
         column = DBF::Column::Dbase.new table, "ColumnName", "M", 3, 0
         expect(column.type_cast('abc')).to be_a(String)
+        expect(column.type_cast('abc')).to eq 'abc'
       end
 
       it 'casts nil to nil' do
         column = DBF::Column::Dbase.new table, "ColumnName", "M", 3, 0
+        expect(column.type_cast(nil)).to be_a(NilClass)
         expect(column.type_cast(nil)).to be_nil
       end
     end
@@ -158,6 +166,7 @@ describe DBF::Column::Dbase do
     let(:column) { DBF::Column::Dbase.new table, "ColumnName", "Y", 8, 4 }
 
     it 'casts to float' do
+      expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to be_a(Float)
       expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to eq 18.0
     end
   end
