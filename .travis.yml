@@ -4,12 +4,16 @@ rvm:
   - 2.0.0
   - 1.9.3
   - 1.9.2
-  - 1.8.7
-  - ree
   - jruby-18mode
   - jruby-19mode
   - jruby-head
   - rbx-2.2.1
+matrix:
+  include:
+    - rvm: 1.8.7
+      gemfile: Gemfile.travis18
+    - rvm: ree
+      gemfile: Gemfile.travis18
 branches:
   only:
     - master
