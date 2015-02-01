@@ -42,7 +42,7 @@ module DBF
           when 'N' then unpack_number(value)
           when 'I' then unpack_unsigned_long(value)
           when 'F' then value.to_f
-          when 'Y' then unpack_unsigned_long(value) / 10000.0
+          when 'Y' then (unpack_unsigned_long(value) / 10000.0).to_f
           when 'D' then decode_date(value)
           when 'T' then decode_datetime(value)
           when 'L' then boolean(value)
