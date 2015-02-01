@@ -1,3 +1,6 @@
+# 2.0.8
+  - fix FoxPro currency fields on some builds of Ruby 1.9.3 and 2.0.0
+
 # 2.0.7
   - fix the dbf binary on some linux systems
 
