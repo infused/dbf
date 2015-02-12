@@ -149,9 +149,10 @@ module DBF
     #
     # @param [optional String] path Defaults to STDOUT
     def to_csv(path = nil)
-      csv = csv_class.new((path ? File.open(path, 'w') : $stdout), :force_quotes => true)
-      csv << columns.map {|c| c.name}
-      each {|record| csv << record.to_a}
+      out_io = path ? File.open(path, 'w') : $stdout
+      csv = csv_class.new(out_io, :force_quotes => true)
+      csv << column_names
+      each { |record| csv << record.to_a }
     end
 
     # Find records using a simple ActiveRecord-like syntax.
