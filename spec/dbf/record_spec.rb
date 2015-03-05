@@ -14,7 +14,19 @@ describe DBF::Record do
     end
 
     describe 'with missing memo file' do
-      let(:table) { DBF::Table.new fixture_path('dbase_83_missing_memo.dbf') }
+      describe 'when opening a path' do
+        let(:table) { DBF::Table.new fixture_path('dbase_83_missing_memo.dbf') }
+
+        it 'returns nil values for memo fields' do
+          record = table.record(0)
+          expect(record.to_a).to eq [87, 2, 0, 0, 87, "1", "Assorted Petits Fours", "graphics/00000001/t_1.jpg", "graphics/00000001/1.jpg", 0.0, 0.0, nil, 1.0, false, false]
+        end
+      end
+    end
+
+    describe 'when opening StringIO' do
+      let(:data) { StringIO.new(File.read(fixture_path('dbase_83_missing_memo.dbf'))) }
+      let(:table) { DBF::Table.new(data) }
 
       it 'returns nil values for memo fields' do
         record = table.record(0)
