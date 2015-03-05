@@ -87,7 +87,13 @@ module DBF
     end
 
     def memo(column) #nodoc
-      @memo && @memo.get(memo_start_block(column))
+      if @memo
+        @memo.get(memo_start_block(column))
+      else
+        # the memo file is missing, so read ahead to next record and return nil
+        @data.read(column.length)
+        nil
+      end
     end
 
     def memo_start_block(column) #nodoc

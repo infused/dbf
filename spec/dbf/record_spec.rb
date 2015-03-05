@@ -19,7 +19,7 @@ describe DBF::Record do
 
         it 'returns nil values for memo fields' do
           record = table.record(0)
-          expect(record.to_a).to eq [87, 2, 0, 0, 87, "1", "Assorted Petits Fours", "graphics/00000001/t_1.jpg", "graphics/00000001/1.jpg", 0.0, 0.0, nil, 1.0, false, false]
+          expect(record.to_a).to eq [87, 2, 0, 0, 87, "1", "Assorted Petits Fours", "graphics/00000001/t_1.jpg", "graphics/00000001/1.jpg", 0.0, 0.0, nil, 5.51, true, true]
         end
       end
     end
@@ -30,7 +30,7 @@ describe DBF::Record do
 
       it 'returns nil values for memo fields' do
         record = table.record(0)
-        expect(record.to_a).to eq [87, 2, 0, 0, 87, "1", "Assorted Petits Fours", "graphics/00000001/t_1.jpg", "graphics/00000001/1.jpg", 0.0, 0.0, nil, 1.0, false, false]
+        expect(record.to_a).to eq [87, 2, 0, 0, 87, "1", "Assorted Petits Fours", "graphics/00000001/t_1.jpg", "graphics/00000001/1.jpg", 0.0, 0.0, nil, 5.51, true, true]
       end
     end
   end
