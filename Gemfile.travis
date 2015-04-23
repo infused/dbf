@@ -1,9 +1,9 @@
 gemspec
 source 'https://rubygems.org'
 
-gem 'rubysl', :platform => :rbx
 
 group :test do
+  gem 'rubysl', :platform => :rbx
   gem 'rspec'
   gem 'codeclimate-test-reporter', :require => false, :platform => :ruby
 end
