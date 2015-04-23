@@ -21,7 +21,7 @@ branches:
 git:
   depth: 150
 bundler_args: --without development
-script: bundle exec rspec
+script: bundle exec rspec -fdoc
 gemfile: Gemfile.travis
 addons:
   code_climate:
