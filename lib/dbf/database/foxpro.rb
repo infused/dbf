@@ -41,12 +41,15 @@ module DBF
 
     # returns the filename of the related table. Checks if it exists, and tries to correct the filename for case sensitive filesystems.
     def table_file_name name
-      suggested_filename = File.join(@basedir, "#{name}.dBf")
+      suggested_filename = File.join(@basedir, "#{name}.dbf")
       unless File.exist?(suggested_filename)
         # if this file does not exist (because of casing), try to find it. It comes from a case insensitive filesystem
         # so no doubles can exists.
         suggested_filename = suggested_filename.downcase
         suggested_filename = Dir.glob('*').find { |f| f.downcase == suggested_filename }
+
+        raise DBF::FileNotFoundError.new("related table not found: #{name}") if suggested_filename.nil?
+        raise DBF::FileNotFoundError.new("related table not found: #{name}") unless File.exist?(suggested_filename)
       end
 
       suggested_filename
