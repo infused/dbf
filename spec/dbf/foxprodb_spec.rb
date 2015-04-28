@@ -25,16 +25,18 @@ describe DBF::FoxproDatabase do
   end
 
   describe '#table' do
-    it 'loads an existing related table' do
-      expect(DBF::FoxproDatabase.new(dbf_path).contacts.record_count).to eq 5
-    end
+    describe "when accessing related tables" do
+      it 'loads an existing related table' do
+        expect(DBF::FoxproDatabase.new(dbf_path).contacts.record_count).to eq 5
+      end
 
-    it 'supports a long table field name' do
-      expect(DBF::FoxproDatabase.new(dbf_path).contacts.record(1).spouses_interests).to eq "Tennis, golf"
-    end
+      it 'supports a long table field name' do
+        expect(DBF::FoxproDatabase.new(dbf_path).contacts.record(1).spouses_interests).to eq "Tennis, golf"
+      end
 
-    it 'loads an existing related table with wrong filename casing' do
-      expect(DBF::FoxproDatabase.new(dbf_path).calls.record_count).to eq 16
+      it 'loads an existing related table with wrong filename casing' do
+        expect(DBF::FoxproDatabase.new(dbf_path).calls.record_count).to eq 16
+      end
     end
   end
 
