@@ -70,27 +70,28 @@ module DBF
     # with a treelike structure. Field definitions are in the same order as in the linked tables
     # but only the long name is provided.
     def extract_dbc_data
-      @tables = {}
+      tabledata = {}
 
       curt = nil
       @db.each do |r|
         unless r.nil?
           if r.objecttype == "Table"
             # This is a related table
-            @tables[r.objectid] = {name: r.objectname, fields: []}
+            tabledata[r.objectid] = {name: r.objectname, fields: []}
           elsif r.objecttype == "Field"
             # This is a related field. The parentid points to the table object
 
             # create using the parentid if the parentid is still unknown.
-            @tables[r.parentid] = {name: "UNKNOWN", fields: []} unless @tables.has_key?(r.parentid)
-            @tables[r.parentid][:fields] << r.objectname
+            tabledata[r.parentid] = {name: "UNKNOWN", fields: []} unless tabledata.has_key?(r.parentid)
+            tabledata[r.parentid][:fields] << r.objectname
           end
         end
       end
 
-      # now we need to transform the resulting array-hash to a direct mapping
+      # now we need to transform the resulting array-hash to a direct mapping (changed to support older Ruby versions)
       # { tablename => [fieldnames] }
-      @tables = @tables.map{|k, v| [v[:name], v[:fields] ] }.to_h
+      @tables = {}
+      tabledata.each{|k, v| @tables[v[:name]] = v[:fields] }
     end
 
   end
