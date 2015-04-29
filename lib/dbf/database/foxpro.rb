@@ -77,12 +77,12 @@ module DBF
         unless r.nil?
           if r.objecttype == "Table"
             # This is a related table
-            tabledata[r.objectid] = {name: r.objectname, fields: []}
+            tabledata[r.objectid] = {:name => r.objectname, :fields => []}
           elsif r.objecttype == "Field"
             # This is a related field. The parentid points to the table object
 
             # create using the parentid if the parentid is still unknown.
-            tabledata[r.parentid] = {name: "UNKNOWN", fields: []} unless tabledata.has_key?(r.parentid)
+            tabledata[r.parentid] = {:name => "UNKNOWN", :fields => []} unless tabledata.has_key?(r.parentid)
             tabledata[r.parentid][:fields] << r.objectname
           end
         end
