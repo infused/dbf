@@ -21,6 +21,7 @@ describe DBF::Database::Foxpro do
         expect(DBF::Database::Foxpro.new(dbf_path).tables.sort).to eq(%w(contacts calls setup types).sort)
       end
     end
+
   end
 
   describe '#table' do
