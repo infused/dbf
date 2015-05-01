@@ -15,14 +15,13 @@ module DBF
       #
       #  # Calling a table
       #  contacts = db.contacts.record(0)
-
       def initialize(path)
         begin
           @path = path
           @dirname = File.dirname(@path)
           @db = DBF::Table.new(@path)
+          @tables = extract_dbc_data
 
-          extract_dbc_data
         rescue Errno::ENOENT
           raise DBF::FileNotFoundError.new("file not found: #{data}")
         end
@@ -70,29 +69,27 @@ module DBF
       # This method extracts the data from the database container. This is just an ordinary table
       # with a treelike structure. Field definitions are in the same order as in the linked tables
       # but only the long name is provided.
-      def extract_dbc_data
-        tabledata = {}
+      def extract_dbc_data # nodoc
+        data = {}
 
-        curt = nil
-        @db.each do |r|
-          unless r.nil?
-            if r.objecttype == "Table"
-              # This is a related table
-              tabledata[r.objectid] = {:name => r.objectname, :fields => []}
-            elsif r.objecttype == "Field"
-              # This is a related field. The parentid points to the table object
+        @db.each do |record|
+          next unless record
 
-              # create using the parentid if the parentid is still unknown.
-              tabledata[r.parentid] = {:name => "UNKNOWN", :fields => []} unless tabledata.has_key?(r.parentid)
-              tabledata[r.parentid][:fields] << r.objectname
-            end
+          case record.objecttype
+          when 'Table'
+            # This is a related table
+            data[record.objectid] = {:name => record.objectname, :fields => []}
+          when 'Field'
+            # This is a related field. The parentid points to the table object.
+            # Create using the parentid if the parentid is still unknown.
+            data[record.parentid] ||= {:name => "UNKNOWN", :fields => []}
+            data[record.parentid][:fields] << record.objectname
           end
         end
 
-        # now we need to transform the resulting array-hash to a direct mapping (changed to support older Ruby versions)
-        # { tablename => [fieldnames] }
-        @tables = {}
-        tabledata.each{|k, v| @tables[v[:name]] = v[:fields] }
+        tables = {}
+        data.each { |k, v| tables[v[:name]] = v[:fields] }
+        tables
       end
 
     end
