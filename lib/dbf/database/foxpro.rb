@@ -35,7 +35,7 @@ module DBF
 
       # returns table with given name (Foxtable)
       def table(name)
-        ft = Foxtable.new(table_path name)
+        ft = Table.new(table_path name)
         ft.longnames = @tables[name]
         ft
       end
@@ -97,7 +97,7 @@ module DBF
 
     end
 
-    class Foxtable < DBF::Table
+    class Table < DBF::Table
       attr_accessor :longnames
 
       def build_columns
