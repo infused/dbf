@@ -34,27 +34,26 @@ module DBF
       end
 
       # returns table with given name (Foxtable)
-      def table name
-        ft = Foxtable.new(table_file_name name)
+      def table(name)
+        ft = Foxtable.new(table_path name)
         ft.longnames = @tables[name]
-
         ft
       end
 
-      # returns the filename of the related table. Checks if it exists, and tries to correct the filename for case sensitive filesystems.
-      def table_file_name name
-        suggested_filename = File.join(@basedir, "#{name}.dbf")
-        unless File.exist?(suggested_filename)
-          # if this file does not exist (because of casing), try to find it. It comes from a case insensitive filesystem
-          # so no doubles can exists.
-          suggested_filename = suggested_filename.downcase
-          suggested_filename = Dir.glob('*').find { |f| f.downcase == suggested_filename }
+      # Searches the database directory for the table's dbf file
+      # and returns the absolute path. Ensures case-insensitivity
+      # on any platform.
+      # @return String
+      def table_path(name)
+        example = File.join(@basedir, "#{name}.dbf")
+        glob = File.join(@basedir, '*')
+        path = Dir.glob(glob).find { |match| match.downcase == example.downcase }
 
-          raise DBF::FileNotFoundError.new("related table not found: #{name}") if suggested_filename.nil?
-          raise DBF::FileNotFoundError.new("related table not found: #{name}") unless File.exist?(suggested_filename)
+        unless path && File.exist?(path)
+          raise DBF::FileNotFoundError.new("related table not found: #{name}")
         end
 
-        suggested_filename
+        path
       end
 
       def method_missing(method, *args)
