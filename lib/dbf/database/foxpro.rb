@@ -23,7 +23,7 @@ module DBF
           @db = DBF::Table.new(@dbcname)
 
           extract_dbc_data
-        rescue Errno::ENOENT => error
+        rescue Errno::ENOENT
           raise DBF::FileNotFoundError.new("file not found: #{data}")
         end
       end
