@@ -70,7 +70,6 @@ module DBF
       # but only the long name is provided.
       def extract_dbc_data # nodoc
         data = {}
-
         @db.each do |record|
           next unless record
 
@@ -86,9 +85,7 @@ module DBF
           end
         end
 
-        tables = {}
-        data.each { |k, v| tables[v[:name]] = v[:fields] }
-        tables
+        Hash[data.values.map {|v| [v[:name], v[:fields]] }]
       end
 
     end
