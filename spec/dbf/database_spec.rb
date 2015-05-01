@@ -19,7 +19,7 @@ describe DBF::Database::Foxpro do
 
     describe 'it loads the example db correctly' do
       it 'shows a correct list of tables' do
-        expect(db.tables.sort).to eq(%w(contacts calls setup types).sort)
+        expect(db.table_names.sort).to eq(%w(contacts calls setup types).sort)
       end
     end
   end

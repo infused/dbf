@@ -27,7 +27,7 @@ module DBF
         end
       end
 
-      def tables
+      def table_names
         @tables.keys
       end
 
@@ -56,7 +56,7 @@ module DBF
       end
 
       def method_missing(method, *args) # nodoc
-        if index = tables.index(method.to_s)
+        if index = table_names.index(method.to_s)
           table method.to_s
         else
           super
