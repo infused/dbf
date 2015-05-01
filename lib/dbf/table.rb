@@ -68,6 +68,7 @@ module DBF
         @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding?)
         @encoding = encoding || header.encoding
         @memo = open_memo(data, memo)
+        yield self if block_given?
       rescue Errno::ENOENT => error
         raise DBF::FileNotFoundError.new("file not found: #{data}")
       end

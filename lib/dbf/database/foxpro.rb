@@ -34,9 +34,9 @@ module DBF
       # Returns table with given name
       # @return Table
       def table(name)
-        table = Table.new(table_path name)
-        table.long_names = @tables[name]
-        table
+        Table.new(table_path name) do |table|
+          table.long_names = @tables[name]
+        end
       end
 
       # Searches the database directory for the table's dbf file
@@ -62,7 +62,6 @@ module DBF
           super
         end
       end
-
 
       private
 
