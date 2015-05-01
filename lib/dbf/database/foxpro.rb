@@ -16,11 +16,11 @@ module DBF
       #  # Calling a table
       #  contacts = db.contacts.record(0)
 
-      def initialize(path_to_dbc)
+      def initialize(path)
         begin
-          @dbcname = path_to_dbc
-          @basedir = File.dirname(@dbcname)
-          @db = DBF::Table.new(@dbcname)
+          @path = path
+          @dirname = File.dirname(@path)
+          @db = DBF::Table.new(@path)
 
           extract_dbc_data
         rescue Errno::ENOENT
@@ -28,16 +28,15 @@ module DBF
         end
       end
 
-
       def tables
         @tables.keys
       end
 
       # returns table with given name (Foxtable)
       def table(name)
-        ft = Table.new(table_path name)
-        ft.longnames = @tables[name]
-        ft
+        table = Table.new(table_path name)
+        table.longnames = @tables[name]
+        table
       end
 
       # Searches the database directory for the table's dbf file
@@ -45,8 +44,8 @@ module DBF
       # on any platform.
       # @return String
       def table_path(name)
-        example = File.join(@basedir, "#{name}.dbf")
-        glob = File.join(@basedir, '*')
+        example = File.join(@dirname, "#{name}.dbf")
+        glob = File.join(@dirname, '*')
         path = Dir.glob(glob).find { |match| match.downcase == example.downcase }
 
         unless path && File.exist?(path)
