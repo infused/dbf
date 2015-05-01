@@ -55,7 +55,7 @@ module DBF
         path
       end
 
-      def method_missing(method, *args)
+      def method_missing(method, *args) # nodoc
         if index = tables.index(method.to_s)
           table method.to_s
         else
@@ -97,7 +97,7 @@ module DBF
     class Table < DBF::Table
       attr_accessor :long_names
 
-      def build_columns
+      def build_columns # nodoc
         columns = super
 
         # modify the column definitions to use the long names as the
