@@ -32,10 +32,11 @@ module DBF
         @tables.keys
       end
 
-      # returns table with given name (Foxtable)
+      # Returns table with given name
+      # @return Table
       def table(name)
         table = Table.new(table_path name)
-        table.longnames = @tables[name]
+        table.long_names = @tables[name]
         table
       end
 
@@ -97,20 +98,18 @@ module DBF
     end
 
     class Table < DBF::Table
-      attr_accessor :longnames
+      attr_accessor :long_names
 
       def build_columns
         columns = super
-        # modify the column definitions to use the long names
-        # as the columnname property is readonly, recreate the column definitions
-        idx = 0
-        columns.map do |item|
-          idx += 1
-          column_class.new(self, longnames[idx-1], item.type, item.length, item.decimal)
+
+        # modify the column definitions to use the long names as the
+        # columnname property is readonly, recreate the column definitions
+        columns.map.with_index do |column, index|
+          column_class.new(self, long_names[index], column.type, column.length, column.decimal)
         end
 
       end
     end
   end
-
 end
