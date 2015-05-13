@@ -44,7 +44,7 @@ describe DBF::Database::Foxpro do
 
   describe '#table_path' do
     it 'returns an absolute path' do
-      expect(db.table_path('contacts')).to eq File.absolute_path('spec/fixtures/foxprodb/contacts.dbf')
+      expect(db.table_path('contacts')).to eq File.expand_path('spec/fixtures/foxprodb/contacts.dbf')
     end
   end
 
