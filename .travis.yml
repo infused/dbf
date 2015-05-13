@@ -18,8 +18,6 @@ matrix:
 branches:
   only:
     - master
-git:
-  depth: 150
 bundler_args: --without development
 script: bundle exec rspec -fdoc
 gemfile: Gemfile.travis
