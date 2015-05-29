@@ -100,6 +100,23 @@ widgets.find :first, :slot_number => 's42'
 widgets.find(10)
 ```
 
+## Enumeration
+
+DBF::Table is a Ruby Enumerable. This means you can use any Enumerable method.
+This means that you get a bunch of traversal, searching and sorting methods
+for free. For example, let's get only records created before January 1st, 2015:
+
+```ruby
+widgets.select { |w| w.created_date < Date.new(2015, 1, 1) }
+```
+
+Or custom sorting:
+
+```ruby
+widgets.sort_by { |w| w.created_date }
+```
+
+
 ## Encodings (Code Pages)
 
 dBase supports encoding non-english characters in different formats.
