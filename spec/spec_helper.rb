@@ -7,6 +7,7 @@ end
 require 'dbf'
 require 'yaml'
 require 'rspec'
+require 'fileutils'
 
 Encoding.default_external = "UTF-8" if defined?(Encoding)
 

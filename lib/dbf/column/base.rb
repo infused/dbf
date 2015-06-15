@@ -24,8 +24,8 @@ module DBF
         @version = table.version
         @encoding = table.encoding
 
-        unless length > 0
-          raise LengthError, "field length must be greater than 0"
+        unless length >= 0
+          raise LengthError, "field length must be greater than or equal 0"
         end
 
         if @name.empty?

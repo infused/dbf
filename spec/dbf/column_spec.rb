@@ -24,10 +24,9 @@ describe DBF::Column::Dbase do
       expect(column.decimal).to eq 0
     end
 
-    describe 'with length of 0' do
-      it 'raises DBF::Column::LengthError' do
-        expect { DBF::Column::Dbase.new table, "ColumnName", "N", 0, 0 }.to raise_error(DBF::Column::LengthError)
-      end
+    it 'accepts length of 0' do
+      column = DBF::Column::Dbase.new table, "ColumnName", "N", 0, 0
+      expect(column.length).to eq 0
     end
 
     describe 'with length less than 0' do
