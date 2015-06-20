@@ -25,11 +25,11 @@ module DBF
         @encoding = table.encoding
 
         unless length >= 0
-          raise LengthError, "field length must be greater than or equal 0"
+          raise LengthError, 'field length must be 0 or greater'
         end
 
         if @name.empty?
-          raise NameError, "column name cannot be empty"
+          raise NameError, 'column name cannot be empty'
         end
       end
 
@@ -38,6 +38,8 @@ module DBF
       # @param [String] value
       # @return [Fixnum, Float, Date, DateTime, Boolean, String]
       def type_cast(value)
+        return nil if length == 0
+
         case type
           when 'N' then unpack_number(value)
           when 'I' then unpack_unsigned_long(value)

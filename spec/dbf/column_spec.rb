@@ -44,6 +44,13 @@ describe DBF::Column::Dbase do
 
   context '#type_cast' do
     context 'with type N (number)' do
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "N", 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
+      end
+
       context 'and 0 decimals' do
         it 'casts value to Fixnum' do
           value = '135'
@@ -64,6 +71,13 @@ describe DBF::Column::Dbase do
     end
 
     context 'with type F (float)' do
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "F", 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
+      end
+
       it 'casts value to Float' do
         value = '135'
         column = DBF::Column::Dbase.new table, "ColumnName", "F", 3, 0
@@ -73,6 +87,13 @@ describe DBF::Column::Dbase do
     end
 
     context 'with type I (integer)' do
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "I", 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
+      end
+
       it "casts value to Fixnum" do
         value = "\203\171\001\000"
         column = DBF::Column::Dbase.new table, "ColumnName", "I", 3, 0
@@ -94,6 +115,13 @@ describe DBF::Column::Dbase do
 
       it "casts value other than 't' or 'y' to false" do
         expect(column.type_cast('n')).to be false
+      end
+
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "L", 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
       end
     end
 
@@ -126,6 +154,13 @@ describe DBF::Column::Dbase do
           expect(column.type_cast("Nl%\000\000A\000\999")).to be_nil
         end
       end
+
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "T", 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
+      end
     end
 
     context 'with type D (date)' do
@@ -144,6 +179,13 @@ describe DBF::Column::Dbase do
           expect(column.type_cast("0")).to be_nil
         end
       end
+
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "D", 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
+      end
     end
 
     context 'with type M (memo)' do
@@ -158,6 +200,13 @@ describe DBF::Column::Dbase do
         expect(column.type_cast(nil)).to be_a(NilClass)
         expect(column.type_cast(nil)).to be_nil
       end
+
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "M", 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
+      end
     end
   end
 
@@ -167,6 +216,13 @@ describe DBF::Column::Dbase do
     it 'casts to float' do
       expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to be_a(Float)
       expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to eq 18.0
+    end
+
+    context 'and 0 length' do
+      it 'returns nil' do
+        column = DBF::Column::Dbase.new table, "ColumnName", "Y", 0, 0
+        expect(column.type_cast('')).to be_nil
+      end
     end
   end
 
