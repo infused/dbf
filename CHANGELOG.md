@@ -1,3 +1,6 @@
+# 2.0.10
+  - allow 0 length fields, but always return nil as value
+
 # 2.0.9
   - fix dBase IV attributes when memo file is missing
 
