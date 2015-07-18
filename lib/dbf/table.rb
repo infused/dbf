@@ -230,7 +230,7 @@ module DBF
     def build_columns #nodoc
       columns = []
       @data.seek(DBF_HEADER_SIZE)
-      while !["\0", "\r"].include?(first_byte = @data.read(1))
+      until ["\0", "\r"].include?(first_byte = @data.read(1))
         column_data = first_byte + @data.read(DBF_HEADER_SIZE - 1)
         name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
         columns << column_class.new(self, name, type, length, decimal)
