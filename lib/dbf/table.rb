@@ -11,33 +11,33 @@ module DBF
     DBF_HEADER_SIZE = 32
 
     VERSIONS = {
-      "02" => "FoxBase",
-      "03" => "dBase III without memo file",
-      "04" => "dBase IV without memo file",
-      "05" => "dBase V without memo file",
-      "07" => "Visual Objects 1.x",
-      "30" => "Visual FoxPro",
-      "31" => "Visual FoxPro with AutoIncrement field",
-      "43" => "dBASE IV SQL table files, no memo",
-      "63" => "dBASE IV SQL system files, no memo",
-      "7b" => "dBase IV with memo file",
-      "83" => "dBase III with memo file",
-      "87" => "Visual Objects 1.x with memo file",
-      "8b" => "dBase IV with memo file",
-      "8e" => "dBase IV with SQL table",
-      "cb" => "dBASE IV SQL table files, with memo",
-      "f5" => "FoxPro with memo file",
-      "fb" => "FoxPro without memo file"
+      '02' => 'FoxBase',
+      '03' => 'dBase III without memo file',
+      '04' => 'dBase IV without memo file',
+      '05' => 'dBase V without memo file',
+      '07' => 'Visual Objects 1.x',
+      '30' => 'Visual FoxPro',
+      '31' => 'Visual FoxPro with AutoIncrement field',
+      '43' => 'dBASE IV SQL table files, no memo',
+      '63' => 'dBASE IV SQL system files, no memo',
+      '7b' => 'dBase IV with memo file',
+      '83' => 'dBase III with memo file',
+      '87' => 'Visual Objects 1.x with memo file',
+      '8b' => 'dBase IV with memo file',
+      '8e' => 'dBase IV with SQL table',
+      'cb' => 'dBASE IV SQL table files, with memo',
+      'f5' => 'FoxPro with memo file',
+      'fb' => 'FoxPro without memo file'
     }
 
     FOXPRO_VERSIONS = {
-      "30" => "Visual FoxPro",
-      "31" => "Visual FoxPro with AutoIncrement field",
-      "f5" => "FoxPro with memo file",
-      "fb" => "FoxPro without memo file"
+      '30' => 'Visual FoxPro',
+      '31' => 'Visual FoxPro with AutoIncrement field',
+      'f5' => 'FoxPro with memo file',
+      'fb' => 'FoxPro without memo file'
     }
 
-    attr_reader   :header
+    attr_reader :header
     attr_accessor :encoding             # Source encoding (for ex. :cp1251)
 
     # Opens a DBF::Table
@@ -171,10 +171,11 @@ module DBF
     #   table.find :first, :first_name => "Keith"
     #
     # The <b>command</b> may be a record index, :all, or :first.
-    # <b>options</b> is optional and, if specified, should be a hash where the keys correspond
-    # to column names in the database.  The values will be matched exactly with the value
-    # in the database.  If you specify more than one key, all values must match in order
-    # for the record to be returned.  The equivalent SQL would be "WHERE key1 = 'value1'
+    # <b>options</b> is optional and, if specified, should be a hash where the
+    # keys correspond to column names in the database.  The values will be
+    # matched exactly with the value in the database.  If you specify more
+    # than one key, all values must match in order for the record to be
+    # returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
     #
     # @param [Fixnum, Symbol] command
