@@ -62,16 +62,14 @@ module DBF
     # @param [optional String, StringIO] memo Path to the memo file or a StringIO object
     # @param [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil)
-      begin
-        @data = open_data(data)
-        @data.rewind
-        @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding?)
-        @encoding = encoding || header.encoding
-        @memo = open_memo(data, memo)
-        yield self if block_given?
-      rescue Errno::ENOENT => error
-        raise DBF::FileNotFoundError.new("file not found: #{data}")
-      end
+      @data = open_data(data)
+      @data.rewind
+      @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding?)
+      @encoding = encoding || header.encoding
+      @memo = open_memo(data, memo)
+      yield self if block_given?
+    rescue Errno::ENOENT
+      raise DBF::FileNotFoundError, "file not found: #{data}"
     end
 
     # @return [TrueClass, FalseClass]
