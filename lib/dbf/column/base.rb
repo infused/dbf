@@ -44,12 +44,12 @@ module DBF
           when 'N' then unpack_number(value)
           when 'I' then unpack_unsigned_long(value)
           when 'F' then value.to_f
-          when 'Y' then (unpack_unsigned_long(value) / 10000.0).to_f
+          when 'Y' then unpack_currency(value)
           when 'D' then decode_date(value)
           when 'T' then decode_datetime(value)
           when 'L' then boolean(value)
           when 'M' then decode_memo(value)
-          else          encode_string(value.to_s).strip
+          else          encode_string(value, true)
         end
       end
 
@@ -75,95 +75,102 @@ module DBF
       # @return [String]
       def underscored_name
         @underscored_name ||= begin
-          name.gsub(/::/, '/').
-            gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-            gsub(/([a-z\d])([A-Z])/,'\1_\2').
-            tr('-', '_').
-            downcase
+          un = name.dup
+          un.gsub!(/::/, '/')
+          un.gsub!(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+          un.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
+          un.tr!('-', '_')
+          un.downcase!
+          un
         end
       end
 
       private
 
-      def decode_date(value) #nodoc
+      def decode_date(value) # nodoc
         value.gsub!(' ', '0')
         value !~ /\S/ ? nil : Date.parse(value)
       rescue
         nil
       end
 
-      def decode_datetime(value) #nodoc
+      def decode_datetime(value) # nodoc
         days, msecs = value.unpack('l2')
         secs = (msecs / 1000).to_i
-        DateTime.jd(days, (secs/3600).to_i, (secs/60).to_i % 60, secs % 60)
+        DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60)
       rescue
         nil
       end
 
-      def decode_memo(value) #nodoc
+      def decode_memo(value) # nodoc
         value && encode_string(value)
       end
 
-      def unpack_number(value) #nodoc
+      def unpack_number(value) # nodoc
         decimal.zero? ? value.to_i : value.to_f
       end
 
-      def unpack_unsigned_long(value) #nodoc
+      def unpack_currency(value) # nodoc
+        (unpack_unsigned_long(value) / 10000.0).to_f
+      end
+
+      def unpack_unsigned_long(value) # nodoc
         value.unpack('V')[0]
       end
 
-      def boolean(value) #nodoc
+      def boolean(value) # nodoc
         value.strip =~ /^(y|t)$/i ? true : false
       end
 
-      def encode_string(value) #nodoc
-        if @encoding && table.supports_encoding?
+      def encode_string(value, strip = false) # nodoc
+        output = if @encoding && table.supports_encoding?
           if table.supports_string_encoding?
-            value.force_encoding(@encoding).encode(*encoding_args)
+            value.to_s.force_encoding(@encoding).encode(*encoding_args)
           elsif table.supports_iconv?
-            Iconv.conv('UTF-8', @encoding, value)
+            Iconv.conv('UTF-8', @encoding, value.to_s)
           end
         else
           value
         end
+
+        strip ? output.strip : output
       end
 
-      def encoding_args #nodoc
+      def encoding_args # nodoc
         [Encoding.default_external, {:undef => :replace, :invalid => :replace}]
       end
 
-      def schema_data_type #nodoc
+      def schema_data_type # nodoc
         case type
-        when "N", "F"
-          decimal > 0 ? ":float" : ":integer"
-        when "I"
-          ":integer"
-        when "Y"
-          ":decimal, :precision => 15, :scale => 4"
-        when "D"
-          ":date"
-        when "T"
-          ":datetime"
-        when "L"
-          ":boolean"
-        when "M"
-          ":text"
-        when "B"
+        when 'N', 'F'
+          decimal > 0 ? ':float' : ':integer'
+        when 'I'
+          ':integer'
+        when 'Y'
+          ':decimal, :precision => 15, :scale => 4'
+        when 'D'
+          ':date'
+        when 'T'
+          ':datetime'
+        when 'L'
+          ':boolean'
+        when 'M'
+          ':text'
+        when 'B'
           if DBF::Table::FOXPRO_VERSIONS.keys.include?(@version)
-            decimal > 0 ? ":float" : ":integer"
+            decimal > 0 ? ':float' : ':integer'
           else
-            ":text"
+            ':text'
           end
         else
           ":string, :limit => #{length}"
         end
       end
 
-      def clean(value) #nodoc
+      def clean(value) # nodoc
         truncated_value = value.strip.partition("\x00").first
         truncated_value.gsub(/[^\x20-\x7E]/, '')
       end
-
     end
   end
 end

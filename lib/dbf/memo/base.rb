@@ -9,13 +9,13 @@ module DBF
       end
 
       def initialize(data, version)
-        @data, @version = data, version
+        @data = data
+        @version = version
       end
 
       def get(start_block)
-        if start_block > 0
-          build_memo start_block
-        end
+        return nil unless start_block > 0
+        build_memo start_block
       end
 
       def close
@@ -28,15 +28,15 @@ module DBF
 
       private
 
-      def offset(start_block) #nodoc
+      def offset(start_block) # nodoc
         start_block * block_size
       end
 
-      def content_size(memo_size) #nodoc
+      def content_size(memo_size) # nodoc
         (memo_size - block_size) + BLOCK_HEADER_SIZE
       end
 
-      def block_content_size #nodoc
+      def block_content_size # nodoc
         @block_content_size ||= block_size - BLOCK_HEADER_SIZE
       end
 

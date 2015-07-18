@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe DBF::Table do
   let(:dbf_path) { fixture_path('dbase_83.dbf') }
@@ -18,7 +18,7 @@ describe DBF::Table do
 
     describe 'when given a path to a non-existent dbf file' do
       it 'raises a DBF::FileNotFound error' do
-        expect { DBF::Table.new "x" }.to raise_error(DBF::FileNotFoundError, 'file not found: x')
+        expect { DBF::Table.new 'x' }.to raise_error(DBF::FileNotFoundError, 'file not found: x')
       end
     end
 
@@ -40,15 +40,15 @@ describe DBF::Table do
     end
   end
 
-  context "#close" do
-    it "closes the io" do
+  context '#close' do
+    it 'closes the io' do
       table.close
       expect { table.record(1) }.to raise_error(IOError)
     end
   end
 
-  describe "#schema" do
-    it "matches the test schema fixture" do
+  describe '#schema' do
+    it 'matches the test schema fixture' do
       control_schema = File.read(fixture_path('dbase_83_schema.txt'))
       expect(table.schema).to eq control_schema
     end
@@ -74,40 +74,40 @@ describe DBF::Table do
     describe 'when path param passed' do
       it 'creates a custom csv file' do
         table.to_csv('test.csv')
-        expect(File.exists?('test.csv')).to be_truthy
+        expect(File.exist?('test.csv')).to be_truthy
       end
     end
   end
 
-  describe "#record" do
-    it "return nil for deleted records" do
+  describe '#record' do
+    it 'return nil for deleted records' do
       allow(table).to receive(:deleted_record?).and_return(true)
       expect(table.record(5)).to be_nil
     end
   end
 
-  describe "#current_record" do
-    it "should return nil for deleted records" do
+  describe '#current_record' do
+    it 'should return nil for deleted records' do
       allow(table).to receive(:deleted_record?).and_return(true)
       expect(table.record(0)).to be_nil
     end
   end
 
-  describe "#find" do
-    describe "with index" do
-      it "returns the correct record" do
+  describe '#find' do
+    describe 'with index' do
+      it 'returns the correct record' do
         expect(table.find(5)).to eq table.record(5)
       end
     end
 
     describe 'with array of indexes' do
-      it "returns the correct records" do
+      it 'returns the correct records' do
         expect(table.find([1, 5, 10])).to eq [table.record(1), table.record(5), table.record(10)]
       end
     end
 
-    describe "with :all" do
-      it "accepts a block" do
+    describe 'with :all' do
+      it 'accepts a block' do
         records = []
         table.find(:all, :weight => 0.0) do |record|
           records << record
@@ -115,53 +115,53 @@ describe DBF::Table do
         expect(records).to eq table.find(:all, :weight => 0.0)
       end
 
-      it "returns all records if options are empty" do
+      it 'returns all records if options are empty' do
         expect(table.find(:all)).to eq table.to_a
       end
 
-      it "returns matching records when used with options" do
-        expect(table.find(:all, "WEIGHT" => 0.0)).to eq table.select {|r| r["weight"] == 0.0}
+      it 'returns matching records when used with options' do
+        expect(table.find(:all, 'WEIGHT' => 0.0)).to eq table.select {|r| r['weight'] == 0.0}
       end
 
-      it "should AND multiple search terms" do
-        expect(table.find(:all, "ID" => 30, :IMAGE => "graphics/00000001/TBC01.jpg")).to be_empty
+      it 'should AND multiple search terms' do
+        expect(table.find(:all, 'ID' => 30, :IMAGE => 'graphics/00000001/TBC01.jpg')).to be_empty
       end
 
-      it "should match original column names" do
-        expect(table.find(:all, "WEIGHT" => 0.0)).not_to be_empty
+      it 'should match original column names' do
+        expect(table.find(:all, 'WEIGHT' => 0.0)).not_to be_empty
       end
 
-      it "matches symbolized column names" do
+      it 'matches symbolized column names' do
         expect(table.find(:all, :WEIGHT => 0.0)).not_to be_empty
       end
 
-      it "matches downcased column names" do
-        expect(table.find(:all, "weight" => 0.0)).not_to be_empty
+      it 'matches downcased column names' do
+        expect(table.find(:all, 'weight' => 0.0)).not_to be_empty
       end
 
-      it "matches symbolized downcased column names" do
+      it 'matches symbolized downcased column names' do
         expect(table.find(:all, :weight => 0.0)).not_to be_empty
       end
     end
 
-    describe "with :first" do
-      it "returns the first record if options are empty" do
+    describe 'with :first' do
+      it 'returns the first record if options are empty' do
         expect(table.find(:first)).to eq table.record(0)
       end
 
-      it "returns the first matching record when used with options" do
-        expect(table.find(:first, "CODE" => "C")).to eq table.record(5)
+      it 'returns the first matching record when used with options' do
+        expect(table.find(:first, 'CODE' => 'C')).to eq table.record(5)
       end
 
-      it "ANDs multiple search terms" do
-        expect(table.find(:first, "ID" => 30, "IMAGE" => "graphics/00000001/TBC01.jpg")).to be_nil
+      it 'ANDs multiple search terms' do
+        expect(table.find(:first, 'ID' => 30, 'IMAGE' => 'graphics/00000001/TBC01.jpg')).to be_nil
       end
     end
   end
 
-  describe "#filename" do
+  describe '#filename' do
     it 'returns the filename as a string' do
-      expect(table.filename).to eq "dbase_83.dbf"
+      expect(table.filename).to eq 'dbase_83.dbf'
     end
   end
 
@@ -190,8 +190,9 @@ describe DBF::Table do
 
   describe '#column_names' do
     it 'is an array of all column names' do
-      correct_column_names = ["ID", "CATCOUNT", "AGRPCOUNT", "PGRPCOUNT", "ORDER", "CODE", "NAME", "THUMBNAIL", "IMAGE", "PRICE", "COST", "DESC", "WEIGHT", "TAXABLE", "ACTIVE"]
+      correct_column_names = %w(ID CATCOUNT AGRPCOUNT PGRPCOUNT ORDER CODE NAME THUMBNAIL IMAGE PRICE COST DESC WEIGHT TAXABLE ACTIVE)
       expect(table.column_names).to eq correct_column_names
     end
   end
+
 end

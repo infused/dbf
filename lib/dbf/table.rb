@@ -104,7 +104,7 @@ module DBF
     #
     # @yield [nil, DBF::Record]
     def each
-      header.record_count.times {|i| yield record(i)}
+      header.record_count.times { |i| yield record(i) }
     end
 
     # Retrieve a record by index number.
@@ -115,9 +115,8 @@ module DBF
     # @return [DBF::Record, NilClass]
     def record(index)
       seek_to_record(index)
-      if !deleted_record?
-        DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
-      end
+      return nil if deleted_record?
+      DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
     end
 
     alias_method :row, :record
@@ -184,7 +183,7 @@ module DBF
       when Fixnum
         record(command)
       when Array
-        command.map {|i| record(i)}
+        command.map { |i| record(i) }
       when :all
         find_all(options, &block)
       when :first
@@ -203,7 +202,7 @@ module DBF
     #
     # @return [String]
     def column_names
-      columns.map { |column| column.name }
+      columns.map(&:name)
     end
 
     # Is string encoding supported?
@@ -218,7 +217,7 @@ module DBF
       ''.respond_to?(:encoding)
     end
 
-    def supports_iconv? #nodoc
+    def supports_iconv? # nodoc
       require 'iconv'
       true
     rescue
@@ -227,7 +226,7 @@ module DBF
 
     private
 
-    def build_columns #nodoc
+    def build_columns # nodoc
       columns = []
       @data.seek(DBF_HEADER_SIZE)
       until ["\0", "\r"].include?(first_byte = @data.read(1))
@@ -238,55 +237,43 @@ module DBF
       columns
     end
 
-
-    def foxpro? #nodoc
+    def foxpro? # nodoc
       FOXPRO_VERSIONS.keys.include? version
     end
 
-    def column_class #nodoc
+    def column_class # nodoc
       @column_class ||= foxpro? ? Column::Foxpro : Column::Dbase
     end
 
-    def memo_class #nodoc
+    def memo_class # nodoc
       @memo_class ||= if foxpro?
         Memo::Foxpro
       else
-        if version == "83"
-          Memo::Dbase3
-        else
-          Memo::Dbase4
-        end
+        version == '83' ? Memo::Dbase3 : Memo::Dbase4
       end
     end
 
-    def column_count #nodoc
-      @column_count ||= ((header.header_length - DBF_HEADER_SIZE + 1) / DBF_HEADER_SIZE).to_i
-    end
-
-    def open_data(data) #nodoc
+    def open_data(data) # nodoc
       data.is_a?(StringIO) ? data : File.open(data, 'rb')
     end
 
-    def open_memo(data, memo = nil) #nodoc
-      if memo.is_a? StringIO
-        memo_class.new(memo, version)
-      elsif memo
-        memo_class.open(memo, version)
+    def open_memo(data, memo = nil) # nodoc
+      if memo
+        meth = memo.is_a?(StringIO) ? :new : :open
+        memo_class.send(meth, memo, version)
       elsif !data.is_a? StringIO
-        files = Dir.glob(memo_search_path(data))
+        files = Dir.glob(memo_search_path data)
         files.any? ? memo_class.open(files.first, version) : nil
-      else
-        nil
       end
     end
 
-    def memo_search_path(io) #nodoc
+    def memo_search_path(io) # nodoc
       dirname = File.dirname(io)
       basename = File.basename(io, '.*')
       "#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}"
     end
 
-    def find_all(options) #nodoc
+    def find_all(options) # nodoc
       map do |record|
         if record && record.match?(options)
           yield record if block_given?
@@ -295,25 +282,24 @@ module DBF
       end.compact
     end
 
-    def find_first(options) #nodoc
-      detect {|record| record && record.match?(options)}
+    def find_first(options) # nodoc
+      detect { |record| record && record.match?(options) }
     end
 
-    def deleted_record? #nodoc
+    def deleted_record? # nodoc
       @data.read(1).unpack('a') == ['*']
     end
 
-    def seek(offset) #nodoc
+    def seek(offset) # nodoc
       @data.seek header.header_length + offset
     end
 
-    def seek_to_record(index) #nodoc
+    def seek_to_record(index) # nodoc
       seek(index * header.record_length)
     end
 
-    def csv_class #nodoc
+    def csv_class # nodoc
       @csv_class ||= CSV.const_defined?(:Reader) ? FCSV : CSV
     end
   end
-
 end

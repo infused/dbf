@@ -15,7 +15,7 @@ module DBF
     end
 
     def unpack_header
-      data.unpack("H2 x3 V v2 x17H2")
+      data.unpack('H2 x3 V v2 x17H2')
     end
   end
 end

@@ -1,4 +1,5 @@
 module DBF
+  # The Schema module is mixin for the Table class
   module Schema
     # Generate an ActiveRecord::Schema
     #
