@@ -2,6 +2,7 @@
 .bundle
 .rspec
 .rvmrc
+.rubocop.yml
 .ruby-version
 .ruby-gemset
 Gemfile.lock
