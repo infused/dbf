@@ -40,17 +40,21 @@ module DBF
       def type_cast(value)
         return nil if length == 0
 
-        case type
-          when 'N' then unpack_number(value)
-          when 'I' then unpack_unsigned_long(value)
-          when 'F' then value.to_f
-          when 'Y' then unpack_currency(value)
-          when 'D' then decode_date(value)
-          when 'T' then decode_datetime(value)
-          when 'L' then boolean(value)
-          when 'M' then decode_memo(value)
-          else          encode_string(value, true)
-        end
+        meth = type_cast_methods[type]
+        meth ? send(meth, value) : encode_string(value, true)
+      end
+
+      def type_cast_methods
+        {
+          'N' => :unpack_number,
+          'I' => :unpack_unsigned_long,
+          'F' => :unpack_float,
+          'Y' => :unpack_currency,
+          'D' => :decode_date,
+          'T' => :decode_datetime,
+          'L' => :boolean,
+          'M' => :decode_memo
+        }
       end
 
       # Returns true if the column is a memo
@@ -116,6 +120,10 @@ module DBF
 
       def unpack_unsigned_long(value) # nodoc
         value.unpack('V')[0]
+      end
+
+      def unpack_float(value) # nodoc
+        value.to_f
       end
 
       def boolean(value) # nodoc
