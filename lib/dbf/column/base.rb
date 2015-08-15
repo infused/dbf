@@ -127,12 +127,10 @@ module DBF
 
       def encode_string(value, strip_output = false) # nodoc
         output =
-          if @encoding && table.supports_encoding?
-            if table.supports_string_encoding?
-              value.to_s.force_encoding(@encoding).encode(*encoding_args)
-            elsif table.supports_iconv?
-              Iconv.conv('UTF-8', @encoding, value.to_s)
-            end
+          if supports_encoding? && table.supports_string_encoding?
+            value.to_s.force_encoding(@encoding).encode(*encoding_args)
+          elsif supports_encoding? && table.supports_iconv?
+            Iconv.conv('UTF-8', @encoding, value.to_s)
           else
             value
           end
@@ -182,6 +180,10 @@ module DBF
 
       def validate_name
         raise NameError, 'column name cannot be empty' if @name.empty?
+      end
+
+      def supports_encoding?
+        @encoding && table.supports_encoding?
       end
     end
   end
