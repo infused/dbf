@@ -24,13 +24,8 @@ module DBF
         @version = table.version
         @encoding = table.encoding
 
-        unless length >= 0
-          raise LengthError, 'field length must be 0 or greater'
-        end
-
-        if @name.empty?
-          raise NameError, 'column name cannot be empty'
-        end
+        validate_length
+        validate_name
       end
 
       # Cast value to native type
@@ -115,7 +110,7 @@ module DBF
       end
 
       def unpack_currency(value) # nodoc
-        (unpack_unsigned_long(value) / 10000.0).to_f
+        (unpack_unsigned_long(value) / 10_000.0).to_f
       end
 
       def unpack_unsigned_long(value) # nodoc
@@ -130,18 +125,19 @@ module DBF
         value.strip =~ /^(y|t)$/i ? true : false
       end
 
-      def encode_string(value, strip = false) # nodoc
-        output = if @encoding && table.supports_encoding?
-          if table.supports_string_encoding?
-            value.to_s.force_encoding(@encoding).encode(*encoding_args)
-          elsif table.supports_iconv?
-            Iconv.conv('UTF-8', @encoding, value.to_s)
+      def encode_string(value, strip_output = false) # nodoc
+        output =
+          if @encoding && table.supports_encoding?
+            if table.supports_string_encoding?
+              value.to_s.force_encoding(@encoding).encode(*encoding_args)
+            elsif table.supports_iconv?
+              Iconv.conv('UTF-8', @encoding, value.to_s)
+            end
+          else
+            value
           end
-        else
-          value
-        end
 
-        strip ? output.strip : output
+        strip_output ? output.strip : output
       end
 
       def encoding_args # nodoc
@@ -178,6 +174,14 @@ module DBF
       def clean(value) # nodoc
         truncated_value = value.strip.partition("\x00").first
         truncated_value.gsub(/[^\x20-\x7E]/, '')
+      end
+
+      def validate_length
+        raise LengthError, 'field length must be 0 or greater' if length < 0
+      end
+
+      def validate_name
+        raise NameError, 'column name cannot be empty' if @name.empty?
       end
     end
   end
