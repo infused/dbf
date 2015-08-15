@@ -39,19 +39,6 @@ module DBF
         meth ? send(meth, value) : encode_string(value, true)
       end
 
-      def type_cast_methods
-        {
-          'N' => :unpack_number,
-          'I' => :unpack_unsigned_long,
-          'F' => :unpack_float,
-          'Y' => :unpack_currency,
-          'D' => :decode_date,
-          'T' => :decode_datetime,
-          'L' => :boolean,
-          'M' => :decode_memo
-        }
-      end
-
       # Returns true if the column is a memo
       #
       # @return [Boolean]
@@ -85,6 +72,19 @@ module DBF
       end
 
       private
+
+      def type_cast_methods # nodoc
+        {
+          'N' => :unpack_number,
+          'I' => :unpack_unsigned_long,
+          'F' => :unpack_float,
+          'Y' => :unpack_currency,
+          'D' => :decode_date,
+          'T' => :decode_datetime,
+          'L' => :boolean,
+          'M' => :decode_memo
+        }
+      end
 
       def decode_date(value) # nodoc
         value.gsub!(' ', '0')
