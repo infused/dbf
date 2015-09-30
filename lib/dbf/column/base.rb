@@ -74,7 +74,7 @@ module DBF
       private
 
       def type_cast_methods # nodoc
-        {
+        m = {
           'N' => :unpack_number,
           'I' => :unpack_unsigned_long,
           'F' => :unpack_float,
@@ -84,6 +84,10 @@ module DBF
           'L' => :boolean,
           'M' => :decode_memo
         }
+        if DBF::Table::FOXPRO_VERSIONS.keys.include?(@version)
+          m['B'] = :unpack_double
+        end
+        m
       end
 
       def decode_date(value) # nodoc
@@ -119,6 +123,10 @@ module DBF
 
       def unpack_float(value) # nodoc
         value.to_f
+      end
+
+      def unpack_double(value) # nodoc
+        value.unpack('E')[0]
       end
 
       def boolean(value) # nodoc
@@ -160,7 +168,7 @@ module DBF
           ':text'
         when 'B'
           if DBF::Table::FOXPRO_VERSIONS.keys.include?(@version)
-            decimal > 0 ? ':float' : ':integer'
+            ':float'
           else
             ':text'
           end
