@@ -1,3 +1,7 @@
+# 2.0.11
+  - Foxpro doubles should always return the full stored precision
+    (see https://github.com/infused/dbf/pull/69)
+
 # 2.0.10
   - allow 0 length fields, but always return nil as value
 
