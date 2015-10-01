@@ -82,7 +82,8 @@ module DBF
           'D' => :decode_date,
           'T' => :decode_datetime,
           'L' => :boolean,
-          'M' => :decode_memo
+          'M' => :decode_memo,
+          'B' => :unpack_double
         }
       end
 
@@ -119,6 +120,10 @@ module DBF
 
       def unpack_float(value) # nodoc
         value.to_f
+      end
+
+      def unpack_double(value) # nodoc
+        value.unpack('E')[0]
       end
 
       def boolean(value) # nodoc
@@ -160,7 +165,7 @@ module DBF
           ':text'
         when 'B'
           if DBF::Table::FOXPRO_VERSIONS.keys.include?(@version)
-            decimal > 0 ? ':float' : ':integer'
+            ':float'
           else
             ':text'
           end
