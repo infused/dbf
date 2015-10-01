@@ -86,6 +86,22 @@ describe DBF::Column::Dbase do
       end
     end
 
+    context "with type B (binary)" do
+      context "with Foxpro dbf" do
+        it 'casts to float' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "B", 1, 2
+          expect(column.type_cast("\xEC\x51\xB8\x1E\x85\x6B\x31\x40")).to be_a(Float)
+          expect(column.type_cast("\xEC\x51\xB8\x1E\x85\x6B\x31\x40")).to eq 17.42
+        end
+
+        it 'stores original precision' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "B", 1, 0
+          expect(column.type_cast("\xEC\x51\xB8\x1E\x85\x6B\x31\x40")).to be_a(Float)
+          expect(column.type_cast("\xEC\x51\xB8\x1E\x85\x6B\x31\x40")).to eq 17.42
+        end
+      end
+    end
+
     context 'with type I (integer)' do
       context 'and 0 length' do
         it 'returns nil' do
@@ -236,18 +252,9 @@ describe DBF::Column::Dbase do
 
     context "with type B (binary)" do
       context "with Foxpro dbf" do
-        context "when decimal is greater than 0" do
-          it "outputs an float column" do
-            column = DBF::Column::Dbase.new table, "ColumnName", "B", 1, 2
-            expect(column.schema_definition).to eq "\"column_name\", :float\n"
-          end
-        end
-
-        context "when decimal is 0" do
-          it "outputs an integer column" do
-            column = DBF::Column::Dbase.new table, "ColumnName", "B", 1, 0
-            expect(column.schema_definition).to eq "\"column_name\", :integer\n"
-          end
+        it "outputs a float column" do
+          column = DBF::Column::Dbase.new table, "ColumnName", "B", 1, 2
+          expect(column.schema_definition).to eq "\"column_name\", :float\n"
         end
       end
     end
