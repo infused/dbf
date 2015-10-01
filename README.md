@@ -15,6 +15,7 @@ database files
 * Report bugs: <http://github.com/infused/dbf/issues>
 * Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the
   subject line
+* Change log: <https://github.com/infused/dbf/blob/master/CHANGELOG.md>
 
 ## Compatibility
 
