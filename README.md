@@ -180,13 +180,13 @@ Dump all records to a CSV file:
 ## Reading a Visual Foxpro database (v8, v9)
 
 A special Database::Foxpro class is available to read Visual Foxpro container files (.dbc-files). When using this class,
-long fieldnames are supported and tables can be references without using names.
+long field names are supported and tables can be referenced without using names.
 
 ```ruby
 require 'dbf'
 
 contacts = DBF::Database::Foxpro.new('contactdatabase.dbc').contacts
-mycontact = contacts.record(1).spouses_interests
+my_contact = contacts.record(1).spouses_interests
 ```
 
 
