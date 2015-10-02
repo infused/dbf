@@ -1,3 +1,7 @@
+# 2.0.12
+  - Parse (I) values as signed
+    (see https://github.com/infused/dbf/pull/70)
+
 # 2.0.11
   - Foxpro doubles should always return the full stored precision
     (see https://github.com/infused/dbf/pull/69)
