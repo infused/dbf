@@ -76,7 +76,7 @@ module DBF
       def type_cast_methods # nodoc
         {
           'N' => :unpack_number,
-          'I' => :unpack_unsigned_long,
+          'I' => :unpack_signed_long,
           'F' => :unpack_float,
           'Y' => :unpack_currency,
           'D' => :decode_date,
@@ -111,11 +111,11 @@ module DBF
       end
 
       def unpack_currency(value) # nodoc
-        (unpack_unsigned_long(value) / 10_000.0).to_f
+        (unpack_signed_long(value) / 10_000.0).to_f
       end
 
-      def unpack_unsigned_long(value) # nodoc
-        value.unpack('V')[0]
+      def unpack_signed_long(value) # nodoc
+        value.unpack('l<')[0]
       end
 
       def unpack_float(value) # nodoc

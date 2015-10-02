@@ -58,6 +58,13 @@ describe DBF::Column::Dbase do
           expect(column.type_cast(value)).to be_a(Fixnum)
           expect(column.type_cast(value)).to eq 135
         end
+
+        it 'supports negative Fixnum' do
+          value = '-135'
+          column = DBF::Column::Dbase.new table, "ColumnName", "N", 3, 0
+          expect(column.type_cast(value)).to be_a(Fixnum)
+          expect(column.type_cast(value)).to eq -135
+        end
       end
 
       context 'and more than 0 decimals' do
@@ -66,6 +73,13 @@ describe DBF::Column::Dbase do
           column = DBF::Column::Dbase.new table, "ColumnName", "N", 2, 1
           expect(column.type_cast(value)).to be_a(Float)
           expect(column.type_cast(value)).to eq 13.5
+        end
+
+        it 'supports negative Float' do
+          value = '-13.5'
+          column = DBF::Column::Dbase.new table, "ColumnName", "N", 2, 1
+          expect(column.type_cast(value)).to be_a(Float)
+          expect(column.type_cast(value)).to eq -13.5
         end
       end
     end
@@ -84,6 +98,13 @@ describe DBF::Column::Dbase do
         expect(column.type_cast(value)).to be_a(Float)
         expect(column.type_cast(value)).to eq 135.0
       end
+
+      it 'supports negative Float' do
+        value = '-135'
+        column = DBF::Column::Dbase.new table, "ColumnName", "F", 3, 0
+        expect(column.type_cast(value)).to be_a(Float)
+        expect(column.type_cast(value)).to eq -135.0
+      end
     end
 
     context "with type B (binary)" do
@@ -98,6 +119,12 @@ describe DBF::Column::Dbase do
           column = DBF::Column::Dbase.new table, "ColumnName", "B", 1, 0
           expect(column.type_cast("\xEC\x51\xB8\x1E\x85\x6B\x31\x40")).to be_a(Float)
           expect(column.type_cast("\xEC\x51\xB8\x1E\x85\x6B\x31\x40")).to eq 17.42
+        end
+
+        it 'supports negative binary' do
+          column = DBF::Column::Dbase.new table, "ColumnName", "B", 1, 2
+          expect(column.type_cast("\x00\x00\x00\x00\x00\xC0\x65\xC0")).to be_a(Float)
+          expect(column.type_cast("\x00\x00\x00\x00\x00\xC0\x65\xC0")).to eq -174.0
         end
       end
     end
@@ -115,6 +142,13 @@ describe DBF::Column::Dbase do
         column = DBF::Column::Dbase.new table, "ColumnName", "I", 3, 0
         expect(column.type_cast(value)).to be_a(Fixnum)
         expect(column.type_cast(value)).to eq 96643
+      end
+
+      it "supports negative Fixnum" do
+        value = "\x24\xE1\xFF\xFF\xFF\xFF\xFF\xFF"
+        column = DBF::Column::Dbase.new table, "ColumnName", "I", 3, 0
+        expect(column.type_cast(value)).to be_a(Fixnum)
+        expect(column.type_cast(value)).to eq -7900
       end
     end
 
@@ -232,6 +266,11 @@ describe DBF::Column::Dbase do
     it 'casts to float' do
       expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to be_a(Float)
       expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to eq 18.0
+    end
+
+    it 'supports negative currency' do
+      expect(column.type_cast("\xFC\xF0\xF0\xFE\xFF\xFF\xFF\xFF")).to be_a(Float)
+      expect(column.type_cast("\xFC\xF0\xF0\xFE\xFF\xFF\xFF\xFF")).to eq -1776.41
     end
 
     context 'and 0 length' do
