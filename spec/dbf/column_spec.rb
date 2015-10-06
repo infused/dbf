@@ -75,7 +75,7 @@ describe DBF::Column::Dbase do
           expect(column.type_cast(value)).to eq 13.5
         end
 
-        it 'supports negative Float' do
+        it 'casts negative value to Float' do
           value = '-13.5'
           column = DBF::Column::Dbase.new table, "ColumnName", "N", 2, 1
           expect(column.type_cast(value)).to be_a(Float)
@@ -99,7 +99,7 @@ describe DBF::Column::Dbase do
         expect(column.type_cast(value)).to eq 135.0
       end
 
-      it 'supports negative Float' do
+      it 'casts negative value to Float' do
         value = '-135'
         column = DBF::Column::Dbase.new table, "ColumnName", "F", 3, 0
         expect(column.type_cast(value)).to be_a(Float)
@@ -145,7 +145,7 @@ describe DBF::Column::Dbase do
       end
 
       it "supports negative Fixnum" do
-        value = "\x24\xE1\xFF\xFF\xFF\xFF\xFF\xFF"
+        value = "\x24\xE1\xFF\xFF"
         column = DBF::Column::Dbase.new table, "ColumnName", "I", 3, 0
         expect(column.type_cast(value)).to be_a(Fixnum)
         expect(column.type_cast(value)).to eq -7900
