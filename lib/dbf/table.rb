@@ -229,12 +229,23 @@ module DBF
     def build_columns # nodoc
       columns = []
       @data.seek(DBF_HEADER_SIZE)
-      until ["\0", "\r"].include?(first_byte = @data.read(1))
-        column_data = first_byte + @data.read(DBF_HEADER_SIZE - 1)
+      while !end_of_record?
+        column_data = @data.read(DBF_HEADER_SIZE)
         name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
         columns << column_class.new(self, name, type, length, decimal)
       end
       columns
+    end
+
+    def end_of_record? # nodoc
+      pos = @data.pos
+      byte = @data.read(1)
+      @data.seek(pos)
+      !printable_ascii_chars.include?(byte[0].ord)
+    end
+
+    def printable_ascii_chars # nodoc
+      32..127
     end
 
     def foxpro? # nodoc
