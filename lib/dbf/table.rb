@@ -227,9 +227,9 @@ module DBF
     private
 
     def build_columns # nodoc
-      columns = []
       @data.seek(DBF_HEADER_SIZE)
-      while !end_of_record?
+      columns = []
+      until end_of_record?
         column_data = @data.read(DBF_HEADER_SIZE)
         name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
         columns << column_class.new(self, name, type, length, decimal)
