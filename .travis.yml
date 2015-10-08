@@ -8,6 +8,7 @@ rvm:
 branches:
   only:
     - master
+    - v3
 bundler_args: --without development
 script: bundle exec rspec -fdoc
 gemfile: Gemfile.travis
