@@ -148,7 +148,7 @@ module DBF
     # @param [optional String] path Defaults to STDOUT
     def to_csv(path = nil)
       out_io = path ? File.open(path, 'w') : $stdout
-      csv = csv_class.new(out_io, :force_quotes => true)
+      csv = CSV.new(out_io, :force_quotes => true)
       csv << column_names
       each { |record| csv << record.to_a }
     end
@@ -259,10 +259,12 @@ module DBF
     end
 
     def memo_class # nodoc
-      @memo_class ||= if foxpro?
-        Memo::Foxpro
-      else
-        version == '83' ? Memo::Dbase3 : Memo::Dbase4
+      @memo_class ||= begin
+        if foxpro?
+          Memo::Foxpro
+        else
+          version == '83' ? Memo::Dbase3 : Memo::Dbase4
+        end
       end
     end
 
@@ -309,10 +311,6 @@ module DBF
 
     def seek_to_record(index) # nodoc
       seek(index * header.record_length)
-    end
-
-    def csv_class # nodoc
-      @csv_class ||= CSV.const_defined?(:Reader) ? FCSV : CSV
     end
   end
 end
