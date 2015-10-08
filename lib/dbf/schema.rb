@@ -22,7 +22,16 @@ module DBF
     #   end
     #
     # @return [String]
-    def schema
+    def schema(format = :activerecord)
+      supported_formats = [:activerecord]
+      if supported_formats.include?(format)
+        send "#{format}_schema"
+      else
+        raise ArgumentError
+      end
+    end
+
+    def activerecord_schema
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{File.basename(@data.path, ".*")}\" do |t|\n"
       columns.each do |column|
