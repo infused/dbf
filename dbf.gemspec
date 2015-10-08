@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.summary = 'Read xBase files'
   s.description = 'A small fast library for reading dBase, xBase, Clipper and FoxPro database files.'
   s.license = 'MIT'
-
   s.bindir = 'bin'
   s.executables = ['dbf']
   s.rdoc_options = ['--charset=UTF-8']
@@ -19,6 +18,5 @@ Gem::Specification.new do |s|
   s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*', 'dbf.gemspec']
   s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.require_paths = ['lib']
-
-  s.required_rubygems_version = '>= 1.3.0'
+  s.required_rubygems_version = Gem::Requirement.new('>= 1.3.0')
 end
