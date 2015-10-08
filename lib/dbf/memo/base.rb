@@ -40,7 +40,7 @@ module DBF
         @block_content_size ||= block_size - BLOCK_HEADER_SIZE
       end
 
-      def block_size
+      def block_size #nodoc
         BLOCK_SIZE
       end
     end
