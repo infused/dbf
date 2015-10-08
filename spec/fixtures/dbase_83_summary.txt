@@ -1,0 +1,24 @@
+
+Database: dbase_83.dbf
+Type: (83) dBase III with memo file
+Memo File: true
+Records: 67
+
+Fields:
+Name             Type       Length     Decimal
+------------------------------------------------------------------------------
+ID               N          19         0         
+CATCOUNT         N          19         0         
+AGRPCOUNT        N          19         0         
+PGRPCOUNT        N          19         0         
+ORDER            N          19         0         
+CODE             C          50         0         
+NAME             C          100        0         
+THUMBNAIL        C          254        0         
+IMAGE            C          254        0         
+PRICE            N          13         2         
+COST             N          13         2         
+DESC             M          10         0         
+WEIGHT           N          13         2         
+TAXABLE          L          1          0         
+ACTIVE           L          1          0         

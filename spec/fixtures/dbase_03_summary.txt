@@ -1,0 +1,40 @@
+
+Database: dbase_03.dbf
+Type: (03) dBase III without memo file
+Memo File: false
+Records: 14
+
+Fields:
+Name             Type       Length     Decimal
+------------------------------------------------------------------------------
+Point_ID         C          12         0         
+Type             C          20         0         
+Shape            C          20         0         
+Circular_D       C          20         0         
+Non_circul       C          60         0         
+Flow_prese       C          20         0         
+Condition        C          20         0         
+Comments         C          60         0         
+Date_Visit       D          8          0         
+Time             C          10         0         
+Max_PDOP         N          5          1         
+Max_HDOP         N          5          1         
+Corr_Type        C          36         0         
+Rcvr_Type        C          36         0         
+GPS_Date         D          8          0         
+GPS_Time         C          10         0         
+Update_Sta       C          36         0         
+Feat_Name        C          20         0         
+Datafile         C          20         0         
+Unfilt_Pos       N          10         0         
+Filt_Pos         N          10         0         
+Data_Dicti       C          20         0         
+GPS_Week         N          6          0         
+GPS_Second       N          12         3         
+GPS_Height       N          16         3         
+Vert_Prec        N          16         1         
+Horz_Prec        N          16         1         
+Std_Dev          N          16         6         
+Northing         N          16         3         
+Easting          N          16         3         
+Point_ID         N          9          0         

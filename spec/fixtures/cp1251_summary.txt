@@ -1,0 +1,11 @@
+
+Database: cp1251.dbf
+Type: (30) Visual FoxPro
+Memo File: false
+Records: 4
+
+Fields:
+Name             Type       Length     Decimal
+------------------------------------------------------------------------------
+RN               N          4          0         
+NAME             C          100        0         
