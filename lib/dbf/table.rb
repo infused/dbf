@@ -238,10 +238,16 @@ module DBF
     end
 
     def end_of_record? # nodoc
-      pos = @data.pos
+      original_pos = @data.pos
       byte = @data.read(1)
       @data.seek(pos)
       byte[0].ord == 13
+      @data.seek(original_pos)
+      !printable_ascii_chars.include?(byte[0].ord)
+    end
+
+    def printable_ascii_chars # nodoc
+      32..127
     end
 
     def foxpro? # nodoc
