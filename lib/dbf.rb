@@ -1,6 +1,7 @@
 require 'date'
 
 require 'csv'
+require 'json'
 
 require 'dbf/schema'
 require 'dbf/record'

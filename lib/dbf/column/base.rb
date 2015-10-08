@@ -71,6 +71,10 @@ module DBF
         end
       end
 
+      def to_hash
+        {name: name, type: type, length: length, decimal: decimal}
+      end
+
       private
 
       def type_cast_methods # nodoc

@@ -21,9 +21,10 @@ module DBF
     #     t.column :notes, :text
     #   end
     #
+    # @param [Symbol] format Valid options are :activerecord and :json
     # @return [String]
     def schema(format = :activerecord)
-      supported_formats = [:activerecord]
+      supported_formats = [:activerecord, :json]
       if supported_formats.include?(format)
         send "#{format}_schema"
       else
@@ -33,12 +34,16 @@ module DBF
 
     def activerecord_schema
       s = "ActiveRecord::Schema.define do\n"
-      s << "  create_table \"#{File.basename(@data.path, ".*")}\" do |t|\n"
+      s << "  create_table \"#{File.basename(@data.path, '.*')}\" do |t|\n"
       columns.each do |column|
         s << "    t.column #{column.schema_definition}"
       end
       s << "  end\nend"
       s
+    end
+
+    def json_schema
+      columns.map(&:to_hash).to_json
     end
   end
 end
