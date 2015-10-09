@@ -148,7 +148,7 @@ module DBF
     # @param [optional String] path Defaults to STDOUT
     def to_csv(path = nil)
       out_io = path ? File.open(path, 'w') : $stdout
-      csv = CSV.new(out_io, :force_quotes => true)
+      csv = CSV.new(out_io, force_quotes: true)
       csv << column_names
       each { |record| csv << record.to_a }
     end

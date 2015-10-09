@@ -92,8 +92,8 @@ module DBF
       end
 
       def decode_date(value) # nodoc
-        value.gsub!(' ', '0')
-        value !~ /\S/ ? nil : Date.parse(value)
+        v = value.tr(' ', '0')
+        v !~ /\S/ ? nil : Date.parse(v)
       rescue
         nil
       end
