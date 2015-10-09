@@ -240,8 +240,6 @@ module DBF
     def end_of_record? # nodoc
       original_pos = @data.pos
       byte = @data.read(1)
-      @data.seek(pos)
-      byte[0].ord == 13
       @data.seek(original_pos)
       byte.ord == 13
     end
