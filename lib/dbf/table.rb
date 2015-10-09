@@ -38,7 +38,7 @@ module DBF
     }
 
     attr_reader :header
-    attr_accessor :encoding             # Source encoding (for ex. :cp1251)
+    attr_accessor :encoding
 
     # Opens a DBF::Table
     # Examples:
