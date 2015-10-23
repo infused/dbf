@@ -4,7 +4,6 @@
 [![Code Quality](http://img.shields.io/codeclimate/github/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
 [![Test Coverage](http://img.shields.io/codeclimate/coverage/github/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
 [![Dependency Status](http://img.shields.io/gemnasium/infused/dbf.svg?style=flat)](https://gemnasium.com/infused/dbf)
-[![Issues](https://img.shields.io/github/issues/infused/dbf.svg)](https://github.com/infused/dbf/issues)
 [![Total Downloads](https://img.shields.io/gem/dt/dbf.svg)](https://rubygems.org/gems/dbf/)
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro
@@ -17,6 +16,11 @@ database files
   subject line
 * Change log: <https://github.com/infused/dbf/blob/master/CHANGELOG.md>
 
+
+NOTE: This documentation is for dbf-2.0.x. If you don't need support for
+Ruby 1.8 or 1.9, please upgrade to dbf-3.0.x. The README for 3.0.x
+can be found here https://github.com/infused/dbf/blob/master/README.md
+
 ## Compatibility
 
 DBF is tested to work with the following versions of ruby:
@@ -26,12 +30,18 @@ DBF is tested to work with the following versions of ruby:
 * REE 1.8.7
 * Rubinius 2.1+
 
-Note that beginning with version 3, support for Ruby 1.8 and 1.9 will be dropped.
-
 ## Installation
 
+Install the gem manually:
+
 ```
-gem install dbf
+gem install dbf -v 2.0.13
+```    
+
+Or, install via Gemfile:
+
+```ruby
+gem 'dbf', '~> 2.0.13'
 ```
 
 ## Basic Usage
