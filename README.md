@@ -26,6 +26,8 @@ DBF is tested to work with the following versions of ruby:
 * REE 1.8.7
 * Rubinius 2.1+
 
+Note that beginning with version 3, support for Ruby 1.8 and 1.9 will be dropped.
+
 ## Installation
 
 ```
