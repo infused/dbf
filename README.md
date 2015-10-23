@@ -17,14 +17,14 @@ database files
   subject line
 * Change log: <https://github.com/infused/dbf/blob/master/CHANGELOG.md>
 
+NOTE: beginning with version 3 we have dropped support for Ruby 1.8 and 1.9. If you need support for older Rubies, please use 2.0.x (https://github.com/infused/dbf/tree/2_stable)
+
 ## Compatibility
 
 DBF is tested to work with the following versions of ruby:
 
 * MRI Ruby 2.0.x, 2.1.x, 2.2.x
 * JRuby head
-
-Note that beginning with version 3, support for Ruby 1.8 and 1.9 will be dropped.
 
 ## Installation
 
