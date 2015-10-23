@@ -241,7 +241,7 @@ module DBF
       pos = @data.pos
       byte = @data.read(1)
       @data.seek(pos)
-      byte.ord == 13
+      byte[0].ord == 13
     end
 
     def foxpro? # nodoc
