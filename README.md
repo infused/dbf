@@ -28,8 +28,16 @@ DBF is tested to work with the following versions of ruby:
 
 ## Installation
 
+Install the gem manually:
+
 ```
 gem install dbf
+```
+
+Or add to your Gemfile:
+
+```ruby
+gem 'dbf'
 ```
 
 ## Basic Usage
