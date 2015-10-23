@@ -273,6 +273,11 @@ describe DBF::Column::Dbase do
       expect(column.type_cast("\xFC\xF0\xF0\xFE\xFF\xFF\xFF\xFF")).to eq -1776.41
     end
 
+    it 'supports 64bit negative currency' do
+      expect(column.type_cast("pN'9\xFF\xFF\xFF\xFF")).to be_a(Float)
+      expect(column.type_cast("pN'9\xFF\xFF\xFF\xFF")).to eq -333609.0
+    end
+
     context 'and 0 length' do
       it 'returns nil' do
         column = DBF::Column::Dbase.new table, "ColumnName", "Y", 0, 0

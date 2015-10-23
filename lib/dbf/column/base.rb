@@ -111,7 +111,7 @@ module DBF
       end
 
       def unpack_currency(value) # nodoc
-        (unpack_signed_long(value) / 10_000.0).to_f
+        (value.unpack('q<')[0] / 10_000.0).to_f
       end
 
       def unpack_signed_long(value) # nodoc
