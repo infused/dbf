@@ -1,3 +1,7 @@
+# 2.0.13
+  - Support 64-bit currency signed currency values
+    (see https://github.com/infused/dbf/pull/71)
+
 # 2.0.12
   - Parse (I) values as signed
     (see https://github.com/infused/dbf/pull/70)
