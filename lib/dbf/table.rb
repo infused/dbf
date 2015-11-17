@@ -64,7 +64,7 @@ module DBF
     def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
       @data.rewind
-      @header = Header.new(@data.read(DBF_HEADER_SIZE), supports_encoding?)
+      @header = Header.new(@data.read DBF_HEADER_SIZE)
       @encoding = encoding || header.encoding
       @memo = open_memo(data, memo)
       yield self if block_given?
@@ -162,10 +162,10 @@ module DBF
     #   table.find(5)
     #
     #   # Find all records for Keith Morrison
-    #   table.find :all, :first_name => "Keith", :last_name => "Morrison"
+    #   table.find :all, first_name: "Keith", last_name: "Morrison"
     #
     #   # Find first record
-    #   table.find :first, :first_name => "Keith"
+    #   table.find :first, first_name: "Keith"
     #
     # The <b>command</b> may be a record index, :all, or :first.
     # <b>options</b> is optional and, if specified, should be a hash where the
@@ -203,25 +203,6 @@ module DBF
     # @return [String]
     def column_names
       columns.map(&:name)
-    end
-
-    # Is string encoding supported?
-    # String encoding is always supported in Ruby 1.9+.
-    # Ruby 1.8.x requires that Ruby be compiled with iconv support.
-    def supports_encoding?
-      supports_string_encoding? || supports_iconv?
-    end
-
-    # Does String support encoding?  Should be true in Ruby 1.9+
-    def supports_string_encoding?
-      ''.respond_to?(:encoding)
-    end
-
-    def supports_iconv? # nodoc
-      require 'iconv'
-      true
-    rescue
-      false
     end
 
     private

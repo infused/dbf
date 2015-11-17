@@ -10,7 +10,7 @@ RSpec::Core::RakeTask.new :specdoc do |t|
   t.rspec_opts = %w(-fl)
 end
 
-task :default => :spec
+task default: :spec
 
 desc "Open an irb session preloaded with this library"
 task :console do

@@ -8,10 +8,10 @@ module DBF
     attr_reader :encoding_key
     attr_reader :encoding
 
-    def initialize(data, set_encoding)
+    def initialize(data)
       @data = data
       @version, @record_count, @header_length, @record_length, @encoding_key = unpack_header
-      @encoding = DBF::ENCODINGS[@encoding_key] if set_encoding
+      @encoding = DBF::ENCODINGS[@encoding_key]
     end
 
     def unpack_header

@@ -95,7 +95,7 @@ all records will be loaded into memory.
 
 ```ruby
 # find all records with slot_number equal to s42
-widgets.find(:all, :slot_number => 's42') do |widget|
+widgets.find(:all, slot_number: 's42') do |widget|
   # the record will be nil if deleted, but not yet pruned from the database
   if widget
     puts widget.serial_number
@@ -103,7 +103,7 @@ widgets.find(:all, :slot_number => 's42') do |widget|
 end
 
 # find the first record with slot_number equal to s42
-widgets.find :first, :slot_number => 's42'
+widgets.find :first, slot_number: 's42'
 
 # find record number 10
 widgets.find(10)
@@ -157,7 +157,7 @@ class CreateBooks < ActiveRecord::Migration
 
     Book.reset_column_information
     table.each do |record|
-      Book.create(:title => record.title, :author => record.author)
+      Book.create(title: record.title, author: record.author)
     end
   end
 

@@ -35,8 +35,8 @@ module DBF
       def type_cast(value)
         return nil if length == 0
 
-        meth = type_cast_methods[type]
-        meth ? send(meth, value) : encode_string(value, true)
+        klass = type_cast_class[type.to_sym]
+        encode klass.new(value, decimal).type_cast
       end
 
       # Returns true if the column is a memo
@@ -77,78 +77,36 @@ module DBF
 
       private
 
-      def type_cast_methods # nodoc
-        {
-          'N' => :unpack_number,
-          'I' => :unpack_signed_long,
-          'F' => :unpack_float,
-          'Y' => :unpack_currency,
-          'D' => :decode_date,
-          'T' => :decode_datetime,
-          'L' => :boolean,
-          'M' => :decode_memo,
-          'B' => :unpack_double
-        }
+      def type_cast_class # nodoc
+        h = Hash.new(ColumnType::String)
+        h[:N] = ColumnType::Number
+        h[:I] = ColumnType::SignedLong
+        h[:F] = ColumnType::Float
+        h[:Y] = ColumnType::Currency
+        h[:D] = ColumnType::Date
+        h[:T] = ColumnType::DateTime
+        h[:L] = ColumnType::Boolean
+        h[:M] = ColumnType::Memo
+        h[:B] = ColumnType::Double
+        h
       end
 
-      def decode_date(value) # nodoc
-        v = value.tr(' ', '0')
-        v !~ /\S/ ? nil : Date.parse(v)
-      rescue
-        nil
-      end
+      def encode(value, strip_output = false) # nodoc
+        return value if !value.respond_to?(:encoding)
 
-      def decode_datetime(value) # nodoc
-        days, msecs = value.unpack('l2')
-        secs = (msecs / 1000).to_i
-        DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60)
-      rescue
-        nil
-      end
-
-      def decode_memo(value) # nodoc
-        value && encode_string(value)
-      end
-
-      def unpack_number(value) # nodoc
-        decimal.zero? ? value.to_i : value.to_f
-      end
-
-      def unpack_currency(value) # nodoc
-        (value.unpack('q<')[0] / 10_000.0).to_f
-      end
-
-      def unpack_signed_long(value) # nodoc
-        value.unpack('l<')[0]
-      end
-
-      def unpack_float(value) # nodoc
-        value.to_f
-      end
-
-      def unpack_double(value) # nodoc
-        value.unpack('E')[0]
-      end
-
-      def boolean(value) # nodoc
-        value.strip =~ /^(y|t)$/i ? true : false
-      end
-
-      def encode_string(value, strip_output = false) # nodoc
-        output =
-          if supports_encoding? && table.supports_string_encoding?
-            value.to_s.force_encoding(@encoding).encode(*encoding_args)
-          elsif supports_encoding? && table.supports_iconv?
-            Iconv.conv('UTF-8', @encoding, value.to_s)
-          else
-            value
-          end
-
+        output = @encoding ? encode_string(value) : value
         strip_output ? output.strip : output
       end
 
+      def encode_string(string)
+        string.force_encoding(@encoding).encode(*encoding_args)
+      end
+
       def encoding_args # nodoc
-        [Encoding.default_external, {:undef => :replace, :invalid => :replace}]
+        @encoding_args ||= [
+          Encoding.default_external,
+          {undef: :replace, invalid: :replace}
+        ]
       end
 
       def schema_data_type # nodoc
@@ -189,10 +147,6 @@ module DBF
 
       def validate_name
         raise NameError, 'column name cannot be empty' if @name.empty?
-      end
-
-      def supports_encoding?
-        @encoding && table.supports_encoding?
       end
     end
   end

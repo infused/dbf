@@ -1,3 +1,6 @@
+# 3.0.0
+  - Requires Ruby version 2.0 and above
+
 # 2.0.13
   - Support 64-bit currency signed currency values
     (see https://github.com/infused/dbf/pull/71)

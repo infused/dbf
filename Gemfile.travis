@@ -1,9 +1,7 @@
 gemspec
 source 'https://rubygems.org'
 
-
 group :test do
-  gem 'rubysl', :platform => :rbx
   gem 'rspec'
-  gem 'codeclimate-test-reporter', :require => false, :platform => :ruby
+  gem 'codeclimate-test-reporter', require: false, platform: :ruby
 end

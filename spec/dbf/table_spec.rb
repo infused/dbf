@@ -10,6 +10,9 @@ describe DBF::Table do
   end
 
   describe '#initialize' do
+    let(:data) { StringIO.new File.read(dbf_path) }
+    let(:memo) { StringIO.new File.read(memo_path) }
+
     describe 'when given a path to an existing dbf file' do
       it 'does not raise an error' do
         expect { DBF::Table.new dbf_path }.to_not raise_error
@@ -29,27 +32,26 @@ describe DBF::Table do
     end
 
     it 'accepts an io-like data object' do
-      data = StringIO.new File.read(dbf_path)
       expect { DBF::Table.new data }.to_not raise_error
     end
 
     it 'accepts an io-like data and memo object' do
-      data = StringIO.new File.read(dbf_path)
-      memo = StringIO.new File.read(memo_path)
       expect { DBF::Table.new data, memo }.to_not raise_error
     end
   end
 
   context '#close' do
+    before { table.close }
+
     it 'closes the io' do
-      table.close
       expect { table.record(1) }.to raise_error(IOError)
     end
   end
 
   describe '#schema' do
+    let(:control_schema) { File.read(fixture_path('dbase_83_schema.txt')) }
+
     it 'matches the test schema fixture' do
-      control_schema = File.read(fixture_path('dbase_83_schema.txt'))
       expect(table.schema).to eq control_schema
     end
   end
@@ -99,8 +101,9 @@ describe DBF::Table do
     end
 
     describe 'when path param passed' do
+      before { table.to_csv('test.csv') }
+
       it 'creates a custom csv file' do
-        table.to_csv('test.csv')
         expect(File.exist?('test.csv')).to be_truthy
       end
     end
@@ -134,12 +137,14 @@ describe DBF::Table do
     end
 
     describe 'with :all' do
-      it 'accepts a block' do
-        records = []
-        table.find(:all, :weight => 0.0) do |record|
+      let(:records) do
+        table.find(:all, weight: 0.0).inject([]) do |records, record|
           records << record
         end
-        expect(records).to eq table.find(:all, :weight => 0.0)
+      end
+
+      it 'accepts a block' do
+        expect(records).to eq table.find(:all, weight: 0.0)
       end
 
       it 'returns all records if options are empty' do
@@ -194,8 +199,9 @@ describe DBF::Table do
 
   describe '#has_memo_file?' do
     describe 'without a memo file' do
+      let(:table) { DBF::Table.new fixture_path('dbase_03.dbf') }
+
       it 'is false' do
-        table = DBF::Table.new fixture_path('dbase_03.dbf')
         expect(table.has_memo_file?).to be_falsey
       end
     end
@@ -208,18 +214,22 @@ describe DBF::Table do
   end
 
   describe '#columns' do
+    let(:columns) { table.columns }
+
     it 'is an array of Columns' do
-      expect(table.columns).to be_an(Array)
-      expect(table.columns).to_not be_empty
-      expect(table.columns.all? {|c| c.class == DBF::Column::Dbase}).to be_truthy
+      expect(columns).to be_an(Array)
+      expect(columns).to_not be_empty
+      expect(columns.all? {|c| c.class == DBF::Column::Dbase}).to be_truthy
     end
   end
 
   describe '#column_names' do
+    let(:column_names) do
+      %w(ID CATCOUNT AGRPCOUNT PGRPCOUNT ORDER CODE NAME THUMBNAIL IMAGE PRICE COST DESC WEIGHT TAXABLE ACTIVE)
+    end
+
     it 'is an array of all column names' do
-      correct_column_names = %w(ID CATCOUNT AGRPCOUNT PGRPCOUNT ORDER CODE NAME THUMBNAIL IMAGE PRICE COST DESC WEIGHT TAXABLE ACTIVE)
-      expect(table.column_names).to eq correct_column_names
+      expect(table.column_names).to eq column_names
     end
   end
-
 end
