@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe DBF::Database::Foxpro do
-  let(:dbf_path) { fixture_path('foxprodb/FOXPRO-DB-TEST.DBC') }
+RSpec.describe DBF::Database::Foxpro do
+  let(:dbf_path) { fixture('foxprodb/FOXPRO-DB-TEST.DBC') }
   let(:db) { DBF::Database::Foxpro.new(dbf_path) }
 
   describe '#initialize' do

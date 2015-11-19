@@ -1,6 +1,6 @@
 require "spec_helper"
 
-shared_examples_for 'DBF' do
+RSpec.shared_examples_for 'DBF' do
   specify "sum of column lengths should equal record length specified in header plus one" do
     header_record_length = table.instance_eval {@header.record_length}
     sum_of_column_lengths = table.columns.inject(1) {|sum, column| sum += column.length}
@@ -50,8 +50,8 @@ shared_examples_for 'DBF' do
   end
 end
 
-describe DBF, "of type 03 (dBase III without memo file)" do
-  let(:table) { DBF::Table.new fixture_path('dbase_03.dbf') }
+RSpec.describe DBF, "of type 03 (dBase III without memo file)" do
+  let(:table) { DBF::Table.new fixture('dbase_03.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -68,8 +68,8 @@ describe DBF, "of type 03 (dBase III without memo file)" do
   end
 end
 
-describe DBF, "of type 30 (Visual FoxPro)" do
-  let(:table) { DBF::Table.new fixture_path('dbase_30.dbf') }
+RSpec.describe DBF, "of type 30 (Visual FoxPro)" do
+  let(:table) { DBF::Table.new fixture('dbase_30.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -90,8 +90,8 @@ describe DBF, "of type 30 (Visual FoxPro)" do
   end
 end
 
-describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
-  let(:table) { DBF::Table.new fixture_path('dbase_31.dbf') }
+RSpec.describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
+  let(:table) { DBF::Table.new fixture('dbase_31.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -108,8 +108,8 @@ describe DBF, "of type 31 (Visual FoxPro with AutoIncrement field)" do
   end
 end
 
-describe DBF, "of type 83 (dBase III with memo file)" do
-  let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
+RSpec.describe DBF, "of type 83 (dBase III with memo file)" do
+  let(:table) { DBF::Table.new fixture('dbase_83.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -126,8 +126,8 @@ describe DBF, "of type 83 (dBase III with memo file)" do
   end
 end
 
-describe DBF, "of type 8b (dBase IV with memo file)" do
-  let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
+RSpec.describe DBF, "of type 8b (dBase IV with memo file)" do
+  let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
 
   it_should_behave_like "DBF"
 
@@ -144,8 +144,8 @@ describe DBF, "of type 8b (dBase IV with memo file)" do
   end
 end
 
-describe DBF, "of type f5 (FoxPro with memo file)" do
-  let(:table) { DBF::Table.new fixture_path('dbase_f5.dbf') }
+RSpec.describe DBF, "of type f5 (FoxPro with memo file)" do
+  let(:table) { DBF::Table.new fixture('dbase_f5.dbf') }
 
   it_should_behave_like "DBF"
 

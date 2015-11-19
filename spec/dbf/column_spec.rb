@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe DBF::Column do
-  let(:table) { DBF::Table.new fixture_path('dbase_30.dbf')}
+RSpec.describe DBF::Column do
+  let(:table) { DBF::Table.new fixture('dbase_30.dbf')}
 
   context 'when initialized' do
     let(:column) { DBF::Column.new table, 'ColumnName', 'N', 1, 0 }
@@ -182,19 +182,6 @@ describe DBF::Column do
         it 'casts to DateTime' do
           expect(column.type_cast("Nl%\000\300Z\252\003")).to be_a(DateTime)
           expect(column.type_cast("Nl%\000\300Z\252\003")).to eq DateTime.parse('2002-10-10T17:04:56+00:00')
-        end
-      end
-
-      if ruby_supports_mathn?
-        context 'when requiring mathn' do
-          it 'casts to DateTime' do
-            with_mathn = lambda do
-              require 'mathn'
-              column.type_cast("Nl%\000\300Z\252\003")
-            end
-            expect(with_mathn.call).to be_a(DateTime)
-            expect(with_mathn.call).to eq DateTime.parse('2002-10-10T17:04:56+00:00')
-          end
         end
       end
 

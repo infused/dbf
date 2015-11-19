@@ -1,11 +1,10 @@
 require "spec_helper"
 
-describe DBF::Record do
-
+RSpec.describe DBF::Record do
   describe '#to_a' do
-    let(:table) { DBF::Table.new fixture_path('dbase_83.dbf') }
-    let(:record_0) { YAML.load_file(fixture_path('dbase_83_record_0.yml')) }
-    let(:record_9) { YAML.load_file(fixture_path('dbase_83_record_9.yml')) }
+    let(:table) { DBF::Table.new fixture('dbase_83.dbf') }
+    let(:record_0) { YAML.load_file(fixture('dbase_83_record_0.yml')) }
+    let(:record_9) { YAML.load_file(fixture('dbase_83_record_9.yml')) }
 
     it 'should return an ordered array of attribute values' do
       record = table.record(0)
@@ -17,8 +16,8 @@ describe DBF::Record do
 
     describe 'with missing memo file' do
       describe 'when opening a path' do
-        let(:table) { DBF::Table.new fixture_path('dbase_83_missing_memo.dbf') }
-        let(:record_0) { YAML.load_file(fixture_path('dbase_83_missing_memo_record_0.yml')) }
+        let(:table) { DBF::Table.new fixture('dbase_83_missing_memo.dbf') }
+        let(:record_0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
 
         it 'returns nil values for memo fields' do
           record = table.record(0)
@@ -28,9 +27,9 @@ describe DBF::Record do
     end
 
     describe 'when opening StringIO' do
-      let(:data) { StringIO.new(File.read(fixture_path('dbase_83_missing_memo.dbf'))) }
+      let(:data) { StringIO.new(File.read(fixture('dbase_83_missing_memo.dbf'))) }
       let(:table) { DBF::Table.new(data) }
-      let(:record_0) { YAML.load_file(fixture_path('dbase_83_missing_memo_record_0.yml')) }
+      let(:record_0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
 
       it 'returns nil values for memo fields' do
         record = table.record(0)
@@ -40,7 +39,7 @@ describe DBF::Record do
   end
 
   describe '#==' do
-    let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
+    let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
     let(:record) { table.record(9) }
 
     describe 'when other does not have attributes' do
@@ -65,7 +64,7 @@ describe DBF::Record do
   end
 
   describe 'column accessors' do
-    let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
+    let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
     let(:record) { table.find(0) }
 
     %w(character numerical date logical float memo).each do |column_name|
@@ -79,7 +78,7 @@ describe DBF::Record do
 
   describe 'column data for table' do
     describe 'using specified in dbf encoding' do
-      let(:table) { DBF::Table.new fixture_path('cp1251.dbf') }
+      let(:table) { DBF::Table.new fixture('cp1251.dbf') }
       let(:record) { table.find(0) }
 
       it 'should automatically encodes to default system encoding' do
@@ -91,7 +90,7 @@ describe DBF::Record do
     end
 
     describe 'overriding specified in dbf encoding' do
-      let(:table) { DBF::Table.new fixture_path('cp1251.dbf'), nil, 'cp866'}
+      let(:table) { DBF::Table.new fixture('cp1251.dbf'), nil, 'cp866'}
       let(:record) { table.find(0) }
 
       it 'should transcode from manually specified encoding to default system encoding' do
@@ -104,7 +103,7 @@ describe DBF::Record do
   end
 
   describe '#attributes' do
-    let(:table) { DBF::Table.new fixture_path('dbase_8b.dbf') }
+    let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
     let(:record) { table.find(0) }
 
     it 'is a hash of attribute name/value pairs' do

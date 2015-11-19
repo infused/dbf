@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe DBF::Table do
-  let(:dbf_path) { fixture_path('dbase_83.dbf') }
-  let(:memo_path) { fixture_path('dbase_83.dbt') }
+RSpec.describe DBF::Table do
+  let(:dbf_path) { fixture('dbase_83.dbf') }
+  let(:memo_path) { fixture('dbase_83.dbt') }
   let(:table) { DBF::Table.new dbf_path }
 
   specify 'foxpro versions' do
@@ -49,7 +49,7 @@ describe DBF::Table do
   end
 
   describe '#schema' do
-    let(:control_schema) { File.read(fixture_path('dbase_83_schema.txt')) }
+    let(:control_schema) { File.read(fixture('dbase_83_schema.txt')) }
 
     it 'matches the test schema fixture' do
       expect(table.schema).to eq control_schema
@@ -199,7 +199,7 @@ describe DBF::Table do
 
   describe '#has_memo_file?' do
     describe 'without a memo file' do
-      let(:table) { DBF::Table.new fixture_path('dbase_03.dbf') }
+      let(:table) { DBF::Table.new fixture('dbase_03.dbf') }
 
       it 'is false' do
         expect(table.has_memo_file?).to be_falsey
