@@ -118,7 +118,7 @@ module DBF
         # columnname property is readonly, recreate the column definitions
         columns.map do |column|
           long_name = long_names[columns.index(column)]
-          column_class.new(self, long_name, column.type, column.length, column.decimal)
+          Column.new(self, long_name, column.type, column.length, column.decimal)
         end
       end
     end

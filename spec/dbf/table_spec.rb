@@ -219,7 +219,7 @@ describe DBF::Table do
     it 'is an array of Columns' do
       expect(columns).to be_an(Array)
       expect(columns).to_not be_empty
-      expect(columns.all? {|c| c.class == DBF::Column::Dbase}).to be_truthy
+      expect(columns.all? {|c| c.class == DBF::Column}).to be_truthy
     end
   end
 

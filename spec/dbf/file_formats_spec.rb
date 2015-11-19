@@ -50,14 +50,6 @@ shared_examples_for 'DBF' do
   end
 end
 
-shared_examples_for 'Foxpro DBF' do
-  specify "columns should be instances of DBF::FoxproColumn" do
-    table.columns.each do |column|
-      expect(column).to be_kind_of(DBF::Column::Foxpro)
-    end
-  end
-end
-
 describe DBF, "of type 03 (dBase III without memo file)" do
   let(:table) { DBF::Table.new fixture_path('dbase_03.dbf') }
 
@@ -156,7 +148,6 @@ describe DBF, "of type f5 (FoxPro with memo file)" do
   let(:table) { DBF::Table.new fixture_path('dbase_f5.dbf') }
 
   it_should_behave_like "DBF"
-  it_should_behave_like "Foxpro DBF"
 
   it "should report the correct version number" do
     expect(table.version).to eq "f5"
