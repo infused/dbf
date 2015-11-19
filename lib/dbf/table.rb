@@ -229,10 +229,6 @@ module DBF
       FOXPRO_VERSIONS.keys.include? version
     end
 
-    def column_class # nodoc
-      @column_class ||= foxpro? ? Column::Foxpro : Column::Dbase
-    end
-
     def memo_class # nodoc
       @memo_class ||= begin
         if foxpro?
