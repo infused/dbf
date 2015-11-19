@@ -70,6 +70,12 @@ module DBF
       end
     end
 
+    class General < Base
+      def type_cast
+        value
+      end
+    end
+
     class String < Base
       def type_cast
         value.strip

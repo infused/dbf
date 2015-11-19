@@ -1,5 +1,6 @@
 # 3.0.0
   - Requires Ruby version 2.0 and above
+  - Support the (G) General Foxpro field type
 
 # 2.0.13
   - Support 64-bit currency signed currency values

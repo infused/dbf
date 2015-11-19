@@ -35,7 +35,8 @@ module DBF
       return nil if length == 0
 
       klass = type_cast_class[type.to_sym]
-      encode klass.new(value, decimal).type_cast
+      cast_value = klass.new(value, decimal).type_cast
+      binary? ? cast_value : encode(cast_value)
     end
 
     # Returns true if the column is a memo
@@ -43,6 +44,13 @@ module DBF
     # @return [Boolean]
     def memo?
       @memo ||= type == 'M'
+    end
+
+    # Returns true if the column contains binary data
+    #
+    # @return [Boolean]
+    def binary?
+      @binary ||= type == 'G'
     end
 
     # Schema definition
@@ -87,6 +95,7 @@ module DBF
       h[:L] = ColumnType::Boolean
       h[:M] = ColumnType::Memo
       h[:B] = ColumnType::Double
+      h[:G] = ColumnType::General
       h
     end
 

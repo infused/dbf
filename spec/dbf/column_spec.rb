@@ -55,14 +55,12 @@ RSpec.describe DBF::Column do
         it 'casts value to Fixnum' do
           value = '135'
           column = DBF::Column.new table, 'ColumnName', 'N', 3, 0
-          expect(column.type_cast(value)).to be_a(Fixnum)
           expect(column.type_cast(value)).to eq 135
         end
 
         it 'supports negative Fixnum' do
           value = '-135'
           column = DBF::Column.new table, 'ColumnName', 'N', 3, 0
-          expect(column.type_cast(value)).to be_a(Fixnum)
           expect(column.type_cast(value)).to eq (-135)
         end
       end
@@ -71,14 +69,12 @@ RSpec.describe DBF::Column do
         it 'casts value to Float' do
           value = '13.5'
           column = DBF::Column.new table, 'ColumnName', 'N', 2, 1
-          expect(column.type_cast(value)).to be_a(Float)
           expect(column.type_cast(value)).to eq 13.5
         end
 
         it 'casts negative value to Float' do
           value = '-13.5'
           column = DBF::Column.new table, 'ColumnName', 'N', 2, 1
-          expect(column.type_cast(value)).to be_a(Float)
           expect(column.type_cast(value)).to eq (-13.5)
         end
       end
@@ -95,14 +91,12 @@ RSpec.describe DBF::Column do
       it 'casts value to Float' do
         value = '135'
         column = DBF::Column.new table, 'ColumnName', 'F', 3, 0
-        expect(column.type_cast(value)).to be_a(Float)
         expect(column.type_cast(value)).to eq 135.0
       end
 
       it 'casts negative value to Float' do
         value = '-135'
         column = DBF::Column.new table, 'ColumnName', 'F', 3, 0
-        expect(column.type_cast(value)).to be_a(Float)
         expect(column.type_cast(value)).to eq (-135.0)
       end
     end
@@ -140,14 +134,12 @@ RSpec.describe DBF::Column do
       it 'casts value to Fixnum' do
         value = "\203\171\001\000"
         column = DBF::Column.new table, 'ColumnName', 'I', 3, 0
-        expect(column.type_cast(value)).to be_a(Fixnum)
         expect(column.type_cast(value)).to eq 96643
       end
 
       it 'supports negative Fixnum' do
         value = "\x24\xE1\xFF\xFF"
         column = DBF::Column.new table, 'ColumnName', 'I', 3, 0
-        expect(column.type_cast(value)).to be_a(Fixnum)
         expect(column.type_cast(value)).to eq (-7900)
       end
     end
@@ -180,14 +172,12 @@ RSpec.describe DBF::Column do
 
       context 'with valid datetime' do
         it 'casts to DateTime' do
-          expect(column.type_cast("Nl%\000\300Z\252\003")).to be_a(DateTime)
           expect(column.type_cast("Nl%\000\300Z\252\003")).to eq DateTime.parse('2002-10-10T17:04:56+00:00')
         end
       end
 
       context 'with invalid datetime' do
         it 'casts to nil' do
-          expect(column.type_cast("Nl%\000\000A\000\999")).to be_a(NilClass)
           expect(column.type_cast("Nl%\000\000A\000\999")).to be_nil
         end
       end
@@ -205,14 +195,12 @@ RSpec.describe DBF::Column do
 
       context 'with valid date' do
         it 'casts to Date' do
-          expect(column.type_cast('20050712')).to be_a(Date)
           expect(column.type_cast('20050712')).to eq Date.new(2005,7,12)
         end
       end
 
       context 'with invalid date' do
         it 'casts to nil' do
-          expect(column.type_cast('0')).to be_a(NilClass)
           expect(column.type_cast('0')).to be_nil
         end
       end
@@ -228,13 +216,11 @@ RSpec.describe DBF::Column do
     context 'with type M (memo)' do
       it 'casts to string' do
         column = DBF::Column.new table, 'ColumnName', 'M', 3, 0
-        expect(column.type_cast('abc')).to be_a(String)
         expect(column.type_cast('abc')).to eq 'abc'
       end
 
       it 'casts nil to nil' do
         column = DBF::Column.new table, 'ColumnName', 'M', 3, 0
-        expect(column.type_cast(nil)).to be_a(NilClass)
         expect(column.type_cast(nil)).to be_nil
       end
 
@@ -245,23 +231,40 @@ RSpec.describe DBF::Column do
         end
       end
     end
+
+    context 'with type G (memo)' do
+      it 'returns binary data' do
+        column = DBF::Column.new table, 'ColumnName', 'G', 3, 0
+        expect(column.type_cast("\000\013\120")).to eq "\000\013\120"
+        expect(column.type_cast("\000\013\120").encoding).to eq Encoding::ASCII_8BIT
+      end
+
+      it 'casts nil to nil' do
+        column = DBF::Column.new table, 'ColumnName', 'G', 3, 0
+        expect(column.type_cast(nil)).to be_nil
+      end
+
+      context 'and 0 length' do
+        it 'returns nil' do
+          column = DBF::Column.new table, 'ColumnName', 'G', 0, 0
+          expect(column.type_cast('')).to be_nil
+        end
+      end
+    end
   end
 
   context 'with type Y (currency)' do
     let(:column) { DBF::Column.new table, 'ColumnName', 'Y', 8, 4 }
 
     it 'casts to float' do
-      expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to be_a(Float)
       expect(column.type_cast(" \xBF\x02\x00\x00\x00\x00\x00")).to eq 18.0
     end
 
     it 'supports negative currency' do
-      expect(column.type_cast("\xFC\xF0\xF0\xFE\xFF\xFF\xFF\xFF")).to be_a(Float)
       expect(column.type_cast("\xFC\xF0\xF0\xFE\xFF\xFF\xFF\xFF")).to eq (-1776.41)
     end
 
     it 'supports 64bit negative currency' do
-      expect(column.type_cast("pN'9\xFF\xFF\xFF\xFF")).to be_a(Float)
       expect(column.type_cast("pN'9\xFF\xFF\xFF\xFF")).to eq (-333609.0)
     end
 

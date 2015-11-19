@@ -1,5 +1,6 @@
 .DS_Store
 .bundle
+.byebug_history
 .rspec
 .rvmrc
 .rubocop.yml
