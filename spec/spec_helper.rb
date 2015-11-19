@@ -9,8 +9,6 @@ require 'yaml'
 require 'rspec'
 require 'fileutils'
 
-Encoding.default_external = "UTF-8" if defined?(Encoding)
-
 DB_PATH = File.dirname(__FILE__) + '/fixtures' unless defined?(DB_PATH)
 
 RSpec.configure do |config|
