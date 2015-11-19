@@ -44,7 +44,7 @@ module DBF
       key = name.to_s
       if attributes.key?(key)
         attributes[key]
-      elsif (index = underscored_column_names.index(key))
+      elsif index = underscored_column_names.index(key)
         attributes[@columns[index].name]
       end
     end
@@ -53,8 +53,7 @@ module DBF
     #
     # @return [Hash]
     def attributes
-      @attributes ||=
-        Hash[@columns.map { |column| [column.name, init_attribute(column)] }]
+      @attributes ||= Hash[attribute_map]
     end
 
     # Overrides standard Object.respond_to? to return true if a
@@ -72,7 +71,11 @@ module DBF
 
     private
 
-    def file_offset(attribute_name)
+    def attribute_map # nodoc
+      @columns.map { |column| [column.name, init_attribute(column)] }
+    end
+
+    def file_offset(attribute_name) # nodoc
       column = @columns.detect { |c| c.name == attribute_name.to_s }
       index = @columns.index(column)
       @columns[0, index + 1].compact.reduce(0) { |x, c| x += c.length }
