@@ -62,11 +62,7 @@ module DBF
     # @param [String, Symbol] method
     # @return [Boolean]
     def respond_to?(method, *args)
-      if underscored_column_names.include?(method.to_s)
-        true
-      else
-        super
-      end
+      underscored_column_names.include?(method.to_s) || super
     end
 
     private
