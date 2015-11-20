@@ -8,6 +8,20 @@ module DBF
 
     attr_reader :table, :name, :type, :length, :decimal
 
+    TYPE_CAST_CLASS = {
+      N: ColumnType::Number,
+      I: ColumnType::SignedLong,
+      F: ColumnType::Float,
+      Y: ColumnType::Currency,
+      D: ColumnType::Date,
+      T: ColumnType::DateTime,
+      L: ColumnType::Boolean,
+      M: ColumnType::Memo,
+      B: ColumnType::Double,
+      G: ColumnType::General
+    }
+    TYPE_CAST_CLASS.default = ColumnType::String
+
     # Initialize a new DBF::Column
     #
     # @param [String] name
@@ -34,7 +48,7 @@ module DBF
     def type_cast(value)
       return nil if length == 0
 
-      klass = type_cast_class[type.to_sym]
+      klass = TYPE_CAST_CLASS[type.to_sym]
       cast_value = klass.new(value, decimal).type_cast
       binary? ? cast_value : encode(cast_value)
     end
@@ -83,21 +97,6 @@ module DBF
     end
 
     private
-
-    def type_cast_class # nodoc
-      h = Hash.new(ColumnType::String)
-      h[:N] = ColumnType::Number
-      h[:I] = ColumnType::SignedLong
-      h[:F] = ColumnType::Float
-      h[:Y] = ColumnType::Currency
-      h[:D] = ColumnType::Date
-      h[:T] = ColumnType::DateTime
-      h[:L] = ColumnType::Boolean
-      h[:M] = ColumnType::Memo
-      h[:B] = ColumnType::Double
-      h[:G] = ColumnType::General
-      h
-    end
 
     def encode(value, strip_output = false) # nodoc
       return value if !value.respond_to?(:encoding)
