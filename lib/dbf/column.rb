@@ -148,11 +148,11 @@ module DBF
       truncated_value.gsub(/[^\x20-\x7E]/, '')
     end
 
-    def validate_length
+    def validate_length # nodoc
       raise LengthError, 'field length must be 0 or greater' if length < 0
     end
 
-    def validate_name
+    def validate_name # nodoc
       raise NameError, 'column name cannot be empty' if @name.empty?
     end
   end
