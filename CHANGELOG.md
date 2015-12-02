@@ -1,3 +1,10 @@
+# 3.0.2
+  - Performance improvements for large files
+
+# 3.0.1
+  - Support FoxPro (G) general field type
+  - Fix ruby warnings
+
 # 3.0.0
   - Requires Ruby version 2.0 and above
   - Support the (G) General Foxpro field type
