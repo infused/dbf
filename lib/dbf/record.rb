@@ -90,7 +90,7 @@ module DBF
     end
 
     def init_attribute(column) # nodoc
-      value = column.memo? ? memo(column) : unpack_data(column)
+      value = column.memo? ? memo(column) : get_data(column)
       column.type_cast(value)
     end
 
@@ -105,13 +105,15 @@ module DBF
     end
 
     def memo_start_block(column) # nodoc
-      format = 'V' if %w(30 31).include?(@version)
-      unpack_data(column, format).to_i
+      data = get_data(column)
+      if %w(30 31).include?(@version)
+        data = data.unpack('V').first
+      end
+      data.to_i
     end
 
-    def unpack_data(column, format = nil) # nodoc
-      format ||= "a#{column.length}"
-      @data.read(column.length).unpack(format).first
+    def get_data(column) # nodoc
+      @data.read(column.length)
     end
   end
 end

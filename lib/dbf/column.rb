@@ -46,11 +46,7 @@ module DBF
     # @param [String] value
     # @return [Fixnum, Float, Date, DateTime, Boolean, String]
     def type_cast(value)
-      return nil if length == 0
-
-      klass = TYPE_CAST_CLASS[type.to_sym]
-      cast_value = klass.new(value, decimal).type_cast
-      binary? ? cast_value : encode(cast_value)
+      type_cast_class.type_cast(value)
     end
 
     # Returns true if the column is a memo
@@ -97,6 +93,15 @@ module DBF
     end
 
     private
+
+    def type_cast_class # nodoc
+      @type_cast_class ||=
+        if @length == 0
+          ColumnType::Nil
+        else
+          TYPE_CAST_CLASS[type.to_sym]
+        end.new(@decimal, @encoding)
+    end
 
     def encode(value, strip_output = false) # nodoc
       return value if !value.respond_to?(:encoding)
