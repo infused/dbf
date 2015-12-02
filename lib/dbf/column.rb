@@ -56,13 +56,6 @@ module DBF
       @memo ||= type == 'M'
     end
 
-    # Returns true if the column contains binary data
-    #
-    # @return [Boolean]
-    def binary?
-      @binary ||= type == 'G'
-    end
-
     # Schema definition
     #
     # @return [String]
