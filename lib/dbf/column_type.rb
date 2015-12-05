@@ -77,7 +77,7 @@ module DBF
 
     class Memo < Base
       def type_cast(value)
-        if encoding and not value.nil?
+        if encoding && !value.nil?
           value.force_encoding(@encoding).encode(*ENCODING_ARGS)
         else
           value

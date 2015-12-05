@@ -88,12 +88,10 @@ module DBF
     private
 
     def type_cast_class # nodoc
-      @type_cast_class ||=
-        if @length == 0
-          ColumnType::Nil
-        else
-          TYPE_CAST_CLASS[type.to_sym]
-        end.new(@decimal, @encoding)
+      @type_cast_class ||= begin
+        klass = @length == 0 ? ColumnType::Nil : TYPE_CAST_CLASS[type.to_sym]
+        klass.new(@decimal, @encoding)
+      end
     end
 
     def encode(value, strip_output = false) # nodoc
