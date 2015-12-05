@@ -12,7 +12,6 @@ if params['h'] then
   puts "  -a = create an ActiveRecord::Schema"
   puts "  -c = create a csv file"
 else
-
   filename = ARGV.shift
   abort "You must supply a filename on the command line" unless filename
 
@@ -39,8 +38,7 @@ else
   end
 
   if params['c']
-   table = DBF::Table.new filename
-   table.to_csv
+    table = DBF::Table.new filename
+    table.to_csv
   end
-
 end
