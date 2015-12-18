@@ -1,3 +1,6 @@
+# 3.0.3
+  - Uninitialized (N)umbers should return nil
+
 # 3.0.2
   - Performance improvements for large files
 
