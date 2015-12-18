@@ -22,6 +22,7 @@ module DBF
 
     class Number < Base
       def type_cast(value)
+        return nil if value.strip.empty?
         @decimal.zero? ? value.to_i : value.to_f
       end
     end

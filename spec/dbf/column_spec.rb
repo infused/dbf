@@ -44,6 +44,14 @@ RSpec.describe DBF::Column do
 
   context '#type_cast' do
     context 'with type N (number)' do
+      context 'when value is empty' do
+        it 'returns nil' do
+          value = ''
+          column = DBF::Column.new table, 'ColumnName', 'N', 5, 2
+          expect(column.type_cast(value)).to be_nil
+        end
+      end
+
       context 'and 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'N', 0, 0
