@@ -62,6 +62,13 @@ module DBF
     def schema_definition
       "\"#{underscored_name}\", #{schema_data_type}\n"
     end
+    
+    # Sequel Schema definition
+    #
+    # @return [String]
+    def sequel_schema_definition
+      ":#{underscored_name}, #{schema_data_type(:sequel)}\n"
+    end
 
     # Underscored name
     #
@@ -112,14 +119,14 @@ module DBF
       ]
     end
 
-    def schema_data_type # nodoc
+    def schema_data_type(format = :activerecord) # nodoc
       case type
       when 'N', 'F'
         decimal > 0 ? ':float' : ':integer'
       when 'I'
         ':integer'
       when 'Y'
-        ':decimal, :precision => 15, :scale => 4'
+        ':decimal, precision: 15, scale: 4'
       when 'D'
         ':date'
       when 'T'
@@ -135,7 +142,11 @@ module DBF
           ':text'
         end
       else
-        ":string, :limit => #{length}"
+        if format == :sequel
+          ":varchar, size: #{length}"
+        else
+          ":string, limit: #{length}"
+        end
       end
     end
 

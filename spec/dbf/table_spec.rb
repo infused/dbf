@@ -56,6 +56,57 @@ RSpec.describe DBF::Table do
     end
   end
 
+  describe '#sequel_schema' do
+    it 'should return a valid Sequel migration by default' do
+      expect(table.sequel_schema).to eq <<-SCHEMA
+Sequel.migration do
+  change do
+     create_table(:dbase_83) do
+      column :id, :integer
+      column :catcount, :integer
+      column :agrpcount, :integer
+      column :pgrpcount, :integer
+      column :order, :integer
+      column :code, :varchar, :size => 50
+      column :name, :varchar, :size => 100
+      column :thumbnail, :varchar, :size => 254
+      column :image, :varchar, :size => 254
+      column :price, :float
+      column :cost, :float
+      column :desc, :text
+      column :weight, :float
+      column :taxable, :boolean
+      column :active, :boolean
+    end
+  end
+end
+SCHEMA
+    end
+    
+    it 'should return a limited Sequel migration when passed true' do
+      expect(table.sequel_schema(true)).to eq <<-SCHEMA
+    create_table(:dbase_83) do
+      column :id, :integer
+      column :catcount, :integer
+      column :agrpcount, :integer
+      column :pgrpcount, :integer
+      column :order, :integer
+      column :code, :varchar, :size => 50
+      column :name, :varchar, :size => 100
+      column :thumbnail, :varchar, :size => 254
+      column :image, :varchar, :size => 254
+      column :price, :float
+      column :cost, :float
+      column :desc, :text
+      column :weight, :float
+      column :taxable, :boolean
+      column :active, :boolean
+    end
+SCHEMA
+    end
+    
+  end
+
   describe '#json_schema' do
     it 'is valid JSON' do
       expect { JSON.parse(table.json_schema) }.to_not raise_error

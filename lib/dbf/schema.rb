@@ -23,16 +23,16 @@ module DBF
     #
     # @param [Symbol] format Valid options are :activerecord and :json
     # @return [String]
-    def schema(format = :activerecord)
-      supported_formats = [:activerecord, :json]
+    def schema(format = :activerecord, table_only = false)
+      supported_formats = [:activerecord, :json, :sequel]
       if supported_formats.include?(format)
-        send "#{format}_schema"
+        send("#{format}_schema", table_only)
       else
         raise ArgumentError
       end
     end
 
-    def activerecord_schema
+    def activerecord_schema(_table_only = false)
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{File.basename(@data.path, '.*')}\" do |t|\n"
       columns.each do |column|
@@ -42,7 +42,21 @@ module DBF
       s
     end
 
-    def json_schema
+    def sequel_schema(table_only = false)
+      s = ''
+      s << "Sequel.migration do\n" unless table_only
+      s << "  change do\n " unless table_only
+      s << "    create_table(:#{File.basename(@data.path, '.*')}) do\n"
+      columns.each do |column|
+        s << "      column #{column.sequel_schema_definition}"
+      end
+      s << "    end\n"
+      s << "  end\n"  unless table_only
+      s << "end\n"  unless table_only
+      s
+    end
+
+    def json_schema(_table_only = false)
       columns.map(&:to_hash).to_json
     end
   end

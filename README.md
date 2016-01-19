@@ -166,6 +166,32 @@ class CreateBooks < ActiveRecord::Migration
 end
 ```
 
+## Migrating to Sequel
+
+An example of migrating a DBF book table to Sequel using a migration:
+
+```ruby
+require 'dbf'
+
+class Book < Sequel::Model; end
+
+Sequel.migration do
+  up do
+    table = DBF::Table.new('db/dbf/books.dbf')
+    eval(table.schema(:sequel, true)) # passing true to limit output to create_table() only
+    
+    Book.reset_column_information
+    table.each do |record|
+      Book.create(title: record.title, author: record.author)
+    end
+  end
+  
+  down do
+    drop_table(:books)
+  end
+end
+```
+
 ## Command-line utility
 
 A small command-line utility called dbf is installed along with the gem.
@@ -173,13 +199,19 @@ A small command-line utility called dbf is installed along with the gem.
     $ dbf -h
     usage: dbf [-h|-s|-a] filename
       -h = print this message
+      -v = print the version number
       -s = print summary information
       -a = create an ActiveRecord::Schema
+      -r = create a Sequel Migration
       -c = create a csv file
 
 Create an executable ActiveRecord schema:
 
     dbf -a books.dbf > books_schema.rb
+
+Create an executable Sequel schema:
+
+    dbf -r books.dbf > migrate/001_create_books.rb
 
 Dump all records to a CSV file:
 

@@ -3,22 +3,35 @@
 require 'dbf'
 require 'optparse'
 
-params = ARGV.getopts('h', 's', 'a', 'c')
+params = ARGV.getopts('h', 's', 'a', 'c', 'r', 'v')
 
-if params['h'] then
-  puts "usage: #{File.basename(__FILE__)} [-h|-s|-a|-c] filename"
+if params['v'] then
+  require 'dbf/version'
+  puts "dbf version: #{DBF::VERSION}"
+
+elsif params['h'] then
+  puts "usage: #{File.basename(__FILE__)} [-h|-s|-a|-c|-r] filename"
   puts "  -h = print this message"
+  puts "  -v = outputs the DBF gem version"
   puts "  -s = print summary information"
   puts "  -a = create an ActiveRecord::Schema"
+  puts "  -r = create a Sequel Migration"
   puts "  -c = create a csv file"
 else
+  
   filename = ARGV.shift
   abort "You must supply a filename on the command line" unless filename
 
   # create an ActiveRecord::Schema
   if params['a']
     table = DBF::Table.new filename
-    puts table.schema
+    puts table.schema(:activerecord)
+  end
+
+  # create an Sequel::Migration
+  if params['r']
+    table = DBF::Table.new filename
+    puts table.schema(:sequel)
   end
 
   if params['s']
