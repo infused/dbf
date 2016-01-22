@@ -62,7 +62,7 @@ module DBF
     def schema_definition
       "\"#{underscored_name}\", #{schema_data_type}\n"
     end
-    
+
     # Sequel Schema definition
     #
     # @return [String]
@@ -126,7 +126,7 @@ module DBF
       when 'I'
         ':integer'
       when 'Y'
-        ':decimal, precision: 15, scale: 4'
+        ':decimal, :precision => 15, :scale => 4'
       when 'D'
         ':date'
       when 'T'
@@ -143,9 +143,9 @@ module DBF
         end
       else
         if format == :sequel
-          ":varchar, size: #{length}"
+          ":varchar, :size => #{length}"
         else
-          ":string, limit: #{length}"
+          ":string, :limit => #{length}"
         end
       end
     end
