@@ -6,7 +6,6 @@ require 'optparse'
 params = ARGV.getopts('h', 's', 'a', 'c', 'r', 'v')
 
 if params['v'] then
-  require 'dbf/version'
   puts "dbf version: #{DBF::VERSION}"
 
 elsif params['h'] then
