@@ -22,7 +22,7 @@ NOTE: beginning with version 3 we have dropped support for Ruby 1.8 and 1.9. If 
 
 DBF is tested to work with the following versions of ruby:
 
-* MRI Ruby 2.0.x, 2.1.x, 2.2.x
+* MRI Ruby 2.0.x, 2.1.x, 2.2.x, 2.3.x
 * JRuby head
 
 ## Installation
@@ -179,13 +179,13 @@ Sequel.migration do
   up do
     table = DBF::Table.new('db/dbf/books.dbf')
     eval(table.schema(:sequel, true)) # passing true to limit output to create_table() only
-    
+
     Book.reset_column_information
     table.each do |record|
       Book.create(title: record.title, author: record.author)
     end
   end
-  
+
   down do
     drop_table(:books)
   end
