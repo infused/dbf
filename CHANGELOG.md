@@ -1,3 +1,8 @@
+# 3.0.4
+  - Adds -v command-line option to print version
+  - Adds -r command-line option to create Sequel migration
+  -
+
 # 3.0.3
   - Uninitialized (N)umbers should return nil
 
