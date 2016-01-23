@@ -20,7 +20,7 @@ NOTE: beginning with version 3 we have dropped support for Ruby 1.8 and 1.9. If 
 
 ## Compatibility
 
-DBF is tested to work with the following versions of ruby:
+DBF is tested to work with the following versions of Ruby:
 
 * MRI Ruby 2.0.x, 2.1.x, 2.2.x, 2.3.x
 * JRuby head
