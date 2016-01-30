@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'dbf'
+require 'dbf/version'
 require 'optparse'
 
 params = ARGV.getopts('h', 's', 'a', 'c', 'r', 'v')
