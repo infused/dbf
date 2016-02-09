@@ -34,7 +34,7 @@ module DBF
 
     def activerecord_schema(_table_only = false)
       s = "ActiveRecord::Schema.define do\n"
-      s << "  create_table \"#{File.basename(filename, '.*')}\" do |t|\n"
+      s << "  create_table \"#{name}\" do |t|\n"
       columns.each do |column|
         s << "    t.column #{column.schema_definition}"
       end
@@ -46,7 +46,7 @@ module DBF
       s = ''
       s << "Sequel.migration do\n" unless table_only
       s << "  change do\n " unless table_only
-      s << "    create_table(:#{File.basename(filename, '.*')}) do\n"
+      s << "    create_table(:#{name}) do\n"
       columns.each do |column|
         s << "      column #{column.sequel_schema_definition}"
       end

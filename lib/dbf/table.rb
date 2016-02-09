@@ -39,6 +39,7 @@ module DBF
 
     attr_reader :header
     attr_accessor :encoding
+    attr_writer :name
 
     # Opens a DBF::Table
     # Examples:
@@ -96,7 +97,12 @@ module DBF
 
     # @return String
     def filename
-      File.basename @data.path
+      File.basename @data.path if @data.respond_to?(:path)
+    end
+
+    # @return String
+    def name
+      @name ||= filename && File.basename(filename, ".*")
     end
 
     # Calls block once for each record in the table. The record may be nil

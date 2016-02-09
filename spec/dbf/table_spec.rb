@@ -248,6 +248,17 @@ SCHEMA
     end
   end
 
+  describe '#name' do
+    it 'defaults to the filename less extension' do
+      expect(table.name).to eq 'dbase_83'
+    end
+
+    it 'is mutable' do
+      table.name = 'database_83'
+      expect(table.name).to eq 'database_83'
+    end
+  end
+
   describe '#has_memo_file?' do
     describe 'without a memo file' do
       let(:table) { DBF::Table.new fixture('dbase_03.dbf') }
