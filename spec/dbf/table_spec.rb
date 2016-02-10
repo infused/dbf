@@ -49,10 +49,25 @@ RSpec.describe DBF::Table do
   end
 
   describe '#schema' do
-    let(:control_schema) { File.read(fixture('dbase_83_schema.txt')) }
+    describe 'when data is IO' do
+      let(:control_schema) { File.read(fixture('dbase_83_schema.txt')) }
 
-    it 'matches the test schema fixture' do
-      expect(table.schema).to eq control_schema
+      it 'matches the test schema fixture' do
+        expect(table.schema).to eq control_schema
+      end
+    end
+
+    describe 'when data is StringIO' do
+      let(:data) { StringIO.new File.read(dbf_path) }
+      let(:memo) { StringIO.new File.read(memo_path) }
+      let(:table) { DBF::Table.new data }
+
+      let(:control_schema) { File.read(fixture('dbase_83_schema.txt')) }
+
+      it 'matches the test schema fixture' do
+        table.name = 'dbase_83'
+        expect(table.schema).to eq control_schema
+      end
     end
   end
 
@@ -82,7 +97,7 @@ Sequel.migration do
 end
 SCHEMA
     end
-    
+
     it 'should return a limited Sequel migration when passed true' do
       expect(table.sequel_schema(true)).to eq <<-SCHEMA
     create_table(:dbase_83) do
@@ -104,7 +119,7 @@ SCHEMA
     end
 SCHEMA
     end
-    
+
   end
 
   describe '#json_schema' do
@@ -249,13 +264,30 @@ SCHEMA
   end
 
   describe '#name' do
-    it 'defaults to the filename less extension' do
-      expect(table.name).to eq 'dbase_83'
+    describe 'when data is an IO' do
+      it 'defaults to the filename less extension' do
+        expect(table.name).to eq 'dbase_83'
+      end
+
+      it 'is mutable' do
+        table.name = 'database_83'
+        expect(table.name).to eq 'database_83'
+      end
     end
 
-    it 'is mutable' do
-      table.name = 'database_83'
-      expect(table.name).to eq 'database_83'
+    describe 'when data is a StringIO' do
+      let(:data) { StringIO.new File.read(dbf_path) }
+      let(:memo) { StringIO.new File.read(memo_path) }
+      let(:table) { DBF::Table.new data }
+
+      it 'is nil' do
+        expect(table.name).to be_nil
+      end
+
+      it 'is mutable' do
+        table.name = 'database_83'
+        expect(table.name).to eq 'database_83'
+      end
     end
   end
 
