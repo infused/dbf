@@ -41,11 +41,24 @@ gem 'dbf'
 
 ## Basic Usage
 
-Open a DBF file:
+Open a DBF file using a path:
 
 ```ruby
 require 'dbf'
 widgets = DBF::Table.new("widgets.dbf")
+```
+
+Open a DBF file using an IO object:
+
+```ruby
+data = File.read('widgets.dbf')
+widgets = DBF::Table.new(data)
+```
+
+Open a DBF by passing in raw data (wrap the raw data with a StringIO):
+
+```ruby
+widgets = DBF::Table.new(StringIO.new('some raw binary data'))
 ```
 
 Enumerate all records
@@ -166,6 +179,13 @@ class CreateBooks < ActiveRecord::Migration
 end
 ```
 
+If you have initalized the DBF::Table with raw data, you will need to set the
+table name manually with:
+
+```ruby
+table.name = 'my_table_name'
+```
+
 ## Migrating to Sequel
 
 An example of migrating a DBF book table to Sequel using a migration:
@@ -190,6 +210,13 @@ Sequel.migration do
     drop_table(:books)
   end
 end
+```
+
+If you have initalized the DBF::Table with raw data, you will need to set the
+table name manually with:
+
+```ruby
+table.name = 'my_table_name'
 ```
 
 ## Command-line utility
