@@ -51,14 +51,14 @@ widgets = DBF::Table.new("widgets.dbf")
 Open a DBF file using an IO object:
 
 ```ruby
-data = File.read('widgets.dbf')
+data = File.open('widgets.dbf')
 widgets = DBF::Table.new(data)
 ```
 
 Open a DBF by passing in raw data (wrap the raw data with a StringIO):
 
 ```ruby
-widgets = DBF::Table.new(StringIO.new('some raw binary data'))
+widgets = DBF::Table.new(StringIO.new('raw binary data'))
 ```
 
 Enumerate all records
