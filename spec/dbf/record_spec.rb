@@ -93,6 +93,12 @@ RSpec.describe DBF::Record do
       let(:table) { DBF::Table.new fixture('cp1251.dbf'), nil, 'cp866'}
       let(:record) { table.find(0) }
 
+      it 'wut' do
+        # puts table.columns.inspect
+        puts record.name
+        puts record.write_data('NAME', 'hello')
+      end
+
       it 'should transcode from manually specified encoding to default system encoding' do
         expect(record.name.encoding).to eq Encoding.default_external
 

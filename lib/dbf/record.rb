@@ -66,6 +66,18 @@ module DBF
       underscored_column_names.include?(method.to_s) || super
     end
 
+    def write_data(column_name, value)
+      column = @columns.detect { |c| c.name == column_name }
+      trimmed = value[0, column.length]
+      formatted = trimmed.ljust(column.length, ' ')
+
+      # puts fetch_column_offset(column)
+      # puts file_offset(column.name)
+      # puts '----'
+
+      # @data.seek @offsets[column.name] #, 'IO::SEEK_SET'
+    end
+
     private
 
     def attribute_map # nodoc
@@ -114,8 +126,17 @@ module DBF
     end
 
     def get_data(column) # nodoc
-      @offsets[column.name] ||= @data.pos
+      fetch_column_offset(column)
       @data.read(column.length)
+    end
+
+    def fetch_column_offset(column)
+      @offsets[column.name] ||= @data.pos
+      @offsets[column.name]
+    end
+
+    def length
+      @length ||= @columns.reduce(0) {|n, c| n += c.length}
     end
   end
 end
