@@ -12,6 +12,7 @@ module DBF
       @columns = columns
       @version = version
       @memo = memo
+      @offsets = {}
     end
 
     # Equality
@@ -113,6 +114,7 @@ module DBF
     end
 
     def get_data(column) # nodoc
+      @offsets[column.name] ||= @data.pos
       @data.read(column.length)
     end
   end
