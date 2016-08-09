@@ -130,21 +130,21 @@ SCHEMA
     it 'matches the test fixture' do
       data = JSON.parse(table.json_schema)
       expect(data).to eq [
-        {'name' => 'ID', 'type' => 'N', 'length' => 19, 'decimal' => 0},
-        {'name' => 'CATCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0},
-        {'name' => 'AGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0},
-        {'name' => 'PGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0},
-        {'name' => 'ORDER', 'type' => 'N', 'length' => 19, 'decimal' => 0},
-        {'name' => 'CODE', 'type' => 'C', 'length' => 50, 'decimal' => 0},
-        {'name' => 'NAME', 'type' => 'C', 'length' => 100, 'decimal' => 0},
-        {'name' => 'THUMBNAIL', 'type' => 'C', 'length' => 254, 'decimal' => 0},
-        {'name' => 'IMAGE', 'type' => 'C', 'length' => 254, 'decimal' => 0},
-        {'name' => 'PRICE', 'type' => 'N', 'length' => 13, 'decimal' => 2},
-        {'name' => 'COST', 'type' => 'N', 'length' => 13, 'decimal' => 2},
-        {'name' => 'DESC', 'type' => 'M', 'length' => 10, 'decimal' => 0},
-        {'name' => 'WEIGHT', 'type' => 'N', 'length' => 13, 'decimal' => 2},
-        {'name' => 'TAXABLE', 'type' => 'L', 'length' => 1, 'decimal' => 0},
-        {'name' => 'ACTIVE', 'type' => 'L', 'length' => 1, 'decimal' => 0}
+        {'name' => 'ID', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 0, 'offset' => 0},
+        {'name' => 'CATCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 1, 'offset' => 20},
+        {'name' => 'AGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 2, 'offset' => 40},
+        {'name' => 'PGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 3, 'offset' => 60},
+        {'name' => 'ORDER', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 4, 'offset' => 80},
+        {'name' => 'CODE', 'type' => 'C', 'length' => 50, 'decimal' => 0, 'position' => 5, 'offset' => 100},
+        {'name' => 'NAME', 'type' => 'C', 'length' => 100, 'decimal' => 0, 'position' => 6, 'offset' => 151},
+        {'name' => 'THUMBNAIL', 'type' => 'C', 'length' => 254, 'decimal' => 0, 'position' => 7, 'offset' => 252},
+        {'name' => 'IMAGE', 'type' => 'C', 'length' => 254, 'decimal' => 0, 'position' => 8, 'offset' => 507},
+        {'name' => 'PRICE', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 9, 'offset' => 762},
+        {'name' => 'COST', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 10, 'offset' => 776},
+        {'name' => 'DESC', 'type' => 'M', 'length' => 10, 'decimal' => 0, 'position' => 11, 'offset' => 790},
+        {'name' => 'WEIGHT', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 12, 'offset' => 801},
+        {'name' => 'TAXABLE', 'type' => 'L', 'length' => 1, 'decimal' => 0, 'position' => 13, 'offset' => 815},
+        {'name' => 'ACTIVE', 'type' => 'L', 'length' => 1, 'decimal' => 0, 'position' => 14, 'offset' => 817}
       ]
     end
   end

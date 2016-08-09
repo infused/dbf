@@ -6,7 +6,13 @@ module DBF
     # Raised if name is empty
     class NameError < StandardError; end
 
-    attr_reader :table, :name, :type, :length, :decimal
+    attr_reader :table
+    attr_reader :name
+    attr_reader :type
+    attr_reader :length
+    attr_reader :decimal
+    attr_reader :position
+    attr_reader :offset
 
     TYPE_CAST_CLASS = {
       N: ColumnType::Number,
@@ -28,7 +34,9 @@ module DBF
     # @param [String] type
     # @param [Fixnum] length
     # @param [Fixnum] decimal
-    def initialize(table, name, type, length, decimal)
+    # @param [Fixnum] position
+    # @param [Fixnum] offset
+    def initialize(table, name, type, length, decimal, position = nil, offset = nil)
       @table = table
       @name = clean(name)
       @type = type
@@ -36,6 +44,8 @@ module DBF
       @decimal = decimal
       @version = table.version
       @encoding = table.encoding
+      @position = position
+      @offset = offset
 
       validate_length
       validate_name
@@ -89,7 +99,15 @@ module DBF
     end
 
     def to_hash
-      {name: name, type: type, length: length, decimal: decimal}
+      Hash[to_hash_method_map]
+    end
+
+    def to_hash_methods
+      [:name, :type, :length, :decimal, :position, :offset]
+    end
+
+    def to_hash_method_map
+      to_hash_methods.map {|m| [m.to_sym, send(m)]}
     end
 
     private

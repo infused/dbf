@@ -216,10 +216,14 @@ module DBF
     def build_columns # nodoc
       @data.seek(DBF_HEADER_SIZE)
       columns = []
+      offset = 0
+      position = 0
       until end_of_record?
+        offset += columns.last.length + 1 if columns.last
         column_data = @data.read(DBF_HEADER_SIZE)
         name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
-        columns << Column.new(self, name, type, length, decimal)
+        columns << Column.new(self, name, type, length, decimal, position, offset)
+        position += 1
       end
       columns
     end

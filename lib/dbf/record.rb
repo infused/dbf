@@ -68,8 +68,9 @@ module DBF
 
     def write_data(column_name, value)
       column = @columns.detect { |c| c.name == column_name }
-      trimmed = value[0, column.length]
+      trimmed = value.to_s.strip[0, column.length]
       formatted = trimmed.ljust(column.length, ' ')
+
 
       # puts fetch_column_offset(column)
       # puts file_offset(column.name)
