@@ -219,7 +219,7 @@ module DBF
       offset = 0
       position = 0
       until end_of_record?
-        offset += columns.last.length + 1 if columns.last
+        offset += columns.last.length if columns.last
         column_data = @data.read(DBF_HEADER_SIZE)
         name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
         columns << Column.new(self, name, type, length, decimal, position, offset)
@@ -250,7 +250,7 @@ module DBF
     end
 
     def open_data(data) # nodoc
-      data.is_a?(StringIO) ? data : File.open(data, 'rb')
+      data.is_a?(StringIO) ? data : File.open(data, 'r+b')
     end
 
     def open_memo(data, memo = nil) # nodoc
@@ -293,6 +293,24 @@ module DBF
 
     def seek_to_record(index) # nodoc
       seek(index * header.record_length)
+    end
+
+    def write_record(index, attributes)
+      attributes.each do |column_name, value|
+        column = columns.detect { |c| c.name == column_name }
+        seek_to_record(index)
+        @data.seek(column.offset + 1, :CUR)
+
+        formatted_value = cast_to_db(column, value)
+        @data.puts formatted_value
+      end
+    end
+
+    def cast_to_db(column, value)
+      case value
+      when String
+        value.ljust(column.length, ' ')
+      end
     end
   end
 end

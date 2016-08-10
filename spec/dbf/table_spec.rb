@@ -131,20 +131,20 @@ SCHEMA
       data = JSON.parse(table.json_schema)
       expect(data).to eq [
         {'name' => 'ID', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 0, 'offset' => 0},
-        {'name' => 'CATCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 1, 'offset' => 20},
-        {'name' => 'AGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 2, 'offset' => 40},
-        {'name' => 'PGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 3, 'offset' => 60},
-        {'name' => 'ORDER', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 4, 'offset' => 80},
-        {'name' => 'CODE', 'type' => 'C', 'length' => 50, 'decimal' => 0, 'position' => 5, 'offset' => 100},
-        {'name' => 'NAME', 'type' => 'C', 'length' => 100, 'decimal' => 0, 'position' => 6, 'offset' => 151},
-        {'name' => 'THUMBNAIL', 'type' => 'C', 'length' => 254, 'decimal' => 0, 'position' => 7, 'offset' => 252},
-        {'name' => 'IMAGE', 'type' => 'C', 'length' => 254, 'decimal' => 0, 'position' => 8, 'offset' => 507},
-        {'name' => 'PRICE', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 9, 'offset' => 762},
-        {'name' => 'COST', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 10, 'offset' => 776},
-        {'name' => 'DESC', 'type' => 'M', 'length' => 10, 'decimal' => 0, 'position' => 11, 'offset' => 790},
-        {'name' => 'WEIGHT', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 12, 'offset' => 801},
-        {'name' => 'TAXABLE', 'type' => 'L', 'length' => 1, 'decimal' => 0, 'position' => 13, 'offset' => 815},
-        {'name' => 'ACTIVE', 'type' => 'L', 'length' => 1, 'decimal' => 0, 'position' => 14, 'offset' => 817}
+        {'name' => 'CATCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 1, 'offset' => 19},
+        {'name' => 'AGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 2, 'offset' => 38},
+        {'name' => 'PGRPCOUNT', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 3, 'offset' => 57},
+        {'name' => 'ORDER', 'type' => 'N', 'length' => 19, 'decimal' => 0, 'position' => 4, 'offset' => 76},
+        {'name' => 'CODE', 'type' => 'C', 'length' => 50, 'decimal' => 0, 'position' => 5, 'offset' => 95},
+        {'name' => 'NAME', 'type' => 'C', 'length' => 100, 'decimal' => 0, 'position' => 6, 'offset' => 145},
+        {'name' => 'THUMBNAIL', 'type' => 'C', 'length' => 254, 'decimal' => 0, 'position' => 7, 'offset' => 245},
+        {'name' => 'IMAGE', 'type' => 'C', 'length' => 254, 'decimal' => 0, 'position' => 8, 'offset' => 499},
+        {'name' => 'PRICE', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 9, 'offset' => 753},
+        {'name' => 'COST', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 10, 'offset' => 766},
+        {'name' => 'DESC', 'type' => 'M', 'length' => 10, 'decimal' => 0, 'position' => 11, 'offset' => 779},
+        {'name' => 'WEIGHT', 'type' => 'N', 'length' => 13, 'decimal' => 2, 'position' => 12, 'offset' => 789},
+        {'name' => 'TAXABLE', 'type' => 'L', 'length' => 1, 'decimal' => 0, 'position' => 13, 'offset' => 802},
+        {'name' => 'ACTIVE', 'type' => 'L', 'length' => 1, 'decimal' => 0, 'position' => 14, 'offset' => 803}
       ]
     end
   end
@@ -324,6 +324,21 @@ SCHEMA
 
     it 'is an array of all column names' do
       expect(table.column_names).to eq column_names
+    end
+  end
+
+  describe 'writes' do
+    let(:dbf_path) { fixture('dbase_83.dbf') }
+    let(:tmp_path) { fixture('tmp_83.dbf') }
+    let(:table) { DBF::Table.new tmp_path }
+
+    before { FileUtils.cp dbf_path, tmp_path }
+    after { FileUtils.rm tmp_path}
+
+    it 'writes string data' do
+      expect(table.record(3).code).to eq 'PASTEL'
+      table.send :write_record, 3, {'CODE' => 'yup'}
+      expect(table.record(3).code).to eq 'yup'
     end
   end
 end
