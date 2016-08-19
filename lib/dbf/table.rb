@@ -279,7 +279,8 @@ module DBF
     end
 
     def deleted_record? # nodoc
-      @data.read(1).unpack('a') == ['*']
+      flag = @data.read(1)
+      flag && flag.unpack('a') == ['*'] || false
     end
 
     def seek(offset) # nodoc
