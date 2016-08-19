@@ -1,3 +1,6 @@
+# 3.0.6
+  - Ignore non-existent records if header record count is incorrect
+
 # 3.0.5
   - Override table name for schema output
 
