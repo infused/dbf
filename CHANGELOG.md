@@ -1,5 +1,8 @@
-# 3.0.6
+# 3.0.7
   - Ignore non-existent records if header record count is incorrect
+
+# 3.0.6
+  - This version has been yanked from rubygems due to errors
 
 # 3.0.5
   - Override table name for schema output
