@@ -10,6 +10,10 @@ module DBF
 
     DBF_HEADER_SIZE = 32
 
+    DEFAULT_OPTIONS = {
+      repare_record_count: false,
+    }
+
     VERSIONS = {
       '02' => 'FoxBase',
       '03' => 'dBase III without memo file',
@@ -59,13 +63,19 @@ module DBF
     #   table = DBF::Table.new 'data.dbf', nil, 'cp437'
     #   table = DBF::Table.new 'data.dbf', 'memo.dbt', Encoding::US_ASCII
     #
+    #   # working with a dbf whose record count in header may be incorrect
+    #   table = DBF::Table.new('dbf/data.dbf', nil, nil, repare_record_count: true)
+    #
     # @param [String, StringIO] data Path to the dbf file or a StringIO object
     # @param [optional String, StringIO] memo Path to the memo file or a StringIO object
     # @param [optional String, Encoding] encoding Name of the encoding or an Encoding object
-    def initialize(data, memo = nil, encoding = nil)
+    # @param [optional Hash] options
+    # @option options [Boolean] :repare_record_count (false) Recalculate record count rather than using record count from header
+    def initialize(data, memo = nil, encoding = nil, options = {})
+      options = DEFAULT_OPTIONS.merge options
       @data = open_data(data)
       @data.rewind
-      @header = Header.new(@data.read DBF_HEADER_SIZE)
+      @header = Header.new(@data.read(DBF_HEADER_SIZE), @data, repare_record_count: options[:repare_record_count])
       @encoding = encoding || header.encoding
       @memo = open_memo(data, memo)
       yield self if block_given?

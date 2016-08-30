@@ -153,6 +153,18 @@ See
 [doc/supported_encodings.csv](docs/supported_encodings.csv)
 for a full list of supported encodings.
 
+## Options
+
+You can pass other options when initializing.
+
+Currently supports:
+
+* `repare_record_count`: Boolean, default `false`. Recalculate record count rather than using record count in header. This is useful if your dbf file may be corrupted and record count in the header is incorrect.
+
+```
+table = DBF::Table.new('dbf/books.dbf', nil, nil, repare_record_count: true)
+```
+
 ## Migrating to ActiveRecord
 
 An example of migrating a DBF book table to ActiveRecord using a migration:
