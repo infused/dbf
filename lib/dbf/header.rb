@@ -7,10 +7,14 @@ module DBF
     attr_reader :encoding_key
     attr_reader :encoding
 
-    def initialize(data)
+    def initialize(data, file = nil, repare_record_count: false)
       @data = data
       @version, @record_count, @header_length, @record_length, @encoding_key = unpack_header
       @encoding = DBF::ENCODINGS[@encoding_key]
+
+      if file && repare_record_count
+        @record_count = (file.size - @header_length) / @record_length
+      end
     end
 
     def unpack_header

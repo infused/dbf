@@ -144,6 +144,19 @@ RSpec.describe DBF, "of type 8b (dBase IV with memo file)" do
   end
 end
 
+RSpec.describe DBF, "of type 8b (dBase IV with incorrect record count)" do
+  let(:table) { DBF::Table.new fixture('dbase_8b_incorrect_record_count.dbf') }
+
+  it "should report the incorrect number of records" do
+    expect(table.record_count).to eq 15
+  end
+
+  table = DBF::Table.new fixture('dbase_8b_incorrect_record_count.dbf'), nil, nil, repare_record_count: true
+  it "should report the incorrect number of records" do
+    expect(table.record_count).to eq 10
+  end
+end
+
 RSpec.describe DBF, "of type f5 (FoxPro with memo file)" do
   let(:table) { DBF::Table.new fixture('dbase_f5.dbf') }
 
