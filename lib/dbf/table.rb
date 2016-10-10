@@ -6,7 +6,7 @@ module DBF
   # methods for enumerating and searching the records.
   class Table
     include Enumerable
-    include Schema
+    include ::DBF::Schema
 
     DBF_HEADER_SIZE = 32
 
