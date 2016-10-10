@@ -1,3 +1,6 @@
+# 3.0.8
+  - Fix uninitialized constant error under Rails 5
+
 # 3.0.7
   - Ignore non-existent records if header record count is incorrect
 
