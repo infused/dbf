@@ -253,7 +253,7 @@ module DBF
       if memo
         meth = memo.is_a?(StringIO) ? :new : :open
         memo_class.send(meth, memo, version)
-      elsif !data.is_a? StringIO
+      elsif !data.is_a?(StringIO)
         files = Dir.glob(memo_search_path data)
         files.any? ? memo_class.open(files.first, version) : nil
       end

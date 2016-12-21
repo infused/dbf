@@ -55,7 +55,7 @@ data = File.open('widgets.dbf')
 widgets = DBF::Table.new(data)
 ```
 
-Open a DBF by passing in raw data (wrap the raw data with a StringIO):
+Open a DBF by passing in raw data (wrap the raw data with StringIO):
 
 ```ruby
 widgets = DBF::Table.new(StringIO.new('raw binary data'))
@@ -180,7 +180,7 @@ end
 ```
 
 If you have initalized the DBF::Table with raw data, you will need to set the
-table name manually with:
+exported table name manually:
 
 ```ruby
 table.name = 'my_table_name'
@@ -213,7 +213,7 @@ end
 ```
 
 If you have initalized the DBF::Table with raw data, you will need to set the
-table name manually with:
+exported table name manually:
 
 ```ruby
 table.name = 'my_table_name'
@@ -230,7 +230,7 @@ A small command-line utility called dbf is installed along with the gem.
       -s = print summary information
       -a = create an ActiveRecord::Schema
       -r = create a Sequel Migration
-      -c = create a csv file
+      -c = dump data in CSV format
 
 Create an executable ActiveRecord schema:
 
@@ -246,16 +246,16 @@ Dump all records to a CSV file:
 
 ## Reading a Visual Foxpro database (v8, v9)
 
-A special Database::Foxpro class is available to read Visual Foxpro container files (.dbc-files). When using this class,
-long field names are supported and tables can be referenced without using names.
+A special Database::Foxpro class is available to read Visual Foxpro container
+files (file with .dbc extension). When using this class long field names are
+supported and tables can be referenced without using names.
 
 ```ruby
 require 'dbf'
 
-contacts = DBF::Database::Foxpro.new('contactdatabase.dbc').contacts
+contacts = DBF::Database::Foxpro.new('contact_database.dbc').contacts
 my_contact = contacts.record(1).spouses_interests
 ```
-
 
 ## dBase version compatibility
 
