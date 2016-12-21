@@ -3,5 +3,6 @@ source 'https://rubygems.org'
 
 group :test do
   gem 'rspec'
-  gem 'codeclimate-test-reporter', require: false, platform: :ruby
+  gem 'simplecov', platform: :ruby
+  gem 'codeclimate-test-reporter'
 end
