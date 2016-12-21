@@ -1,18 +1,19 @@
 language: ruby
 sudo: false
 rvm:
-  - 2.3.0
-  - 2.2.4
-  - 2.1.8
-  - 2.0.0
-  - jruby
+- 2.3.0
+- 2.2.4
+- 2.1.8
+- 2.0.0
+- jruby
 branches:
   only:
-    - master
-    - 2_stable
-bundler_args: --without development
-script: bundle exec rspec -fdoc
+  - master
+  - 2_stable
 gemfile: Gemfile.travis
-addons:
-  code_climate:
-    repo_token: 2877e253fb18735180e9c3f5faf075c3190b63fd720dc2a282751a4d50290fa8
+bundler_args: "--without development"
+script: bundle exec rspec -fdoc
+after_success: bundle exec codeclimate-test-reporter
+env:
+  global:
+    secure: IT68W+OwNUzHqRc77nXA3iVbzGAnD3MGTBaXypT0ODDBVMKnMsAdCfH8QryBmtka1W7Is/1Tcb9sv8PqtBXNSoJPpJHYv6rXCJA1+nit0xvB1m4PXITrJOD2Kvj1KR7ovnQg9CG0pVxrPezKpHVDpPRzEkI79TMCrC5QTI4aZWU=
