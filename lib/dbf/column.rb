@@ -108,7 +108,7 @@ module DBF
       strip_output ? output.strip : output
     end
 
-    def encode_string(string)
+    def encode_string(string) # nodoc
       string.force_encoding(@encoding).encode(*encoding_args)
     end
 
