@@ -117,7 +117,7 @@ module DBF
     # The record will be nil if it has been deleted, but not yet pruned from
     # the database.
     #
-    # @param [Fixnum] index
+    # @param [Integer] index
     # @return [DBF::Record, NilClass]
     def record(index)
       seek_to_record(index)
@@ -136,7 +136,7 @@ module DBF
 
     # Total number of records
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def record_count
       @record_count ||= header.record_count
     end
@@ -181,12 +181,12 @@ module DBF
     # returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
     #
-    # @param [Fixnum, Symbol] command
+    # @param [Integer, Symbol] command
     # @param [optional, Hash] options Hash of search parameters
     # @yield [optional, DBF::Record, NilClass]
     def find(command, options = {}, &block)
       case command
-      when Fixnum
+      when Integer
         record(command)
       when Array
         command.map { |i| record(i) }

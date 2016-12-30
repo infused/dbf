@@ -26,8 +26,8 @@ module DBF
     #
     # @param [String] name
     # @param [String] type
-    # @param [Fixnum] length
-    # @param [Fixnum] decimal
+    # @param [Integer] length
+    # @param [Integer] decimal
     def initialize(table, name, type, length, decimal)
       @table = table
       @name = clean(name)
@@ -44,7 +44,7 @@ module DBF
     # Cast value to native type
     #
     # @param [String] value
-    # @return [Fixnum, Float, Date, DateTime, Boolean, String]
+    # @return [Integer, Float, Date, DateTime, Boolean, String]
     def type_cast(value)
       type_cast_class.type_cast(value)
     end
