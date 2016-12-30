@@ -296,7 +296,7 @@ RSpec.describe DBF::Column do
       context 'with Foxpro dbf' do
         it 'outputs a float column' do
           column = DBF::Column.new table, 'ColumnName', 'B', 1, 2
-          expect(column.schema_definition).to eq "\"column_name\", :float\n"
+          expect(column.schema_definition).to eq "\"column_name\", :binary\n"
         end
       end
     end

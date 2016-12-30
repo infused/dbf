@@ -1,3 +1,6 @@
+# 3.1.0
+  - Use :binary for binary fields in ActiveRecord schemas
+
 # 3.0.8
   - Fix uninitialized constant error under Rails 5
 

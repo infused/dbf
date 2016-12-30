@@ -1,3 +1,3 @@
 module DBF
-  VERSION = '3.0.8'
+  VERSION = '3.1.0'
 end

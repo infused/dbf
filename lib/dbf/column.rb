@@ -136,11 +136,7 @@ module DBF
       when 'M'
         ':text'
       when 'B'
-        if DBF::Table::FOXPRO_VERSIONS.keys.include?(@version)
-          ':float'
-        else
-          ':text'
-        end
+        ':binary'
       else
         if format == :sequel
           ":varchar, :size => #{length}"
