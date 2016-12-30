@@ -56,20 +56,6 @@ module DBF
       @memo ||= type == 'M'
     end
 
-    # Schema definition
-    #
-    # @return [String]
-    def schema_definition
-      "\"#{underscored_name}\", #{schema_data_type}\n"
-    end
-
-    # Sequel Schema definition
-    #
-    # @return [String]
-    def sequel_schema_definition
-      ":#{underscored_name}, #{schema_data_type(:sequel)}\n"
-    end
-
     # Underscored name
     #
     # This is the column name converted to underscore format.
