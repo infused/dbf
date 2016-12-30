@@ -32,23 +32,23 @@ module DBF
       end
     end
 
-    def activerecord_schema(_table_only = false)
+    def activerecord_schema(_table_only = false) # nodoc
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{name}\" do |t|\n"
       columns.each do |column|
-        s << "    t.column #{column.schema_definition}"
+        s << "    t.column #{activerecord_schema_definition(column)}"
       end
       s << "  end\nend"
       s
     end
 
-    def sequel_schema(table_only = false)
+    def sequel_schema(table_only = false) # nodoc
       s = ''
       s << "Sequel.migration do\n" unless table_only
       s << "  change do\n " unless table_only
       s << "    create_table(:#{name}) do\n"
       columns.each do |column|
-        s << "      column #{column.sequel_schema_definition}"
+        s << "      column #{sequel_schema_definition(column)}"
       end
       s << "    end\n"
       s << "  end\n"  unless table_only
@@ -56,8 +56,51 @@ module DBF
       s
     end
 
-    def json_schema(_table_only = false)
+    def json_schema(_table_only = false) # nodoc
       columns.map(&:to_hash).to_json
+    end
+
+    # ActiveRecord schema definition
+    #
+    # @param [DBF::Column]
+    # @return [String]
+    def activerecord_schema_definition(column)
+      "\"#{column.underscored_name}\", #{schema_data_type(column, :activerecord)}\n"
+    end
+
+    # Sequel schema definition
+    #
+    # @params [DBF::Column]
+    # @return [String]
+    def sequel_schema_definition(column)
+      ":#{column.underscored_name}, #{schema_data_type(column, :sequel)}\n"
+    end
+
+    def schema_data_type(column, format = :activerecord) # nodoc
+      case column.type
+      when 'N', 'F'
+        column.decimal > 0 ? ':float' : ':integer'
+      when 'I'
+        ':integer'
+      when 'Y'
+        ':decimal, :precision => 15, :scale => 4'
+      when 'D'
+        ':date'
+      when 'T'
+        ':datetime'
+      when 'L'
+        ':boolean'
+      when 'M'
+        ':text'
+      when 'B'
+        ':binary'
+      else
+        if format == :sequel
+          ":varchar, :size => #{column.length}"
+        else
+          ":string, :limit => #{column.length}"
+        end
+      end
     end
   end
 end

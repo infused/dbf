@@ -326,4 +326,52 @@ SCHEMA
       expect(table.column_names).to eq column_names
     end
   end
+
+  context '#activerecord_schema_definition' do
+    context 'with type N (number)' do
+      it 'outputs an integer column' do
+        column = DBF::Column.new table, 'ColumnName', 'N', 1, 0
+        expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :integer\n"
+      end
+    end
+
+    context 'with type B (binary)' do
+      context 'with Foxpro dbf' do
+        it 'outputs a float column' do
+          column = DBF::Column.new table, 'ColumnName', 'B', 1, 2
+          expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :binary\n"
+        end
+      end
+    end
+
+    it 'defines a float colmn if type is (N)umber with more than 0 decimals' do
+      column = DBF::Column.new table, 'ColumnName', 'N', 1, 2
+      expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :float\n"
+    end
+
+    it 'defines a date column if type is (D)ate' do
+      column = DBF::Column.new table, 'ColumnName', 'D', 8, 0
+      expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :date\n"
+    end
+
+    it 'defines a datetime column if type is (D)ate' do
+      column = DBF::Column.new table, 'ColumnName', 'T', 16, 0
+      expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :datetime\n"
+    end
+
+    it 'defines a boolean column if type is (L)ogical' do
+      column = DBF::Column.new table, 'ColumnName', 'L', 1, 0
+      expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :boolean\n"
+    end
+
+    it 'defines a text column if type is (M)emo' do
+      column = DBF::Column.new table, 'ColumnName', 'M', 1, 0
+      expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :text\n"
+    end
+
+    it 'defines a string column with length for any other data types' do
+      column = DBF::Column.new table, 'ColumnName', 'X', 20, 0
+      expect(table.activerecord_schema_definition(column)).to eq "\"column_name\", :string, :limit => 20\n"
+    end
+  end
 end
