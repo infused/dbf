@@ -1,10 +1,10 @@
 module DBF
   class Column
-    # Raised if length is less than 1
-    class LengthError < StandardError; end
+    class LengthError < StandardError
+    end
 
-    # Raised if name is empty
-    class NameError < StandardError; end
+    class NameError < StandardError
+    end
 
     attr_reader :table, :name, :type, :length, :decimal
 
