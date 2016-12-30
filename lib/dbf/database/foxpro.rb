@@ -43,9 +43,8 @@ module DBF
       # on any platform.
       # @return String
       def table_path(name)
-        example = File.join(@dirname, "#{name}.dbf")
-        glob = File.join(@dirname, '*')
-        path = Dir.glob(glob).find { |match| match.downcase == example.downcase }
+        glob = File.join(@dirname, "#{name}.dbf")
+        path = Dir.glob(glob, File::FNM_CASEFOLD).first
 
         unless path && File.exist?(path)
           raise DBF::FileNotFoundError, "related table not found: #{name}"
