@@ -4,7 +4,7 @@ begin
 rescue LoadError
 end
 
-Encoding.default_external = "UTF-8"
+Encoding.default_external = 'UTF-8'
 
 require 'dbf'
 require 'yaml'
@@ -26,7 +26,7 @@ RSpec.configure do |config|
 end
 
 def fixture_path
-  @fixture_path ||= File.join(File.dirname(__FILE__), '/fixtures')
+  @fixture_path ||= File.join(File.dirname(__FILE__), 'fixtures')
 end
 
 def fixture(filename)
