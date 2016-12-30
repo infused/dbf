@@ -60,13 +60,13 @@ RSpec.describe DBF::Column do
       end
 
       context 'and 0 decimals' do
-        it 'casts value to Fixnum' do
+        it 'casts value to Integer' do
           value = '135'
           column = DBF::Column.new table, 'ColumnName', 'N', 3, 0
           expect(column.type_cast(value)).to eq 135
         end
 
-        it 'supports negative Fixnum' do
+        it 'supports negative Integer' do
           value = '-135'
           column = DBF::Column.new table, 'ColumnName', 'N', 3, 0
           expect(column.type_cast(value)).to eq (-135)
@@ -139,13 +139,13 @@ RSpec.describe DBF::Column do
         end
       end
 
-      it 'casts value to Fixnum' do
+      it 'casts value to Integer' do
         value = "\203\171\001\000"
         column = DBF::Column.new table, 'ColumnName', 'I', 3, 0
         expect(column.type_cast(value)).to eq 96643
       end
 
-      it 'supports negative Fixnum' do
+      it 'supports negative Integer' do
         value = "\x24\xE1\xFF\xFF"
         column = DBF::Column.new table, 'ColumnName', 'I', 3, 0
         expect(column.type_cast(value)).to eq (-7900)
