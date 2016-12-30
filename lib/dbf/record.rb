@@ -90,11 +90,11 @@ module DBF
     end
 
     def init_attribute(column) # nodoc
-      value = column.memo? ? memo(column) : get_data(column)
+      value = column.memo? ? get_memo(column) : get_data(column)
       column.type_cast(value)
     end
 
-    def memo(column) # nodoc
+    def get_memo(column) # nodoc
       if @memo
         @memo.get(memo_start_block(column))
       else
