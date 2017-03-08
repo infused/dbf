@@ -79,19 +79,15 @@ widget = widgets.find(6)
 Note that find() will return nil if the requested record has been deleted
 and not yet pruned from the database.
 
-The value for a attribute can be accessed via element reference in one of three
-ways
+The value for an attribute can be accessed via element reference in several
+ways.
 
 ```ruby
+widget.slot_number     # underscored field name as method
+
 widget["SlotNumber"]   # original field name in dbf file
 widget['slot_number']  # underscored field name string
 widget[:slot_number]   # underscored field name symbol
-```
-
-Attributes can also be accessed as method using the underscored field name
-
-```ruby
-widget.slot_number
 ```
 
 Get a hash of all attributes. The keys are the original column names.
