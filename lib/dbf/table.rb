@@ -68,10 +68,6 @@ module DBF
       yield self if block_given?
     end
 
-    def header
-      @header ||= Header.new(@data.read DBF_HEADER_SIZE)
-    end
-
     # @return [TrueClass, FalseClass]
     def has_memo_file?
       !!@memo
@@ -94,12 +90,12 @@ module DBF
       end
     end
 
-    # @return String
+    # @return [String]
     def filename
-      File.basename @data.path if @data.respond_to?(:path)
+      File.basename(@data.path) if @data.respond_to?(:path)
     end
 
-    # @return String
+    # @return [String]
     def name
       @name ||= filename && File.basename(filename, ".*")
     end
@@ -290,6 +286,10 @@ module DBF
 
     def seek_to_record(index) # nodoc
       seek(index * header.record_length)
+    end
+
+    def header
+      @header ||= Header.new(@data.read DBF_HEADER_SIZE)
     end
   end
 end
