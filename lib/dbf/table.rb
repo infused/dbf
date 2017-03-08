@@ -67,8 +67,6 @@ module DBF
       @encoding = encoding || header.encoding
       @memo = open_memo(data, memo)
       yield self if block_given?
-    rescue Errno::ENOENT
-      raise DBF::FileNotFoundError, "file not found: #{data}"
     end
 
     def header
@@ -249,6 +247,8 @@ module DBF
 
     def open_data(data) # nodoc
       data.is_a?(StringIO) ? data : File.open(data, 'rb')
+    rescue Errno::ENOENT
+      raise DBF::FileNotFoundError, "file not found: #{data}"
     end
 
     def open_memo(data, memo = nil) # nodoc
