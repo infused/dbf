@@ -68,11 +68,6 @@ module DBF
       yield self if block_given?
     end
 
-    # @return [TrueClass, FalseClass]
-    def has_memo_file?
-      !!@memo
-    end
-
     # Closes the table and memo file
     #
     # @return [TrueClass, FalseClass]
@@ -90,14 +85,18 @@ module DBF
       end
     end
 
+    # Column names
+    #
     # @return [String]
-    def filename
-      File.basename(@data.path) if @data.respond_to?(:path)
+    def column_names
+      columns.map(&:name)
     end
 
-    # @return [String]
-    def name
-      @name ||= filename && File.basename(filename, ".*")
+    # All columns
+    #
+    # @return [Array]
+    def columns
+      @columns ||= build_columns
     end
 
     # Calls block once for each record in the table. The record may be nil
@@ -108,50 +107,9 @@ module DBF
       header.record_count.times { |i| yield record(i) }
     end
 
-    # Retrieve a record by index number.
-    # The record will be nil if it has been deleted, but not yet pruned from
-    # the database.
-    #
-    # @param [Integer] index
-    # @return [DBF::Record, NilClass]
-    def record(index)
-      seek_to_record(index)
-      return nil if deleted_record?
-      DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
-    end
-
-    alias_method :row, :record
-
-    # Internal dBase version number
-    #
     # @return [String]
-    def version
-      @version ||= header.version
-    end
-
-    # Total number of records
-    #
-    # @return [Integer]
-    def record_count
-      @record_count ||= header.record_count
-    end
-
-    # Human readable version description
-    #
-    # @return [String]
-    def version_description
-      VERSIONS[version]
-    end
-
-    # Dumps all records to a CSV file.  If no filename is given then CSV is
-    # output to STDOUT.
-    #
-    # @param [optional String] path Defaults to STDOUT
-    def to_csv(path = nil)
-      out_io = path ? File.open(path, 'w') : $stdout
-      csv = CSV.new(out_io, force_quotes: true)
-      csv << column_names
-      each { |record| csv << record.to_a }
+    def filename
+      File.basename(@data.path) if @data.respond_to?(:path)
     end
 
     # Find records using a simple ActiveRecord-like syntax.
@@ -192,18 +150,60 @@ module DBF
       end
     end
 
-    # All columns
-    #
-    # @return [Array]
-    def columns
-      @columns ||= build_columns
+    # @return [TrueClass, FalseClass]
+    def has_memo_file?
+      !!@memo
     end
 
-    # Column names
+    # @return [String]
+    def name
+      @name ||= filename && File.basename(filename, ".*")
+    end
+
+    # Retrieve a record by index number.
+    # The record will be nil if it has been deleted, but not yet pruned from
+    # the database.
+    #
+    # @param [Integer] index
+    # @return [DBF::Record, NilClass]
+    def record(index)
+      seek_to_record(index)
+      return nil if deleted_record?
+      DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
+    end
+
+    alias_method :row, :record
+
+    # Total number of records
+    #
+    # @return [Integer]
+    def record_count
+      @record_count ||= header.record_count
+    end
+
+    # Dumps all records to a CSV file.  If no filename is given then CSV is
+    # output to STDOUT.
+    #
+    # @param [optional String] path Defaults to STDOUT
+    def to_csv(path = nil)
+      out_io = path ? File.open(path, 'w') : $stdout
+      csv = CSV.new(out_io, force_quotes: true)
+      csv << column_names
+      each { |record| csv << record.to_a }
+    end
+
+    # Internal dBase version number
     #
     # @return [String]
-    def column_names
-      columns.map(&:name)
+    def version
+      @version ||= header.version
+    end
+
+    # Human readable version description
+    #
+    # @return [String]
+    def version_description
+      VERSIONS[version]
     end
 
     private
@@ -219,6 +219,11 @@ module DBF
       columns
     end
 
+    def deleted_record? # nodoc
+      flag = @data.read(1)
+      flag ? flag.unpack('a') == ['*'] : true
+    end
+
     def end_of_record? # nodoc
       original_pos = @data.pos
       byte = @data.read(1)
@@ -226,8 +231,25 @@ module DBF
       byte.ord == 13
     end
 
+    def find_all(options) # nodoc
+      map do |record|
+        if record && record.match?(options)
+          yield record if block_given?
+          record
+        end
+      end.compact
+    end
+
+    def find_first(options) # nodoc
+      detect { |record| record && record.match?(options) }
+    end
+
     def foxpro? # nodoc
       FOXPRO_VERSIONS.keys.include? version
+    end
+
+    def header
+      @header ||= Header.new(@data.read DBF_HEADER_SIZE)
     end
 
     def memo_class # nodoc
@@ -238,6 +260,12 @@ module DBF
           version == '83' ? Memo::Dbase3 : Memo::Dbase4
         end
       end
+    end
+
+    def memo_search_path(io) # nodoc
+      dirname = File.dirname(io)
+      basename = File.basename(io, '.*')
+      "#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}"
     end
 
     def open_data(data) # nodoc
@@ -256,40 +284,12 @@ module DBF
       end
     end
 
-    def memo_search_path(io) # nodoc
-      dirname = File.dirname(io)
-      basename = File.basename(io, '.*')
-      "#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}"
-    end
-
-    def find_all(options) # nodoc
-      map do |record|
-        if record && record.match?(options)
-          yield record if block_given?
-          record
-        end
-      end.compact
-    end
-
-    def find_first(options) # nodoc
-      detect { |record| record && record.match?(options) }
-    end
-
-    def deleted_record? # nodoc
-      flag = @data.read(1)
-      flag ? flag.unpack('a') == ['*'] : true
-    end
-
     def seek(offset) # nodoc
       @data.seek(header.header_length + offset)
     end
 
     def seek_to_record(index) # nodoc
       seek(index * header.record_length)
-    end
-
-    def header
-      @header ||= Header.new(@data.read DBF_HEADER_SIZE)
     end
   end
 end
