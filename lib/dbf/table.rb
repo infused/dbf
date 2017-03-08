@@ -285,7 +285,7 @@ module DBF
     end
 
     def seek(offset) # nodoc
-      @data.seek header.header_length + offset
+      @data.seek(header.header_length + offset)
     end
 
     def seek_to_record(index) # nodoc
