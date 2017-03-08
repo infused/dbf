@@ -63,7 +63,6 @@ module DBF
     # @param [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
-      @data.rewind
       @encoding = encoding || header.encoding
       @memo = open_memo(data, memo)
       yield self if block_given?
