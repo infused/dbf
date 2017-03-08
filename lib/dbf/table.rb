@@ -37,7 +37,6 @@ module DBF
       'fb' => 'FoxPro without memo file'
     }
 
-    attr_reader :header
     attr_accessor :encoding
     attr_writer :name
 
@@ -65,12 +64,15 @@ module DBF
     def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
       @data.rewind
-      @header = Header.new(@data.read DBF_HEADER_SIZE)
       @encoding = encoding || header.encoding
       @memo = open_memo(data, memo)
       yield self if block_given?
     rescue Errno::ENOENT
       raise DBF::FileNotFoundError, "file not found: #{data}"
+    end
+
+    def header
+      @header ||= Header.new(@data.read DBF_HEADER_SIZE)
     end
 
     # @return [TrueClass, FalseClass]
