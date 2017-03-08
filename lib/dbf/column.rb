@@ -41,19 +41,26 @@ module DBF
       validate_name
     end
 
+    # Returns true if the column is a memo
+    #
+    # @return [Boolean]
+    def memo?
+      @memo ||= type == 'M'
+    end
+
+    # Returns a Hash with :name, :type, :length, and :decimal keys
+    #
+    # @return [Hash]
+    def to_hash
+      {name: name, type: type, length: length, decimal: decimal}
+    end
+
     # Cast value to native type
     #
     # @param [String] value
     # @return [Integer, Float, Date, DateTime, Boolean, String]
     def type_cast(value)
       type_cast_class.type_cast(value)
-    end
-
-    # Returns true if the column is a memo
-    #
-    # @return [Boolean]
-    def memo?
-      @memo ||= type == 'M'
     end
 
     # Underscored name
@@ -72,17 +79,11 @@ module DBF
       end
     end
 
-    def to_hash
-      {name: name, type: type, length: length, decimal: decimal}
-    end
-
     private
 
-    def type_cast_class # nodoc
-      @type_cast_class ||= begin
-        klass = @length == 0 ? ColumnType::Nil : TYPE_CAST_CLASS[type.to_sym]
-        klass.new(@decimal, @encoding)
-      end
+    def clean(value) # nodoc
+      truncated_value = value.strip.partition("\x00").first
+      truncated_value.gsub(/[^\x20-\x7E]/, '')
     end
 
     def encode(value, strip_output = false) # nodoc
@@ -92,15 +93,15 @@ module DBF
       strip_output ? output.strip : output
     end
 
-    def encode_string(string) # nodoc
-      string.force_encoding(@encoding).encode(*encoding_args)
-    end
-
     def encoding_args # nodoc
       @encoding_args ||= [
         Encoding.default_external,
         {undef: :replace, invalid: :replace}
       ]
+    end
+
+    def encode_string(string) # nodoc
+      string.force_encoding(@encoding).encode(*encoding_args)
     end
 
     def schema_data_type(format = :activerecord) # nodoc
@@ -130,9 +131,11 @@ module DBF
       end
     end
 
-    def clean(value) # nodoc
-      truncated_value = value.strip.partition("\x00").first
-      truncated_value.gsub(/[^\x20-\x7E]/, '')
+    def type_cast_class # nodoc
+      @type_cast_class ||= begin
+        klass = @length == 0 ? ColumnType::Nil : TYPE_CAST_CLASS[type.to_sym]
+        klass.new(@decimal, @encoding)
+      end
     end
 
     def validate_length # nodoc
