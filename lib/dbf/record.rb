@@ -71,12 +71,6 @@ module DBF
       @columns.map { |column| [column.name, init_attribute(column)] }
     end
 
-    def file_offset(attribute_name) # nodoc
-      column = @columns.detect { |c| c.name == attribute_name.to_s }
-      index = @columns.index(column)
-      @columns[0, index + 1].compact.reduce(0) { |x, c| x += c.length }
-    end
-
     def method_missing(method, *args) # nodoc
       if (index = underscored_column_names.index(method.to_s))
         attributes[@columns[index].name]
