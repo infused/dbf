@@ -1,3 +1,6 @@
+# 3.1.1
+  - Use Date.strptime to parse date fields
+
 # 3.1.0
   - Use :binary for binary fields in ActiveRecord schemas
 
