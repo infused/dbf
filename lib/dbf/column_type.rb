@@ -59,7 +59,7 @@ module DBF
 
     class Date < Base
       def type_cast(value)
-        value =~ /\d{8}/ && ::Date.parse(value)
+        value =~ /\d{8}/ && ::Date.strptime(value, '%Y%m%d')
       end
     end
 
