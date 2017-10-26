@@ -59,10 +59,7 @@ module DBF
 
     class Date < Base
       def type_cast(value)
-        v = value.tr(' ', '0')
-        v !~ /\S/ ? nil : ::Date.parse(v)
-      rescue
-        nil
+        value =~ /\d{8}/ && ::Date.parse(value)
       end
     end
 
