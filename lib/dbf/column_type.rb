@@ -4,7 +4,7 @@ module DBF
       ENCODING_ARGS = [
         Encoding.default_external,
         {undef: :replace, invalid: :replace}
-      ]
+      ].freeze
 
       attr_reader :decimal, :encoding
 
