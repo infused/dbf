@@ -105,33 +105,6 @@ module DBF
       string.force_encoding(@encoding).encode(*encoding_args)
     end
 
-    def schema_data_type(format = :activerecord) # :nodoc:
-      case type
-      when 'N', 'F'
-        decimal > 0 ? ':float' : ':integer'
-      when 'I'
-        ':integer'
-      when 'Y'
-        ':decimal, :precision => 15, :scale => 4'
-      when 'D'
-        ':date'
-      when 'T'
-        ':datetime'
-      when 'L'
-        ':boolean'
-      when 'M'
-        ':text'
-      when 'B'
-        ':binary'
-      else
-        if format == :sequel
-          ":varchar, :size => #{length}"
-        else
-          ":string, :limit => #{length}"
-        end
-      end
-    end
-
     def type_cast_class # :nodoc:
       @type_cast_class ||= begin
         klass = @length == 0 ? ColumnType::Nil : TYPE_CAST_CLASS[type.to_sym]
