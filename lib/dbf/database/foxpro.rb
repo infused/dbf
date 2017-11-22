@@ -21,7 +21,6 @@ module DBF
         @dirname = File.dirname(@path)
         @db = DBF::Table.new(@path)
         @tables = extract_dbc_data
-
       rescue Errno::ENOENT
         raise DBF::FileNotFoundError, "file not found: #{data}"
       end
@@ -33,7 +32,7 @@ module DBF
       # Returns table with given name
       # @return Table
       def table(name)
-        Table.new(table_path name) do |table|
+        Table.new table_path(name) do |table|
           table.long_names = @tables[name]
         end
       end
