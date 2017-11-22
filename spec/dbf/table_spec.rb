@@ -50,7 +50,7 @@ RSpec.describe DBF::Table do
 
   describe '#schema' do
     describe 'when data is IO' do
-      let(:control_schema) { File.read(fixture('dbase_83_schema.txt')) }
+      let(:control_schema) { File.read(fixture('dbase_83_schema_ar.txt')) }
 
       it 'matches the test schema fixture' do
         expect(table.schema).to eq control_schema
@@ -62,7 +62,7 @@ RSpec.describe DBF::Table do
       let(:memo) { StringIO.new File.read(memo_path) }
       let(:table) { DBF::Table.new data }
 
-      let(:control_schema) { File.read(fixture('dbase_83_schema.txt')) }
+      let(:control_schema) { File.read(fixture('dbase_83_schema_ar.txt')) }
 
       it 'matches the test schema fixture' do
         table.name = 'dbase_83'
@@ -73,51 +73,13 @@ RSpec.describe DBF::Table do
 
   describe '#sequel_schema' do
     it 'should return a valid Sequel migration by default' do
-      expect(table.sequel_schema).to eq <<-SCHEMA
-Sequel.migration do
-  change do
-     create_table(:dbase_83) do
-      column :id, :integer
-      column :catcount, :integer
-      column :agrpcount, :integer
-      column :pgrpcount, :integer
-      column :order, :integer
-      column :code, :varchar, :size => 50
-      column :name, :varchar, :size => 100
-      column :thumbnail, :varchar, :size => 254
-      column :image, :varchar, :size => 254
-      column :price, :float
-      column :cost, :float
-      column :desc, :text
-      column :weight, :float
-      column :taxable, :boolean
-      column :active, :boolean
-    end
-  end
-end
-SCHEMA
+      control_schema = File.read(fixture('dbase_83_schema_sq.txt'))
+      expect(table.sequel_schema).to eq control_schema
     end
 
     it 'should return a limited Sequel migration when passed true' do
-      expect(table.sequel_schema(true)).to eq <<-SCHEMA
-    create_table(:dbase_83) do
-      column :id, :integer
-      column :catcount, :integer
-      column :agrpcount, :integer
-      column :pgrpcount, :integer
-      column :order, :integer
-      column :code, :varchar, :size => 50
-      column :name, :varchar, :size => 100
-      column :thumbnail, :varchar, :size => 254
-      column :image, :varchar, :size => 254
-      column :price, :float
-      column :cost, :float
-      column :desc, :text
-      column :weight, :float
-      column :taxable, :boolean
-      column :active, :boolean
-    end
-SCHEMA
+      control_schema = File.read(fixture('dbase_83_schema_sq_lim.txt'))
+      expect(table.sequel_schema).to eq control_schema
     end
 
   end
