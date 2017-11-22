@@ -25,7 +25,7 @@ RSpec.describe DBF::Database::Foxpro do
   end
 
   describe '#table' do
-    describe "when accessing related tables" do
+    describe 'when accessing related tables' do
       let(:db) { DBF::Database::Foxpro.new(dbf_path) }
 
       it 'loads an existing related table' do

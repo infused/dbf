@@ -11,16 +11,16 @@ if params['v']
 
 elsif params['h'] then
   puts "usage: #{File.basename(__FILE__)} [-h|-s|-a|-c|-r] filename"
-  puts "  -h = print this message"
-  puts "  -v = print the DBF gem version"
-  puts "  -s = print summary information"
-  puts "  -a = create an ActiveRecord::Schema"
-  puts "  -r = create a Sequel migration"
-  puts "  -c = create a CSV file"
+  puts '  -h = print this message'
+  puts '  -v = print the DBF gem version'
+  puts '  -s = print summary information'
+  puts '  -a = create an ActiveRecord::Schema'
+  puts '  -r = create a Sequel migration'
+  puts '  -c = create a CSV file'
 else
 
   filename = ARGV.shift
-  abort "You must supply a filename on the command line" unless filename
+  abort 'You must supply a filename on the command line' unless filename
 
   # create an ActiveRecord::Schema
   if params['a']
@@ -43,10 +43,10 @@ else
     puts "Records: #{table.record_count}"
 
     puts "\nFields:"
-    puts "Name             Type       Length     Decimal"
-    puts "-" * 78
+    puts 'Name             Type       Length     Decimal'
+    puts '-' * 78
     table.columns.each do |f|
-      puts "%-16s %-10s %-10s %-10s" % [f.name, f.type, f.length, f.decimal]
+      puts '%-16s %-10s %-10s %-10s' % [f.name, f.type, f.length, f.decimal]
     end
   end
 

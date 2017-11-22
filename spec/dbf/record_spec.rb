@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe DBF::Record do
   describe '#to_a' do
@@ -84,7 +84,7 @@ RSpec.describe DBF::Record do
         expect(record.name.encoding).to eq Encoding.default_external
 
         # russian a
-        expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d0b0"]
+        expect(record.name.encode('UTF-8').unpack('H4')).to eq ['d0b0']
       end
     end
 
@@ -96,7 +96,7 @@ RSpec.describe DBF::Record do
         expect(record.name.encoding).to eq Encoding.default_external
 
         # russian а encoded in cp1251 and read as if it was encoded in cp866
-        expect(record.name.encode("UTF-8").unpack("H4")).to eq ["d180"]
+        expect(record.name.encode('UTF-8').unpack('H4')).to eq ['d180']
       end
     end
   end
