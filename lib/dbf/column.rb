@@ -88,7 +88,7 @@ module DBF
     end
 
     def encode(value, strip_output = false) # :nodoc:
-      return value if !value.respond_to?(:encoding)
+      return value unless value.respond_to?(:encoding)
 
       output = @encoding ? encode_string(value) : value
       strip_output ? output.strip : output
