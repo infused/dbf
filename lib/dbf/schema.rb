@@ -32,7 +32,7 @@ module DBF
       end
     end
 
-    def activerecord_schema(_table_only = false) # nodoc
+    def activerecord_schema(_table_only = false) # :nodoc:
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{name}\" do |t|\n"
       columns.each do |column|
@@ -42,7 +42,7 @@ module DBF
       s
     end
 
-    def sequel_schema(table_only = false) # nodoc
+    def sequel_schema(table_only = false) # :nodoc:
       s = ''
       s << "Sequel.migration do\n" unless table_only
       s << "  change do\n " unless table_only
@@ -56,7 +56,7 @@ module DBF
       s
     end
 
-    def json_schema(_table_only = false) # nodoc
+    def json_schema(_table_only = false) # :nodoc:
       columns.map(&:to_hash).to_json
     end
 
@@ -76,7 +76,7 @@ module DBF
       ":#{column.underscored_name}, #{schema_data_type(column, :sequel)}\n"
     end
 
-    def schema_data_type(column, format = :activerecord) # nodoc
+    def schema_data_type(column, format = :activerecord) # :nodoc:
       case column.type
       when 'N', 'F'
         column.decimal > 0 ? ':float' : ':integer'
