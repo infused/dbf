@@ -1,0 +1,21 @@
+Sequel.migration do
+  change do
+     create_table(:dbase_83) do
+      column :id, :integer
+      column :catcount, :integer
+      column :agrpcount, :integer
+      column :pgrpcount, :integer
+      column :order, :integer
+      column :code, :varchar, :size => 50
+      column :name, :varchar, :size => 100
+      column :thumbnail, :varchar, :size => 254
+      column :image, :varchar, :size => 254
+      column :price, :float
+      column :cost, :float
+      column :desc, :text
+      column :weight, :float
+      column :taxable, :boolean
+      column :active, :boolean
+    end
+  end
+end
