@@ -67,8 +67,7 @@ RSpec.describe DBF::Record do
     let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
     let(:record) { table.find(0) }
 
-    %w(character numerical date logical float memo).each do |column_name|
-
+    %w[character numerical date logical float memo].each do |column_name|
       it "defines accessor method for '#{column_name}' column" do
         expect(record).to respond_to(column_name.to_sym)
       end
@@ -112,7 +111,7 @@ RSpec.describe DBF::Record do
     end
 
     it 'has only original field names as keys' do
-      original_field_names = %w(CHARACTER DATE FLOAT LOGICAL MEMO NUMERICAL)
+      original_field_names = %w[CHARACTER DATE FLOAT LOGICAL MEMO NUMERICAL]
       expect(record.attributes.keys.sort).to eq original_field_names
     end
   end

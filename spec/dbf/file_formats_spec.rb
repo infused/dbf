@@ -25,7 +25,7 @@ RSpec.shared_examples_for 'DBF' do
   end
 
   specify "column types should be valid" do
-    valid_column_types = %w(C N L D M F B G P Y T I V X @ O + 0)
+    valid_column_types = %w[C N L D M F B G P Y T I V X @ O + 0]
     table.columns.each do |column|
       expect(valid_column_types).to include(column.type)
     end

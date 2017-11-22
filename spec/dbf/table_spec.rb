@@ -6,7 +6,7 @@ RSpec.describe DBF::Table do
   let(:table) { DBF::Table.new dbf_path }
 
   specify 'foxpro versions' do
-    expect(DBF::Table::FOXPRO_VERSIONS.keys.sort).to eq %w(30 31 f5 fb).sort
+    expect(DBF::Table::FOXPRO_VERSIONS.keys.sort).to eq %w[30 31 f5 fb].sort
   end
 
   describe '#initialize' do
@@ -319,7 +319,7 @@ SCHEMA
 
   describe '#column_names' do
     let(:column_names) do
-      %w(ID CATCOUNT AGRPCOUNT PGRPCOUNT ORDER CODE NAME THUMBNAIL IMAGE PRICE COST DESC WEIGHT TAXABLE ACTIVE)
+      %w[ID CATCOUNT AGRPCOUNT PGRPCOUNT ORDER CODE NAME THUMBNAIL IMAGE PRICE COST DESC WEIGHT TAXABLE ACTIVE]
     end
 
     it 'is an array of all column names' do
