@@ -1,6 +1,15 @@
 module DBF
   # The Schema module is mixin for the Table class
   module Schema
+    OTHER_DATA_TYPES = {
+      'Y' => ':decimal, :precision => 15, :scale => 4',
+      'D' => ':date',
+      'T' => ':datetime',
+      'L' => ':boolean',
+      'M' => ':text',
+      'B' => ':binary'
+    }.freeze
+
     # Generate an ActiveRecord::Schema
     #
     # xBase data types are converted to generic types as follows:
@@ -51,8 +60,8 @@ module DBF
         s << "      column #{sequel_schema_definition(column)}"
       end
       s << "    end\n"
-      s << "  end\n"  unless table_only
-      s << "end\n"  unless table_only
+      s << "  end\n" unless table_only
+      s << "end\n" unless table_only
       s
     end
 
@@ -78,28 +87,24 @@ module DBF
 
     def schema_data_type(column, format = :activerecord) # :nodoc:
       case column.type
-      when 'N', 'F'
-        column.decimal > 0 ? ':float' : ':integer'
-      when 'I'
-        ':integer'
-      when 'Y'
-        ':decimal, :precision => 15, :scale => 4'
-      when 'D'
-        ':date'
-      when 'T'
-        ':datetime'
-      when 'L'
-        ':boolean'
-      when 'M'
-        ':text'
-      when 'B'
-        ':binary'
+      when *%w[N F I]
+        number_data_type(column)
+      when *%w[Y D T L M B]
+        OTHER_DATA_TYPES[column.type]
       else
-        if format == :sequel
-          ":varchar, :size => #{column.length}"
-        else
-          ":string, :limit => #{column.length}"
-        end
+        string_data_format(format, column)
+      end
+    end
+
+    def number_data_type(column)
+      column.decimal > 0 ? ':float' : ':integer'
+    end
+
+    def string_data_format(format, column)
+      if format == :sequel
+        ":varchar, :size => #{column.length}"
+      else
+        ":string, :limit => #{column.length}"
       end
     end
   end
