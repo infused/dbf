@@ -21,6 +21,7 @@ module DBF
       G: ColumnType::General
     }
     TYPE_CAST_CLASS.default = ColumnType::String
+    TYPE_CAST_CLASS.freeze
 
     # Initialize a new DBF::Column
     #
