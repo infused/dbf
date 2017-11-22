@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.shared_examples_for 'DBF' do
   specify 'sum of column lengths should equal record length specified in header plus one' do
     header_record_length = table.instance_eval { @header.record_length }
-    sum_of_column_lengths = table.columns.sum(&:length) + 1
+    sum_of_column_lengths = table.columns.inject(1) { |sum, column| sum += column.length }
 
     expect(header_record_length).to eq sum_of_column_lengths
   end
