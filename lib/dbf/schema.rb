@@ -41,7 +41,7 @@ module DBF
       raise ArgumentError, ":#{format} is not a valid schema. Valid schemas are: #{FORMATS.join(', ')}."
     end
 
-    def schema_name(format)
+    def schema_name(format) # :nodoc:
       "#{format}_schema"
     end
 
