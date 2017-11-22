@@ -208,7 +208,7 @@ module DBF
 
     private
 
-    def build_columns # nodoc
+    def build_columns # :nodoc:
       @data.seek(DBF_HEADER_SIZE)
       columns = []
       until end_of_record?
@@ -219,19 +219,19 @@ module DBF
       columns
     end
 
-    def deleted_record? # nodoc
+    def deleted_record? # :nodoc:
       flag = @data.read(1)
       flag ? flag.unpack('a') == ['*'] : true
     end
 
-    def end_of_record? # nodoc
+    def end_of_record? # :nodoc:
       original_pos = @data.pos
       byte = @data.read(1)
       @data.seek(original_pos)
       byte.ord == 13
     end
 
-    def find_all(options) # nodoc
+    def find_all(options) # :nodoc:
       map do |record|
         if record && record.match?(options)
           yield record if block_given?
@@ -240,11 +240,11 @@ module DBF
       end.compact
     end
 
-    def find_first(options) # nodoc
+    def find_first(options) # :nodoc:
       detect { |record| record && record.match?(options) }
     end
 
-    def foxpro? # nodoc
+    def foxpro? # :nodoc:
       FOXPRO_VERSIONS.keys.include? version
     end
 
@@ -252,7 +252,7 @@ module DBF
       @header ||= Header.new(@data.read DBF_HEADER_SIZE)
     end
 
-    def memo_class # nodoc
+    def memo_class # :nodoc:
       @memo_class ||= begin
         if foxpro?
           Memo::Foxpro
@@ -262,19 +262,19 @@ module DBF
       end
     end
 
-    def memo_search_path(io) # nodoc
+    def memo_search_path(io) # :nodoc:
       dirname = File.dirname(io)
       basename = File.basename(io, '.*')
       "#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}"
     end
 
-    def open_data(data) # nodoc
+    def open_data(data) # :nodoc:
       data.is_a?(StringIO) ? data : File.open(data, 'rb')
     rescue Errno::ENOENT
       raise DBF::FileNotFoundError, "file not found: #{data}"
     end
 
-    def open_memo(data, memo = nil) # nodoc
+    def open_memo(data, memo = nil) # :nodoc:
       if memo
         meth = memo.is_a?(StringIO) ? :new : :open
         memo_class.send(meth, memo, version)
@@ -284,11 +284,11 @@ module DBF
       end
     end
 
-    def seek(offset) # nodoc
+    def seek(offset) # :nodoc:
       @data.seek(header.header_length + offset)
     end
 
-    def seek_to_record(index) # nodoc
+    def seek_to_record(index) # :nodoc:
       seek(index * header.record_length)
     end
   end

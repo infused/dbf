@@ -53,7 +53,7 @@ module DBF
         path
       end
 
-      def method_missing(method, *args) # nodoc
+      def method_missing(method, *args) # :nodoc:
         if table_names.index(method.to_s)
           table method.to_s
         else
@@ -67,7 +67,7 @@ module DBF
       # just an ordinary table with a treelike structure. Field definitions
       # are in the same order as in the linked tables but only the long name
       # is provided.
-      def extract_dbc_data # nodoc
+      def extract_dbc_data # :nodoc:
         data = {}
         @db.each do |record|
           next unless record
@@ -110,7 +110,7 @@ module DBF
     class Table < DBF::Table
       attr_accessor :long_names
 
-      def build_columns # nodoc
+      def build_columns # :nodoc:
         columns = super
 
         # modify the column definitions to use the long names as the

@@ -81,30 +81,30 @@ module DBF
 
     private
 
-    def clean(value) # nodoc
+    def clean(value) # :nodoc:
       truncated_value = value.strip.partition("\x00").first
       truncated_value.gsub(/[^\x20-\x7E]/, '')
     end
 
-    def encode(value, strip_output = false) # nodoc
+    def encode(value, strip_output = false) # :nodoc:
       return value if !value.respond_to?(:encoding)
 
       output = @encoding ? encode_string(value) : value
       strip_output ? output.strip : output
     end
 
-    def encoding_args # nodoc
+    def encoding_args # :nodoc:
       @encoding_args ||= [
         Encoding.default_external,
         {undef: :replace, invalid: :replace}
       ]
     end
 
-    def encode_string(string) # nodoc
+    def encode_string(string) # :nodoc:
       string.force_encoding(@encoding).encode(*encoding_args)
     end
 
-    def schema_data_type(format = :activerecord) # nodoc
+    def schema_data_type(format = :activerecord) # :nodoc:
       case type
       when 'N', 'F'
         decimal > 0 ? ':float' : ':integer'
@@ -131,18 +131,18 @@ module DBF
       end
     end
 
-    def type_cast_class # nodoc
+    def type_cast_class # :nodoc:
       @type_cast_class ||= begin
         klass = @length == 0 ? ColumnType::Nil : TYPE_CAST_CLASS[type.to_sym]
         klass.new(@decimal, @encoding)
       end
     end
 
-    def validate_length # nodoc
+    def validate_length # :nodoc:
       raise LengthError, 'field length must be 0 or greater' if length < 0
     end
 
-    def validate_name # nodoc
+    def validate_name # :nodoc:
       raise NameError, 'column name cannot be empty' if @name.empty?
     end
   end

@@ -67,15 +67,15 @@ module DBF
 
     private
 
-    def attribute_map # nodoc
+    def attribute_map # :nodoc:
       @columns.map { |column| [column.name, init_attribute(column)] }
     end
 
-    def get_data(column) # nodoc
+    def get_data(column) # :nodoc:
       @data.read(column.length)
     end
 
-    def get_memo(column) # nodoc
+    def get_memo(column) # :nodoc:
       if @memo
         @memo.get(memo_start_block(column))
       else
@@ -85,12 +85,12 @@ module DBF
       end
     end
 
-    def init_attribute(column) # nodoc
+    def init_attribute(column) # :nodoc:
       value = column.memo? ? get_memo(column) : get_data(column)
       column.type_cast(value)
     end
 
-    def memo_start_block(column) # nodoc
+    def memo_start_block(column) # :nodoc:
       data = get_data(column)
       if %w(30 31).include?(@version)
         data = data.unpack('V').first
@@ -98,7 +98,7 @@ module DBF
       data.to_i
     end
 
-    def method_missing(method, *args) # nodoc
+    def method_missing(method, *args) # :nodoc:
       if (index = underscored_column_names.index(method.to_s))
         attributes[@columns[index].name]
       else
@@ -106,7 +106,7 @@ module DBF
       end
     end
 
-    def underscored_column_names # nodoc
+    def underscored_column_names # :nodoc:
       @underscored_column_names ||= @columns.map(&:underscored_name)
     end
   end

@@ -1,7 +1,7 @@
 module DBF
   module Memo
     class Dbase3 < Base
-      def build_memo(start_block) # nodoc
+      def build_memo(start_block) # :nodoc:
         @data.seek offset(start_block)
         memo_string = ''
         loop do
