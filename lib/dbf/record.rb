@@ -54,7 +54,7 @@ module DBF
     #
     # @param [String, Symbol] method
     # @return [Boolean]
-    def respond_to?(method, *args)
+    def respond_to_missing?(method, *)
       underscored_column_names.include?(method.to_s) || super
     end
 
