@@ -92,9 +92,7 @@ module DBF
 
     def memo_start_block(column) # :nodoc:
       data = get_data(column)
-      if %w[30 31].include?(@version)
-        data = data.unpack('V').first
-      end
+      data = data.unpack('V').first if %w[30 31].include?(@version)
       data.to_i
     end
 
