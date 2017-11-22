@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe DBF::Column do
-  let(:table) { DBF::Table.new fixture('dbase_30.dbf')}
+  let(:table) { DBF::Table.new fixture('dbase_30.dbf') }
 
   context 'when initialized' do
     let(:column) { DBF::Column.new table, 'ColumnName', 'N', 1, 0 }

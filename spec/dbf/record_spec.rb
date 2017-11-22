@@ -89,7 +89,7 @@ RSpec.describe DBF::Record do
     end
 
     describe 'overriding specified in dbf encoding' do
-      let(:table) { DBF::Table.new fixture('cp1251.dbf'), nil, 'cp866'}
+      let(:table) { DBF::Table.new fixture('cp1251.dbf'), nil, 'cp866' }
       let(:record) { table.find(0) }
 
       it 'should transcode from manually specified encoding to default system encoding' do

@@ -184,7 +184,7 @@ RSpec.describe DBF::Table do
       end
 
       it 'returns matching records when used with options' do
-        expect(table.find(:all, 'WEIGHT' => 0.0)).to eq table.select {|r| r['weight'] == 0.0}
+        expect(table.find(:all, 'WEIGHT' => 0.0)).to eq table.select { |r| r['weight'] == 0.0 }
       end
 
       it 'should AND multiple search terms' do
@@ -279,7 +279,7 @@ RSpec.describe DBF::Table do
     it 'is an array of Columns' do
       expect(columns).to be_an(Array)
       expect(columns).to_not be_empty
-      expect(columns.all? {|c| c.class == DBF::Column}).to be_truthy
+      expect(columns.all? { |c| c.class == DBF::Column }).to be_truthy
     end
   end
 
