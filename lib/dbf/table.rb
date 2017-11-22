@@ -157,7 +157,7 @@ module DBF
 
     # @return [String]
     def name
-      @name ||= filename && File.basename(filename, ".*")
+      @name ||= filename && File.basename(filename, '.*')
     end
 
     # Retrieve a record by index number.
