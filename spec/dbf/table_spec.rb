@@ -57,7 +57,10 @@ RSpec.describe DBF::Table do
       end
 
       it 'raises ArgumentError if there is no matching schema' do
-        expect { table.schema(:invalid) }.to raise_error ArgumentError
+        expect { table.schema(:invalid) }.to raise_error(
+          ArgumentError,
+          ':invalid is not a valid schema. Valid schemas are: activerecord, json, sequel.'
+        )
       end
     end
 

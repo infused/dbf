@@ -36,11 +36,9 @@ module DBF
     # @return [String]
     def schema(format = :activerecord, table_only = false)
       schema_method_name = schema_name(format)
-      if FORMATS.include?(format) && respond_to?(schema_method_name)
-        send(schema_method_name, table_only)
-      else
-        raise ArgumentError
-      end
+      send(schema_method_name, table_only)
+    rescue NameError
+      raise ArgumentError, ":#{format} is not a valid schema. Valid schemas are: #{FORMATS.join(', ')}."
     end
 
     def schema_name(format)
