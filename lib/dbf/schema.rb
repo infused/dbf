@@ -1,6 +1,8 @@
 module DBF
   # The Schema module is mixin for the Table class
   module Schema
+    FORMATS = [:activerecord, :json, :sequel].freeze
+
     OTHER_DATA_TYPES = {
       'Y' => ':decimal, :precision => 15, :scale => 4',
       'D' => ':date',
@@ -33,12 +35,16 @@ module DBF
     # @param [Symbol] format Valid options are :activerecord and :json
     # @return [String]
     def schema(format = :activerecord, table_only = false)
-      supported_formats = [:activerecord, :json, :sequel]
-      if supported_formats.include?(format)
-        send("#{format}_schema", table_only)
+      schema_method_name = schema_name(format)
+      if FORMATS.include?(format) && respond_to?(schema_method_name)
+        send(schema_method_name, table_only)
       else
         raise ArgumentError
       end
+    end
+
+    def schema_name(format)
+      "#{format}_schema"
     end
 
     def activerecord_schema(_table_only = false) # :nodoc:

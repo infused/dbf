@@ -55,6 +55,10 @@ RSpec.describe DBF::Table do
       it 'matches the test schema fixture' do
         expect(table.schema).to eq control_schema
       end
+
+      it 'raises ArgumentError if there is no matching schema' do
+        expect { table.schema(:invalid) }.to raise_error ArgumentError
+      end
     end
 
     describe 'when data is StringIO' do
