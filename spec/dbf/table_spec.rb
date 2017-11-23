@@ -9,6 +9,10 @@ RSpec.describe DBF::Table do
     expect(DBF::Table::FOXPRO_VERSIONS.keys.sort).to eq %w[30 31 f5 fb].sort
   end
 
+  specify 'row is an alias of record' do
+    expect(table.record(1)).to eq table.row(1)
+  end
+
   describe '#initialize' do
     let(:data) { StringIO.new File.read(dbf_path) }
     let(:memo) { StringIO.new File.read(memo_path) }
