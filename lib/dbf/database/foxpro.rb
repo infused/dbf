@@ -53,11 +53,11 @@ module DBF
       end
 
       def method_missing(method, *args) # :nodoc:
-        if table_names.index(method.to_s)
-          table method.to_s
-        else
-          super
-        end
+        table_names.index(method.to_s) ? table(method.to_s) : super
+      end
+
+      def respond_to_missing?(method, *)
+        table_names.index(method.to_s) || super
       end
 
       private
