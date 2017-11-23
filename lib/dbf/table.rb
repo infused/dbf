@@ -73,7 +73,7 @@ module DBF
     # @return [TrueClass, FalseClass]
     def close
       @data.close
-      @memo && @memo.close
+      @memo&.close
     end
 
     # @return [TrueClass, FalseClass]
@@ -233,7 +233,7 @@ module DBF
 
     def find_all(options) # :nodoc:
       map do |record|
-        if record && record.match?(options)
+        if record&.match?(options)
           yield record if block_given?
           record
         end
@@ -241,7 +241,7 @@ module DBF
     end
 
     def find_first(options) # :nodoc:
-      detect { |record| record && record.match?(options) }
+      detect { |record| record&.match?(options) }
     end
 
     def foxpro? # :nodoc:
@@ -249,7 +249,7 @@ module DBF
     end
 
     def header # :nodoc:
-      @header ||= Header.new(@data.read DBF_HEADER_SIZE)
+      @header ||= Header.new(@data.read(DBF_HEADER_SIZE))
     end
 
     def memo_class # :nodoc:

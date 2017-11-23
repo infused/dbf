@@ -15,7 +15,7 @@ module DBF
     end
 
     class Nil < Base
-      def type_cast(value)
+      def type_cast(_value)
         nil
       end
     end
@@ -53,7 +53,7 @@ module DBF
 
     class Boolean < Base
       def type_cast(value)
-        value.strip =~ /^(y|t)$/i ? true : false
+        value.strip.match?(/^(y|t)$/i) ? true : false
       end
     end
 
@@ -95,6 +95,5 @@ module DBF
         @encoding ? value.force_encoding(@encoding).encode(*ENCODING_ARGS) : value
       end
     end
-
   end
 end

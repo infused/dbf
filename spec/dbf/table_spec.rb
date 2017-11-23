@@ -203,7 +203,7 @@ RSpec.describe DBF::Table do
       end
 
       it 'matches symbolized column names' do
-        expect(table.find(:all, :WEIGHT => 0.0)).not_to be_empty
+        expect(table.find(:all, WEIGHT: 0.0)).not_to be_empty
       end
 
       it 'matches downcased column names' do
@@ -211,7 +211,7 @@ RSpec.describe DBF::Table do
       end
 
       it 'matches symbolized downcased column names' do
-        expect(table.find(:all, :weight => 0.0)).not_to be_empty
+        expect(table.find(:all, weight: 0.0)).not_to be_empty
       end
     end
 
