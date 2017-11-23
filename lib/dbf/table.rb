@@ -28,14 +28,14 @@ module DBF
       'cb' => 'dBASE IV SQL table files, with memo',
       'f5' => 'FoxPro with memo file',
       'fb' => 'FoxPro without memo file'
-    }
+    }.freeze
 
     FOXPRO_VERSIONS = {
       '30' => 'Visual FoxPro',
       '31' => 'Visual FoxPro with AutoIncrement field',
       'f5' => 'FoxPro with memo file',
       'fb' => 'FoxPro without memo file'
-    }
+    }.freeze
 
     attr_accessor :encoding
     attr_writer :name
