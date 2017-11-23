@@ -172,7 +172,7 @@ module DBF
       DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
     end
 
-    alias_method :row, :record
+    alias row record
 
     # Total number of records
     #
