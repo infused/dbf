@@ -248,7 +248,7 @@ module DBF
       FOXPRO_VERSIONS.keys.include? version
     end
 
-    def header
+    def header # :nodoc:
       @header ||= Header.new(@data.read DBF_HEADER_SIZE)
     end
 
@@ -279,7 +279,7 @@ module DBF
         meth = memo.is_a?(StringIO) ? :new : :open
         memo_class.send(meth, memo, version)
       elsif !data.is_a?(StringIO)
-        files = Dir.glob(memo_search_path data)
+        files = Dir.glob(memo_search_path(data))
         files.any? ? memo_class.open(files.first, version) : nil
       end
     end
