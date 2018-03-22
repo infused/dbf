@@ -295,8 +295,19 @@ RSpec.describe DBF::Table do
       %w[ID CATCOUNT AGRPCOUNT PGRPCOUNT ORDER CODE NAME THUMBNAIL IMAGE PRICE COST DESC WEIGHT TAXABLE ACTIVE]
     end
 
-    it 'is an array of all column names' do
-      expect(table.column_names).to eq column_names
+    describe 'when data is an IO' do
+      it 'is an array of all column names' do
+        expect(table.column_names).to eq column_names
+      end
+    end
+
+    describe 'when data is a StringIO' do
+      let(:data) { StringIO.new File.read(dbf_path) }
+      let(:table) { DBF::Table.new data, nil, Encoding::US_ASCII }
+
+      it 'is an array of all column names' do
+        expect(table.column_names).to eq column_names
+      end
     end
   end
 
