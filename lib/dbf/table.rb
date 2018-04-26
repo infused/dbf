@@ -227,9 +227,7 @@ module DBF
     end
 
     def end_of_record? # :nodoc:
-      safe_seek do
-        @data.read(1).ord == 13
-      end
+      safe_seek { @data.read(1).ord == 13 }
     end
 
     def find_all(options) # :nodoc:
@@ -288,9 +286,9 @@ module DBF
       end
     end
 
-    def safe_seek
+    def safe_seek # :nodoc:
       original_pos = @data.pos
-      yield.tap{ @data.seek(original_pos) }
+      yield.tap { @data.seek(original_pos) }
     end
 
     def seek(offset) # :nodoc:
