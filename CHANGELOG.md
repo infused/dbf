@@ -1,3 +1,6 @@
+# 3.1.2
+  - Fix incorrect columns list when StringIO and encoding set
+
 # 3.1.1
   - Use Date.strptime to parse date fields
 
