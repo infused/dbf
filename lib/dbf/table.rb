@@ -209,14 +209,16 @@ module DBF
     private
 
     def build_columns # :nodoc:
-      @data.seek(DBF_HEADER_SIZE)
-      columns = []
-      until end_of_record?
-        column_data = @data.read(DBF_HEADER_SIZE)
-        name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
-        columns << Column.new(self, name, type, length, decimal)
+      safe_seek do
+        @data.seek(DBF_HEADER_SIZE)
+        columns = []
+        until end_of_record?
+          column_data = @data.read(DBF_HEADER_SIZE)
+          name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
+          columns << Column.new(self, name, type, length, decimal)
+        end
+        columns
       end
-      columns
     end
 
     def deleted_record? # :nodoc:
@@ -225,10 +227,7 @@ module DBF
     end
 
     def end_of_record? # :nodoc:
-      original_pos = @data.pos
-      byte = @data.read(1)
-      @data.seek(original_pos)
-      byte.ord == 13
+      safe_seek { @data.read(1).ord == 13 }
     end
 
     def find_all(options) # :nodoc:
@@ -249,7 +248,10 @@ module DBF
     end
 
     def header # :nodoc:
-      @header ||= Header.new(@data.read DBF_HEADER_SIZE)
+      @header ||= safe_seek do
+        @data.seek(0)
+        Header.new(@data.read DBF_HEADER_SIZE)
+      end
     end
 
     def memo_class # :nodoc:
@@ -282,6 +284,11 @@ module DBF
         files = Dir.glob(memo_search_path(data))
         files.any? ? memo_class.open(files.first, version) : nil
       end
+    end
+
+    def safe_seek # :nodoc:
+      original_pos = @data.pos
+      yield.tap { @data.seek(original_pos) }
     end
 
     def seek(offset) # :nodoc:
