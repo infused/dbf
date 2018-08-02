@@ -177,13 +177,20 @@ RSpec.describe DBF::Table do
 
     describe 'with :all' do
       let(:records) do
-        table.find(:all, weight: 0.0).inject([]) do |records, record|
-          records << record
-        end
+        table.find(:all, weight: 0.0)
       end
 
-      it 'accepts a block' do
-        expect(records).to eq table.find(:all, weight: 0.0)
+      it 'retrieves only matching records' do
+        expect(records.size).to eq 66
+      end
+
+      it 'yields to a block if given' do
+        record_count = 0
+        table.find(:all, weight: 0.0) do |record|
+          record_count += 1
+          expect(record).to be_a DBF::Record
+        end
+        expect(record_count).to eq 66
       end
 
       it 'returns all records if options are empty' do
