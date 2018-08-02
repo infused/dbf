@@ -222,7 +222,7 @@ module DBF
 
     def deleted_record? # :nodoc:
       flag = @data.read(1)
-      flag ? flag.unpack1('a') == ['*'] : true
+      flag ? flag.unpack('a') == ['*'] : true
     end
 
     def end_of_record? # :nodoc:
@@ -230,12 +230,11 @@ module DBF
     end
 
     def find_all(options) # :nodoc:
-      map do |record|
-        if record && record.match?(options)
-          yield record if block_given?
-          record
-        end
-      end.compact
+      select do |record|
+        next unless record && record.match?(options)
+        yield record if block_given?
+        record
+      end
     end
 
     def find_first(options) # :nodoc:
