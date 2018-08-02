@@ -211,19 +211,18 @@ module DBF
     def build_columns # :nodoc:
       safe_seek do
         @data.seek(DBF_HEADER_SIZE)
-        columns = []
-        until end_of_record?
-          column_data = @data.read(DBF_HEADER_SIZE)
-          name, type, length, decimal = column_data.unpack('a10 x a x4 C2')
-          columns << Column.new(self, name, type, length, decimal)
+        [].tap do |columns|
+          until end_of_record?
+            column_data = @data.read(DBF_HEADER_SIZE)
+            columns << Column.new(self, *column_data.unpack('a10 x a x4 C2'))
+          end
         end
-        columns
       end
     end
 
     def deleted_record? # :nodoc:
       flag = @data.read(1)
-      flag ? flag.unpack('a') == ['*'] : true
+      flag ? flag.unpack1('a') == ['*'] : true
     end
 
     def end_of_record? # :nodoc:
@@ -250,7 +249,7 @@ module DBF
     def header # :nodoc:
       @header ||= safe_seek do
         @data.seek(0)
-        Header.new(@data.read DBF_HEADER_SIZE)
+        Header.new(@data.read(DBF_HEADER_SIZE))
       end
     end
 
