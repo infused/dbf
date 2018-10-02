@@ -60,6 +60,8 @@ module DBF
     class Date < Base
       def type_cast(value)
         value =~ /\d{8}/ && ::Date.strptime(value, '%Y%m%d')
+      rescue
+        nil
       end
     end
 

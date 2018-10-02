@@ -209,7 +209,7 @@ RSpec.describe DBF::Column do
 
       context 'with invalid date' do
         it 'casts to nil' do
-          expect(column.type_cast('0')).to be_nil
+          expect(column.type_cast('000000000')).to be_nil
         end
       end
 
