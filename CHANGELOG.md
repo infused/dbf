@@ -1,3 +1,6 @@
+# 3.1.3
+  - Ensure malformed dates return nil
+
 # 3.1.2
   - Fix incorrect columns list when StringIO and encoding set
 
