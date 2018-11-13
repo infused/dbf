@@ -45,9 +45,7 @@ module DBF
         glob = File.join(@dirname, "#{name}.dbf")
         path = Dir.glob(glob, File::FNM_CASEFOLD).first
 
-        unless path && File.exist?(path)
-          raise DBF::FileNotFoundError, "related table not found: #{name}"
-        end
+        raise DBF::FileNotFoundError, "related table not found: #{name}" unless path && File.exist?(path)
 
         path
       end

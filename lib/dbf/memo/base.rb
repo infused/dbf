@@ -15,6 +15,7 @@ module DBF
 
       def get(start_block)
         return nil unless start_block > 0
+
         build_memo start_block
       end
 

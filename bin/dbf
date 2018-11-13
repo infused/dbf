@@ -9,7 +9,7 @@ params = ARGV.getopts('h', 's', 'a', 'c', 'r', 'v')
 if params['v']
   puts "dbf version: #{DBF::VERSION}"
 
-elsif params['h'] then
+elsif params['h']
   puts "usage: #{File.basename(__FILE__)} [-h|-s|-a|-c|-r] filename"
   puts '  -h = print this message'
   puts '  -v = print the DBF gem version'
@@ -46,7 +46,7 @@ else
     puts 'Name             Type       Length     Decimal'
     puts '-' * 78
     table.columns.each do |f|
-      puts '%-16s %-10s %-10s %-10s' % [f.name, f.type, f.length, f.decimal]
+      puts format('%-16s %-10s %-10s %-10s', f.name, f.type, f.length, f.decimal)
     end
   end
 

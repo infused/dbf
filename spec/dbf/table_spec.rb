@@ -83,12 +83,12 @@ RSpec.describe DBF::Table do
   end
 
   describe '#sequel_schema' do
-    it 'should return a valid Sequel migration by default' do
+    it 'returns a valid Sequel migration by default' do
       control_schema = File.read(fixture('dbase_83_schema_sq.txt'))
       expect(table.sequel_schema).to eq control_schema
     end
 
-    it 'should return a limited Sequel migration when passed true' do
+    it 'returns a limited Sequel migration when passed true' do
       control_schema = File.read(fixture('dbase_83_schema_sq_lim.txt'))
       expect(table.sequel_schema).to eq control_schema
     end
@@ -132,7 +132,7 @@ RSpec.describe DBF::Table do
         begin
           $stdout = StringIO.new
           table.to_csv
-          expect($stdout.string).not_to be_empty
+          expect($stdout.string).to_not be_empty
         ensure
           $stdout = STDOUT
         end
@@ -143,7 +143,7 @@ RSpec.describe DBF::Table do
       before { table.to_csv('test.csv') }
 
       it 'creates a custom csv file' do
-        expect(File.exist?('test.csv')).to be_truthy
+        expect(File).to be_exist('test.csv')
       end
     end
   end
@@ -156,7 +156,7 @@ RSpec.describe DBF::Table do
   end
 
   describe '#current_record' do
-    it 'should return nil for deleted records' do
+    it 'returns nil for deleted records' do
       allow(table).to receive(:deleted_record?).and_return(true)
       expect(table.record(0)).to be_nil
     end
@@ -201,24 +201,24 @@ RSpec.describe DBF::Table do
         expect(table.find(:all, 'WEIGHT' => 0.0)).to eq table.select { |r| r['weight'] == 0.0 }
       end
 
-      it 'should AND multiple search terms' do
+      it 'ANDS multiple search terms' do
         expect(table.find(:all, 'ID' => 30, :IMAGE => 'graphics/00000001/TBC01.jpg')).to be_empty
       end
 
-      it 'should match original column names' do
-        expect(table.find(:all, 'WEIGHT' => 0.0)).not_to be_empty
+      it 'matches original column names' do
+        expect(table.find(:all, 'WEIGHT' => 0.0)).to_not be_empty
       end
 
       it 'matches symbolized column names' do
-        expect(table.find(:all, :WEIGHT => 0.0)).not_to be_empty
+        expect(table.find(:all, WEIGHT: 0.0)).to_not be_empty
       end
 
       it 'matches downcased column names' do
-        expect(table.find(:all, 'weight' => 0.0)).not_to be_empty
+        expect(table.find(:all, 'weight' => 0.0)).to_not be_empty
       end
 
       it 'matches symbolized downcased column names' do
-        expect(table.find(:all, :weight => 0.0)).not_to be_empty
+        expect(table.find(:all, weight: 0.0)).to_not be_empty
       end
     end
 
@@ -276,13 +276,13 @@ RSpec.describe DBF::Table do
       let(:table) { DBF::Table.new fixture('dbase_03.dbf') }
 
       it 'is false' do
-        expect(table.has_memo_file?).to be_falsey
+        expect(table).to_not have_memo_file
       end
     end
 
     describe 'with a memo file' do
       it 'is true' do
-        expect(table.has_memo_file?).to be_truthy
+        expect(table).to have_memo_file
       end
     end
   end
@@ -293,7 +293,7 @@ RSpec.describe DBF::Table do
     it 'is an array of Columns' do
       expect(columns).to be_an(Array)
       expect(columns).to_not be_empty
-      expect(columns.all? { |c| c.class == DBF::Column }).to be_truthy
+      expect(columns).to be_all { |c| c.class == DBF::Column }
     end
   end
 

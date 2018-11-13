@@ -15,7 +15,7 @@ module DBF
     end
 
     class Nil < Base
-      def type_cast(value)
+      def type_cast(_value)
         nil
       end
     end
@@ -23,6 +23,7 @@ module DBF
     class Number < Base
       def type_cast(value)
         return nil if value.strip.empty?
+
         @decimal.zero? ? value.to_i : value.to_f
       end
     end
@@ -60,7 +61,7 @@ module DBF
     class Date < Base
       def type_cast(value)
         value =~ /\d{8}/ && ::Date.strptime(value, '%Y%m%d')
-      rescue
+      rescue StandardError
         nil
       end
     end
@@ -70,7 +71,7 @@ module DBF
         days, msecs = value.unpack('l2')
         secs = (msecs / 1000).to_i
         ::DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60)
-      rescue
+      rescue StandardError
         nil
       end
     end
@@ -97,6 +98,5 @@ module DBF
         @encoding ? value.force_encoding(@encoding).encode(*ENCODING_ARGS) : value
       end
     end
-
   end
 end

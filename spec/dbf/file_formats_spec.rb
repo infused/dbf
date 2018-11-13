@@ -20,7 +20,7 @@ RSpec.shared_examples_for 'DBF' do
 
   specify 'column names should not be blank' do
     table.columns.each do |column|
-      expect(column.name).not_to be_empty
+      expect(column.name).to_not be_empty
     end
   end
 
@@ -53,17 +53,17 @@ end
 RSpec.describe DBF, 'of type 03 (dBase III without memo file)' do
   let(:table) { DBF::Table.new fixture('dbase_03.dbf') }
 
-  it_should_behave_like 'DBF'
+  it_behaves_like 'DBF'
 
-  it 'should report the correct version number' do
+  it 'reports the correct version number' do
     expect(table.version).to eq '03'
   end
 
-  it 'should report the correct version description' do
+  it 'reports the correct version description' do
     expect(table.version_description).to eq 'dBase III without memo file'
   end
 
-  it 'should determine the number of records' do
+  it 'determines the number of records' do
     expect(table.record_count).to eq 14
   end
 end
@@ -71,17 +71,17 @@ end
 RSpec.describe DBF, 'of type 30 (Visual FoxPro)' do
   let(:table) { DBF::Table.new fixture('dbase_30.dbf') }
 
-  it_should_behave_like 'DBF'
+  it_behaves_like 'DBF'
 
-  it 'should report the correct version number' do
+  it 'reports the correct version number' do
     expect(table.version).to eq '30'
   end
 
-  it 'should report the correct version description' do
+  it 'reports the correct version description' do
     expect(table.version_description).to eq 'Visual FoxPro'
   end
 
-  it 'should determine the number of records' do
+  it 'determines the number of records' do
     expect(table.record_count).to eq 34
   end
 
@@ -93,17 +93,17 @@ end
 RSpec.describe DBF, 'of type 31 (Visual FoxPro with AutoIncrement field)' do
   let(:table) { DBF::Table.new fixture('dbase_31.dbf') }
 
-  it_should_behave_like 'DBF'
+  it_behaves_like 'DBF'
 
-  it 'should have a dBase version of 31' do
+  it 'has a dBase version of 31' do
     expect(table.version).to eq '31'
   end
 
-  it 'should report the correct version description' do
+  it 'reports the correct version description' do
     expect(table.version_description).to eq 'Visual FoxPro with AutoIncrement field'
   end
 
-  it 'should determine the number of records' do
+  it 'determines the number of records' do
     expect(table.record_count).to eq 77
   end
 end
@@ -111,17 +111,17 @@ end
 RSpec.describe DBF, 'of type 83 (dBase III with memo file)' do
   let(:table) { DBF::Table.new fixture('dbase_83.dbf') }
 
-  it_should_behave_like 'DBF'
+  it_behaves_like 'DBF'
 
-  it 'should report the correct version number' do
+  it 'reports the correct version number' do
     expect(table.version).to eq '83'
   end
 
-  it 'should report the correct version description' do
+  it 'reports the correct version description' do
     expect(table.version_description).to eq 'dBase III with memo file'
   end
 
-  it 'should determine the number of records' do
+  it 'determines the number of records' do
     expect(table.record_count).to eq 67
   end
 end
@@ -129,17 +129,17 @@ end
 RSpec.describe DBF, 'of type 8b (dBase IV with memo file)' do
   let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
 
-  it_should_behave_like 'DBF'
+  it_behaves_like 'DBF'
 
-  it 'should report the correct version number' do
+  it 'reports the correct version number' do
     expect(table.version).to eq '8b'
   end
 
-  it 'should report the correct version description' do
+  it 'reports the correct version description' do
     expect(table.version_description).to eq 'dBase IV with memo file'
   end
 
-  it 'should determine the number of records' do
+  it 'determines the number of records' do
     expect(table.record_count).to eq 10
   end
 end
@@ -147,17 +147,17 @@ end
 RSpec.describe DBF, 'of type f5 (FoxPro with memo file)' do
   let(:table) { DBF::Table.new fixture('dbase_f5.dbf') }
 
-  it_should_behave_like 'DBF'
+  it_behaves_like 'DBF'
 
-  it 'should report the correct version number' do
+  it 'reports the correct version number' do
     expect(table.version).to eq 'f5'
   end
 
-  it 'should report the correct version description' do
+  it 'reports the correct version description' do
     expect(table.version_description).to eq 'FoxPro with memo file'
   end
 
-  it 'should determine the number of records' do
+  it 'determines the number of records' do
     expect(table.record_count).to eq 975
   end
 
