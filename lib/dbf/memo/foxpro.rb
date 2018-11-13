@@ -15,8 +15,7 @@ module DBF
           memo_string = memo_string[0, memo_size]
         end
         memo_string
-
-      rescue
+      rescue StandardError
         nil
       end
 

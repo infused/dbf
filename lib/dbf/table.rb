@@ -169,6 +169,7 @@ module DBF
     def record(index)
       seek_to_record(index)
       return nil if deleted_record?
+
       DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
     end
 
@@ -232,6 +233,7 @@ module DBF
     def find_all(options) # :nodoc:
       select do |record|
         next unless record && record.match?(options)
+
         yield record if block_given?
         record
       end
@@ -242,7 +244,7 @@ module DBF
     end
 
     def foxpro? # :nodoc:
-      FOXPRO_VERSIONS.keys.include? version
+      FOXPRO_VERSIONS.key?(version)
     end
 
     def header # :nodoc:

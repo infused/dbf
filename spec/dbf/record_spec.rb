@@ -6,7 +6,7 @@ RSpec.describe DBF::Record do
     let(:record_0) { YAML.load_file(fixture('dbase_83_record_0.yml')) }
     let(:record_9) { YAML.load_file(fixture('dbase_83_record_9.yml')) }
 
-    it 'should return an ordered array of attribute values' do
+    it 'returns an ordered array of attribute values' do
       record = table.record(0)
       expect(record.to_a).to eq record_0
 
@@ -80,7 +80,7 @@ RSpec.describe DBF::Record do
       let(:table) { DBF::Table.new fixture('cp1251.dbf') }
       let(:record) { table.find(0) }
 
-      it 'should automatically encodes to default system encoding' do
+      it 'automaticallies encodes to default system encoding' do
         expect(record.name.encoding).to eq Encoding.default_external
 
         # russian a
@@ -92,7 +92,7 @@ RSpec.describe DBF::Record do
       let(:table) { DBF::Table.new fixture('cp1251.dbf'), nil, 'cp866' }
       let(:record) { table.find(0) }
 
-      it 'should transcode from manually specified encoding to default system encoding' do
+      it 'transcodes from manually specified encoding to default system encoding' do
         expect(record.name.encoding).to eq Encoding.default_external
 
         # russian а encoded in cp1251 and read as if it was encoded in cp866
