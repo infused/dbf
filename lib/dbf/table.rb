@@ -5,6 +5,7 @@ module DBF
   # DBF::Table is the primary interface to a single DBF file and provides
   # methods for enumerating and searching the records.
   class Table
+    extend Forwardable
     include Enumerable
     include ::DBF::Schema
 
@@ -39,6 +40,11 @@ module DBF
 
     attr_accessor :encoding
     attr_writer :name
+
+    def_delegator :header, :header_length
+    def_delegator :header, :record_count
+    def_delegator :header, :record_length
+    def_delegator :header, :version
 
     # Opens a DBF::Table
     # Examples:
@@ -104,7 +110,7 @@ module DBF
     #
     # @yield [nil, DBF::Record]
     def each
-      header.record_count.times { |i| yield record(i) }
+      record_count.times { |i| yield record(i) }
     end
 
     # @return [String]
@@ -170,17 +176,10 @@ module DBF
       seek_to_record(index)
       return nil if deleted_record?
 
-      DBF::Record.new(@data.read(header.record_length), columns, version, @memo)
+      DBF::Record.new(@data.read(record_length), columns, version, @memo)
     end
 
     alias row record
-
-    # Total number of records
-    #
-    # @return [Integer]
-    def record_count
-      @record_count ||= header.record_count
-    end
 
     # Dumps all records to a CSV file.  If no filename is given then CSV is
     # output to STDOUT.
@@ -191,13 +190,6 @@ module DBF
       csv = CSV.new(out_io, force_quotes: true)
       csv << column_names
       each { |record| csv << record.to_a }
-    end
-
-    # Internal dBase version number
-    #
-    # @return [String]
-    def version
-      @version ||= header.version
     end
 
     # Human readable version description
@@ -292,11 +284,11 @@ module DBF
     end
 
     def seek(offset) # :nodoc:
-      @data.seek(header.header_length + offset)
+      @data.seek(header_length + offset)
     end
 
     def seek_to_record(index) # :nodoc:
-      seek(index * header.record_length)
+      seek(index * record_length)
     end
   end
 end
