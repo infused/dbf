@@ -1,5 +1,7 @@
 module DBF
   class Column
+    extend Forwardable
+
     class LengthError < StandardError
     end
 
@@ -7,6 +9,7 @@ module DBF
     end
 
     attr_reader :table, :name, :type, :length, :decimal
+    def_delegator :type_cast_class, :type_cast
 
     TYPE_CAST_CLASS = {
       N: ColumnType::Number,
@@ -54,14 +57,6 @@ module DBF
     # @return [Hash]
     def to_hash
       {name: name, type: type, length: length, decimal: decimal}
-    end
-
-    # Cast value to native type
-    #
-    # @param [String] value
-    # @return [Integer, Float, Date, DateTime, Boolean, String]
-    def type_cast(value)
-      type_cast_class.type_cast(value)
     end
 
     # Underscored name
