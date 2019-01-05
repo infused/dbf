@@ -24,7 +24,7 @@ module DBF
       def block_size # :nodoc:
         @block_size ||= begin
           @data.rewind
-          @data.read(FPT_HEADER_SIZE).unpack('x6n').first || 0
+          @data.read(FPT_HEADER_SIZE).unpack1('x6n') || 0
         end
       end
     end
