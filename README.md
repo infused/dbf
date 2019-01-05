@@ -24,7 +24,7 @@ NOTE: Beginning with version 3 we have dropped support for Ruby 1.8 and 1.9. If 
 
 DBF is tested to work with the following versions of Ruby:
 
-* Ruby 2.3.x, 2.4.x, 2.5.x, 2.6.x
+* Ruby 2.4.x, 2.5.x, 2.6.x
 
 ## Installation
 
