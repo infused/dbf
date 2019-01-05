@@ -30,13 +30,13 @@ module DBF
 
     class Currency < Base
       def type_cast(value)
-        (value.unpack('q<')[0] / 10_000.0).to_f
+        (value.unpack1('q<') / 10_000.0).to_f
       end
     end
 
     class SignedLong < Base
       def type_cast(value)
-        value.unpack('l<')[0]
+        value.unpack1('l<')
       end
     end
 
@@ -48,19 +48,19 @@ module DBF
 
     class Double < Base
       def type_cast(value)
-        value.unpack('E')[0]
+        value.unpack1('E')
       end
     end
 
     class Boolean < Base
       def type_cast(value)
-        value.strip =~ /^(y|t)$/i ? true : false
+        value.strip.match? /^(y|t)$/i
       end
     end
 
     class Date < Base
       def type_cast(value)
-        value =~ /\d{8}/ && ::Date.strptime(value, '%Y%m%d')
+        value.match?(/\d{8}/) && ::Date.strptime(value, '%Y%m%d')
       rescue StandardError
         nil
       end

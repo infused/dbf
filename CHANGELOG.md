@@ -1,3 +1,6 @@
+# 4.0.0
+  - Drop support for ruby-2.2 and earlier
+
 # 3.1.3
   - Ensure malformed dates return nil
 

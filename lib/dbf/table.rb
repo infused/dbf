@@ -215,7 +215,7 @@ module DBF
 
     def deleted_record? # :nodoc:
       flag = @data.read(1)
-      flag ? flag.unpack('a') == ['*'] : true
+      flag ? flag.unpack1('a') == '*' : true
     end
 
     def end_of_record? # :nodoc:
