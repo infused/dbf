@@ -44,7 +44,7 @@ RSpec.describe DBF::Table do
     end
   end
 
-  context '#close' do
+  describe '#close' do
     before { table.close }
 
     it 'closes the io' do
@@ -129,13 +129,7 @@ RSpec.describe DBF::Table do
 
     describe 'when no path param passed' do
       it 'writes to STDOUT' do
-        begin
-          $stdout = StringIO.new
-          table.to_csv
-          expect($stdout.string).to_not be_empty
-        ensure
-          $stdout = STDOUT
-        end
+        expect { table.to_csv }.to output.to_stdout
       end
     end
 
@@ -293,7 +287,7 @@ RSpec.describe DBF::Table do
     it 'is an array of Columns' do
       expect(columns).to be_an(Array)
       expect(columns).to_not be_empty
-      expect(columns).to be_all { |c| c.class == DBF::Column }
+      expect(columns).to be_all { |c| c.is_a? DBF::Column }
     end
   end
 
@@ -318,7 +312,7 @@ RSpec.describe DBF::Table do
     end
   end
 
-  context '#activerecord_schema_definition' do
+  describe '#activerecord_schema_definition' do
     context 'with type N (number)' do
       it 'outputs an integer column' do
         column = DBF::Column.new table, 'ColumnName', 'N', 1, 0
@@ -326,7 +320,7 @@ RSpec.describe DBF::Table do
       end
     end
 
-    context 'with type B (binary)' do
+    describe 'with type B (binary)' do
       context 'with Foxpro dbf' do
         it 'outputs a float column' do
           column = DBF::Column.new table, 'ColumnName', 'B', 1, 2
