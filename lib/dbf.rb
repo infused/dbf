@@ -1,8 +1,8 @@
-require 'date'
-
 require 'csv'
+require 'date'
 require 'forwardable'
 require 'json'
+require 'time'
 
 require 'dbf/version'
 require 'dbf/schema'
