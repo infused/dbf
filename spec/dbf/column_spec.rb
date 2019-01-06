@@ -180,7 +180,7 @@ RSpec.describe DBF::Column do
 
       context 'with valid datetime' do
         it 'casts to DateTime' do
-          expect(column.type_cast("Nl%\000\300Z\252\003")).to eq DateTime.parse('2002-10-10T17:04:56+00:00')
+          expect(column.type_cast("Nl%\000\300Z\252\003")).to eq Time.parse('2002-10-10T17:04:56+00:00')
         end
       end
 

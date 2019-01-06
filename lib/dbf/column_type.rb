@@ -70,7 +70,7 @@ module DBF
       def type_cast(value)
         days, msecs = value.unpack('l2')
         secs = (msecs / 1000).to_i
-        ::DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60)
+        ::DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60).to_time
       rescue StandardError
         nil
       end

@@ -1,3 +1,6 @@
+# 4.1.0
+  - Return Time instead of DateTime
+
 # 4.0.0
   - Drop support for ruby-2.2 and earlier
 
