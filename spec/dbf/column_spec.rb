@@ -42,7 +42,7 @@ RSpec.describe DBF::Column do
     end
   end
 
-  context '#type_cast' do
+  describe '#type_cast' do
     context 'with type N (number)' do
       context 'when value is empty' do
         it 'returns nil' do
@@ -190,7 +190,7 @@ RSpec.describe DBF::Column do
         end
       end
 
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'T', 0, 0
           expect(column.type_cast('')).to be_nil
@@ -213,7 +213,7 @@ RSpec.describe DBF::Column do
         end
       end
 
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'D', 0, 0
           expect(column.type_cast('')).to be_nil

@@ -115,7 +115,9 @@ module DBF
 
     # @return [String]
     def filename
-      File.basename(@data.path) if @data.respond_to?(:path)
+      return unless @data.respond_to?(:path)
+
+      File.basename(@data.path)
     end
 
     # Find records using a simple ActiveRecord-like syntax.

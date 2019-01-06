@@ -80,7 +80,7 @@ RSpec.describe DBF::Record do
       let(:table) { DBF::Table.new fixture('cp1251.dbf') }
       let(:record) { table.find(0) }
 
-      it 'automaticallies encodes to default system encoding' do
+      it 'encodes to default system encoding' do
         expect(record.name.encoding).to eq Encoding.default_external
 
         # russian a
