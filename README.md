@@ -16,7 +16,7 @@ database files
   subject line
 * Change log: <https://github.com/infused/dbf/blob/master/CHANGELOG.md>
 
-NOTE: Beginninf with version 4 we have dropped support for Ruby 2.0, 2.1, 2.2, and 2.3. If you need support for these older Rubies, please use 3.0.x (https://github.com/infused.org/dbf/tree/3_stable)
+NOTE: Beginning with version 4 we have dropped support for Ruby 2.0, 2.1, 2.2, and 2.3. If you need support for these older Rubies, please use 3.0.x (https://github.com/infused.org/dbf/tree/3_stable)
 
 NOTE: Beginning with version 3 we have dropped support for Ruby 1.8 and 1.9. If you need support for older Rubies, please use 2.0.x (https://github.com/infused/dbf/tree/2_stable)
 
