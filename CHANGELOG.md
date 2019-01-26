@@ -1,3 +1,6 @@
+# 4.1.1
+  - Add required_ruby_version to gemspec
+
 # 4.1.0
   - Return Time instead of DateTime
 
