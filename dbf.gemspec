@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.require_paths = ['lib']
   s.required_rubygems_version = Gem::Requirement.new('>= 1.3.0')
+  s.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
 end
