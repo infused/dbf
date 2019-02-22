@@ -4,8 +4,6 @@ begin
 rescue LoadError
 end
 
-Encoding.default_external = 'UTF-8'
-
 require 'dbf'
 require 'yaml'
 require 'rspec'
