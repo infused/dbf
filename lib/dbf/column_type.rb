@@ -54,7 +54,7 @@ module DBF
 
     class Boolean < Base
       def type_cast(value)
-        value.strip.match? /^(y|t)$/i
+        value.strip.match?(/^(y|t)$/i)
       end
     end
 
