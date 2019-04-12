@@ -6,6 +6,6 @@ guard :rspec, cmd: 'bundle exec rspec' do
   # watch(%r{^lib/(.+)\.rb$})     { |m| "spec/#{m[1]}_spec.rb" }
   watch(%r{^lib/(.+)\.rb$})     { 'spec' }
   watch('spec/spec_helper.rb')  { 'spec' }
-  watch(/spec\/fixtures\/(.+)/) { 'spec' }
+  watch(%r{spec/fixtures/(.+)}) { 'spec' }
   watch('Guardfile')            { 'spec' }
 end
