@@ -52,14 +52,14 @@ RSpec.describe DBF::Column do
         end
       end
 
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'N', 0, 0
           expect(column.type_cast('')).to be_nil
         end
       end
 
-      context 'and 0 decimals' do
+      context 'with 0 decimals' do
         it 'casts value to Integer' do
           value = '135'
           column = DBF::Column.new table, 'ColumnName', 'N', 3, 0
@@ -73,7 +73,7 @@ RSpec.describe DBF::Column do
         end
       end
 
-      context 'and more than 0 decimals' do
+      context 'with more than 0 decimals' do
         it 'casts value to Float' do
           value = '13.5'
           column = DBF::Column.new table, 'ColumnName', 'N', 2, 1
@@ -89,7 +89,7 @@ RSpec.describe DBF::Column do
     end
 
     context 'with type F (float)' do
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'F', 0, 0
           expect(column.type_cast('')).to be_nil
@@ -132,7 +132,7 @@ RSpec.describe DBF::Column do
     end
 
     context 'with type I (integer)' do
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'I', 0, 0
           expect(column.type_cast('')).to be_nil
@@ -167,7 +167,7 @@ RSpec.describe DBF::Column do
         expect(column.type_cast('n')).to be false
       end
 
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'L', 0, 0
           expect(column.type_cast('')).to be_nil
@@ -232,7 +232,7 @@ RSpec.describe DBF::Column do
         expect(column.type_cast(nil)).to be_nil
       end
 
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'M', 0, 0
           expect(column.type_cast('')).to be_nil
@@ -252,7 +252,7 @@ RSpec.describe DBF::Column do
         expect(column.type_cast(nil)).to be_nil
       end
 
-      context 'and 0 length' do
+      context 'with 0 length' do
         it 'returns nil' do
           column = DBF::Column.new table, 'ColumnName', 'G', 0, 0
           expect(column.type_cast('')).to be_nil
@@ -276,7 +276,7 @@ RSpec.describe DBF::Column do
       expect(column.type_cast("pN'9\xFF\xFF\xFF\xFF")).to eq(-333_609.0)
     end
 
-    context 'and 0 length' do
+    context 'with 0 length' do
       it 'returns nil' do
         column = DBF::Column.new table, 'ColumnName', 'Y', 0, 0
         expect(column.type_cast('')).to be_nil
@@ -284,7 +284,7 @@ RSpec.describe DBF::Column do
     end
   end
 
-  context '#name' do
+  describe '#name' do
     it 'contains only ASCII characters' do
       column = DBF::Column.new table, "--\x1F-\x68\x65\x6C\x6C\x6F world-\x80--", 'N', 1, 0
       expect(column.name).to eq '---hello world---'
