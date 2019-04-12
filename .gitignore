@@ -3,6 +3,5 @@
 .byebug_history
 .rspec
 .rvmrc
-.rubocop.yml
 Gemfile.lock
 tmp/*
