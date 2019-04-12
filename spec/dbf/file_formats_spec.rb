@@ -1,17 +1,15 @@
 require 'spec_helper'
 
 RSpec.shared_examples_for 'DBF' do
-  specify 'sum of column lengths should equal record length specified in header plus one' do
-    header_record_length = table.instance_eval { @header.record_length }
-    sum_of_column_lengths = table.columns.inject(1) { |sum, column| sum += column.length }
+  let(:header_record_length) { table.instance_eval { header.record_length } }
+  let(:sum_of_column_lengths) { table.columns.inject(1) { |sum, column| sum + column.length } }
 
+  specify 'sum of column lengths should equal record length specified in header plus one' do
     expect(header_record_length).to eq sum_of_column_lengths
   end
 
   specify 'records should be instances of DBF::Record' do
-    table.each do |record|
-      expect(record).to be_kind_of(DBF::Record)
-    end
+    expect(table).to all be_kind_of(DBF::Record)
   end
 
   specify 'record count should be the same as reported in the header' do

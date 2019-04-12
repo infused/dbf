@@ -97,6 +97,9 @@ RSpec/DescribeClass:
 RSpec/DescribedClass:
   Enabled: false
 
+RSpec/DescribeMethod:
+  Enabled: false
+
 RSpec/ExampleLength:
   Max: 25
   Exclude:
@@ -125,6 +128,9 @@ Security/YAMLLoad:
     - app/models/entity.rb
 
 Style/Alias:
+  Enabled: false
+
+Style/AsciiComments:
   Enabled: false
 
 Style/ClassAndModuleChildren:
