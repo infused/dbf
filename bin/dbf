@@ -16,7 +16,7 @@ elsif params['h']
   puts '  -s = print summary information'
   puts '  -a = create an ActiveRecord::Schema'
   puts '  -r = create a Sequel migration'
-  puts '  -c = create a CSV file'
+  puts '  -c = export as CSV'
 else
 
   filename = ARGV.shift
