@@ -227,7 +227,7 @@ A small command-line utility called dbf is installed along with the gem.
       -s = print summary information
       -a = create an ActiveRecord::Schema
       -r = create a Sequel Migration
-      -c = dump data in CSV format
+      -c = export as CSV
 
 Create an executable ActiveRecord schema:
 
