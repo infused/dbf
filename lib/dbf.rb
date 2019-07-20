@@ -4,6 +4,10 @@ require 'forwardable'
 require 'json'
 require 'time'
 
+require 'bindata'
+require 'dbf/binary/field'
+require 'dbf/binary/header'
+
 require 'dbf/version'
 require 'dbf/schema'
 require 'dbf/record'

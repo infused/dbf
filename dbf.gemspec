@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.required_rubygems_version = Gem::Requirement.new('>= 1.3.0')
   s.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
+  s.add_runtime_dependency 'bindata'
 end
