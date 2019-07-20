@@ -17,13 +17,13 @@ RSpec.describe DBF::Binary::Header do
   specify { expect(table.encoding).to eq 'cp1252' }
 
   specify do
-    expect(table.field_definitions).to eq [
-      DBF::Binary::Field.new(name: 'TCHAR', _field_type: 'C', field_length: 10, decimal: 0, record_offset: 1),
-      DBF::Binary::Field.new(name: 'TDATE', _field_type: 'D', field_length: 8, decimal: 0, record_offset: 11),
-      DBF::Binary::Field.new(name: 'TLOGICAL', _field_type: 'L', field_length: 1, decimal: 0, record_offset: 19),
-      DBF::Binary::Field.new(name: 'TMEMO', _field_type: 'M', field_length: 10, decimal: 0, record_offset: 20),
-      DBF::Binary::Field.new(name: 'TNUMERIC1', _field_type: 'N', field_length: 10, decimal: 0, record_offset: 30),
-      DBF::Binary::Field.new(name: 'TNUMERIC2', _field_type: 'N', field_length: 10, decimal: 2, record_offset: 40)
+    expect(table.columns).to eq [
+      DBF::Binary::Column.new(name: 'TCHAR', column_type: 'C', column_length: 10, decimal: 0, record_offset: 1),
+      DBF::Binary::Column.new(name: 'TDATE', column_type: 'D', column_length: 8, decimal: 0, record_offset: 11),
+      DBF::Binary::Column.new(name: 'TLOGICAL', column_type: 'L', column_length: 1, decimal: 0, record_offset: 19),
+      DBF::Binary::Column.new(name: 'TMEMO', column_type: 'M', column_length: 10, decimal: 0, record_offset: 20),
+      DBF::Binary::Column.new(name: 'TNUMERIC1', column_type: 'N', column_length: 10, decimal: 0, record_offset: 30),
+      DBF::Binary::Column.new(name: 'TNUMERIC2', column_type: 'N', column_length: 10, decimal: 2, record_offset: 40)
     ]
   end
 

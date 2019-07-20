@@ -48,7 +48,7 @@ module DBF
       # Reserved, full with 0x00
       skip length: 2                            # byte offset 30-31
 
-      array :field_definitions, type: :field, initial_length: :field_count
+      array :columns, type: :column, initial_length: :field_count
 
       def version
         @version ||= _version.to_i.to_s(16).rjust(2, '0')

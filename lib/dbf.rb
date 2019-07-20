@@ -5,7 +5,7 @@ require 'json'
 require 'time'
 
 require 'bindata'
-require 'dbf/binary/field'
+require 'dbf/binary/column'
 require 'dbf/binary/header'
 
 require 'dbf/version'
