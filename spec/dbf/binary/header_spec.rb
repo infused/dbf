@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-RSpec.describe DBF::Binary::Header do
+RSpec.describe DBF::Binary::Table do
   let(:dbf_path) { fixture('binary/dbase_test.dbf') }
   let(:memo_path) { fixture('binary/dbase_test.dbt') }
-  let(:table) { DBF::Binary::Header.read(File.read dbf_path) }
+  let(:table) { DBF::Binary::Table.read(File.read dbf_path) }
 
   specify { expect(table.version).to eq '83' }
   specify { expect(table._last_update).to eq({year: 15, month: 11, day: 21}) }

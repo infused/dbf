@@ -6,7 +6,7 @@ require 'time'
 
 require 'bindata'
 require 'dbf/binary/column'
-require 'dbf/binary/header'
+require 'dbf/binary/table'
 
 require 'dbf/version'
 require 'dbf/schema'

@@ -2,7 +2,7 @@
 
 module DBF
   module Binary
-    class Header < BinData::Record
+    class Table < BinData::Record
       endian :little
 
       # The size of the header up to (but not including) the field descriptors
