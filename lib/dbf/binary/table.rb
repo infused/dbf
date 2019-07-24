@@ -51,11 +51,11 @@ module DBF
       array :columns, type: :column, initial_length: :field_count
 
       def version
-        @version ||= _version.to_i.to_s(16).rjust(2, '0')
+        @version ||= _version.to_hex
       end
 
       def encoding_key
-        @encoding_key ||= code_page_mark.to_i.to_s(16).rjust(2, '0')
+        @encoding_key ||= code_page_mark.to_hex
       end
 
       def encoding
