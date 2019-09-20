@@ -1,8 +1,8 @@
 language: ruby
 sudo: false
 rvm:
-  - 2.6.2
-  - 2.5.5
+  - 2.6.4
+  - 2.5.6
   - 2.4.6
 branches:
   only:
