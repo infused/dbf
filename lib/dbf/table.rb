@@ -177,8 +177,11 @@ module DBF
     def record(index)
       seek_to_record(index)
       return nil if deleted_record?
-
-      DBF::Record.new(@data.read(record_length), columns, version, @memo)
+      
+      record_data = @data.read(header.record_length)
+      return nil unless record_data
+      
+      DBF::Record.new(record_data, columns, version, @memo)
     end
 
     alias row record
