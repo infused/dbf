@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 group :development, :test do
   gem 'awesome_print'
   gem 'byebug'
+  gem 'e2mmap'
   gem 'guard'
   gem 'guard-rspec'
   gem 'irb'
