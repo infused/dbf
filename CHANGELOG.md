@@ -1,3 +1,6 @@
+# 4.1.3
+  - Raise DBF::NoColumnsDefined error when attempting to read records if no columns are defined
+
 # 4.1.1
   - Add required_ruby_version to gemspec
 
