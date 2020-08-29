@@ -147,6 +147,14 @@ RSpec.describe DBF::Table do
       allow(table).to receive(:deleted_record?).and_return(true)
       expect(table.record(5)).to be_nil
     end
+
+    describe 'when dbf has no column definitions' do
+      let(:dbf_path) { fixture('polygon.dbf') }
+
+      it 'raises a DBF::NoColumnsDefined error' do
+        expect { DBF::Table.new(dbf_path).record(1) }.to raise_error(DBF::NoColumnsDefined, 'The DBF file has no columns defined')
+      end
+    end
   end
 
   describe '#current_record' do
