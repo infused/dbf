@@ -98,7 +98,7 @@ module DBF
     #
     # @return [String]
     def column_names
-      columns.map(&:name)
+      @column_names ||= columns.map(&:name)
     end
 
     # All columns
