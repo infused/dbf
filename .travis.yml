@@ -1,6 +1,7 @@
 language: ruby
 sudo: false
 rvm:
+  - 3.0.0
   - 2.7.0
   - 2.6.4
   - 2.5.6
