@@ -24,7 +24,7 @@ module DBF
 
     # Reads attributes by column name
     #
-    # @param [String, Symbol] key
+    # @param name [String, Symbol] key
     def [](name)
       key = name.to_s
       if attributes.key?(key)

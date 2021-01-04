@@ -12,6 +12,8 @@ module DBF
     end
 
     class Nil < Base
+
+      # @param _value [String]
       def type_cast(_value)
         nil
       end
@@ -19,7 +21,7 @@ module DBF
 
     class Number < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         return nil if value.strip.empty?
 
@@ -29,7 +31,7 @@ module DBF
 
     class Currency < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         (value.unpack1('q<') / 10_000.0).to_f
       end
@@ -37,7 +39,7 @@ module DBF
 
     class SignedLong < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         value.unpack1('l<')
       end
@@ -45,7 +47,7 @@ module DBF
 
     class Float < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         value.to_f
       end
@@ -53,7 +55,7 @@ module DBF
 
     class Double < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         value.unpack1('E')
       end
@@ -61,7 +63,7 @@ module DBF
 
     class Boolean < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         value.strip.match?(/^(y|t)$/i)
       end
@@ -69,7 +71,7 @@ module DBF
 
     class Date < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         value.match?(/\d{8}/) && ::Date.strptime(value, '%Y%m%d')
       rescue StandardError
@@ -79,7 +81,7 @@ module DBF
 
     class DateTime < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         days, msecs = value.unpack('l2')
         secs = (msecs / 1000).to_i
@@ -91,7 +93,7 @@ module DBF
 
     class Memo < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         if encoding && !value.nil?
           value.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
@@ -103,7 +105,7 @@ module DBF
 
     class General < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         value
       end
@@ -111,7 +113,7 @@ module DBF
 
     class String < Base
 
-      # @param [String]
+      # @param value [String]
       def type_cast(value)
         value = value.strip
         @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace) : value
