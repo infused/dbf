@@ -17,7 +17,7 @@ module DBF
       #  # Calling a table
       #  contacts = db.contacts.record(0)
       #
-      # @param [String]
+      # @param path [String]
       def initialize(path)
         @path = path
         @dirname = File.dirname(@path)
@@ -33,7 +33,7 @@ module DBF
 
       # Returns table with given name
       #
-      # @param [String]
+      # @param name [String]
       # @return [DBF::Table]
       def table(name)
         Table.new table_path(name) do |table|
@@ -44,7 +44,7 @@ module DBF
       # Searches the database directory for the table's dbf file
       # and returns the absolute path. Ensures case-insensitivity
       # on any platform.
-      # @param [String]
+      # @param name [String]
       # @return [String]
       def table_path(name)
         glob = File.join(@dirname, "#{name}.dbf")

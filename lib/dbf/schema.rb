@@ -76,7 +76,7 @@ module DBF
 
     # ActiveRecord schema definition
     #
-    # @param [DBF::Column]
+    # @param column [DBF::Column]
     # @return [String]
     def activerecord_schema_definition(column)
       "\"#{column.underscored_name}\", #{schema_data_type(column, :activerecord)}\n"
@@ -84,7 +84,7 @@ module DBF
 
     # Sequel schema definition
     #
-    # @params [DBF::Column]
+    # @param column [DBF::Column]
     # @return [String]
     def sequel_schema_definition(column)
       ":#{column.underscored_name}, #{schema_data_type(column, :sequel)}\n"
