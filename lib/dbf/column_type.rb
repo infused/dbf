@@ -3,6 +3,8 @@ module DBF
     class Base
       attr_reader :decimal, :encoding
 
+      # @param decimal [Integer]
+      # @param encoding [String, Encoding]
       def initialize(decimal, encoding)
         @decimal = decimal
         @encoding = encoding
@@ -16,6 +18,8 @@ module DBF
     end
 
     class Number < Base
+
+      # @param [String]
       def type_cast(value)
         return nil if value.strip.empty?
 
@@ -24,36 +28,48 @@ module DBF
     end
 
     class Currency < Base
+
+      # @param [String]
       def type_cast(value)
         (value.unpack1('q<') / 10_000.0).to_f
       end
     end
 
     class SignedLong < Base
+
+      # @param [String]
       def type_cast(value)
         value.unpack1('l<')
       end
     end
 
     class Float < Base
+
+      # @param [String]
       def type_cast(value)
         value.to_f
       end
     end
 
     class Double < Base
+
+      # @param [String]
       def type_cast(value)
         value.unpack1('E')
       end
     end
 
     class Boolean < Base
+
+      # @param [String]
       def type_cast(value)
         value.strip.match?(/^(y|t)$/i)
       end
     end
 
     class Date < Base
+
+      # @param [String]
       def type_cast(value)
         value.match?(/\d{8}/) && ::Date.strptime(value, '%Y%m%d')
       rescue StandardError
@@ -62,6 +78,8 @@ module DBF
     end
 
     class DateTime < Base
+
+      # @param [String]
       def type_cast(value)
         days, msecs = value.unpack('l2')
         secs = (msecs / 1000).to_i
@@ -72,6 +90,8 @@ module DBF
     end
 
     class Memo < Base
+
+      # @param [String]
       def type_cast(value)
         if encoding && !value.nil?
           value.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
@@ -82,12 +102,16 @@ module DBF
     end
 
     class General < Base
+
+      # @param [String]
       def type_cast(value)
         value
       end
     end
 
     class String < Base
+
+      # @param [String]
       def type_cast(value)
         value = value.strip
         @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace) : value

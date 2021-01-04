@@ -28,10 +28,11 @@ module DBF
 
     # Initialize a new DBF::Column
     #
-    # @param [String] name
-    # @param [String] type
-    # @param [Integer] length
-    # @param [Integer] decimal
+    # @param table [String]
+    # @param name [String]
+    # @param type [String]
+    # @param length [Integer]
+    # @param decimal [Integer]
     def initialize(table, name, type, length, decimal)
       @table = table
       @name = clean(name)
