@@ -1,17 +1,17 @@
 # DBF
-[![Version](http://img.shields.io/gem/v/dbf.svg?style=flat)](https://rubygems.org/gems/dbf)
-[![Build Status](http://img.shields.io/travis/infused/dbf/master.svg?style=flat)](http://travis-ci.com/infused/dbf)
-[![Code Quality](http://img.shields.io/codeclimate/maintainability/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
-[![Code Coverage](http://img.shields.io/codeclimate/c/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
+[![Version](https://img.shields.io/gem/v/dbf.svg?style=flat)](https://rubygems.org/gems/dbf)
+[![Build Status](https://img.shields.io/travis/infused/dbf/master.svg?style=flat)](https://travis-ci.com/infused/dbf)
+[![Code Quality](https://img.shields.io/codeclimate/maintainability/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
+[![Code Coverage](https://img.shields.io/codeclimate/c/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
 [![Total Downloads](https://img.shields.io/gem/dt/dbf.svg)](https://rubygems.org/gems/dbf/)
 [![License](https://img.shields.io/github/license/infused/dbf.svg)](https://github.com/infused/dbf)
 
 DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro
 database files
 
-* Project page: <http://github.com/infused/dbf>
-* API Documentation: <http://dbf.infused.org/>
-* Report bugs: <http://github.com/infused/dbf/issues>
+* Project page: <https://github.com/infused/dbf>
+* API Documentation: <https://dbf.infused.org/>
+* Report bugs: <https://github.com/infused/dbf/issues>
 * Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the
   subject line
 * Change log: <https://github.com/infused/dbf/blob/master/CHANGELOG.md>
