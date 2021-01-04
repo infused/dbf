@@ -3,10 +3,10 @@ module DBF
   class Record
     # Initialize a new DBF::Record
     #
-    # @data [String, StringIO] data
-    # @columns [Column]
-    # @version [String]
-    # @memo [DBF::Memo]
+    # @param data [String, StringIO] data
+    # @param columns [Column]
+    # @param version [String]
+    # @param memo [DBF::Memo]
     def initialize(data, columns, version, memo)
       @data = StringIO.new(data)
       @columns = columns
