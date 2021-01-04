@@ -67,9 +67,9 @@ module DBF
     #   table = DBF::Table.new 'data.dbf', nil, 'cp437'
     #   table = DBF::Table.new 'data.dbf', 'memo.dbt', Encoding::US_ASCII
     #
-    # @param [String, StringIO] data Path to the dbf file or a StringIO object
-    # @param [optional String, StringIO] memo Path to the memo file or a StringIO object
-    # @param [optional String, Encoding] encoding Name of the encoding or an Encoding object
+    # @param data [String, StringIO] data Path to the dbf file or a StringIO object
+    # @param memo [optional String, StringIO] memo Path to the memo file or a StringIO object
+    # @param encoding [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
       @encoding = encoding || header.encoding
@@ -145,8 +145,8 @@ module DBF
     # returned.  The equivalent SQL would be "WHERE key1 = 'value1'
     # AND key2 = 'value2'".
     #
-    # @param [Integer, Symbol] command
-    # @param [optional, Hash] options Hash of search parameters
+    # @param command [Integer, Symbol] command
+    # @param options [optional, Hash] options Hash of search parameters
     # @yield [optional, DBF::Record, NilClass]
     def find(command, options = {}, &block)
       case command

@@ -32,7 +32,8 @@ module DBF
     #     t.column :notes, :text
     #   end
     #
-    # @param [Symbol] format Valid options are :activerecord and :json
+    # @param format [Symbol] format Valid options are :activerecord and :json
+    # @param table_only [Boolean]
     # @return [String]
     def schema(format = :activerecord, table_only = false)
       schema_method_name = schema_name(format)
