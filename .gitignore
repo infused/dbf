@@ -4,6 +4,5 @@
 .rspec
 .rvmrc
 .yardoc
-doc
 Gemfile.lock
 tmp/*
