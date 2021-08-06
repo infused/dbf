@@ -3,6 +3,7 @@
 .byebug_history
 .rspec
 .rvmrc
+.vscode
 .yardoc
 Gemfile.lock
 tmp/*
