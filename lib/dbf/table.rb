@@ -12,7 +12,8 @@ module DBF
     include Enumerable
     include ::DBF::Schema
 
-    DBF_HEADER_SIZE = 32
+    DBASE2_HEADER_SIZE = 8
+    DBASE3_HEADER_SIZE = 32
 
     VERSIONS = {
       '02' => 'FoxBase',
@@ -211,13 +212,26 @@ module DBF
 
     def build_columns # :nodoc:
       safe_seek do
-        @data.seek(DBF_HEADER_SIZE)
+        @data.seek(header_size)
         [].tap do |columns|
           until end_of_record?
-            column_data = @data.read(DBF_HEADER_SIZE)
-            columns << Column.new(self, *column_data.unpack('a10 x a x4 C2'))
+            case version
+            when '02'
+              column_data = @data.read(header_size * 2)
+              columns << Column.new(self, *column_data.unpack('A11 a C'), 0)
+            else
+              column_data = @data.read(header_size)
+              columns << Column.new(self, *column_data.unpack('A11 a x4 C2'))
+            end
           end
         end
+      end
+    end
+
+    def header_size
+      header_size = case version
+        when '02' then DBASE2_HEADER_SIZE
+        else DBASE3_HEADER_SIZE
       end
     end
 
@@ -250,7 +264,7 @@ module DBF
     def header # :nodoc:
       @header ||= safe_seek do
         @data.seek(0)
-        Header.new(@data.read(DBF_HEADER_SIZE))
+        Header.new(@data.read(DBASE3_HEADER_SIZE))
       end
     end
 
