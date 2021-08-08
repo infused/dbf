@@ -48,6 +48,24 @@ RSpec.shared_examples_for 'DBF' do
   end
 end
 
+RSpec.describe DBF, 'of type 02 (FoxBase)' do
+  let(:table) { DBF::Table.new fixture('dbase_02.dbf') }
+
+  it_behaves_like 'DBF'
+
+  it 'reports the correct version number' do
+    expect(table.version).to eq '02'
+  end
+
+  it 'reports the correct version description' do
+    expect(table.version_description).to eq 'FoxBase'
+  end
+
+  it 'determines the number of records' do
+    expect(table.record_count).to eq 9
+  end
+end
+
 RSpec.describe DBF, 'of type 03 (dBase III without memo file)' do
   let(:table) { DBF::Table.new fixture('dbase_03.dbf') }
 
