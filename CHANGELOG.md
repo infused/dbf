@@ -1,3 +1,6 @@
+# 4.1.4
+  - Add full support for FoxBase files
+
 # 4.1.3
   - Raise DBF::NoColumnsDefined error when attempting to read records if no columns are defined
 
