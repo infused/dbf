@@ -1,3 +1,3 @@
 module DBF
-  VERSION = '4.1.4'.freeze
+  VERSION = '4.1.5'.freeze
 end

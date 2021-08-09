@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+Signal.trap('PIPE', 'SYSTEM_DEFAULT')
+
 require 'dbf'
 require 'dbf/version'
 require 'optparse'
