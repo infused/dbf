@@ -1,3 +1,6 @@
+# 4.1.5
+  - Better handling for PIPE errors when using command line utility
+
 # 4.1.4
   - Add full support for FoxBase files
 
