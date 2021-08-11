@@ -2,10 +2,6 @@ require:
   - rubocop-rspec
   - rubocop-performance
 
-Layout/AlignParameters:
-  Enabled: true
-  EnforcedStyle: with_fixed_indentation
-
 Layout/CaseIndentation:
   Enabled: false
 
@@ -19,10 +15,10 @@ Layout/EndAlignment:
   Enabled: true
   EnforcedStyleAlignWith: start_of_line
 
-Layout/IndentArray:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/MultilineHashBraceLayout:
@@ -34,6 +30,10 @@ Layout/MultilineMethodCallIndentation:
 
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
+
+Layout/ParameterAlignment:
+  Enabled: true
+  EnforcedStyle: with_fixed_indentation
 
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
@@ -50,7 +50,7 @@ Lint/AmbiguousBlockAssociation:
 Lint/AssignmentInCondition:
   Enabled: false
 
-Lint/UnneededSplatExpansion:
+Lint/RedundantSplatExpansion:
   Enabled: false
 
 Metrics/AbcSize:
@@ -84,7 +84,7 @@ Metrics/PerceivedComplexity:
 Naming/FileName:
   Enabled: false
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: false
 
 RSpec/AnyInstance:
