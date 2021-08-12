@@ -1,162 +1,211 @@
-# 4.1.6
-  - Add support for file type 32
+# Changelog
 
-# 4.1.5
-  - Better handling for PIPE errors when using command line utility
+## 4.1.6
 
-# 4.1.4
-  - Add full support for FoxBase files
+- Add support for file type 32
 
-# 4.1.3
-  - Raise DBF::NoColumnsDefined error when attempting to read records if no columns are defined
+## 4.1.5
 
-# 4.1.1
-  - Add required_ruby_version to gemspec
+- Better handling for PIPE errors when using command line utility
 
-# 4.1.0
-  - Return Time instead of DateTime
+## 4.1.4
 
-# 4.0.0
-  - Drop support for ruby-2.2 and earlier
+- Add full support for FoxBase files
 
-# 3.1.3
-  - Ensure malformed dates return nil
+## 4.1.3
 
-# 3.1.2
-  - Fix incorrect columns list when StringIO and encoding set
+- Raise DBF::NoColumnsDefined error when attempting to read records if no columns are defined
 
-# 3.1.1
-  - Use Date.strptime to parse date fields
+## 4.1.1
 
-# 3.1.0
-  - Use :binary for binary fields in ActiveRecord schemas
+- Add required_ruby_version to gemspec
 
-# 3.0.8
-  - Fix uninitialized constant error under Rails 5
+## 4.1.0
 
-# 3.0.7
-  - Ignore non-existent records if header record count is incorrect
+- Return Time instead of DateTime
 
-# 3.0.6
-  - This version has been yanked from rubygems due to errors
+## 4.0.0
 
-# 3.0.5
-  - Override table name for schema output
+- Drop support for ruby-2.2 and earlier
 
-# 3.0.4
-  - Adds -v command-line option to print version
-  - Adds -r command-line option to create Sequel migration
+## 3.1.3
 
-# 3.0.3
-  - Uninitialized (N)umbers should return nil
+- Ensure malformed dates return nil
 
-# 3.0.2
-  - Performance improvements for large files
+## 3.1.2
 
-# 3.0.1
-  - Support FoxPro (G) general field type
-  - Fix ruby warnings
+- Fix incorrect columns list when StringIO and encoding set
 
-# 3.0.0
-  - Requires Ruby version 2.0 and above
-  - Support the (G) General Foxpro field type
+## 3.1.1
 
-# 2.0.13
-  - Support 64-bit currency signed currency values
-    (see https://github.com/infused/dbf/pull/71)
+- Use Date.strptime to parse date fields
 
-# 2.0.12
-  - Parse (I) values as signed
-    (see https://github.com/infused/dbf/pull/70)
+## 3.1.0
 
-# 2.0.11
-  - Foxpro doubles should always return the full stored precision
-    (see https://github.com/infused/dbf/pull/69)
+- Use :binary for binary fields in ActiveRecord schemas
 
-# 2.0.10
-  - allow 0 length fields, but always return nil as value
+## 3.0.8
 
-# 2.0.9
-  - fix dBase IV attributes when memo file is missing
+- Fix uninitialized constant error under Rails 5
 
-# 2.0.8
-  - fix FoxPro currency fields on some builds of Ruby 1.9.3 and 2.0.0
+## 3.0.7
 
-# 2.0.7
-  - fix the dbf binary on some linux systems
+- Ignore non-existent records if header record count is incorrect
 
-# 2.0.6
-  - build_memo returns nil on errors
+## 3.0.6
 
-# 2.0.5
-  - use correct FoxPro memo block size
+- This version has been yanked from rubygems due to errors
 
-# 2.0.4
-  - memo fields return nil if memo file is missing
+## 3.0.5
 
-# 2.0.3
-  - set encoding if table encoding is nil
+- Override table name for schema output
 
-# 2.0.2
-  - Allow overriding the character encoding specified in the file
+## 3.0.4
 
-# 2.0.1
-  - Add experimental support for character encodings under Ruby 1.8
+- Adds -v command-line option to print version
+- Adds -r command-line option to create Sequel migration
 
-# 2.0.0
-  - #44 Require FasterCSV gem on all platforms
-  - Remove rdoc development dependency
-  - #42 Fixes encoding of memos
-  - #43 Improve handling of record attributes
+## 3.0.3
 
-# 1.7.5
-  - fixes FoxPro currency (Y) fields
+- Uninitialized (N)umbers should return nil
 
-# 1.7.4
-  - Replace Memo Type with Memo File boolean in command-line utility summary output
+## 3.0.2
+  
+- Performance improvements for large files
 
-# 1.7.3
-  - find_all/find_first should ignore deleted records
+## 3.0.1
 
-# 1.7.2
-  - Fix integer division under Ruby 1.8 when requiring mathn
-    standard library (see http://bugs.ruby-lang.org/issues/2121)
+- Support FoxPro (G) general field type
+- Fix ruby warnings
 
-# 1.7.1
-  - Fix Table.FOXPRO_VERSIONS breakage on Ruby 1.8
+## 3.0.0
 
-# 1.7.0
-  - allow DBF::Table to work with dbf data in memory
-  - allow DBF::Table#to_csv to write to STDOUT
+- Requires Ruby version 2.0 and above
+- Support the (G) General Foxpro field type
 
-# 1.6.7
-  - memo columns return nil when no memo file found
+## 2.0.13
 
-# 1.6.6
-  - add binary data type support to ActiveRecord schema output
+- Support 64-bit currency signed currency values
+  (see https://github.com/infused/dbf/pull/71)
 
-# 1.6.5
-  - support for visual foxpro double (b) data type
+## 2.0.12
 
-# 1.6.3
-  - Replace invalid chars with 'unicode replacement character' (U+FFFD)
+- Parse (I) values as signed
+  (see https://github.com/infused/dbf/pull/70)
+
+## 2.0.11
+
+- Foxpro doubles should always return the full stored precision
+  (see https://github.com/infused/dbf/pull/69)
+
+## 2.0.10
+
+- allow 0 length fields, but always return nil as value
+
+## 2.0.9
+
+- fix dBase IV attributes when memo file is missing
+
+## 2.0.8
+
+- fix FoxPro currency fields on some builds of Ruby 1.9.3 and 2.0.0
+
+## 2.0.7
+
+- fix the dbf binary on some linux systems
+
+## 2.0.6
+
+- build_memo returns nil on errors
+
+## 2.0.5
+
+- use correct FoxPro memo block size
+
+## 2.0.4
+  
+- memo fields return nil if memo file is missing
+
+## 2.0.3
+
+- set encoding if table encoding is nil
+
+## 2.0.2
+
+- Allow overriding the character encoding specified in the file
+
+## 2.0.1
+
+- Add experimental support for character encodings under Ruby 1.8
+
+## 2.0.0
+
+- #44 Require FasterCSV gem on all platforms
+- Remove rdoc development dependency
+- #42 Fixes encoding of memos
+- #43 Improve handling of record attributes
+
+## 1.7.5
+  
+- fixes FoxPro currency (Y) fields
+
+## 1.7.4
+  
+- Replace Memo Type with Memo File boolean in command-line utility summary output
+
+## 1.7.3
+  
+- find_all/find_first should ignore deleted records
+
+## 1.7.2
+  
+- Fix integer division under Ruby 1.8 when requiring mathn
+  standard library (see http://bugs.ruby-lang.org/issues/2121)
+
+## 1.7.1
+
+- Fix Table.FOXPRO_VERSIONS breakage on Ruby 1.8
+
+## 1.7.0
+
+- allow DBF::Table to work with dbf data in memory
+- allow DBF::Table#to_csv to write to STDOUT
+
+## 1.6.7
+
+- memo columns return nil when no memo file found
+
+## 1.6.6
+
+- add binary data type support to ActiveRecord schema output
+
+## 1.6.5
+
+- support for visual foxpro double (b) data type
+
+## 1.6.3
+
+- Replace invalid chars with 'unicode replacement character' (U+FFFD)
 
 ## 1.6.2
-  - add Table#filename method
-  - Rakefile now loads gems with bundler
-  - add Table#supports_encoding?
-  - simplify encodings.yml loader
-  - add rake and rdoc as development dependencies
-  - simplify open_memo file search logic
-  - remove unnecessary requires in spec helper
-  - fix cli summary
+
+- add Table#filename method
+- Rakefile now loads gems with bundler
+- add Table#supports_encoding?
+- simplify encodings.yml loader
+- add rake and rdoc as development dependencies
+- simplify open_memo file search logic
+- remove unnecessary requires in spec helper
+- fix cli summary
 
 ## 1.6.1
-  - fix YAML issue when using MRI version > 1.9.1
-  - remove Table#seek_to_index and Table#current_record private methods
+
+- fix YAML issue when using MRI version > 1.9.1
+- remove Table#seek_to_index and Table#current_record private methods
 
 ## 1.6.0
-  - remove activesupport gem dependency
+
+- remove activesupport gem dependency
 
 ## 1.5.0
 
