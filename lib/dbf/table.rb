@@ -22,6 +22,7 @@ module DBF
       '05' => 'dBase V without memo file',
       '07' => 'Visual Objects 1.x',
       '30' => 'Visual FoxPro',
+      '32' => 'Visual FoxPro with field type Varchar or Varbinary',
       '31' => 'Visual FoxPro with AutoIncrement field',
       '43' => 'dBASE IV SQL table files, no memo',
       '63' => 'dBASE IV SQL system files, no memo',
