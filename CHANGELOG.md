@@ -1,3 +1,6 @@
+# 4.1.6
+  - Add support for file type 32
+
 # 4.1.5
   - Better handling for PIPE errors when using command line utility
 

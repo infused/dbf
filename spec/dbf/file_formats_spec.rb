@@ -124,6 +124,24 @@ RSpec.describe DBF, 'of type 31 (Visual FoxPro with AutoIncrement field)' do
   end
 end
 
+RSpec.describe DBF, 'of type 32 (Visual FoxPro with field type Varchar or Varbinary)' do
+  let(:table) { DBF::Table.new fixture('dbase_32.dbf') }
+
+  it_behaves_like 'DBF'
+
+  it 'has a dBase version of 32' do
+    expect(table.version).to eq '32'
+  end
+
+  it 'reports the correct version description' do
+    expect(table.version_description).to eq 'Visual FoxPro with field type Varchar or Varbinary'
+  end
+
+  it 'determines the number of records' do
+    expect(table.record_count).to eq 1
+  end
+end
+
 RSpec.describe DBF, 'of type 83 (dBase III with memo file)' do
   let(:table) { DBF::Table.new fixture('dbase_83.dbf') }
 
