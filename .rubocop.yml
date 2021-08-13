@@ -21,6 +21,9 @@ Layout/FirstArrayElementIndentation:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
+Layout/LineLength:
+  Enabled: false
+
 Layout/MultilineHashBraceLayout:
   Enabled: true
   EnforcedStyle: symmetrical
@@ -68,9 +71,6 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Max: 10
-
-Metrics/LineLength:
-  Enabled: false
 
 Metrics/MethodLength:
   Enabled: false
