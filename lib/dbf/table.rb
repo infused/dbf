@@ -216,23 +216,25 @@ module DBF
         @data.seek(header_size)
         [].tap do |columns|
           until end_of_record?
-            case version
+            args = case version
             when '02'
-              column_data = @data.read(header_size * 2)
-              columns << Column.new(self, *column_data.unpack('A11 a C'), 0)
+              [self, *@data.read(header_size * 2).unpack('A11 a C'), 0]
             else
-              column_data = @data.read(header_size)
-              columns << Column.new(self, *column_data.unpack('A11 a x4 C2'))
+              [self, *@data.read(header_size).unpack('A11 a x4 C2')]
             end
+
+            columns << Column.new(*args)
           end
         end
       end
     end
 
     def header_size
-      header_size = case version
-        when '02' then DBASE2_HEADER_SIZE
-        else DBASE3_HEADER_SIZE
+      case version
+      when '02' 
+        DBASE2_HEADER_SIZE
+      else 
+        DBASE3_HEADER_SIZE
       end
     end
 
