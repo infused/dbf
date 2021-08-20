@@ -1,0 +1,23 @@
+
+Database: dbase_02.dbf
+Type: (02) FoxBase
+Memo File: false
+Records: 9
+
+Fields:
+Name             Type       Length     Decimal
+------------------------------------------------------------------------------
+EMP:NMBR         N          3          0         
+LAST             C          10         0         
+FIRST            C          10         0         
+ADDR             C          20         0         
+CITY             C          15         0         
+ZIP:CODE         C          10         0         
+PHONE            C          9          0         
+SSN              C          11         0         
+HIREDATE         C          8          0         
+TERMDATE         C          8          0         
+CLASS            C          3          0         
+DEPT             C          3          0         
+PAYRATE          N          8          0         
+START:PAY        N          8          0         
