@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.0
+
+- Initial support for dBase 7 files
+
 ## 4.1.6
 
 - Add support for file type 32
