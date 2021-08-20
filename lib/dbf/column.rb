@@ -21,7 +21,8 @@ module DBF
       L: ColumnType::Boolean,
       M: ColumnType::Memo,
       B: ColumnType::Double,
-      G: ColumnType::General
+      G: ColumnType::General,
+      '+'.to_sym => ColumnType::SignedLong2
     }
     TYPE_CAST_CLASS.default = ColumnType::String
     TYPE_CAST_CLASS.freeze
@@ -79,8 +80,7 @@ module DBF
     private
 
     def clean(value) # :nodoc:
-      truncated_value = value.strip.partition("\x00").first
-      truncated_value.gsub(/[^\x20-\x7E]/, '')
+      value.strip.gsub("\x00", '').gsub(/[^\x20-\x7E]/, '')
     end
 
     def encode(value, strip_output = false) # :nodoc:
