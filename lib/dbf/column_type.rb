@@ -12,7 +12,6 @@ module DBF
     end
 
     class Nil < Base
-
       # @param _value [String]
       def type_cast(_value)
         nil
@@ -20,7 +19,6 @@ module DBF
     end
 
     class Number < Base
-
       # @param value [String]
       def type_cast(value)
         return nil if value.strip.empty?
@@ -30,7 +28,6 @@ module DBF
     end
 
     class Currency < Base
-
       # @param value [String]
       def type_cast(value)
         (value.unpack1('q<') / 10_000.0).to_f
@@ -38,15 +35,22 @@ module DBF
     end
 
     class SignedLong < Base
-
       # @param value [String]
       def type_cast(value)
         value.unpack1('l<')
       end
     end
 
-    class Float < Base
+    class SignedLong2 < Base
+      # @param value [String]
+      def type_cast(value)
+        s = value.unpack1('B*')
+        sign_multiplier = s[0] == '0' ? -1 : 1
+        s[1, 31].to_i(2) * sign_multiplier
+      end
+    end
 
+    class Float < Base
       # @param value [String]
       def type_cast(value)
         value.to_f
@@ -54,7 +58,6 @@ module DBF
     end
 
     class Double < Base
-
       # @param value [String]
       def type_cast(value)
         value.unpack1('E')
@@ -62,7 +65,6 @@ module DBF
     end
 
     class Boolean < Base
-
       # @param value [String]
       def type_cast(value)
         value.strip.match?(/^(y|t)$/i)
@@ -70,7 +72,6 @@ module DBF
     end
 
     class Date < Base
-
       # @param value [String]
       def type_cast(value)
         value.match?(/\d{8}/) && ::Date.strptime(value, '%Y%m%d')
@@ -80,7 +81,6 @@ module DBF
     end
 
     class DateTime < Base
-
       # @param value [String]
       def type_cast(value)
         days, msecs = value.unpack('l2')
@@ -92,7 +92,6 @@ module DBF
     end
 
     class Memo < Base
-
       # @param value [String]
       def type_cast(value)
         if encoding && !value.nil?
@@ -104,7 +103,6 @@ module DBF
     end
 
     class General < Base
-
       # @param value [String]
       def type_cast(value)
         value
@@ -112,7 +110,6 @@ module DBF
     end
 
     class String < Base
-
       # @param value [String]
       def type_cast(value)
         value = value.strip

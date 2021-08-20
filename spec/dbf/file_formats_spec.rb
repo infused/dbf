@@ -178,6 +178,24 @@ RSpec.describe DBF, 'of type 8b (dBase IV with memo file)' do
   end
 end
 
+RSpec.describe DBF, 'of type 8c (unknown)' do
+  let(:table) { DBF::Table.new fixture('dbase_8c.dbf') }
+
+  it_behaves_like 'DBF'
+
+  it 'reports the correct version number' do
+    expect(table.version).to eq '8c'
+  end
+
+  it 'reports the correct version description' do
+    expect(table.version_description).to eq 'dBase 7'
+  end
+
+  it 'determines the number of records' do
+    expect(table.record_count).to eq 10
+  end
+end
+
 RSpec.describe DBF, 'of type f5 (FoxPro with memo file)' do
   let(:table) { DBF::Table.new fixture('dbase_f5.dbf') }
 
