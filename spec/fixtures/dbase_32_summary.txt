@@ -1,0 +1,11 @@
+
+Database: dbase_32.dbf
+Type: (32) Visual FoxPro with field type Varchar or Varbinary
+Memo File: false
+Records: 1
+
+Fields:
+Name             Type       Length     Decimal
+------------------------------------------------------------------------------
+NAME             V          250        0         
+_NullFlags       0          1          0         
