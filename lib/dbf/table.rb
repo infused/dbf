@@ -221,7 +221,7 @@ module DBF
             args = case version
             when '02'
               [self, *@data.read(header_size * 2).unpack('A11 a C'), 0]
-            when '8c'
+            when '04', '8c'
               [self, *@data.read(48).unpack('A32 a C C x13')]
             else
               [self, *@data.read(header_size).unpack('A11 a x4 C2')]
@@ -237,7 +237,7 @@ module DBF
       case version
       when '02'
         DBASE2_HEADER_SIZE
-      when '8c'
+      when '04', '8c'
         DBASE7_HEADER_SIZE
       else 
         DBASE3_HEADER_SIZE
