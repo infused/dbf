@@ -38,7 +38,7 @@ module DBF
     #
     # @return [Hash]
     def attributes
-      @attributes ||= Hash[attribute_map]
+      @attributes ||= Hash[column_names.zip(to_a)]
     end
 
     # Do all search parameters match?
@@ -53,13 +53,13 @@ module DBF
     #
     # @return [Array]
     def to_a
-      @columns.map { |column| attributes[column.name] }
+      @to_a ||= @columns.map { |column| init_attribute(column) }
     end
 
     private
 
-    def attribute_map # :nodoc:
-      @columns.map { |column| [column.name, init_attribute(column)] }
+    def column_names # :nodoc:
+      @column_names ||= @columns.map { |column| column.name }
     end
 
     def get_data(column) # :nodoc:
