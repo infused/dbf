@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.2.2
+
+- Faster CSV generation
+
+## 4.2.1
+
+- Support for dBase IV "04" type files
+
 ## 4.2.0
 
 - Initial support for dBase 7 files
