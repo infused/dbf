@@ -7,7 +7,7 @@ RSpec::Core::RakeTask.new :spec do |t|
 end
 
 RSpec::Core::RakeTask.new :specdoc do |t|
-  t.rspec_opts = %w[-fl]
+  t.rspec_opts = %w[-fdocumentation]
 end
 
 task default: :spec
