@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
@@ -183,7 +183,312 @@
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="DBF/Table.html" title="DBF::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="DBF/Table.html#initialize-instance_method" title="DBF::Table#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dbf/books.dbf</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>cp866</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 </code></pre>
 
-<p>| Code Page | Encoding | Description | | ——— | ——– | ———– | | 01 | cp437 | U.S. MS–DOS | | 02 | cp850 | International MS–DOS | | 03 | cp1252 | Windows ANSI | | 08 | cp865 | Danish OEM | | 09 | cp437 | Dutch OEM | | 0a | cp850 | Dutch OEM* | | 0b | cp437 | Finnish OEM | | 0d | cp437 | French OEM | | 0e | cp850 | French OEM* | | 0f | cp437 | German OEM | | 10 | cp850 | German OEM* | | 11 | cp437 | Italian OEM | | 12 | cp850 | Italian OEM* | | 13 | cp932 | Japanese Shift-JIS | | 14 | cp850 | Spanish OEM* | | 15 | cp437 | Swedish OEM | | 16 | cp850 | Swedish OEM* | | 17 | cp865 | Norwegian OEM | | 18 | cp437 | Spanish OEM | | 19 | cp437 | English OEM (Britain) | | 1a | cp850 | English OEM (Britain)* | | 1b | cp437 | English OEM (U.S.) | | 1c | cp863 | French OEM (Canada) | | 1d | cp850 | French OEM* | | 1f | cp852 | Czech OEM | | 22 | cp852 | Hungarian OEM | | 23 | cp852 | Polish OEM | | 24 | cp860 | Portuguese OEM | | 25 | cp850 | Portuguese OEM* | | 26 | cp866 | Russian OEM | | 37 | cp850 | English OEM (U.S.)* | | 40 | cp852 | Romanian OEM | | 4d | cp936 | Chinese GBK (PRC) | | 4e | cp949 | Korean (ANSI/OEM) | | 4f | cp950 | Chinese Big5 (Taiwan) | | 50 | cp874 | Thai (ANSI/OEM) | | 57 | cp1252 | ANSI | | 58 | cp1252 | Western European ANSI | | 59 | cp1252 | Spanish ANSI | | 64 | cp852 | Eastern European MS–DOS | | 65 | cp866 | Russian MS–DOS | | 66 | cp865 | Nordic MS–DOS | | 67 | cp861 | Icelandic MS–DOS | | 6a | cp737 | Greek MS–DOS (437G) | | 6b | cp857 | Turkish MS–DOS | | 6c | cp863 | French–Canadian MS–DOS | | 78 | cp950 | Taiwan Big 5 | | 79 | cp949 | Hangul (Wansung) | | 7a | cp936 | PRC GBK | | 7b | cp932 | Japanese Shift-JIS | | 7c | cp874 | Thai Windows/MS–DOS | | 86 | cp737 | Greek OEM | | 87 | cp852 | Slovenian OEM | | 88 | cp857 | Turkish OEM | | c8 | cp1250 | Eastern European Windows | | c9 | cp1251 | Russian Windows | | ca | cp1254 | Turkish Windows | | cb | cp1253 | Greek Windows | | cc | cp1257 | Baltic Windows |</p>
+<table role="table">
+<thead>
+<tr>
+<th>Code Page</th>
+<th>Encoding</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>cp437</td>
+<td>U.S. MS–DOS</td>
+</tr>
+<tr>
+<td>02</td>
+<td>cp850</td>
+<td>International MS–DOS</td>
+</tr>
+<tr>
+<td>03</td>
+<td>cp1252</td>
+<td>Windows ANSI</td>
+</tr>
+<tr>
+<td>08</td>
+<td>cp865</td>
+<td>Danish OEM</td>
+</tr>
+<tr>
+<td>09</td>
+<td>cp437</td>
+<td>Dutch OEM</td>
+</tr>
+<tr>
+<td>0a</td>
+<td>cp850</td>
+<td>Dutch OEM*</td>
+</tr>
+<tr>
+<td>0b</td>
+<td>cp437</td>
+<td>Finnish OEM</td>
+</tr>
+<tr>
+<td>0d</td>
+<td>cp437</td>
+<td>French OEM</td>
+</tr>
+<tr>
+<td>0e</td>
+<td>cp850</td>
+<td>French OEM*</td>
+</tr>
+<tr>
+<td>0f</td>
+<td>cp437</td>
+<td>German OEM</td>
+</tr>
+<tr>
+<td>10</td>
+<td>cp850</td>
+<td>German OEM*</td>
+</tr>
+<tr>
+<td>11</td>
+<td>cp437</td>
+<td>Italian OEM</td>
+</tr>
+<tr>
+<td>12</td>
+<td>cp850</td>
+<td>Italian OEM*</td>
+</tr>
+<tr>
+<td>13</td>
+<td>cp932</td>
+<td>Japanese Shift-JIS</td>
+</tr>
+<tr>
+<td>14</td>
+<td>cp850</td>
+<td>Spanish OEM*</td>
+</tr>
+<tr>
+<td>15</td>
+<td>cp437</td>
+<td>Swedish OEM</td>
+</tr>
+<tr>
+<td>16</td>
+<td>cp850</td>
+<td>Swedish OEM*</td>
+</tr>
+<tr>
+<td>17</td>
+<td>cp865</td>
+<td>Norwegian OEM</td>
+</tr>
+<tr>
+<td>18</td>
+<td>cp437</td>
+<td>Spanish OEM</td>
+</tr>
+<tr>
+<td>19</td>
+<td>cp437</td>
+<td>English OEM (Britain)</td>
+</tr>
+<tr>
+<td>1a</td>
+<td>cp850</td>
+<td>English OEM (Britain)*</td>
+</tr>
+<tr>
+<td>1b</td>
+<td>cp437</td>
+<td>English OEM (U.S.)</td>
+</tr>
+<tr>
+<td>1c</td>
+<td>cp863</td>
+<td>French OEM (Canada)</td>
+</tr>
+<tr>
+<td>1d</td>
+<td>cp850</td>
+<td>French OEM*</td>
+</tr>
+<tr>
+<td>1f</td>
+<td>cp852</td>
+<td>Czech OEM</td>
+</tr>
+<tr>
+<td>22</td>
+<td>cp852</td>
+<td>Hungarian OEM</td>
+</tr>
+<tr>
+<td>23</td>
+<td>cp852</td>
+<td>Polish OEM</td>
+</tr>
+<tr>
+<td>24</td>
+<td>cp860</td>
+<td>Portuguese OEM</td>
+</tr>
+<tr>
+<td>25</td>
+<td>cp850</td>
+<td>Portuguese OEM*</td>
+</tr>
+<tr>
+<td>26</td>
+<td>cp866</td>
+<td>Russian OEM</td>
+</tr>
+<tr>
+<td>37</td>
+<td>cp850</td>
+<td>English OEM (U.S.)*</td>
+</tr>
+<tr>
+<td>40</td>
+<td>cp852</td>
+<td>Romanian OEM</td>
+</tr>
+<tr>
+<td>4d</td>
+<td>cp936</td>
+<td>Chinese GBK (PRC)</td>
+</tr>
+<tr>
+<td>4e</td>
+<td>cp949</td>
+<td>Korean (ANSI/OEM)</td>
+</tr>
+<tr>
+<td>4f</td>
+<td>cp950</td>
+<td>Chinese Big5 (Taiwan)</td>
+</tr>
+<tr>
+<td>50</td>
+<td>cp874</td>
+<td>Thai (ANSI/OEM)</td>
+</tr>
+<tr>
+<td>57</td>
+<td>cp1252</td>
+<td>ANSI</td>
+</tr>
+<tr>
+<td>58</td>
+<td>cp1252</td>
+<td>Western European ANSI</td>
+</tr>
+<tr>
+<td>59</td>
+<td>cp1252</td>
+<td>Spanish ANSI</td>
+</tr>
+<tr>
+<td>64</td>
+<td>cp852</td>
+<td>Eastern European MS–DOS</td>
+</tr>
+<tr>
+<td>65</td>
+<td>cp866</td>
+<td>Russian MS–DOS</td>
+</tr>
+<tr>
+<td>66</td>
+<td>cp865</td>
+<td>Nordic MS–DOS</td>
+</tr>
+<tr>
+<td>67</td>
+<td>cp861</td>
+<td>Icelandic MS–DOS</td>
+</tr>
+<tr>
+<td>6a</td>
+<td>cp737</td>
+<td>Greek MS–DOS (437G)</td>
+</tr>
+<tr>
+<td>6b</td>
+<td>cp857</td>
+<td>Turkish MS–DOS</td>
+</tr>
+<tr>
+<td>6c</td>
+<td>cp863</td>
+<td>French–Canadian MS–DOS</td>
+</tr>
+<tr>
+<td>78</td>
+<td>cp950</td>
+<td>Taiwan Big 5</td>
+</tr>
+<tr>
+<td>79</td>
+<td>cp949</td>
+<td>Hangul (Wansung)</td>
+</tr>
+<tr>
+<td>7a</td>
+<td>cp936</td>
+<td>PRC GBK</td>
+</tr>
+<tr>
+<td>7b</td>
+<td>cp932</td>
+<td>Japanese Shift-JIS</td>
+</tr>
+<tr>
+<td>7c</td>
+<td>cp874</td>
+<td>Thai Windows/MS–DOS</td>
+</tr>
+<tr>
+<td>86</td>
+<td>cp737</td>
+<td>Greek OEM</td>
+</tr>
+<tr>
+<td>87</td>
+<td>cp852</td>
+<td>Slovenian OEM</td>
+</tr>
+<tr>
+<td>88</td>
+<td>cp857</td>
+<td>Turkish OEM</td>
+</tr>
+<tr>
+<td>c8</td>
+<td>cp1250</td>
+<td>Eastern European Windows</td>
+</tr>
+<tr>
+<td>c9</td>
+<td>cp1251</td>
+<td>Russian Windows</td>
+</tr>
+<tr>
+<td>ca</td>
+<td>cp1254</td>
+<td>Turkish Windows</td>
+</tr>
+<tr>
+<td>cb</td>
+<td>cp1253</td>
+<td>Greek Windows</td>
+</tr>
+<tr>
+<td>cc</td>
+<td>cp1257</td>
+<td>Baltic Windows</td>
+</tr>
+</tbody>
+</table>
 
 <h2 id="label-Migrating+to+ActiveRecord">Migrating to ActiveRecord</h2>
 
@@ -680,7 +985,7 @@ usage: dbf [-h|-s|-a] filename
 
 <h2 id="label-License">License</h2>
 
-<p>Copyright © 2006-2021 Keith Morrison &lt;<a href="mailto:keithm@infused.org">keithm@infused.org</a>&gt;</p>
+<p>Copyright © 2006-2023 Keith Morrison &lt;<a href="mailto:keithm@infused.org">keithm@infused.org</a>&gt;</p>
 
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 
@@ -690,9 +995,9 @@ usage: dbf [-h|-s|-a] filename
 </div></div>
 
       <div id="footer">
-  Generated on Tue May 31 15:27:10 2022 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.26 (ruby-3.1.1).
+  Generated on Tue Jan 17 13:25:53 2023 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.2.0).
 </div>
 
     </div>
