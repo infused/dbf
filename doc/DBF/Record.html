@@ -6,7 +6,7 @@
 <title>
   Class: DBF::Record
   
-    &mdash; Documentation by YARD 0.9.26
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
@@ -628,7 +628,7 @@
       <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_attributes'>attributes</span>
-  <span class='ivar'>@attributes</span> <span class='op'>||=</span> <span class='const'>Hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_attribute_map'>attribute_map</span><span class='rbracket'>]</span>
+  <span class='ivar'>@attributes</span> <span class='op'>||=</span> <span class='const'>Hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_column_names'>column_names</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_to_a'>to_a</span><span class='rparen'>)</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -751,7 +751,7 @@
       <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_a'>to_a</span>
-  <span class='ivar'>@columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@to_a</span> <span class='op'>||=</span> <span class='ivar'>@columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span> <span class='id identifier rubyid_init_attribute'>init_attribute</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -763,9 +763,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue May 31 15:27:10 2022 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.26 (ruby-3.1.1).
+  Generated on Tue Jan 17 13:25:53 2023 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.2.0).
 </div>
 
     </div>
