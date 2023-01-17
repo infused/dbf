@@ -26,7 +26,7 @@ please use 2.0.x (https://github.com/infused/dbf/tree/2_stable)
 
 DBF is tested to work with the following versions of Ruby:
 
-* Ruby 2.4.x, 2.5.x, 2.6.x, 2.7.x, 3.0.x, TruffleRuby
+* Ruby 2.4.x, 2.5.x, 2.6.x, 2.7.x, 3.0.x, 3.1.x, and 3.2.x
 
 ## Installation
 
