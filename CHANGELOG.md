@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.3
+
+- Require MFA to publish gem
+
 ## 4.2.2
 
 - Faster CSV generation
