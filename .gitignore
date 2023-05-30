@@ -6,4 +6,5 @@
 .vscode
 .yardoc
 Gemfile.lock
+/*.gem
 tmp/*
