@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables = ['dbf']
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'LICENSE']
-  s.files = Dir['[A-Z]*', '{bin,docs,lib,spec}/**/*', 'dbf.gemspec']
+  s.files = Dir['README.md', 'CHANGELOG.md', 'LICENSE', '{bin,lib,spec}/**/*', 'dbf.gemspec']
   s.require_paths = ['lib']
   s.required_rubygems_version = Gem::Requirement.new('>= 1.3.0')
   s.required_ruby_version = Gem::Requirement.new('>= 2.4.0')

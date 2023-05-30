@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.4
+
+- Exclude unnecessary files from the gem file list
+
 ## 4.2.3
 
 - Require MFA to publish gem
