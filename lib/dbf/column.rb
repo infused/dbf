@@ -69,11 +69,7 @@ module DBF
     # @return [String]
     def underscored_name
       @underscored_name ||= begin
-        name.gsub(/::/, '/')
-          .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-          .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-          .tr('-', '_')
-          .downcase
+        name.gsub(/([a-z\d])([A-Z])/, '\1_\2').tr('-', '_').downcase
       end
     end
 
