@@ -5,6 +5,9 @@ module DBF
   class NoColumnsDefined < StandardError
   end
 
+  class DataNotFound < StandardError
+  end
+
   # DBF::Table is the primary interface to a single DBF file and provides
   # methods for enumerating and searching the records.
   class Table
@@ -188,6 +191,8 @@ module DBF
       return nil if deleted_record?
 
       record_data = @data.read(record_length)
+      raise DBF::DataNotFound, 'No data found' if record_data.nil?
+
       DBF::Record.new(record_data, columns, version, @memo)
     end
 
