@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.28
+    &mdash; Documentation by YARD 0.9.34
   
 </title>
 
@@ -62,28 +62,30 @@
 
 <p><a href="https://rubygems.org/gems/dbf"><img src="https://img.shields.io/gem/v/dbf.svg?style=flat"></a> <a href="https://github.com/infused/dbf/actions/workflows/build.yml"><img src="https://github.com/infused/dbf/actions/workflows/build.yml/badge.svg"></a> <a href="https://codeclimate.com/github/infused/dbf"><img src="https://img.shields.io/codeclimate/maintainability/infused/dbf.svg?style=flat"></a> <a href="https://codeclimate.com/github/infused/dbf"><img src="https://img.shields.io/codeclimate/c/infused/dbf.svg?style=flat"></a> <a href="https://rubygems.org/gems/dbf/"><img src="https://img.shields.io/gem/dt/dbf.svg"></a> <a href="https://github.com/infused/dbf"><img src="https://img.shields.io/github/license/infused/dbf.svg"></a></p>
 
-<p>DBF is a small fast library for reading dBase, xBase, Clipper and FoxPro database files</p>
+<p>DBF is a small, fast Ruby library for reading dBase, xBase, Clipper, and FoxPro database files.</p>
 <ul><li>
 <p>Project page: <a href="https://github.com/infused/dbf">github.com/infused/dbf</a></p>
 </li><li>
-<p>API Documentation: <a href="https://dbf.infused.org">dbf.infused.org</a></p>
+<p>API Documentation: <a href="https://rubydoc.info/github/infused/dbf">rubydoc.info/github/infused/dbf</a></p>
 </li><li>
 <p>Report bugs: <a href="https://github.com/infused/dbf/issues">github.com/infused/dbf/issues</a></p>
 </li><li>
-<p>Questions: Email <a href="mailto:keithm@infused.org">keithm@infused.org</a> and put DBF somewhere in the  subject line</p>
+<p>Questions: Email <a href="mailto:keithm@infused.org">keithm@infused.org</a> and put DBF somewhere in the subject line</p>
 </li><li>
 <p>Change log: <a href="https://github.com/infused/dbf/blob/master/CHANGELOG.md">github.com/infused/dbf/blob/master/CHANGELOG.md</a></p>
 </li></ul>
 
-<p>NOTE: Beginning with version 4 we have dropped support for Ruby 2.0, 2.1, 2.2, and 2.3. If you need support for these older Rubies, please use 3.0.x (<a href="https://github.com/infused.org/dbf/tree/3_stable">github.com/infused.org/dbf/tree/3_stable</a>)</p>
+<p>NOTE:</p>
 
-<p>NOTE: Beginning with version 3 we have dropped support for Ruby 1.8 and 1.9. If you need support for older Rubies, please use 2.0.x (<a href="https://github.com/infused/dbf/tree/2_stable">github.com/infused/dbf/tree/2_stable</a>)</p>
+<p>NOTE: Beginning with version 4, we have dropped support for Ruby 2.0, 2.1, 2.2, and 2.3. If you need support for these older Rubies, please use 3.0.x (<a href="https://github.com/infused.org/dbf/tree/3_stable">github.com/infused.org/dbf/tree/3_stable</a>)</p>
+
+<p>NOTE: Beginning with version 3, we have dropped support for Ruby 1.8 and 1.9. If you need support for older Rubies, please use 2.0.x (<a href="https://github.com/infused/dbf/tree/2_stable">github.com/infused/dbf/tree/2_stable</a>)</p>
 
 <h2 id="label-Compatibility">Compatibility</h2>
 
 <p>DBF is tested to work with the following versions of Ruby:</p>
 <ul><li>
-<p>Ruby 2.4.x, 2.5.x, 2.6.x, 2.7.x, 3.0.x, TruffleRuby</p>
+<p>Ruby 3.0.x, 3.1.x, 3.2.x, 3.3.x</p>
 </li></ul>
 
 <h2 id="label-Installation">Installation</h2>
@@ -147,7 +149,7 @@
 <span class='comment'># =&gt; {&quot;Name&quot; =&gt; &quot;Thing1 | SlotNumber&quot; =&gt; 1}
 </span></code></pre>
 
-<p>Search for records using a simple hash format. Multiple search criteria are ANDed. Use the block form if the resulting recordset could be large, otherwise all records will be loaded into memory.</p>
+<p>Search for records using a simple hash format. Multiple search criteria are ANDed. Use the block form if the resulting record set is too big. Otherwise, all records are loaded into memory.</p>
 
 <pre class="code ruby"><code class="ruby"><span class='comment'># find all records with slot_number equal to s42
 </span><span class='id identifier rubyid_widgets'>widgets</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:all</span><span class='comma'>,</span> <span class='label'>slot_number:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>s42</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_widget'>widget</span><span class='op'>|</span>
@@ -166,7 +168,7 @@
 
 <h2 id="label-Enumeration">Enumeration</h2>
 
-<p>DBF::Table is a Ruby Enumerable. This means you can use any Enumerable method. This means that you get a bunch of traversal, searching and sorting methods for free. For example, let’s get only records created before January 1st, 2015:</p>
+<p>DBF::Table is a Ruby Enumerable, so you get several traversal, search, and sort methods for free. For example, let’s get only records created before January 1st, 2015:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_widgets'>widgets</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_w'>w</span><span class='op'>|</span> <span class='id identifier rubyid_w'>w</span><span class='period'>.</span><span class='id identifier rubyid_created_date'>created_date</span> <span class='op'>&lt;</span> <span class='const'>Date</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='int'>2015</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 </code></pre>
@@ -178,7 +180,7 @@
 
 <h2 id="label-Encodings+-28Code+Pages-29">Encodings (Code Pages)</h2>
 
-<p>dBase supports encoding non-english characters in different formats. Unfortunately, the format used is not always set, so you may have to specify it manually. For example, you have a DBF file from Russia and you are getting bad data. Try using the ‘Russion OEM’ encoding:</p>
+<p>dBase supports encoding non-english characters with different character sets. Unfortunately, the character set used may not be set explicitly. In that case, you will have to specify it manually. For example, if you know the dbf file is encoded with ‘Russian OEM’:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="DBF/Table.html" title="DBF::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="DBF/Table.html#initialize-instance_method" title="DBF::Table#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dbf/books.dbf</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>cp866</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 </code></pre>
@@ -515,7 +517,7 @@
 <span class='kw'>end</span>
 </code></pre>
 
-<p>If you have initalized the DBF::Table with raw data, you will need to set the exported table name manually:</p>
+<p>If you have initialized the DBF::Table with raw data, you will need to set the exported table name manually:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>my_table_name</span><span class='tstring_end'>&#39;</span></span>
 </code></pre>
@@ -552,7 +554,7 @@
 
 <h2 id="label-Command-line+utility">Command-line utility</h2>
 
-<p>A small command-line utility called dbf is installed along with the gem.</p>
+<p>A small command-line utility called dbf is installed with the gem.</p>
 
 <pre class="code ruby"><code class="ruby">$ dbf -h
 usage: dbf [-h|-s|-a] filename
@@ -581,7 +583,7 @@ usage: dbf [-h|-s|-a] filename
 
 <h2 id="label-Reading+a+Visual+Foxpro+database+-28v8-2C+v9-29">Reading a Visual Foxpro database (v8, v9)</h2>
 
-<p>A special Database::Foxpro class is available to read Visual Foxpro container files (file with .dbc extension). When using this class long field names are supported and tables can be referenced without using names.</p>
+<p>A special Database::Foxpro class is available to read Visual Foxpro container files (file with .dbc extension). When using this class, long field names are supported, and tables can be referenced without using names.</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dbf</span><span class='tstring_end'>&#39;</span></span>
 
@@ -591,7 +593,7 @@ usage: dbf [-h|-s|-a] filename
 
 <h2 id="label-dBase+version+compatibility">dBase version compatibility</h2>
 
-<p>The basic dBase data types are generally supported well. Support for the advanced data types in dbase V and FoxPro are still experimental or not supported. If you have insight into how any of the unsupported data types are implemented, please give me a shout. FoxBase/dBase II files are not supported at this time.</p>
+<p>The basic dBase data types are generally supported well. Support for the advanced data types in dBase V and FoxPro are still experimental or not supported. If you have insight into how any of the unsupported data types are implemented, please open an issue on Github. FoxBase/dBase II files are not supported at this time.</p>
 
 <h3 id="label-Supported+data+types+by+dBase+version">Supported data types by dBase version</h3>
 
@@ -985,7 +987,7 @@ usage: dbf [-h|-s|-a] filename
 
 <h2 id="label-License">License</h2>
 
-<p>Copyright © 2006-2023 Keith Morrison &lt;<a href="mailto:keithm@infused.org">keithm@infused.org</a>&gt;</p>
+<p>Copyright © 2006-2024 Keith Morrison &lt;<a href="mailto:keithm@infused.org">keithm@infused.org</a>&gt;</p>
 
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 
@@ -995,9 +997,9 @@ usage: dbf [-h|-s|-a] filename
 </div></div>
 
       <div id="footer">
-  Generated on Tue Jan 17 13:25:53 2023 by
+  Generated on Wed Dec 27 10:30:38 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.2.0).
+  0.9.34 (ruby-3.3.0).
 </div>
 
     </div>
