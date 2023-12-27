@@ -9,8 +9,10 @@ module DBF
     end
 
     attr_reader :table, :name, :type, :length, :decimal
+
     def_delegator :type_cast_class, :type_cast
 
+    # rubocop:disable Style/MutableConstant
     TYPE_CAST_CLASS = {
       N: ColumnType::Number,
       I: ColumnType::SignedLong,
@@ -24,6 +26,7 @@ module DBF
       G: ColumnType::General,
       '+'.to_sym => ColumnType::SignedLong2
     }
+    # rubocop:enable Style/MutableConstant
     TYPE_CAST_CLASS.default = ColumnType::String
     TYPE_CAST_CLASS.freeze
 
@@ -58,7 +61,7 @@ module DBF
     #
     # @return [Hash]
     def to_hash
-      {name: name, type: type, length: length, decimal: decimal}
+      {name:, type:, length:, decimal:}
     end
 
     # Underscored name
@@ -68,18 +71,17 @@ module DBF
     #
     # @return [String]
     def underscored_name
-      @underscored_name ||= begin
-        name.gsub(/([a-z\d])([A-Z])/, '\1_\2').tr('-', '_').downcase
-      end
+      @underscored_name ||= name.gsub(/([a-z\d])([A-Z])/, '\1_\2').tr('-', '_').downcase
+      
     end
 
     private
 
     def clean(value) # :nodoc:
-      value.strip.gsub("\x00", '').gsub(/[^\x20-\x7E]/, '')
+      value.strip.delete("\x00").gsub(/[^\x20-\x7E]/, '')
     end
 
-    def encode(value, strip_output = false) # :nodoc:
+    def encode(value, strip_output: false) # :nodoc:
       return value unless value.respond_to?(:encoding)
 
       output = @encoding ? encode_string(value) : value

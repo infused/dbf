@@ -3,25 +3,25 @@ require 'spec_helper'
 RSpec.describe DBF::Record do
   describe '#to_a' do
     let(:table) { DBF::Table.new fixture('dbase_83.dbf') }
-    let(:record_0) { YAML.load_file(fixture('dbase_83_record_0.yml')) }
-    let(:record_9) { YAML.load_file(fixture('dbase_83_record_9.yml')) }
+    let(:record0) { YAML.load_file(fixture('dbase_83_record_0.yml')) }
+    let(:record9) { YAML.load_file(fixture('dbase_83_record_9.yml')) }
 
     it 'returns an ordered array of attribute values' do
       record = table.record(0)
-      expect(record.to_a).to eq record_0
+      expect(record.to_a).to eq record0
 
       record = table.record(9)
-      expect(record.to_a).to eq record_9
+      expect(record.to_a).to eq record9
     end
 
     describe 'with missing memo file' do
       describe 'when opening a path' do
         let(:table) { DBF::Table.new fixture('dbase_83_missing_memo.dbf') }
-        let(:record_0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
+        let(:record0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
 
         it 'returns nil values for memo fields' do
           record = table.record(0)
-          expect(record.to_a).to eq record_0
+          expect(record.to_a).to eq record0
         end
       end
     end
@@ -29,11 +29,11 @@ RSpec.describe DBF::Record do
     describe 'when opening StringIO' do
       let(:data) { StringIO.new(File.read(fixture('dbase_83_missing_memo.dbf'))) }
       let(:table) { DBF::Table.new(data) }
-      let(:record_0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
+      let(:record0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
 
       it 'returns nil values for memo fields' do
         record = table.record(0)
-        expect(record.to_a).to eq record_0
+        expect(record.to_a).to eq record0
       end
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe DBF::Record do
 
     describe 'if other attributes match' do
       let(:attributes) { {x: 1, y: 2} }
-      let(:other) { instance_double('DBF::Record', attributes: attributes) }
+      let(:other) { instance_double('DBF::Record', attributes:) }
 
       before do
         allow(record).to receive(:attributes).and_return(attributes)

@@ -86,7 +86,7 @@ module DBF
     # @return [TrueClass, FalseClass]
     def close
       @data.close
-      @memo && @memo.close
+      @memo&.close
     end
 
     # @return [TrueClass, FalseClass]
@@ -255,7 +255,7 @@ module DBF
 
     def find_all(options) # :nodoc:
       select do |record|
-        next unless record && record.match?(options)
+        next unless record&.match?(options)
 
         yield record if block_given?
         record
@@ -263,7 +263,7 @@ module DBF
     end
 
     def find_first(options) # :nodoc:
-      detect { |record| record && record.match?(options) }
+      detect { |record| record&.match?(options) }
     end
 
     def foxpro? # :nodoc:
@@ -278,13 +278,12 @@ module DBF
     end
 
     def memo_class # :nodoc:
-      @memo_class ||= begin
-        if foxpro?
-          Memo::Foxpro
+      @memo_class ||= if foxpro?
+        Memo::Foxpro
         else
           version == '83' ? Memo::Dbase3 : Memo::Dbase4
-        end
       end
+      
     end
 
     def memo_search_path(io) # :nodoc:
