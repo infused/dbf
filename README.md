@@ -16,6 +16,8 @@ DBF is a small, fast Ruby library for reading dBase, xBase, Clipper, and FoxPro 
   subject line
 * Change log: <https://github.com/infused/dbf/blob/master/CHANGELOG.md>
 
+NOTE: 
+
 NOTE: Beginning with version 4, we have dropped support for Ruby 2.0, 2.1, 2.2, and 2.3. If you need support for these older Rubies,
 please use 3.0.x (<https://github.com/infused.org/dbf/tree/3_stable>)
 
@@ -26,7 +28,7 @@ please use 2.0.x (<https://github.com/infused/dbf/tree/2_stable>)
 
 DBF is tested to work with the following versions of Ruby:
 
-* Ruby 2.4.x, 2.5.x, 2.6.x, 2.7.x, 3.0.x, 3.1.x, and 3.2.x
+* Ruby 3.0.x, 3.1.x, 3.2.x, 3.3.x
 
 ## Installation
 
@@ -362,7 +364,7 @@ Data type descriptions
 
 ## License
 
-Copyright (c) 2006-2023 Keith Morrison <<keithm@infused.org>>
+Copyright (c) 2006-2024 Keith Morrison <<keithm@infused.org>>
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

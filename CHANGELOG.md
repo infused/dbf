@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.3.0
+
+- Drop support for Ruby versions older than 3.0
+- Require CSV gem
+
 ## 4.2.4
 
 - Exclude unnecessary files from the gem file list
