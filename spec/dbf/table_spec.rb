@@ -70,7 +70,6 @@ RSpec.describe DBF::Table do
 
     describe 'when data is StringIO' do
       let(:data) { StringIO.new File.read(dbf_path) }
-      let(:memo) { StringIO.new File.read(memo_path) }
       let(:table) { DBF::Table.new data }
 
       let(:control_schema) { File.read(fixture('dbase_83_schema_ar.txt')) }
@@ -200,7 +199,7 @@ RSpec.describe DBF::Table do
       end
 
       it 'returns matching records when used with options' do
-        expect(table.find(:all, 'WEIGHT' => 0.0)).to eq table.select { |r| r['weight'] == 0.0 }
+        expect(table.find(:all, 'WEIGHT' => 0.0)).to eq(table.select { |r| r['weight'] == 0.0 })
       end
 
       it 'ANDS multiple search terms' do
@@ -295,7 +294,7 @@ RSpec.describe DBF::Table do
     it 'is an array of Columns' do
       expect(columns).to be_an(Array)
       expect(columns).to_not be_empty
-      expect(columns).to be_all { |c| c.is_a? DBF::Column }
+      expect(columns).to(be_all { |c| c.is_a? DBF::Column })
     end
   end
 

@@ -35,9 +35,9 @@ module DBF
     # @param format [Symbol] format Valid options are :activerecord and :json
     # @param table_only [Boolean]
     # @return [String]
-    def schema(format = :activerecord, table_only = false)
+    def schema(format = :activerecord, table_only: false)
       schema_method_name = schema_name(format)
-      send(schema_method_name, table_only)
+      send(schema_method_name, table_only:)
     rescue NameError
       raise ArgumentError, ":#{format} is not a valid schema. Valid schemas are: #{FORMATS.join(', ')}."
     end
@@ -46,7 +46,7 @@ module DBF
       "#{format}_schema"
     end
 
-    def activerecord_schema(_table_only = false) # :nodoc:
+    def activerecord_schema(*) # :nodoc:
       s = "ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{name}\" do |t|\n"
       columns.each do |column|
@@ -56,7 +56,7 @@ module DBF
       s
     end
 
-    def sequel_schema(table_only = false) # :nodoc:
+    def sequel_schema(table_only: false) # :nodoc:
       s = ''
       s << "Sequel.migration do\n" unless table_only
       s << "  change do\n " unless table_only
@@ -70,7 +70,7 @@ module DBF
       s
     end
 
-    def json_schema(_table_only = false) # :nodoc:
+    def json_schema(*) # :nodoc:
       columns.map(&:to_hash).to_json
     end
 
@@ -92,9 +92,9 @@ module DBF
 
     def schema_data_type(column, format = :activerecord) # :nodoc:
       case column.type
-      when *%w[N F I]
+      when 'N', 'F', 'I'
         number_data_type(column)
-      when *%w[Y D T L M B]
+      when 'Y', 'D', 'T', 'L', 'M', 'B'
         OTHER_DATA_TYPES[column.type]
       else
         string_data_format(format, column)

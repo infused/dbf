@@ -29,7 +29,7 @@ module DBF
       key = name.to_s
       if attributes.key?(key)
         attributes[key]
-      elsif index = underscored_column_names.index(key)
+      elsif (index = underscored_column_names.index(key))
         attributes[@columns[index].name]
       end
     end
@@ -59,7 +59,7 @@ module DBF
     private
 
     def column_names # :nodoc:
-      @column_names ||= @columns.map { |column| column.name }
+      @column_names ||= @columns.map(&:name)
     end
 
     def get_data(column) # :nodoc:

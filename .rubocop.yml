@@ -2,6 +2,9 @@ require:
   - rubocop-rspec
   - rubocop-performance
 
+AllCops:
+  SuggestExtensions: true
+
 Layout/CaseIndentation:
   Enabled: false
 
@@ -47,15 +50,6 @@ Layout/SpaceInLambdaLiteral:
 Layout/TrailingWhitespace:
   Enabled: false
 
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
-
-Lint/AssignmentInCondition:
-  Enabled: false
-
-Lint/RedundantSplatExpansion:
-  Enabled: false
-
 Metrics/AbcSize:
   Enabled: false
 
@@ -81,10 +75,7 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
-Naming/FileName:
-  Enabled: false
-
-Naming/MethodParameterName:
+Naming/PredicateName:
   Enabled: false
 
 RSpec/AnyInstance:
@@ -114,6 +105,10 @@ RSpec/LetSetup:
 RSpec/MessageSpies:
   Enabled: false
 
+RSpec/MultipleDescribes:
+  Exclude:
+    - spec/dbf/file_formats_spec.rb
+
 RSpec/MultipleExpectations:
   Enabled: false
 
@@ -122,19 +117,6 @@ RSpec/NestedGroups:
 
 RSpec/NotToNot:
   EnforcedStyle: to_not
-
-Security/YAMLLoad:
-  Exclude:
-    - app/models/entity.rb
-
-Style/Alias:
-  Enabled: false
-
-Style/AsciiComments:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Enabled: false
 
 Style/Documentation:
   Enabled: false
@@ -148,19 +130,7 @@ Style/FormatStringToken:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Style/Lambda:
-  Enabled: false
-
 Style/NumericPredicate:
-  Enabled: false
-
-Style/PerlBackrefs:
-  Enabled: false
-
-Style/RescueModifier:
-  Enabled: false
-
-Style/SafeNavigation:
   Enabled: false
 
 Style/SymbolArray:

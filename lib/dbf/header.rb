@@ -1,11 +1,6 @@
 module DBF
   class Header
-    attr_reader :version
-    attr_reader :record_count
-    attr_reader :header_length
-    attr_reader :record_length
-    attr_reader :encoding_key
-    attr_reader :encoding
+    attr_reader :version, :record_count, :header_length, :record_length, :encoding_key, :encoding
 
     def initialize(data)
       @data = data
@@ -13,7 +8,7 @@ module DBF
     end
 
     def unpack_header
-      @version = @data.unpack('H2').first
+      @version = @data.unpack1('H2')
 
       case @version
       when '02'
