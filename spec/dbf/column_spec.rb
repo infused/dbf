@@ -287,12 +287,12 @@ RSpec.describe DBF::Column do
   describe '#name' do
     it 'contains only ASCII characters' do
       column = DBF::Column.new table, "--\x1F-\x68\x65\x6C\x6C\x6F \x00world-\x80--", 'N', 1, 0
-      expect(column.name).to eq '---hello world---'
+      expect(column.name).to eq '---hello '
     end
 
     it 'is truncated at the null character' do
       column = DBF::Column.new table, "--\x1F-\x68\x65\x6C\x6C\x6F \x00world-\x80\x80--", 'N', 1, 0
-      expect(column.name).to eq '---hello world---'
+      expect(column.name).to eq '---hello '
     end
   end
 end

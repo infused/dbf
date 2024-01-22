@@ -78,7 +78,7 @@ module DBF
     private
 
     def clean(value) # :nodoc:
-      value.strip.delete("\x00").gsub(/[^\x20-\x7E]/, '')
+      value.strip.partition("\x00").first.gsub(/[^\x20-\x7E]/, '')
     end
 
     def encode(value, strip_output: false) # :nodoc:
