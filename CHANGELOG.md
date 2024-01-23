@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.2
+
+- Fixes to maintain support for Ruby 3.0.x until it's EOL
+
 ## 4.3.1
 
 - Fix bug (since 4.2.0) that caused column names not to be truncated after null character
