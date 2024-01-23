@@ -37,7 +37,7 @@ module DBF
     # @return [String]
     def schema(format = :activerecord, table_only: false)
       schema_method_name = schema_name(format)
-      send(schema_method_name, table_only:)
+      send(schema_method_name, table_only: table_only)
     rescue NameError
       raise ArgumentError, ":#{format} is not a valid schema. Valid schemas are: #{FORMATS.join(', ')}."
     end

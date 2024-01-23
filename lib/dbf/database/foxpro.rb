@@ -105,7 +105,7 @@ module DBF
       end
 
       def table_field_hash(name)
-        {name:, fields: []}
+        {name: name, fields: []}
       end
     end
 
