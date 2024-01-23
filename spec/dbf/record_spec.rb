@@ -50,7 +50,7 @@ RSpec.describe DBF::Record do
 
     describe 'if other attributes match' do
       let(:attributes) { {x: 1, y: 2} }
-      let(:other) { instance_double('DBF::Record', attributes:) }
+      let(:other) { instance_double('DBF::Record', attributes: attributes) }
 
       before do
         allow(record).to receive(:attributes).and_return(attributes)
