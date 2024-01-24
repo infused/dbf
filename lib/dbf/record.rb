@@ -8,6 +8,8 @@ module DBF
     # @param version [String]
     # @param memo [DBF::Memo]
     def initialize(data, columns, version, memo)
+      raise ArgumentError, "Expected String or StringIO, got #{data.class.name}" unless data.kind_of?(String) || data.kind_of?(StringIO)
+
       @data = StringIO.new(data)
       @columns = columns
       @version = version
