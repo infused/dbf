@@ -29,6 +29,12 @@ RSpec.describe DBF::Table do
       end
     end
 
+    describe 'when data is nil' do
+      it 'raises ArgumentError' do
+        expect { DBF::Table.new nil }.to raise_error(ArgumentError, 'data must be a file path or StringIO object')
+      end
+    end
+
     describe 'when given paths to existing dbf and memo files' do
       it 'does not raise an error' do
         expect { DBF::Table.new dbf_path, memo_path }.to_not raise_error
