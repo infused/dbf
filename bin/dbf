@@ -41,6 +41,7 @@ else
     puts
     puts "Database: #{filename}"
     puts "Type: (#{table.version}) #{table.version_description}"
+    puts "Encoding: #{table.header_encoding}" if table.header_encoding
     puts "Memo File: #{table.has_memo_file? ? 'true' : 'false'}"
     puts "Records: #{table.record_count}"
 

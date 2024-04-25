@@ -1,6 +1,7 @@
 
 Database: cp1251.dbf
 Type: (30) Visual FoxPro
+Encoding: cp1251
 Memo File: false
 Records: 4
 

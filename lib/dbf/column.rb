@@ -8,7 +8,7 @@ module DBF
     class NameError < StandardError
     end
 
-    attr_reader :table, :name, :type, :length, :decimal
+    attr_reader :table, :name, :type, :length, :decimal, :encoding
 
     def_delegator :type_cast_class, :type_cast
 
@@ -38,13 +38,14 @@ module DBF
     # @param length [Integer]
     # @param decimal [Integer]
     def initialize(table, name, type, length, decimal)
+      @encoding = table.encoding
+
       @table = table
       @name = clean(name)
       @type = type
       @length = length
       @decimal = decimal
       @version = table.version
-      @encoding = table.encoding
 
       validate_length
       validate_name
@@ -72,37 +73,18 @@ module DBF
     # @return [String]
     def underscored_name
       @underscored_name ||= name.gsub(/([a-z\d])([A-Z])/, '\1_\2').tr('-', '_').downcase
-      
     end
 
     private
 
     def clean(value) # :nodoc:
-      value.strip.partition("\x00").first.gsub(/[^\x20-\x7E]/, '')
-    end
-
-    def encode(value, strip_output: false) # :nodoc:
-      return value unless value.respond_to?(:encoding)
-
-      output = @encoding ? encode_string(value) : value
-      strip_output ? output.strip : output
-    end
-
-    def encoding_args # :nodoc:
-      @encoding_args ||= [
-        Encoding.default_external,
-        {undef: :replace, invalid: :replace}
-      ]
-    end
-
-    def encode_string(string) # :nodoc:
-      string.force_encoding(@encoding).encode(*encoding_args)
+      table.encode_string(value.strip.partition("\x00").first)
     end
 
     def type_cast_class # :nodoc:
       @type_cast_class ||= begin
         klass = @length == 0 ? ColumnType::Nil : TYPE_CAST_CLASS[type.to_sym]
-        klass.new(@decimal, @encoding)
+        klass.new(self)
       end
     end
 

@@ -76,7 +76,7 @@ module DBF
     # @param encoding [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil)
       @data = open_data(data)
-      @encoding = encoding || header.encoding
+      @encoding = encoding || header.encoding || Encoding.default_external
       @memo = open_memo(data, memo)
       yield self if block_given?
     end
@@ -209,6 +209,21 @@ module DBF
     # @return [String]
     def version_description
       VERSIONS[version]
+    end
+
+    # Encode string
+    #
+    # @param [String] string
+    # @return [String]
+    def encode_string(string) # :nodoc:
+      string.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
+    end
+
+    # Encoding specified in the file header
+    #
+    # @return [Encoding]
+    def header_encoding
+      header.encoding
     end
 
     private
