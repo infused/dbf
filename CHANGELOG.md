@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1
+
+- Raise ArgumentError data is not a string or StringIO object
+
 ## 5.0.0
 
 - Refactor the Column class to support non-ASCII header names

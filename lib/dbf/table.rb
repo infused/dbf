@@ -308,7 +308,14 @@ module DBF
     end
 
     def open_data(data) # :nodoc:
-      data.is_a?(StringIO) ? data : File.open(data, 'rb')
+      case data
+      when StringIO
+        data
+      when String
+        File.open(data, 'rb')
+      else
+        raise ArgumentError, 'data must be a file path or StringIO object'
+      end
     rescue Errno::ENOENT
       raise DBF::FileNotFoundError, "file not found: #{data}"
     end
