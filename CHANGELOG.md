@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.0
+
+- Refactor the Column class to support non-ASCII header names
+- Output encoding is now set to UTF-8 if there is no embedded encoding and one is not
+  specified during DBF::Table initialization.
+
 ## 4.3.2
 
 - Fixes to maintain support for Ruby 3.0.x until it's EOL

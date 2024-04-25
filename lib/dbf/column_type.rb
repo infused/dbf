@@ -5,9 +5,9 @@ module DBF
 
       # @param decimal [Integer]
       # @param encoding [String, Encoding]
-      def initialize(decimal, encoding)
-        @decimal = decimal
-        @encoding = encoding
+      def initialize(column)
+        @decimal = column.decimal
+        @encoding = column.encoding
       end
     end
 

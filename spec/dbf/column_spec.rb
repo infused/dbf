@@ -37,7 +37,7 @@ RSpec.describe DBF::Column do
 
     describe 'with empty column name' do
       it 'raises DBF::Column::NameError' do
-        expect { DBF::Column.new table, "\xFF\xFC", 'N', 1, 0 }.to raise_error(DBF::Column::NameError)
+        expect { DBF::Column.new table, '', 'N', 1, 0 }.to raise_error(DBF::Column::NameError)
       end
     end
   end
@@ -281,18 +281,6 @@ RSpec.describe DBF::Column do
         column = DBF::Column.new table, 'ColumnName', 'Y', 0, 0
         expect(column.type_cast('')).to be_nil
       end
-    end
-  end
-
-  describe '#name' do
-    it 'contains only ASCII characters' do
-      column = DBF::Column.new table, "--\x1F-\x68\x65\x6C\x6C\x6F \x00world-\x80--", 'N', 1, 0
-      expect(column.name).to eq '---hello '
-    end
-
-    it 'is truncated at the null character' do
-      column = DBF::Column.new table, "--\x1F-\x68\x65\x6C\x6C\x6F \x00world-\x80\x80--", 'N', 1, 0
-      expect(column.name).to eq '---hello '
     end
   end
 end

@@ -1,0 +1,11 @@
+
+Database: dbase_03_cyrillic.dbf
+Type: (03) dBase III without memo file
+Memo File: false
+Records: 2
+
+Fields:
+Name             Type       Length     Decimal
+------------------------------------------------------------------------------
+ШАР              C          25         0         
+ПЛОЩА            N          15         2         
