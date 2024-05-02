@@ -24,7 +24,7 @@ module DBF
       M: ColumnType::Memo,
       B: ColumnType::Double,
       G: ColumnType::General,
-      '+'.to_sym => ColumnType::SignedLong2
+      :+ => ColumnType::SignedLong2
     }
     # rubocop:enable Style/MutableConstant
     TYPE_CAST_CLASS.default = ColumnType::String

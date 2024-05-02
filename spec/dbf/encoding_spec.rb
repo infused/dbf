@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'spec_helper'
 
 RSpec.describe 'default encoding' do
@@ -16,7 +14,7 @@ RSpec.describe 'default encoding' do
   end
 
   it 'encodes column names' do
-    expect(table.column_names).to eq ['ШАР', 'ПЛОЩА']
+    expect(table.column_names).to eq %w[ШАР ПЛОЩА]
   end
 
   it 'encodes record values' do
@@ -38,7 +36,7 @@ RSpec.describe 'embedded encoding' do
   end
 
   it 'encodes column names' do
-    expect(table.column_names).to eq ['RN', 'NAME']
+    expect(table.column_names).to eq %w[RN NAME]
   end
 
   it 'encodes record values' do

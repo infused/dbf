@@ -85,9 +85,7 @@ module DBF
           end
         end
 
-        Hash[
-          data.values.map { |v| [v[:name], v[:fields]] }
-        ]
+        data.values.to_h { |v| [v[:name], v[:fields]] }
       end
 
       def process_table(record, data)

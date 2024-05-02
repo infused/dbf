@@ -38,7 +38,7 @@ module DBF
     #
     # @return [Hash]
     def attributes
-      @attributes ||= Hash[column_names.zip(to_a)]
+      @attributes ||= column_names.zip(to_a).to_h
     end
 
     # Do all search parameters match?

@@ -142,7 +142,7 @@ RSpec.describe DBF::Table do
       before { table.to_csv('test.csv') }
 
       it 'creates a custom csv file' do
-        expect(File).to be_exist('test.csv')
+        expect(File).to exist('test.csv')
       end
     end
   end
