@@ -9,7 +9,7 @@ RSpec.shared_examples_for 'DBF' do
   end
 
   specify 'records should be instances of DBF::Record' do
-    expect(table).to all be_kind_of(DBF::Record)
+    expect(table).to all be_a(DBF::Record)
   end
 
   specify 'record count should be the same as reported in the header' do
@@ -31,7 +31,7 @@ RSpec.shared_examples_for 'DBF' do
 
   specify 'column lengths should be instances of Integer' do
     table.columns.each do |column|
-      expect(column.length).to be_kind_of(Integer)
+      expect(column.length).to be_a(Integer)
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.shared_examples_for 'DBF' do
 
   specify 'column decimals should be instances of Integer' do
     table.columns.each do |column|
-      expect(column.decimal).to be_kind_of(Integer)
+      expect(column.decimal).to be_a(Integer)
     end
   end
 end

@@ -44,13 +44,13 @@ RSpec.describe DBF::Record do
 
     describe 'when other does not have attributes' do
       it 'returns false' do
-        expect((record == instance_double('DBF::Record'))).to be_falsey
+        expect((record == instance_double(DBF::Record))).to be_falsey
       end
     end
 
     describe 'if other attributes match' do
       let(:attributes) { {x: 1, y: 2} }
-      let(:other) { instance_double('DBF::Record', attributes: attributes) }
+      let(:other) { instance_double(DBF::Record, attributes: attributes) }
 
       before do
         allow(record).to receive(:attributes).and_return(attributes)
