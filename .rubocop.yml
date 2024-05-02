@@ -3,7 +3,7 @@ require:
   - rubocop-performance
 
 AllCops:
-  SuggestExtensions: true
+  NewCops: enable
 
 Layout/CaseIndentation:
   Enabled: false
