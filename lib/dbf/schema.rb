@@ -1,29 +1,29 @@
 module DBF
-  # The Schema module is mixin for the Table class
+  # The Schema module provides schema generation capabilities for DBF tables
   module Schema
     FORMATS = [:activerecord, :json, :sequel].freeze
 
-    OTHER_DATA_TYPES = {
+    # Maps DBF data types to their corresponding schema data types
+    SCHEMA_DATA_TYPES = {
       'Y' => ':decimal, :precision => 15, :scale => 4',
       'D' => ':date',
-      'T' => ':datetime',
+      'T' => ':datetime', 
       'L' => ':boolean',
       'M' => ':text',
       'B' => ':binary'
     }.freeze
 
-    # Generate an ActiveRecord::Schema
+    # Generate a database schema in the specified format
     #
-    # xBase data types are converted to generic types as follows:
-    # - Number columns with no decimals are converted to :integer
-    # - Number columns with decimals are converted to :float
-    # - Date columns are converted to :datetime
-    # - Logical columns are converted to :boolean
-    # - Memo columns are converted to :text
-    # - Character columns are converted to :string and the :limit option is set
-    #   to the length of the character column
+    # DBF data types are mapped to generic types as follows:
+    # - Numbers without decimals -> :integer
+    # - Numbers with decimals -> :float
+    # - Dates -> :datetime
+    # - Logical -> :boolean
+    # - Memo -> :text
+    # - Character -> :string with :limit
     #
-    # Example:
+    # Example ActiveRecord schema:
     #   create_table "mydata" do |t|
     #     t.column :name, :string, :limit => 30
     #     t.column :last_update, :datetime
@@ -32,85 +32,74 @@ module DBF
     #     t.column :notes, :text
     #   end
     #
-    # @param format [Symbol] format Valid options are :activerecord and :json
-    # @param table_only [Boolean]
-    # @return [String]
+    # @param format [Symbol] Schema format (:activerecord, :json, or :sequel)
+    # @param table_only [Boolean] Whether to output just the table definition
+    # @return [String] Generated schema
     def schema(format = :activerecord, table_only: false)
-      schema_method_name = schema_name(format)
-      send(schema_method_name, table_only: table_only)
+      schema_method = schema_name(format)
+      send(schema_method, table_only: table_only)
     rescue NameError
-      raise ArgumentError, ":#{format} is not a valid schema. Valid schemas are: #{FORMATS.join(', ')}."
+      raise ArgumentError, "Invalid schema format :#{format}. Valid formats are: #{FORMATS.join(', ')}."
     end
 
-    def schema_name(format) # :nodoc:
+    def schema_name(format)
       "#{format}_schema"
     end
 
-    def activerecord_schema(*) # :nodoc:
-      s = "ActiveRecord::Schema.define do\n"
-      s << "  create_table \"#{name}\" do |t|\n"
+    def activerecord_schema(table_only: false)
+      schema = "ActiveRecord::Schema.define do\n"
+      schema << "  create_table \"#{name}\" do |t|\n"
       columns.each do |column|
-        s << "    t.column #{activerecord_schema_definition(column)}"
+        schema << "    t.column #{activerecord_schema_definition(column)}"
       end
-      s << "  end\nend"
-      s
+      schema << "  end\nend"
+      schema
     end
 
-    def sequel_schema(table_only: false) # :nodoc:
-      s = ''
-      s << "Sequel.migration do\n" unless table_only
-      s << "  change do\n " unless table_only
-      s << "    create_table(:#{name}) do\n"
+    def sequel_schema(table_only: false)
+      schema = ''
+      schema << "Sequel.migration do\n" unless table_only
+      schema << "  change do\n " unless table_only
+      schema << "    create_table(:#{name}) do\n"
       columns.each do |column|
-        s << "      column #{sequel_schema_definition(column)}"
+        schema << "      column #{sequel_schema_definition(column)}"
       end
-      s << "    end\n"
-      s << "  end\n" unless table_only
-      s << "end\n" unless table_only
-      s
+      schema << "    end\n"
+      schema << "  end\n" unless table_only
+      schema << "end\n" unless table_only
+      schema
     end
 
-    def json_schema(*) # :nodoc:
+    def json_schema(table_only: false)
       columns.map(&:to_hash).to_json
     end
 
-    # ActiveRecord schema definition
-    #
-    # @param column [DBF::Column]
-    # @return [String]
     def activerecord_schema_definition(column)
       "\"#{column.underscored_name}\", #{schema_data_type(column, :activerecord)}\n"
     end
 
-    # Sequel schema definition
-    #
-    # @param column [DBF::Column]
-    # @return [String]
     def sequel_schema_definition(column)
       ":#{column.underscored_name}, #{schema_data_type(column, :sequel)}\n"
     end
 
-    def schema_data_type(column, format = :activerecord) # :nodoc:
+    def schema_data_type(column, format = :activerecord)
       case column.type
       when 'N', 'F', 'I'
         number_data_type(column)
       when 'Y', 'D', 'T', 'L', 'M', 'B'
-        OTHER_DATA_TYPES[column.type]
+        SCHEMA_DATA_TYPES[column.type]
       else
         string_data_format(format, column)
       end
     end
 
     def number_data_type(column)
-      column.decimal > 0 ? ':float' : ':integer'
+      column.decimal.positive? ? ':float' : ':integer'
     end
 
     def string_data_format(format, column)
-      if format == :sequel
-        ":varchar, :size => #{column.length}"
-      else
-        ":string, :limit => #{column.length}"
-      end
+      size_option = format == :sequel ? 'size' : 'limit'
+      ":#{format == :sequel ? 'varchar' : 'string'}, :#{size_option} => #{column.length}"
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   # DBF::Database::Foxpro is the primary interface to a Visual Foxpro database
   # container (.dbc file). When using this database container, long fieldnames
@@ -9,6 +11,11 @@ module DBF
   # a linux server.
   module Database
     class Foxpro
+      OBJECT_TYPES = {
+        TABLE: 'Table',
+        FIELD: 'Field'
+      }.freeze
+
       # Opens a DBF::Database::Foxpro
       # Examples:
       #   # working with a database stored on the filesystem
@@ -19,12 +26,14 @@ module DBF
       #
       # @param path [String]
       def initialize(path)
+        raise ArgumentError, 'path must be a String' unless path.is_a?(String)
+
         @path = path
         @dirname = File.dirname(@path)
         @db = DBF::Table.new(@path)
         @tables = extract_dbc_data
       rescue Errno::ENOENT
-        raise DBF::FileNotFoundError, "file not found: #{data}"
+        raise DBF::FileNotFoundError, "Database file not found: #{@path}"
       end
 
       def table_names
@@ -65,27 +74,36 @@ module DBF
 
       private
 
-      # This method extracts the data from the database container. This is
-      # just an ordinary table with a treelike structure. Field definitions
-      # are in the same order as in the linked tables but only the long name
-      # is provided.
-      def extract_dbc_data # :nodoc:
-        data = {}
+      # Extracts and processes the database container structure
+      # @return [Hash] Processed table data with long field names
+      def extract_dbc_data
+        table_data = {}
+        
         @db.each do |record|
           next unless record
-
-          case record.objecttype
-          when 'Table'
-            # This is a related table
-            process_table record, data
-          when 'Field'
-            # This is a related field. The parentid points to the table object.
-            # Create using the parentid if the parentid is still unknown.
-            process_field record, data
-          end
+          process_record(record, table_data)
         end
 
-        data.values.to_h { |v| [v[:name], v[:fields]] }
+        normalize_table_data(table_data)
+      end
+
+      # Processes a single database record based on its object type
+      # @param record [DBF::Record] The record to process
+      # @param table_data [Hash] The accumulator for processed data
+      def process_record(record, table_data)
+        case record.objecttype
+        when OBJECT_TYPES[:TABLE]
+          process_table(record, table_data)
+        when OBJECT_TYPES[:FIELD]
+          process_field(record, table_data)
+        end
+      end
+
+      # Normalizes the table data into the final format
+      # @param table_data [Hash] Raw table data
+      # @return [Hash] Normalized table data
+      def normalize_table_data(table_data)
+        table_data.values.to_h { |v| [v[:name], v[:fields]] }
       end
 
       def process_table(record, data)
