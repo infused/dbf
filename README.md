@@ -14,7 +14,7 @@ DBF is a small, fast Ruby library for reading dBase, xBase, Clipper, and FoxPro 
 * Report bugs: <https://github.com/infused/dbf/issues>
 * Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the
   subject line
-* Change log: <https://github.com/infused/dbf/blob/master/CHANGELOG.md>
+* Change log: <https://github.com/infused/dbf/blob/main/CHANGELOG.md>
 
 NOTE: Beginning with version 4.3 we have dropped support for Ruby 3.0 and earlier.
 
