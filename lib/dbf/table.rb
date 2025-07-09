@@ -295,10 +295,9 @@ module DBF
     def memo_class # :nodoc:
       @memo_class ||= if foxpro?
         Memo::Foxpro
-        else
-          version == '83' ? Memo::Dbase3 : Memo::Dbase4
+      else
+        version == '83' ? Memo::Dbase3 : Memo::Dbase4
       end
-      
     end
 
     def memo_search_path(io) # :nodoc:
