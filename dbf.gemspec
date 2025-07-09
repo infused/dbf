@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README.md', 'CHANGELOG.md', 'LICENSE']
   s.files = Dir['README.md', 'CHANGELOG.md', 'LICENSE', '{bin,lib,spec}/**/*', 'dbf.gemspec']
   s.require_paths = ['lib']
-  s.required_rubygems_version = Gem::Requirement.new('>= 1.3.0')
-  s.required_ruby_version = Gem::Requirement.new('>= 3.0.0')
+  s.required_rubygems_version = Gem::Requirement.new('>= 3.2.3')
+  s.required_ruby_version = Gem::Requirement.new('>= 3.1.0')
   s.metadata['rubygems_mfa_required'] = 'true'
   s.add_dependency 'csv'
 end
