@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   class Header
     attr_reader :version, :record_count, :header_length, :record_length, :encoding_key, :encoding

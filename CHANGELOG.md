@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.1
+
+- Frozen string literals
+
 ## 5.1.0
 
 - Drop support for Ruby 3.0.x

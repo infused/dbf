@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   # An instance of DBF::Record represents a row in the DBF file
   class Record

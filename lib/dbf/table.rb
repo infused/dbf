@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   class FileNotFoundError < StandardError
   end

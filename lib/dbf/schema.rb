@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   # The Schema module is mixin for the Table class
   module Schema
@@ -47,7 +49,7 @@ module DBF
     end
 
     def activerecord_schema(*) # :nodoc:
-      s = "ActiveRecord::Schema.define do\n"
+      s = +"ActiveRecord::Schema.define do\n"
       s << "  create_table \"#{name}\" do |t|\n"
       columns.each do |column|
         s << "    t.column #{activerecord_schema_definition(column)}"
@@ -57,7 +59,7 @@ module DBF
     end
 
     def sequel_schema(table_only: false) # :nodoc:
-      s = ''
+      s = +''
       s << "Sequel.migration do\n" unless table_only
       s << "  change do\n " unless table_only
       s << "    create_table(:#{name}) do\n"

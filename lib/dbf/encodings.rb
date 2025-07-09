@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   ENCODINGS = {
     '01' => 'cp437',       # U.S. MS-DOS
