@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.0
+
+- Drop support for Ruby 3.0.x
+
 ## 5.0.1
 
 - Raise ArgumentError data is not a string or StringIO object
