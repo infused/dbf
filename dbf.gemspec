@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new('>= 1.3.0')
   s.required_ruby_version = Gem::Requirement.new('>= 3.0.0')
   s.metadata['rubygems_mfa_required'] = 'true'
-  s.add_runtime_dependency 'csv'
+  s.add_dependency 'csv'
 end
