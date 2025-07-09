@@ -3,25 +3,22 @@ require 'spec_helper'
 RSpec.describe DBF::Record do
   describe '#to_a' do
     let(:table) { DBF::Table.new fixture('dbase_83.dbf') }
-    let(:record0) { YAML.load_file(fixture('dbase_83_record_0.yml')) }
-    let(:record9) { YAML.load_file(fixture('dbase_83_record_9.yml')) }
 
     it 'returns an ordered array of attribute values' do
       record = table.record(0)
-      expect(record.to_a).to eq record0
+      expect(record.to_a).to eq YAML.load_file(fixture('dbase_83_record_0.yml'))
 
       record = table.record(9)
-      expect(record.to_a).to eq record9
+      expect(record.to_a).to eq YAML.load_file(fixture('dbase_83_record_9.yml'))
     end
 
     describe 'with missing memo file' do
       describe 'when opening a path' do
         let(:table) { DBF::Table.new fixture('dbase_83_missing_memo.dbf') }
-        let(:record0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
 
         it 'returns nil values for memo fields' do
           record = table.record(0)
-          expect(record.to_a).to eq record0
+          expect(record.to_a).to eq YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml'))
         end
       end
     end
@@ -29,11 +26,10 @@ RSpec.describe DBF::Record do
     describe 'when opening StringIO' do
       let(:data) { StringIO.new(File.read(fixture('dbase_83_missing_memo.dbf'))) }
       let(:table) { DBF::Table.new(data) }
-      let(:record0) { YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml')) }
 
       it 'returns nil values for memo fields' do
         record = table.record(0)
-        expect(record.to_a).to eq record0
+        expect(record.to_a).to eq YAML.load_file(fixture('dbase_83_missing_memo_record_0.yml'))
       end
     end
   end
@@ -44,7 +40,7 @@ RSpec.describe DBF::Record do
 
     describe 'when other does not have attributes' do
       it 'returns false' do
-        expect((record == instance_double(DBF::Record))).to be_falsey
+        expect(record == instance_double(DBF::Record)).to be_falsey
       end
     end
 
