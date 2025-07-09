@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # encoding: ascii-8bit
 
 require 'spec_helper'

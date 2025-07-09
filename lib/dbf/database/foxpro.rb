@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   # DBF::Database::Foxpro is the primary interface to a Visual Foxpro database
   # container (.dbc file). When using this database container, long fieldnames

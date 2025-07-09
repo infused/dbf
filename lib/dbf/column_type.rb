@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DBF
   module ColumnType
     class Base
@@ -95,7 +97,7 @@ module DBF
       # @param value [String]
       def type_cast(value)
         if encoding && !value.nil?
-          value.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
+          value.dup.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
         else
           value
         end
@@ -105,7 +107,7 @@ module DBF
     class General < Base
       # @param value [String]
       def type_cast(value)
-        value
+        value&.dup&.force_encoding(Encoding::ASCII_8BIT)
       end
     end
 
