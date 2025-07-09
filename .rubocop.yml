@@ -1,4 +1,5 @@
-require:
+plugins:
+  - rubocop-rake
   - rubocop-rspec
   - rubocop-performance
 
@@ -75,7 +76,7 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Enabled: false
 
 RSpec/AnyInstance:
