@@ -1,6 +1,7 @@
 .DS_Store
 .bundle
 .byebug_history
+.claude
 .rspec
 .rvmrc
 .vscode
