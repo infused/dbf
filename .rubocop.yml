@@ -76,6 +76,11 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
+Naming/PredicateMethod:
+  Enabled: true
+  AllowedMethods:
+    - type_cast
+
 Naming/PredicatePrefix:
   Enabled: false
 
