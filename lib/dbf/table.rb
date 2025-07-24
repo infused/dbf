@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'column_parser'
+
 module DBF
   class FileNotFoundError < StandardError
   end
@@ -235,19 +237,18 @@ module DBF
         @data.seek(header_size)
         [].tap do |columns|
           until end_of_record?
-            args = case version
-            when '02'
-              [self, *@data.read(header_size * 2).unpack('A11 a C'), 0]
-            when '04', '8c'
-              [self, *@data.read(48).unpack('A32 a C C x13')]
-            else
-              [self, *@data.read(header_size).unpack('A11 a x4 C2')]
-            end
-
+            raw_data = read_column_data
+            parsed_data = ColumnParser.parse_column_data(raw_data, version)
+            args = ColumnParser.build_column_args(self, parsed_data, version)
             columns << Column.new(*args)
           end
         end
       end
+    end
+
+    def read_column_data
+      data_size = ColumnParser.data_size_for_version(version, header_size)
+      @data.read(data_size)
     end
 
     def header_size
