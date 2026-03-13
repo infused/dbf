@@ -115,7 +115,7 @@ module DBF
     class String < Base
       # @param value [String]
       def type_cast(value)
-        value = value.strip
+        value.strip!
         @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace) : value
       end
     end
