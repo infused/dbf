@@ -2,8 +2,6 @@
 
 module DBF
   class Column
-    extend Forwardable
-
     class LengthError < StandardError
     end
 
