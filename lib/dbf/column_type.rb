@@ -113,10 +113,21 @@ module DBF
     end
 
     class String < Base
+      def initialize(column)
+        super
+        @target_encoding = Encoding.default_external
+        @needs_encode = @encoding && @encoding != @target_encoding
+      end
+
       # @param value [String]
       def type_cast(value)
         value.strip!
-        @encoding ? value.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace) : value
+        if @encoding
+          value.force_encoding(@encoding)
+          @needs_encode ? value.encode(@target_encoding, undef: :replace, invalid: :replace) : value
+        else
+          value
+        end
       end
     end
   end
