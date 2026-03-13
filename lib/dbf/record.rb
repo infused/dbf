@@ -9,9 +9,9 @@ module DBF
     # @param columns [Column]
     # @param version [String]
     # @param memo [DBF::Memo]
-    def initialize(data, columns, version, memo)
+    def initialize(data, columns, version, memo, offset = 0)
       @data = data
-      @offset = 0
+      @offset = offset
       @columns = columns
       @version = version
       @memo = memo

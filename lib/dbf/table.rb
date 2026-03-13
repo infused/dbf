@@ -119,7 +119,22 @@ module DBF
     #
     # @yield [nil, DBF::Record]
     def each
-      record_count.times { |i| yield record(i) }
+      return enum_for(:each) unless block_given?
+      return if columns.empty?
+
+      @data.seek(header_length)
+      rl = record_length
+      cols = columns
+      ver = version
+      memo = @memo
+      record_count.times do
+        raw = @data.read(rl)
+        if raw && raw.getbyte(0) != 0x2A
+          yield DBF::Record.new(raw, cols, ver, memo, 1)
+        else
+          yield nil
+        end
+      end
     end
 
     # @return [String]
