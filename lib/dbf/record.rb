@@ -71,8 +71,12 @@ module DBF
       @to_a ||= begin
         data = @data
         offset = @offset
-        result = Array.new(@columns.length)
-        @columns.each_with_index do |column, i|
+        columns = @columns
+        col_count = columns.length
+        result = Array.new(col_count)
+        i = 0
+        while i < col_count
+          column = columns[i]
           len = column.length
           if column.memo?
             if @memo
@@ -93,6 +97,7 @@ module DBF
               result[i] = column.type_cast(value)
             end
           end
+          i += 1
         end
         @offset = offset
         result
