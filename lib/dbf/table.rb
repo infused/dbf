@@ -263,7 +263,7 @@ module DBF
 
     def deleted_record? # :nodoc:
       flag = @data.read(1)
-      flag ? flag.unpack1('a') == '*' : true
+      flag ? flag.getbyte(0) == 0x2A : true
     end
 
     def end_of_record? # :nodoc:
