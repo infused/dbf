@@ -57,8 +57,26 @@ module DBF
     # @return [Array]
     def to_a
       @to_a ||= begin
+        data = @data
+        offset = @offset
         result = Array.new(@columns.length)
-        @columns.each_with_index { |column, i| result[i] = init_attribute(column) }
+        @columns.each_with_index do |column, i|
+          if column.memo?
+            if @memo
+              memo_data = data.byteslice(offset, column.length)
+              offset += column.length
+              memo_data = memo_data.unpack1('V') if %w[30 31].include?(@version)
+              result[i] = column.type_cast(@memo.get(memo_data.to_i))
+            else
+              offset += column.length
+              result[i] = nil
+            end
+          else
+            result[i] = column.type_cast(data.byteslice(offset, column.length))
+            offset += column.length
+          end
+        end
+        @offset = offset
         result
       end
     end
