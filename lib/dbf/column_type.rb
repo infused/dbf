@@ -69,7 +69,8 @@ module DBF
     class Boolean < Base
       # @param value [String]
       def type_cast(value)
-        value.strip.match?(/^(y|t)$/i)
+        c = value.getbyte(0)
+        c == 89 || c == 121 || c == 84 || c == 116 # Y y T t
       end
     end
 
