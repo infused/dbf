@@ -23,7 +23,10 @@ module DBF
     class Number < Base
       # @param value [String]
       def type_cast(value)
-        return nil if value.strip.empty?
+        i = 0
+        len = value.bytesize
+        i += 1 while i < len && value.getbyte(i) == 32
+        return nil if i == len
 
         @decimal.zero? ? value.to_i : value.to_f
       end
