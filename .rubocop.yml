@@ -136,6 +136,9 @@ Style/FormatStringToken:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Style/MultipleComparison:
+  Enabled: false
+
 Style/NumericPredicate:
   Enabled: false
 

@@ -19,8 +19,8 @@ def count_allocations
   after[:TOTAL] - before[:TOTAL]
 end
 
-def bench(name, warmup: WARMUP, iterations: ITERATIONS)
-  warmup.times { yield }
+def bench(name, warmup: WARMUP, iterations: ITERATIONS, &block)
+  warmup.times(&block)
   GC.compact if GC.respond_to?(:compact)
 
   times = iterations.times.map do
@@ -30,7 +30,7 @@ def bench(name, warmup: WARMUP, iterations: ITERATIONS)
     Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0
   end
 
-  allocations = count_allocations { yield }
+  allocations = count_allocations(&block)
 
   median = times.sort[times.length / 2]
   {

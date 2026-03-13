@@ -40,12 +40,10 @@ module DBF
       elsif @column_offsets
         index = column_name_index(key)
         index ? column_value(index) : nil
-      else
-        if attributes.key?(key)
-          attributes[key]
+      elsif attributes.key?(key)
+        attributes[key]
         elsif (index = underscored_column_names.index(key))
           attributes[@columns[index].name]
-        end
       end
     end
 
@@ -91,10 +89,10 @@ module DBF
           else
             value = data.byteslice(offset, len)
             offset += len
-            if column.skip_blank? && value.count(' ') == len
-              result[i] = column.blank_value
+            result[i] = if column.skip_blank? && value.count(' ') == len
+              column.blank_value
             else
-              result[i] = column.type_cast(value)
+              column.type_cast(value)
             end
           end
           i += 1

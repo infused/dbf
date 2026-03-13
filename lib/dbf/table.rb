@@ -148,10 +148,10 @@ module DBF
 
       pos = 0
       record_count.times do
-        if buf.getbyte(pos) != 0x2A
-          yield DBF::Record.new(buf, cols, ver, memo, pos + 1, col_offsets)
-        else
+        if buf.getbyte(pos) == 0x2A
           yield nil
+        else
+          yield DBF::Record.new(buf, cols, ver, memo, pos + 1, col_offsets)
         end
         pos += rl
       end
@@ -189,14 +189,14 @@ module DBF
     # @param command [Integer, Symbol] command
     # @param options [optional, Hash] options Hash of search parameters
     # @yield [optional, DBF::Record, NilClass]
-    def find(command, options = {}, &block)
+    def find(command, options = {}, &)
       case command
       when Integer
         record(command)
       when Array
         command.map { |i| record(i) }
       when :all
-        find_all(options, &block)
+        find_all(options, &)
       when :first
         find_first(options)
       end

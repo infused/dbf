@@ -29,7 +29,7 @@ module DBF
     end
 
     class Number < Base
-      def skip_blank?; true; end
+      def skip_blank? = true
 
       # @param value [String]
       def type_cast(value)
@@ -80,8 +80,8 @@ module DBF
     end
 
     class Boolean < Base
-      def skip_blank?; true; end
-      def blank_value; false; end
+      def skip_blank? = true
+      def blank_value = false
 
       # @param value [String]
       def type_cast(value)
@@ -91,8 +91,8 @@ module DBF
     end
 
     class Date < Base
-      def skip_blank?; true; end
-      def blank_value; false; end
+      def skip_blank? = true
+      def blank_value = false
 
       # @param value [String]
       def type_cast(value)
@@ -138,8 +138,8 @@ module DBF
         @needs_encode = @encoding && @encoding != @target_encoding
       end
 
-      def skip_blank?; true; end
-      def blank_value; ''; end
+      def skip_blank? = true
+      def blank_value = ''
 
       # @param value [String]
       def type_cast(value)
