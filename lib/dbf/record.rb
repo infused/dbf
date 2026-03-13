@@ -56,7 +56,11 @@ module DBF
     #
     # @return [Array]
     def to_a
-      @to_a ||= @columns.map { |column| init_attribute(column) }
+      @to_a ||= begin
+        result = Array.new(@columns.length)
+        @columns.each_with_index { |column, i| result[i] = init_attribute(column) }
+        result
+      end
     end
 
     private
