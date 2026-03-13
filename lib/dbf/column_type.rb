@@ -11,6 +11,14 @@ module DBF
         @decimal = column.decimal
         @encoding = column.encoding
       end
+
+      def blank_value
+        nil
+      end
+
+      def skip_blank?
+        false
+      end
     end
 
     class Nil < Base
@@ -21,6 +29,8 @@ module DBF
     end
 
     class Number < Base
+      def skip_blank?; true; end
+
       # @param value [String]
       def type_cast(value)
         i = 0
@@ -70,6 +80,9 @@ module DBF
     end
 
     class Boolean < Base
+      def skip_blank?; true; end
+      def blank_value; false; end
+
       # @param value [String]
       def type_cast(value)
         c = value.getbyte(0)
@@ -78,6 +91,9 @@ module DBF
     end
 
     class Date < Base
+      def skip_blank?; true; end
+      def blank_value; false; end
+
       # @param value [String]
       def type_cast(value)
         value.match?(/\d{8}/) && ::Date.strptime(value, '%Y%m%d')
@@ -121,6 +137,9 @@ module DBF
         @target_encoding = Encoding.default_external
         @needs_encode = @encoding && @encoding != @target_encoding
       end
+
+      def skip_blank?; true; end
+      def blank_value; ''; end
 
       # @param value [String]
       def type_cast(value)

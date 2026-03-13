@@ -8,7 +8,7 @@ module DBF
     class NameError < StandardError
     end
 
-    attr_reader :table, :name, :type, :length, :decimal, :encoding
+    attr_reader :table, :name, :type, :length, :decimal, :encoding, :blank_value
 
     # rubocop:disable Style/MutableConstant
     TYPE_CAST_CLASS = {
@@ -45,9 +45,15 @@ module DBF
       @decimal = decimal
       @version = table.version
       @memo = type == 'M'
+      @skip_blank = type_cast_class.skip_blank?
+      @blank_value = type_cast_class.blank_value
 
       validate_length
       validate_name
+    end
+
+    def skip_blank?
+      @skip_blank
     end
 
     # Returns true if the column is a memo

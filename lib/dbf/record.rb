@@ -61,19 +61,25 @@ module DBF
         offset = @offset
         result = Array.new(@columns.length)
         @columns.each_with_index do |column, i|
+          len = column.length
           if column.memo?
             if @memo
-              memo_data = data.byteslice(offset, column.length)
-              offset += column.length
+              memo_data = data.byteslice(offset, len)
+              offset += len
               memo_data = memo_data.unpack1('V') if @version == '30' || @version == '31'
               result[i] = column.type_cast(@memo.get(memo_data.to_i))
             else
-              offset += column.length
+              offset += len
               result[i] = nil
             end
           else
-            result[i] = column.type_cast(data.byteslice(offset, column.length))
-            offset += column.length
+            value = data.byteslice(offset, len)
+            offset += len
+            if column.skip_blank? && value.count(' ') == len
+              result[i] = column.blank_value
+            else
+              result[i] = column.type_cast(value)
+            end
           end
         end
         @offset = offset
