@@ -107,6 +107,21 @@ module DBF
       @column_names ||= columns.map(&:name)
     end
 
+    # Cumulative byte offsets for each column within a record
+    #
+    # @return [Array<Integer>]
+    def column_offsets
+      @column_offsets ||= begin
+        offsets = Array.new(columns.length)
+        sum = 0
+        columns.each_with_index do |col, i|
+          offsets[i] = sum
+          sum += col.length
+        end
+        offsets
+      end
+    end
+
     # All columns
     #
     # @return [Array]
@@ -127,13 +142,14 @@ module DBF
       cols = columns
       ver = version
       memo = @memo
+      col_offsets = column_offsets
       buf = @data.read(rl * record_count)
       return unless buf
 
       pos = 0
       record_count.times do
         if buf.getbyte(pos) != 0x2A
-          yield DBF::Record.new(buf, cols, ver, memo, pos + 1)
+          yield DBF::Record.new(buf, cols, ver, memo, pos + 1, col_offsets)
         else
           yield nil
         end
@@ -209,7 +225,7 @@ module DBF
       return nil if deleted_record?
 
       record_data = @data.read(record_length)
-      DBF::Record.new(record_data, columns, version, @memo)
+      DBF::Record.new(record_data, columns, version, @memo, 0, column_offsets)
     end
 
     alias row record

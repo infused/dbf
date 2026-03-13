@@ -9,12 +9,13 @@ module DBF
     # @param columns [Column]
     # @param version [String]
     # @param memo [DBF::Memo]
-    def initialize(data, columns, version, memo, offset = 0)
+    def initialize(data, columns, version, memo, offset = 0, column_offsets = nil)
       @data = data
       @offset = offset
       @columns = columns
       @version = version
       @memo = memo
+      @column_offsets = column_offsets
     end
 
     # Equality
@@ -30,10 +31,21 @@ module DBF
     # @param name [String, Symbol] key
     def [](name)
       key = name.to_s
-      if attributes.key?(key)
-        attributes[key]
-      elsif (index = underscored_column_names.index(key))
-        attributes[@columns[index].name]
+      if @to_a
+        if attributes.key?(key)
+          attributes[key]
+        elsif (index = underscored_column_names.index(key))
+          attributes[@columns[index].name]
+        end
+      elsif @column_offsets
+        index = column_name_index(key)
+        index ? column_value(index) : nil
+      else
+        if attributes.key?(key)
+          attributes[key]
+        elsif (index = underscored_column_names.index(key))
+          attributes[@columns[index].name]
+        end
       end
     end
 
@@ -89,40 +101,45 @@ module DBF
 
     private
 
+    def column_name_index(key) # :nodoc:
+      column_names.index(key) || underscored_column_names.index(key)
+    end
+
+    def column_value(index) # :nodoc:
+      column = @columns[index]
+      col_offset = @offset + @column_offsets[index]
+      len = column.length
+
+      if column.memo?
+        if @memo
+          memo_data = @data.byteslice(col_offset, len)
+          memo_data = memo_data.unpack1('V') if @version == '30' || @version == '31'
+          column.type_cast(@memo.get(memo_data.to_i))
+        end
+      else
+        value = @data.byteslice(col_offset, len)
+        if column.skip_blank? && value.count(' ') == len
+          column.blank_value
+        else
+          column.type_cast(value)
+        end
+      end
+    end
+
     def column_names # :nodoc:
       @column_names ||= @columns.map(&:name)
     end
 
-    def get_data(column) # :nodoc:
-      result = @data.byteslice(@offset, column.length)
-      @offset += column.length
-      result
-    end
-
-    def get_memo(column) # :nodoc:
-      if @memo
-        @memo.get(memo_start_block(column))
-      else
-        # the memo file is missing, so skip ahead to next column and return nil
-        @offset += column.length
-        nil
-      end
-    end
-
-    def init_attribute(column) # :nodoc:
-      value = column.memo? ? get_memo(column) : get_data(column)
-      column.type_cast(value)
-    end
-
-    def memo_start_block(column) # :nodoc:
-      data = get_data(column)
-      data = data.unpack1('V') if @version == '30' || @version == '31'
-      data.to_i
-    end
-
     def method_missing(method, *args) # :nodoc:
-      if (index = underscored_column_names.index(method.to_s))
-        attributes[@columns[index].name]
+      key = method.to_s
+      if (index = underscored_column_names.index(key))
+        if @to_a
+          attributes[@columns[index].name]
+        elsif @column_offsets
+          column_value(index)
+        else
+          attributes[@columns[index].name]
+        end
       else
         super
       end
