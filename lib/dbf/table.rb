@@ -127,13 +127,17 @@ module DBF
       cols = columns
       ver = version
       memo = @memo
+      buf = @data.read(rl * record_count)
+      return unless buf
+
+      pos = 0
       record_count.times do
-        raw = @data.read(rl)
-        if raw && raw.getbyte(0) != 0x2A
-          yield DBF::Record.new(raw, cols, ver, memo, 1)
+        if buf.getbyte(pos) != 0x2A
+          yield DBF::Record.new(buf, cols, ver, memo, pos + 1)
         else
           yield nil
         end
+        pos += rl
       end
     end
 
