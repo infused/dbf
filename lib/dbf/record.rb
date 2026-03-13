@@ -65,7 +65,7 @@ module DBF
             if @memo
               memo_data = data.byteslice(offset, column.length)
               offset += column.length
-              memo_data = memo_data.unpack1('V') if %w[30 31].include?(@version)
+              memo_data = memo_data.unpack1('V') if @version == '30' || @version == '31'
               result[i] = column.type_cast(@memo.get(memo_data.to_i))
             else
               offset += column.length
@@ -110,7 +110,7 @@ module DBF
 
     def memo_start_block(column) # :nodoc:
       data = get_data(column)
-      data = data.unpack1('V') if %w[30 31].include?(@version)
+      data = data.unpack1('V') if @version == '30' || @version == '31'
       data.to_i
     end
 
