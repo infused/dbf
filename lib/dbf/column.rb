@@ -80,7 +80,10 @@ module DBF
     private
 
     def clean(value) # :nodoc:
-      table.encode_string(value.strip.partition("\x00").first)
+      value = value.strip
+      null_index = value.index("\x00")
+      value = value.byteslice(0, null_index) if null_index
+      table.encode_string(value)
     end
 
     def type_cast_class # :nodoc:
