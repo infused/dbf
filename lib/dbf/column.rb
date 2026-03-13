@@ -12,8 +12,6 @@ module DBF
 
     attr_reader :table, :name, :type, :length, :decimal, :encoding
 
-    def_delegator :type_cast_class, :type_cast
-
     # rubocop:disable Style/MutableConstant
     TYPE_CAST_CLASS = {
       N: ColumnType::Number,
@@ -48,6 +46,7 @@ module DBF
       @length = length
       @decimal = decimal
       @version = table.version
+      @memo = type == 'M'
 
       validate_length
       validate_name
@@ -57,7 +56,12 @@ module DBF
     #
     # @return [Boolean]
     def memo?
-      @memo ||= type == 'M'
+      @memo
+    end
+
+    # @param value [String]
+    def type_cast(value)
+      type_cast_class.type_cast(value)
     end
 
     # Returns a Hash with :name, :type, :length, and :decimal keys
