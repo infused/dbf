@@ -10,7 +10,8 @@ module DBF
     # @param version [String]
     # @param memo [DBF::Memo]
     def initialize(data, columns, version, memo)
-      @data = StringIO.new(data)
+      @data = data
+      @offset = 0
       @columns = columns
       @version = version
       @memo = memo
@@ -65,15 +66,17 @@ module DBF
     end
 
     def get_data(column) # :nodoc:
-      @data.read(column.length)
+      result = @data.byteslice(@offset, column.length)
+      @offset += column.length
+      result
     end
 
     def get_memo(column) # :nodoc:
       if @memo
         @memo.get(memo_start_block(column))
       else
-        # the memo file is missing, so read ahead to next record and return nil
-        @data.read(column.length)
+        # the memo file is missing, so skip ahead to next column and return nil
+        @offset += column.length
         nil
       end
     end
