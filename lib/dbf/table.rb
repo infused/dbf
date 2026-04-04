@@ -13,42 +13,9 @@ module DBF
     extend Forwardable
     include Enumerable
     include ::DBF::Schema
+    include ::DBF::Find
 
-    DBASE2_HEADER_SIZE = 8
-    DBASE3_HEADER_SIZE = 32
-    DBASE7_HEADER_SIZE = 68
-
-    VERSIONS = {
-      '02' => 'FoxBase',
-      '03' => 'dBase III without memo file',
-      '04' => 'dBase IV without memo file',
-      '05' => 'dBase V without memo file',
-      '07' => 'Visual Objects 1.x',
-      '30' => 'Visual FoxPro',
-      '32' => 'Visual FoxPro with field type Varchar or Varbinary',
-      '31' => 'Visual FoxPro with AutoIncrement field',
-      '43' => 'dBASE IV SQL table files, no memo',
-      '63' => 'dBASE IV SQL system files, no memo',
-      '7b' => 'dBase IV with memo file',
-      '83' => 'dBase III with memo file',
-      '87' => 'Visual Objects 1.x with memo file',
-      '8b' => 'dBase IV with memo file',
-      '8c' => 'dBase 7',
-      '8e' => 'dBase IV with SQL table',
-      'cb' => 'dBASE IV SQL table files, with memo',
-      'f5' => 'FoxPro with memo file',
-      'fb' => 'FoxPro without memo file'
-    }.freeze
-
-    FOXPRO_VERSIONS = {
-      '30' => 'Visual FoxPro',
-      '31' => 'Visual FoxPro with AutoIncrement field',
-      'f5' => 'FoxPro with memo file',
-      'fb' => 'FoxPro without memo file'
-    }.freeze
-
-    attr_accessor :encoding
-    attr_writer :name
+    attr_reader :encoding
 
     def_delegator :header, :header_length
     def_delegator :header, :record_count
@@ -76,10 +43,12 @@ module DBF
     # @param data [String, StringIO] data Path to the dbf file or a StringIO object
     # @param memo [optional String, StringIO] memo Path to the memo file or a StringIO object
     # @param encoding [optional String, Encoding] encoding Name of the encoding or an Encoding object
-    def initialize(data, memo = nil, encoding = nil)
-      @data = open_data(data)
-      @encoding = encoding || header.encoding || Encoding.default_external
-      @memo = open_memo(data, memo)
+    def initialize(data, memo = nil, encoding = nil, name: nil)
+      @data = FileHandler.open_data(data)
+      @user_encoding = encoding
+      @encoding = determine_encoding
+      @memo = FileHandler.open_memo(data, memo, version_config.memo_class, version)
+      @name = name
       yield self if block_given?
     end
 
@@ -93,11 +62,7 @@ module DBF
 
     # @return [TrueClass, FalseClass]
     def closed?
-      if @memo
-        @data.closed? && @memo.closed?
-      else
-        @data.closed?
-      end
+      @data.closed? && (!@memo || @memo.closed?)
     end
 
     # Column names
@@ -112,14 +77,13 @@ module DBF
     # @return [Array<Integer>]
     def column_offsets
       @column_offsets ||= begin
-        offsets = Array.new(columns.length)
         sum = 0
-        columns.each_with_index do |col, i|
-          offsets[i] = sum
-          sum += col.length
-        end
-        offsets
+        columns.map { |col| sum.tap { sum += col.length } }
       end
+    end
+
+    def record_context
+      @record_context ||= RecordContext.new(columns: columns, version: version, memo: @memo, column_offsets: column_offsets)
     end
 
     # All columns
@@ -133,73 +97,16 @@ module DBF
     # if the record has been marked as deleted.
     #
     # @yield [nil, DBF::Record]
-    def each
+    def each(&)
       return enum_for(:each) unless block_given?
       return if columns.empty?
 
-      @data.seek(header_length)
-      rl = record_length
-      cols = columns
-      ver = version
-      memo = @memo
-      col_offsets = column_offsets
-      buf = @data.read(rl * record_count)
-      return unless buf
-
-      pos = 0
-      record_count.times do
-        if buf.getbyte(pos) == 0x2A
-          yield nil
-        else
-          yield DBF::Record.new(buf, cols, ver, memo, pos + 1, col_offsets)
-        end
-        pos += rl
-      end
+      RecordIterator.new(@data, record_context, header_length, record_length, record_count).each(&)
     end
 
     # @return [String]
     def filename
-      return unless @data.respond_to?(:path)
-
-      File.basename(@data.path)
-    end
-
-    # Find records using a simple ActiveRecord-like syntax.
-    #
-    # Examples:
-    #   table = DBF::Table.new 'mydata.dbf'
-    #
-    #   # Find record number 5
-    #   table.find(5)
-    #
-    #   # Find all records for Keith Morrison
-    #   table.find :all, first_name: "Keith", last_name: "Morrison"
-    #
-    #   # Find first record
-    #   table.find :first, first_name: "Keith"
-    #
-    # The <b>command</b> may be a record index, :all, or :first.
-    # <b>options</b> is optional and, if specified, should be a hash where the
-    # keys correspond to column names in the database.  The values will be
-    # matched exactly with the value in the database.  If you specify more
-    # than one key, all values must match in order for the record to be
-    # returned.  The equivalent SQL would be "WHERE key1 = 'value1'
-    # AND key2 = 'value2'".
-    #
-    # @param command [Integer, Symbol] command
-    # @param options [optional, Hash] options Hash of search parameters
-    # @yield [optional, DBF::Record, NilClass]
-    def find(command, options = {}, &)
-      case command
-      when Integer
-        record(command)
-      when Array
-        command.map { |i| record(i) }
-      when :all
-        find_all(options, &)
-      when :first
-        find_first(options)
-      end
+      File.basename(@data.path) if @data.is_a?(File)
     end
 
     # @return [TrueClass, FalseClass]
@@ -225,7 +132,7 @@ module DBF
       return nil if deleted_record?
 
       record_data = @data.read(record_length)
-      DBF::Record.new(record_data, columns, version, @memo, 0, column_offsets)
+      DBF::Record.new(record_data, record_context)
     end
 
     alias row record
@@ -235,8 +142,7 @@ module DBF
     #
     # @param [optional String] path Defaults to STDOUT
     def to_csv(path = nil)
-      out_io = path ? File.open(path, 'w') : $stdout
-      csv = CSV.new(out_io, force_quotes: true)
+      csv = CSV.new(path ? File.open(path, 'w') : $stdout, force_quotes: true)
       csv << column_names
       each { |record| csv << record.to_a }
     end
@@ -245,7 +151,7 @@ module DBF
     #
     # @return [String]
     def version_description
-      VERSIONS[version]
+      version_config.version_description
     end
 
     # Encode string
@@ -265,35 +171,16 @@ module DBF
 
     private
 
-    def build_columns # :nodoc:
-      safe_seek do
-        @data.seek(header_size)
-        [].tap do |columns|
-          until end_of_record?
-            args = case version
-            when '02'
-              [self, *@data.read(header_size * 2).unpack('A11 a C'), 0]
-            when '04', '8c'
-              [self, *@data.read(48).unpack('A32 a C C x13')]
-            else
-              [self, *@data.read(header_size).unpack('A11 a x4 C2')]
-            end
-
-            columns << Column.new(*args)
-          end
-        end
-      end
+    def version_config
+      @version_config ||= VersionConfig.new(version)
     end
 
-    def header_size
-      case version
-      when '02'
-        DBASE2_HEADER_SIZE
-      when '04', '8c'
-        DBASE7_HEADER_SIZE
-      else 
-        DBASE3_HEADER_SIZE
-      end
+    def determine_encoding
+      @user_encoding || header.encoding || Encoding.default_external
+    end
+
+    def build_columns # :nodoc:
+      ColumnBuilder.new(self, @data, version_config).build
     end
 
     def deleted_record? # :nodoc:
@@ -301,68 +188,10 @@ module DBF
       flag ? flag.getbyte(0) == 0x2A : true
     end
 
-    def end_of_record? # :nodoc:
-      safe_seek { @data.read(1).ord == 13 }
-    end
-
-    def find_all(options) # :nodoc:
-      select do |record|
-        next unless record&.match?(options)
-
-        yield record if block_given?
-        record
-      end
-    end
-
-    def find_first(options) # :nodoc:
-      detect { |record| record&.match?(options) }
-    end
-
-    def foxpro? # :nodoc:
-      FOXPRO_VERSIONS.key?(version)
-    end
-
     def header # :nodoc:
       @header ||= safe_seek do
         @data.seek(0)
-        Header.new(@data.read(DBASE3_HEADER_SIZE))
-      end
-    end
-
-    def memo_class # :nodoc:
-      @memo_class ||= if foxpro?
-        Memo::Foxpro
-      else
-        version == '83' ? Memo::Dbase3 : Memo::Dbase4
-      end
-    end
-
-    def memo_search_path(io) # :nodoc:
-      dirname = File.dirname(io)
-      basename = File.basename(io, '.*')
-      "#{dirname}/#{basename}*.{fpt,FPT,dbt,DBT}"
-    end
-
-    def open_data(data) # :nodoc:
-      case data
-      when StringIO
-        data
-      when String
-        File.open(data, 'rb')
-      else
-        raise ArgumentError, 'data must be a file path or StringIO object'
-      end
-    rescue Errno::ENOENT
-      raise DBF::FileNotFoundError, "file not found: #{data}"
-    end
-
-    def open_memo(data, memo = nil) # :nodoc:
-      if memo
-        meth = memo.is_a?(StringIO) ? :new : :open
-        memo_class.send(meth, memo, version)
-      elsif !data.is_a?(StringIO)
-        files = Dir.glob(memo_search_path(data))
-        files.any? ? memo_class.open(files.first, version) : nil
+        Header.new(@data.read(VersionConfig::DBASE3_HEADER_SIZE))
       end
     end
 

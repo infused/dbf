@@ -9,35 +9,37 @@ require 'dbf'
 FIXTURES = File.expand_path('fixtures', __dir__)
 WARMUP = 2
 ITERATIONS = 10
+CLOCK_TYPE = Process::CLOCK_MONOTONIC
 
 def count_allocations
   GC.disable
-  before = ObjectSpace.count_objects
+  before_count = ObjectSpace.count_objects[:TOTAL]
   yield
-  after = ObjectSpace.count_objects
+  after_count = ObjectSpace.count_objects[:TOTAL]
   GC.enable
-  after[:TOTAL] - before[:TOTAL]
+  after_count - before_count
+end
+
+def measure_time
+  GC.start
+  start_time = Process.clock_gettime(CLOCK_TYPE)
+  yield
+  Process.clock_gettime(CLOCK_TYPE) - start_time
 end
 
 def bench(name, warmup: WARMUP, iterations: ITERATIONS, &block)
   warmup.times(&block)
-  GC.compact if GC.respond_to?(:compact)
+  GC.compact
 
-  times = iterations.times.map do
-    GC.start
-    t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-    yield
-    Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0
-  end
-
+  durations = iterations.times.map { measure_time(&block) }
   allocations = count_allocations(&block)
+  min, max = durations.minmax
 
-  median = times.sort[times.length / 2]
   {
     name: name,
-    median_ms: (median * 1000).round(3),
-    min_ms: (times.min * 1000).round(3),
-    max_ms: (times.max * 1000).round(3),
+    median_ms: (durations.sort[durations.length / 2] * 1000).round(3),
+    min_ms: (min * 1000).round(3),
+    max_ms: (max * 1000).round(3),
     allocations: allocations
   }
 end

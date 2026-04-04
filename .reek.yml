@@ -1,0 +1,39 @@
+exclude_paths:
+  - spec
+
+detectors:
+  IrresponsibleModule:
+    enabled: false
+  TooManyMethods:
+    exclude:
+      - DBF::Table
+  TooManyInstanceVariables:
+    max_instance_variables: 10
+  TooManyStatements:
+    max_statements: 15
+  BooleanParameter:
+    exclude:
+      - DBF::Schema#schema
+      - DBF::Schema#sequel_schema
+  ControlParameter:
+    exclude:
+      - DBF::Find#find_all_records
+      - DBF::Schema#sequel_schema
+  DuplicateMethodCall:
+    exclude:
+      - count_allocations
+      - measure_time
+  LongParameterList:
+    max_params: 5
+  UncommunicativeModuleName:
+    accept:
+      - Dbase3
+      - Dbase4
+  FeatureEnvy:
+    enabled: true
+    exclude:
+      - DBF::ColumnType::Number#type_cast
+      - DBF::Database::Foxpro#build_table_data
+      - DBF::Schema#sequel_schema
+  UtilityFunction:
+    enabled: false

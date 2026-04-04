@@ -1,5 +1,5 @@
-# frozen_string_literal: true
 # encoding: ascii-8bit
+# frozen_string_literal: true
 
 require 'spec_helper'
 

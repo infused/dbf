@@ -19,6 +19,14 @@ module DBF
       def skip_blank?
         false
       end
+
+      def decode(raw, &_memo_handler)
+        if skip_blank? && raw.count(' ') == raw.length
+          blank_value
+        else
+          type_cast(raw)
+        end
+      end
     end
 
     class Nil < Base
@@ -33,12 +41,9 @@ module DBF
 
       # @param value [String]
       def type_cast(value)
-        i = 0
-        len = value.bytesize
-        i += 1 while i < len && value.getbyte(i) == 32
-        return nil if i == len
+        return nil if value.empty?
 
-        @decimal.zero? ? value.to_i : value.to_f
+        decimal.zero? ? value.to_i : value.to_f
       end
     end
 
@@ -56,12 +61,12 @@ module DBF
       end
     end
 
-    class SignedLong2 < Base
+    class AutoIncrement < Base
       # @param value [String]
       def type_cast(value)
-        s = value.unpack1('B*')
-        sign_multiplier = s[0] == '0' ? -1 : 1
-        s[1, 31].to_i(2) * sign_multiplier
+        bits = value.unpack1('B*')
+        sign_multiplier = bits[0] == '0' ? -1 : 1
+        bits[1, 31].to_i(2) * sign_multiplier
       end
     end
 
@@ -85,8 +90,8 @@ module DBF
 
       # @param value [String]
       def type_cast(value)
-        c = value.getbyte(0)
-        c == 89 || c == 121 || c == 84 || c == 116 # Y y T t
+        byte = value.getbyte(0)
+        byte == 89 || byte == 121 || byte == 84 || byte == 116 # Y y T t
       end
     end
 
@@ -114,13 +119,16 @@ module DBF
     end
 
     class Memo < Base
+      def decode(raw, &memo_handler)
+        memo_content = memo_handler.call(raw)
+        memo_content ? type_cast(memo_content) : nil
+      end
+
       # @param value [String]
       def type_cast(value)
-        if encoding && !value.nil?
-          value.dup.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
-        else
-          value
-        end
+        return value unless encoding && value
+
+        value.dup.force_encoding(encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
       end
     end
 
@@ -135,7 +143,7 @@ module DBF
       def initialize(column)
         super
         @target_encoding = Encoding.default_external
-        @needs_encode = @encoding && @encoding != @target_encoding
+        @needs_encode = encoding && encoding != @target_encoding
       end
 
       def skip_blank? = true
@@ -144,12 +152,14 @@ module DBF
       # @param value [String]
       def type_cast(value)
         value.strip!
-        if @encoding
-          value.force_encoding(@encoding)
-          @needs_encode ? value.encode(@target_encoding, undef: :replace, invalid: :replace) : value
-        else
-          value
-        end
+        encoding ? encode(value) : value
+      end
+
+      private
+
+      def encode(value)
+        value.force_encoding(encoding)
+        @needs_encode ? value.encode(@target_encoding, undef: :replace, invalid: :replace) : value
       end
     end
   end

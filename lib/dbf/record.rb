@@ -6,16 +6,13 @@ module DBF
     # Initialize a new DBF::Record
     #
     # @param data [String, StringIO] data
-    # @param columns [Column]
-    # @param version [String]
-    # @param memo [DBF::Memo]
-    def initialize(data, columns, version, memo, offset = 0, column_offsets = nil)
+    # @param context [DBF::RecordContext]
+    # @param offset [Integer]
+    def initialize(data, context, offset = 0)
       @data = data
+      @context = context
       @offset = offset
-      @columns = columns
-      @version = version
-      @memo = memo
-      @column_offsets = column_offsets
+      @to_a = nil
     end
 
     # Equality
@@ -23,7 +20,9 @@ module DBF
     # @param [DBF::Record] other
     # @return [Boolean]
     def ==(other)
-      other.respond_to?(:attributes) && other.attributes == attributes
+      attributes == other.attributes
+    rescue NoMethodError
+      false
     end
 
     # Reads attributes by column name
@@ -31,19 +30,13 @@ module DBF
     # @param name [String, Symbol] key
     def [](name)
       key = name.to_s
-      if @to_a
-        if attributes.key?(key)
-          attributes[key]
-        elsif (index = underscored_column_names.index(key))
-          attributes[@columns[index].name]
-        end
-      elsif @column_offsets
+      if @context.column_offsets && !@to_a
         index = column_name_index(key)
         index ? column_value(index) : nil
       elsif attributes.key?(key)
         attributes[key]
-        elsif (index = underscored_column_names.index(key))
-          attributes[@columns[index].name]
+      elsif (index = underscored_column_names.index(key))
+        attributes[@context.columns[index].name]
       end
     end
 
@@ -69,33 +62,17 @@ module DBF
       @to_a ||= begin
         data = @data
         offset = @offset
-        columns = @columns
+        columns = @context.columns
         col_count = columns.length
         result = Array.new(col_count)
-        i = 0
-        while i < col_count
-          column = columns[i]
+        index = 0
+        while index < col_count
+          column = columns[index]
           len = column.length
-          if column.memo?
-            if @memo
-              memo_data = data.byteslice(offset, len)
-              offset += len
-              memo_data = memo_data.unpack1('V') if @version == '30' || @version == '31'
-              result[i] = column.type_cast(@memo.get(memo_data.to_i))
-            else
-              offset += len
-              result[i] = nil
-            end
-          else
-            value = data.byteslice(offset, len)
-            offset += len
-            result[i] = if column.skip_blank? && value.count(' ') == len
-              column.blank_value
-            else
-              column.type_cast(value)
-            end
-          end
-          i += 1
+          raw = data.byteslice(offset, len)
+          offset += len
+          result[index] = decode_column(raw, column)
+          index += 1
         end
         @offset = offset
         result
@@ -104,44 +81,42 @@ module DBF
 
     private
 
+    def decode_memo_value(raw) # :nodoc:
+      memo = @context.memo
+      return nil unless memo
+
+      version = @context.version
+      raw = raw.unpack1('V') if version == '30' || version == '31'
+      memo.get(raw.to_i)
+    end
+
     def column_name_index(key) # :nodoc:
       column_names.index(key) || underscored_column_names.index(key)
     end
 
     def column_value(index) # :nodoc:
-      column = @columns[index]
-      col_offset = @offset + @column_offsets[index]
+      column = @context.columns[index]
+      col_offset = @offset + @context.column_offsets[index]
       len = column.length
+      raw = @data.byteslice(col_offset, len)
+      decode_column(raw, column)
+    end
 
-      if column.memo?
-        if @memo
-          memo_data = @data.byteslice(col_offset, len)
-          memo_data = memo_data.unpack1('V') if @version == '30' || @version == '31'
-          column.type_cast(@memo.get(memo_data.to_i))
-        end
-      else
-        value = @data.byteslice(col_offset, len)
-        if column.skip_blank? && value.count(' ') == len
-          column.blank_value
-        else
-          column.type_cast(value)
-        end
-      end
+    def decode_column(raw, column) # :nodoc:
+      column.decode(raw) { |raw_memo| decode_memo_value(raw_memo) }
     end
 
     def column_names # :nodoc:
-      @column_names ||= @columns.map(&:name)
+      @column_names ||= @context.columns.map(&:name)
     end
 
     def method_missing(method, *args) # :nodoc:
       key = method.to_s
       if (index = underscored_column_names.index(key))
-        if @to_a
-          attributes[@columns[index].name]
-        elsif @column_offsets
+        if @context.column_offsets && !@to_a
           column_value(index)
         else
-          attributes[@columns[index].name]
+          attributes[@context.columns[index].name]
         end
       else
         super
@@ -153,7 +128,7 @@ module DBF
     end
 
     def underscored_column_names # :nodoc:
-      @underscored_column_names ||= @columns.map(&:underscored_name)
+      @underscored_column_names ||= @context.columns.map(&:underscored_name)
     end
   end
 end

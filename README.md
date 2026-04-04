@@ -251,7 +251,7 @@ class Book < Sequel::Model; end
 Sequel.migration do
   up do
     table = DBF::Table.new('db/dbf/books.dbf')
-    eval(table.schema(:sequel, true)) # passing true to limit output to create_table() only
+    eval(table.schema(:sequel, table_only: true)) # limit output to create_table() only
 
     Book.reset_column_information
     table.each do |record|

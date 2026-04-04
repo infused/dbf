@@ -8,7 +8,7 @@ RSpec.describe DBF::Table do
   let(:table) { DBF::Table.new dbf_path }
 
   specify 'foxpro versions' do
-    expect(DBF::Table::FOXPRO_VERSIONS.keys.sort).to eq %w[30 31 f5 fb].sort
+    expect(DBF::VersionConfig::FOXPRO_VERSIONS.keys.sort).to eq %w[30 31 f5 fb].sort
   end
 
   specify 'row is an alias of record' do
@@ -83,8 +83,8 @@ RSpec.describe DBF::Table do
       let(:control_schema) { File.read(fixture('dbase_83_schema_ar.txt')) }
 
       it 'matches the test schema fixture' do
-        table.name = 'dbase_83'
-        expect(table.schema).to eq control_schema
+        named_table = DBF::Table.new data, nil, nil, name: 'dbase_83'
+        expect(named_table.schema).to eq control_schema
       end
     end
   end
@@ -97,7 +97,7 @@ RSpec.describe DBF::Table do
 
     it 'returns a limited Sequel migration when passed true' do
       control_schema = File.read(fixture('dbase_83_schema_sq_lim.txt'))
-      expect(table.sequel_schema).to eq control_schema
+      expect(table.sequel_schema(table_only: true)).to eq control_schema
     end
 
   end
@@ -258,24 +258,23 @@ RSpec.describe DBF::Table do
         expect(table.name).to eq 'dbase_83'
       end
 
-      it 'is mutable' do
-        table.name = 'database_83'
-        expect(table.name).to eq 'database_83'
+      it 'can be overridden via constructor' do
+        named_table = DBF::Table.new dbf_path, nil, nil, name: 'database_83'
+        expect(named_table.name).to eq 'database_83'
       end
     end
 
     describe 'when data is a StringIO' do
       let(:data) { StringIO.new File.read(dbf_path) }
-      let(:memo) { StringIO.new File.read(memo_path) }
       let(:table) { DBF::Table.new data }
 
       it 'is nil' do
         expect(table.name).to be_nil
       end
 
-      it 'is mutable' do
-        table.name = 'database_83'
-        expect(table.name).to eq 'database_83'
+      it 'can be set via constructor' do
+        named_table = DBF::Table.new data, nil, nil, name: 'database_83'
+        expect(named_table.name).to eq 'database_83'
       end
     end
   end

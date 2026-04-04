@@ -8,7 +8,7 @@ module DBF
     class NameError < StandardError
     end
 
-    attr_reader :table, :name, :type, :length, :decimal, :encoding, :blank_value
+    attr_reader :name, :type, :length, :decimal
 
     # rubocop:disable Style/MutableConstant
     TYPE_CAST_CLASS = {
@@ -22,7 +22,7 @@ module DBF
       M: ColumnType::Memo,
       B: ColumnType::Double,
       G: ColumnType::General,
-      :+ => ColumnType::SignedLong2
+      :+ => ColumnType::AutoIncrement
     }
     # rubocop:enable Style/MutableConstant
     TYPE_CAST_CLASS.default = ColumnType::String
@@ -36,36 +36,30 @@ module DBF
     # @param length [Integer]
     # @param decimal [Integer]
     def initialize(table, name, type, length, decimal)
-      @encoding = table.encoding
-
       @table = table
       @name = clean(name)
       @type = type
       @length = length
       @decimal = decimal
-      @version = table.version
-      @memo = type == 'M'
-      @skip_blank = type_cast_class.skip_blank?
-      @blank_value = type_cast_class.blank_value
 
       validate_length
       validate_name
     end
 
-    def skip_blank?
-      @skip_blank
-    end
-
-    # Returns true if the column is a memo
-    #
-    # @return [Boolean]
-    def memo?
-      @memo
-    end
+    def encoding = @table.encoding
 
     # @param value [String]
     def type_cast(value)
       type_cast_class.type_cast(value)
+    end
+
+    # Decodes a raw column value, handling memo, blank, and type cast cases
+    #
+    # @param raw [String]
+    # @yield [raw] for memo column resolution
+    # @return decoded value
+    def decode(raw, &memo_handler)
+      type_cast_class.decode(raw, &memo_handler)
     end
 
     # Returns a Hash with :name, :type, :length, and :decimal keys
@@ -88,10 +82,7 @@ module DBF
     private
 
     def clean(value) # :nodoc:
-      value = value.strip
-      null_index = value.index("\x00")
-      value = value.byteslice(0, null_index) if null_index
-      table.encode_string(value)
+      @table.encode_string(value.strip.split("\x00", 2).first || +'')
     end
 
     def type_cast_class # :nodoc:

@@ -5,23 +5,30 @@ module DBF
     class Foxpro < Base
       FPT_HEADER_SIZE = 512
 
+      def initialize(data, version)
+        @data = data
+        super
+      end
+
       def build_memo(start_block) # :nodoc:
         @data.seek offset(start_block)
-
         memo_type, memo_size, memo_string = @data.read(block_size).unpack('NNa*')
         return nil unless memo_type == 1 && memo_size > 0
 
-        if memo_size > block_content_size
-          memo_string << @data.read(content_size(memo_size))
-        else
-          memo_string = memo_string[0, memo_size]
-        end
-        memo_string
+        read_memo_content(memo_string, memo_size)
       rescue StandardError
         nil
       end
 
       private
+
+      def read_memo_content(memo_string, memo_size) # :nodoc:
+        if memo_size > block_content_size
+          memo_string << @data.read(content_size(memo_size))
+        else
+          memo_string[0, memo_size]
+        end
+      end
 
       def block_size # :nodoc:
         @block_size ||= begin

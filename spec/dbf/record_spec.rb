@@ -42,7 +42,7 @@ RSpec.describe DBF::Record do
 
     describe 'when other does not have attributes' do
       it 'returns false' do
-        expect(record == instance_double(DBF::Record)).to be_falsey
+        expect(record == Object.new).to be_falsey
       end
     end
 

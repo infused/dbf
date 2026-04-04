@@ -14,6 +14,11 @@ module DBF
       'B' => ':binary'
     }.freeze
 
+    STRING_DATA_FORMATS = {
+      sequel: ':varchar, :size => %s',
+      activerecord: ':string, :limit => %s'
+    }.freeze
+
     # Generate an ActiveRecord::Schema
     #
     # xBase data types are converted to generic types as follows:
@@ -49,27 +54,25 @@ module DBF
     end
 
     def activerecord_schema(*) # :nodoc:
-      s = +"ActiveRecord::Schema.define do\n"
-      s << "  create_table \"#{name}\" do |t|\n"
+      output = +"ActiveRecord::Schema.define do\n"
+      output << "  create_table \"#{name}\" do |t|\n"
       columns.each do |column|
-        s << "    t.column #{activerecord_schema_definition(column)}"
+        output << "    t.column #{activerecord_schema_definition(column)}"
       end
-      s << "  end\nend"
-      s
+      output << "  end\nend"
+      output
     end
 
     def sequel_schema(table_only: false) # :nodoc:
-      s = +''
-      s << "Sequel.migration do\n" unless table_only
-      s << "  change do\n " unless table_only
-      s << "    create_table(:#{name}) do\n"
+      output = +''
+      output << "Sequel.migration do\n  change do\n " unless table_only
+      output << "    create_table(:#{name}) do\n"
       columns.each do |column|
-        s << "      column #{sequel_schema_definition(column)}"
+        output << "      column #{sequel_schema_definition(column)}"
       end
-      s << "    end\n"
-      s << "  end\n" unless table_only
-      s << "end\n" unless table_only
-      s
+      output << "    end\n"
+      output << "  end\nend\n" unless table_only
+      output
     end
 
     def json_schema(*) # :nodoc:
@@ -93,11 +96,12 @@ module DBF
     end
 
     def schema_data_type(column, format = :activerecord) # :nodoc:
-      case column.type
+      col_type = column.type
+      case col_type
       when 'N', 'F', 'I'
         number_data_type(column)
       when 'Y', 'D', 'T', 'L', 'M', 'B'
-        OTHER_DATA_TYPES[column.type]
+        OTHER_DATA_TYPES[col_type]
       else
         string_data_format(format, column)
       end
@@ -108,11 +112,7 @@ module DBF
     end
 
     def string_data_format(format, column)
-      if format == :sequel
-        ":varchar, :size => #{column.length}"
-      else
-        ":string, :limit => #{column.length}"
-      end
+      STRING_DATA_FORMATS.fetch(format, STRING_DATA_FORMATS[:activerecord]) % column.length
     end
   end
 end

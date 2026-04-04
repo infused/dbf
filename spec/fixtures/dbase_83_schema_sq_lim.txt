@@ -1,6 +1,4 @@
-Sequel.migration do
-  change do
-     create_table(:dbase_83) do
+    create_table(:dbase_83) do
       column :id, :integer
       column :catcount, :integer
       column :agrpcount, :integer
@@ -17,5 +15,3 @@ Sequel.migration do
       column :taxable, :boolean
       column :active, :boolean
     end
-  end
-end

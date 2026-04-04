@@ -31,6 +31,8 @@ module DBF
 
       private
 
+      attr_reader :data
+
       def offset(start_block) # :nodoc:
         start_block * block_size
       end

@@ -14,6 +14,7 @@ group :development, :test do
   gem 'rubocop-performance'
   gem 'rubocop-rake'
   gem 'rubocop-rspec'
+  gem 'rubycritic'
   gem 'ruby-lsp'
   gem 'yard'
 end

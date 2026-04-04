@@ -26,7 +26,7 @@ module DBF
         @db = DBF::Table.new(@path)
         @tables = extract_dbc_data
       rescue Errno::ENOENT
-        raise DBF::FileNotFoundError, "file not found: #{data}"
+        raise DBF::FileNotFoundError, "file not found: #{path}"
       end
 
       def table_names
@@ -38,9 +38,7 @@ module DBF
       # @param name [String]
       # @return [DBF::Table]
       def table(name)
-        Table.new table_path(name) do |table|
-          table.long_names = @tables[name]
-        end
+        Table.new(table_path(name), long_names: @tables[name])
       end
 
       # Searches the database directory for the table's dbf file
@@ -58,7 +56,8 @@ module DBF
       end
 
       def method_missing(method, *args) # :nodoc:
-        table_names.index(method.to_s) ? table(method.to_s) : super
+        name = method.to_s
+        table_names.index(name) ? table(name) : super
       end
 
       def respond_to_missing?(method, *)
@@ -72,36 +71,19 @@ module DBF
       # are in the same order as in the linked tables but only the long name
       # is provided.
       def extract_dbc_data # :nodoc:
-        data = {}
-        @db.each do |record|
+        build_table_data.values.to_h { |entry| entry.values_at(:name, :fields) }
+      end
+
+      def build_table_data # :nodoc:
+        @db.each_with_object({}) do |record, hash|
           next unless record
 
+          name = record.objectname
           case record.objecttype
-          when 'Table'
-            # This is a related table
-            process_table record, data
-          when 'Field'
-            # This is a related field. The parentid points to the table object.
-            # Create using the parentid if the parentid is still unknown.
-            process_field record, data
+          when 'Table' then hash[record.objectid] = table_field_hash(name)
+          when 'Field' then (hash[record.parentid] ||= table_field_hash('UNKNOWN'))[:fields] << name
           end
         end
-
-        data.values.to_h { |v| [v[:name], v[:fields]] }
-      end
-
-      def process_table(record, data)
-        id = record.objectid
-        name = record.objectname
-        data[id] = table_field_hash(name)
-      end
-
-      def process_field(record, data)
-        id = record.parentid
-        name = 'UNKNOWN'
-        field = record.objectname
-        data[id] ||= table_field_hash(name)
-        data[id][:fields] << field
       end
 
       def table_field_hash(name)
@@ -110,7 +92,12 @@ module DBF
     end
 
     class Table < DBF::Table
-      attr_accessor :long_names
+      attr_reader :long_names
+
+      def initialize(path, long_names:)
+        @long_names = long_names
+        super(path)
+      end
 
       def build_columns # :nodoc:
         columns = super
