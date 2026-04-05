@@ -66,7 +66,7 @@ module DBF
     #
     # @return [Hash]
     def to_hash
-      {name: name, type: type, length: length, decimal: decimal}
+      {name:, type:, length:, decimal:}
     end
 
     # Underscored name

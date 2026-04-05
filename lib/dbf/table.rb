@@ -83,7 +83,7 @@ module DBF
     end
 
     def record_context
-      @record_context ||= RecordContext.new(columns: columns, version: version, memo: @memo, column_offsets: column_offsets)
+      @record_context ||= RecordContext.new(columns:, version:, memo: @memo, column_offsets:)
     end
 
     # All columns
