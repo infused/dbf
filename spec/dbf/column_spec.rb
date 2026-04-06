@@ -262,6 +262,28 @@ RSpec.describe DBF::Column do
     end
   end
 
+  context 'with type + (auto increment)' do
+    let(:column) { DBF::Column.new table, 'ColumnName', '+', 4, 0 }
+
+    it 'casts positive value' do
+      expect(column.type_cast("\x80\x00\x00\x05")).to eq 5
+    end
+
+    it 'casts negative value' do
+      expect(column.type_cast("\x00\x00\x00\x01")).to eq(-1)
+    end
+  end
+
+  describe '#decode' do
+    context 'with type N (number) and all-spaces input' do
+      let(:column) { DBF::Column.new table, 'ColumnName', 'N', 5, 0 }
+
+      it 'returns nil for blank value' do
+        expect(column.decode('     ') {}).to be_nil
+      end
+    end
+  end
+
   context 'with type Y (currency)' do
     let(:column) { DBF::Column.new table, 'ColumnName', 'Y', 8, 4 }
 

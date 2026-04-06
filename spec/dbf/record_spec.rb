@@ -99,6 +99,53 @@ RSpec.describe DBF::Record do
     end
   end
 
+  describe '#[]' do
+    let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
+
+    describe 'with column_offsets and no prior to_a' do
+      it 'returns value by column name' do
+        record = table.record(0)
+        expect(record['CHARACTER']).to eq 'One'
+      end
+
+      it 'returns nil for unknown column name' do
+        record = table.record(0)
+        expect(record['NONEXISTENT']).to be_nil
+      end
+    end
+
+    describe 'after to_a with original column name' do
+      it 'returns value by original column name' do
+        record = table.record(0)
+        record.to_a
+        expect(record['CHARACTER']).to eq 'One'
+      end
+    end
+
+    describe 'after to_a with underscored column name' do
+      it 'returns value by underscored name' do
+        record = table.record(0)
+        record.to_a
+        expect(record['character']).to eq 'One'
+      end
+    end
+  end
+
+  describe 'method_missing' do
+    let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
+
+    it 'returns attribute value after to_a has been called' do
+      record = table.record(0)
+      record.to_a
+      expect(record.character).to eq 'One'
+    end
+
+    it 'raises NoMethodError for nonexistent column' do
+      record = table.record(0)
+      expect { record.nonexistent_column }.to raise_error(NoMethodError)
+    end
+  end
+
   describe '#attributes' do
     let(:table) { DBF::Table.new fixture('dbase_8b.dbf') }
     let(:record) { table.find(0) }

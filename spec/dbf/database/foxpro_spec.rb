@@ -26,6 +26,25 @@ RSpec.describe DBF::Database::Foxpro do
     end
   end
 
+  describe '#respond_to?' do
+    it 'returns true for valid table names' do
+      expect(db.respond_to?(:contacts)).to be true
+    end
+
+    it 'returns false for invalid table names' do
+      expect(db.respond_to?(:nonexistent)).to be false
+    end
+  end
+
+  describe '#initialize' do
+    describe 'when Errno::ENOENT is raised' do
+      it 'raises DBF::FileNotFoundError' do
+        allow(DBF::Table).to receive(:new).and_raise(Errno::ENOENT)
+        expect { DBF::Database::Foxpro.new('missing.dbc') }.to raise_error(DBF::FileNotFoundError, 'file not found: missing.dbc')
+      end
+    end
+  end
+
   describe '#table' do
     describe 'when accessing related tables' do
       let(:db) { DBF::Database::Foxpro.new(dbf_path) }

@@ -60,6 +60,20 @@ RSpec.describe DBF::Table do
     end
   end
 
+  describe '#closed?' do
+    it 'returns true after closing a table with memo' do
+      table.close
+      expect(table.closed?).to be true
+    end
+  end
+
+  describe '#header_encoding' do
+    it 'returns the encoding from the file header' do
+      cp1251_table = DBF::Table.new fixture('cp1251.dbf')
+      expect(cp1251_table.header_encoding).to eq 'cp1251'
+    end
+  end
+
   describe '#schema' do
     describe 'when data is IO' do
       let(:control_schema) { File.read(fixture('dbase_83_schema_ar.txt')) }
