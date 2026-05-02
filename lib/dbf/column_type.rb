@@ -20,7 +20,7 @@ module DBF
         false
       end
 
-      def decode(raw, &_memo_handler)
+      def decode(raw, &)
         if skip_blank? && raw.count(' ') == raw.length
           blank_value
         else
@@ -119,8 +119,8 @@ module DBF
     end
 
     class Memo < Base
-      def decode(raw, &memo_handler)
-        memo_content = memo_handler.call(raw)
+      def decode(raw, &)
+        memo_content = yield(raw)
         memo_content ? type_cast(memo_content) : nil
       end
 

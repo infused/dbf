@@ -58,8 +58,8 @@ module DBF
     # @param raw [String]
     # @yield [raw] for memo column resolution
     # @return decoded value
-    def decode(raw, &memo_handler)
-      type_cast_class.decode(raw, &memo_handler)
+    def decode(raw, &)
+      type_cast_class.decode(raw, &)
     end
 
     # Returns a Hash with :name, :type, :length, and :decimal keys
