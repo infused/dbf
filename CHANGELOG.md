@@ -1,5 +1,11 @@
 # Changelog
 
+## main branch
+
+- Extract CLI logic into `DBF::CLI` class (`bin/dbf` is now a thin shim)
+- `DBF::Table#to_csv` now accepts an IO in addition to a String path
+- Fix broken link in README
+
 ## 5.2.0
 
 - Drop support for Ruby 3.1 and 3.2
