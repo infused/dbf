@@ -1,60 +1,8 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 Signal.trap('PIPE', 'SYSTEM_DEFAULT')
 
 require 'dbf'
-require 'dbf/version'
-require 'optparse'
 
-params = ARGV.getopts('h', 's', 'a', 'c', 'r', 'v')
-
-if params['v']
-  puts "dbf version: #{DBF::VERSION}"
-
-elsif params['h']
-  puts "usage: #{File.basename(__FILE__)} [-h|-s|-a|-c|-r] filename"
-  puts '  -h = print this message'
-  puts '  -v = print the DBF gem version'
-  puts '  -s = print summary information'
-  puts '  -a = create an ActiveRecord::Schema'
-  puts '  -r = create a Sequel migration'
-  puts '  -c = export as CSV'
-else
-
-  filename = ARGV.shift
-  abort 'You must supply a filename on the command line' unless filename
-
-  # create an ActiveRecord::Schema
-  if params['a']
-    table = DBF::Table.new filename
-    puts table.schema(:activerecord)
-  end
-
-  # create an Sequel::Migration
-  if params['r']
-    table = DBF::Table.new filename
-    puts table.schema(:sequel)
-  end
-
-  if params['s']
-    table = DBF::Table.new filename
-    puts
-    puts "Database: #{filename}"
-    puts "Type: (#{table.version}) #{table.version_description}"
-    puts "Encoding: #{table.header_encoding}" if table.header_encoding
-    puts "Memo File: #{table.has_memo_file? ? 'true' : 'false'}"
-    puts "Records: #{table.record_count}"
-
-    puts "\nFields:"
-    puts 'Name             Type       Length     Decimal'
-    puts '-' * 78
-    table.columns.each do |f|
-      puts format('%-16s %-10s %-10s %-10s', f.name, f.type, f.length, f.decimal)
-    end
-  end
-
-  if params['c']
-    table = DBF::Table.new filename
-    table.to_csv
-  end
-end
+exit DBF::CLI.run(ARGV)

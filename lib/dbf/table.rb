@@ -140,9 +140,14 @@ module DBF
     # Dumps all records to a CSV file.  If no filename is given then CSV is
     # output to STDOUT.
     #
-    # @param [optional String] path Defaults to STDOUT
-    def to_csv(path = nil)
-      csv = CSV.new(path ? File.open(path, 'w') : $stdout, force_quotes: true)
+    # @param [optional String, IO] path_or_io String path, IO-like object, or nil for STDOUT
+    def to_csv(path_or_io = nil)
+      io = case path_or_io
+      when nil then $stdout
+      when String then File.open(path_or_io, 'w')
+      else path_or_io
+      end
+      csv = CSV.new(io, force_quotes: true)
       csv << column_names
       each { |record| csv << record.to_a }
     end
