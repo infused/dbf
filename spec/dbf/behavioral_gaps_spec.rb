@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'DBF::Table behavioral gaps' do
+RSpec.describe DBF::Table do # rubocop:disable RSpec/SpecFilePathFormat
   describe 'user-supplied encoding overrides header encoding' do
     let(:dbf_path) { fixture('cp1251.dbf') }
 
@@ -58,7 +58,7 @@ RSpec.describe 'DBF::Table behavioral gaps' do
     let(:table) { DBF::Table.new fixture('polygon.dbf') }
 
     it 'yields nothing rather than raising' do
-      expect { table.each { |_| } }.to_not raise_error
+      expect { table.each { |record| record } }.to_not raise_error
     end
   end
 

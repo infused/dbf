@@ -16,14 +16,13 @@ RSpec.describe DBF::ColumnBuilder do
     end
 
     it 'restores the io position after building' do
-      io = File.open(fixture('dbase_83.dbf'), 'rb')
-      io.seek(0)
-      original_pos = io.pos
-      version_config = DBF::VersionConfig.new('83')
-      DBF::ColumnBuilder.new(table, io, version_config).build
-      expect(io.pos).to eq original_pos
-    ensure
-      io.close
+      File.open(fixture('dbase_83.dbf'), 'rb') do |io|
+        io.seek(0)
+        original_pos = io.pos
+        version_config = DBF::VersionConfig.new('83')
+        DBF::ColumnBuilder.new(table, io, version_config).build
+        expect(io.pos).to eq original_pos
+      end
     end
   end
 

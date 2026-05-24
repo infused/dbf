@@ -279,7 +279,7 @@ RSpec.describe DBF::Column do
       let(:column) { DBF::Column.new table, 'ColumnName', 'N', 5, 0 }
 
       it 'returns nil for blank value' do
-        expect(column.decode('     ') {}).to be_nil
+        expect(column.decode('     ') { nil }).to be_nil
       end
     end
   end

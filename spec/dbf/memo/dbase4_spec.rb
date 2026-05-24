@@ -11,7 +11,7 @@ RSpec.describe DBF::Memo::Dbase4 do
       # Block 0 is the header (unused by Dbase4 reader). Block 1 holds our memo.
       header = "\x00" * block_size
       # Dbase4 reads 8-byte block header and unpacks an unsigned long at offset 4
-      block_header = "\x00\x00\x00\x00" + [memo_text.bytesize].pack('L')
+      block_header = "\u0000\u0000\u0000\u0000#{[memo_text.bytesize].pack('L')}"
       body = memo_text + ("\x00" * (block_size - block_header.bytesize - memo_text.bytesize))
       header + block_header + body
     end
@@ -31,7 +31,7 @@ RSpec.describe DBF::Memo::Dbase4 do
     let(:table) { DBF::Table.new fixture('dbase_8b.dbf'), fixture('dbase_8b.dbt') }
 
     it 'reads memo content via the table' do
-      record = table.each.find { |r| r && r.attributes.values.any? { |v| v.is_a?(String) && v.length > 0 } }
+      record = table.each.find { |r| r && r.attributes.values.any? { |v| v.is_a?(String) && !v.empty? } }
       expect(record).to_not be_nil
     end
 

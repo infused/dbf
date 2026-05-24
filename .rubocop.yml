@@ -5,6 +5,8 @@ plugins:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - 'spec/benchmark.rb'
 
 Layout/CaseIndentation:
   Enabled: false

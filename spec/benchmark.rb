@@ -31,7 +31,7 @@ def bench(name, warmup: WARMUP, iterations: ITERATIONS, &block)
   warmup.times(&block)
   GC.compact
 
-  durations = iterations.times.map { measure_time(&block) }
+  durations = Array.new(iterations) { measure_time(&block) }
   allocations = count_allocations(&block)
   min, max = durations.minmax
 

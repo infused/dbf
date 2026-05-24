@@ -49,18 +49,18 @@ RSpec.describe DBF::FileHandler do
     end
 
     it 'opens the memo via memo_class.open when a path is given' do
-      expect(memo_class).to receive(:open).with('/tmp/m.dbt', '83').and_return(:opened)
+      allow(memo_class).to receive(:open).with('/tmp/m.dbt', '83').and_return(:opened)
       expect(described_class.open_memo('any.dbf', '/tmp/m.dbt', memo_class, '83')).to eq(:opened)
     end
 
     it 'instantiates the memo via memo_class.new when a StringIO is given' do
       io = StringIO.new
-      expect(memo_class).to receive(:new).with(io, '83').and_return(:built)
+      allow(memo_class).to receive(:new).with(io, '83').and_return(:built)
       expect(described_class.open_memo('any.dbf', io, memo_class, '83')).to eq(:built)
     end
 
     it 'auto-discovers a memo file next to the data path' do
-      expect(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83').and_return(:opened)
+      allow(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83').and_return(:opened)
       expect(described_class.open_memo(fixture('dbase_83.dbf'), nil, memo_class, '83')).to eq(:opened)
     end
   end

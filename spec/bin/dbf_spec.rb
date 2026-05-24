@@ -3,15 +3,15 @@
 require 'spec_helper'
 require 'stringio'
 
-RSpec.describe 'bin/dbf' do
+BinDbfResult = Struct.new(:stdout, :stderr, :exit_status) do
+  def success?
+    exit_status.zero?
+  end
+end
+
+RSpec.describe 'bin/dbf' do # rubocop:disable RSpec/DescribeClass
   let(:bin) { File.expand_path('../../bin/dbf', __dir__) }
   let(:dbf_fixture) { fixture('dbase_83.dbf') }
-
-  Result = Struct.new(:stdout, :stderr, :exit_status) do
-    def success?
-      exit_status.zero?
-    end
-  end
 
   def run(*args)
     original_argv = ARGV.dup
@@ -29,7 +29,7 @@ RSpec.describe 'bin/dbf' do
       warn "#{e.class}: #{e.message}"
       status = 1
     end
-    Result.new($stdout.string, $stderr.string, status)
+    BinDbfResult.new($stdout.string, $stderr.string, status)
   ensure
     ARGV.replace(original_argv)
     $stdout = original_stdout

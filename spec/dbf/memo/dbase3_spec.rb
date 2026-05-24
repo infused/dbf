@@ -8,7 +8,7 @@ RSpec.describe DBF::Memo::Dbase3 do
 
     let(:fpt_data) do
       header = "\x00" * block_size
-      content = ('x' * 100) + "\x1A\x00" # terminator bytes stripped by gsub
+      content = "#{'x' * 100}\u001A\u0000" # terminator bytes stripped by gsub
       header + content + ("\x00" * (block_size - content.bytesize))
     end
 
@@ -23,7 +23,7 @@ RSpec.describe DBF::Memo::Dbase3 do
 
     it 'reads across multiple blocks until a short read terminates the loop' do
       memo_text = 'y' * 1500
-      data = ("\x00" * block_size) + memo_text + "\x1A\x00"
+      data = "#{"\x00" * block_size}#{memo_text}\u001A\u0000"
       io = StringIO.new(data)
       expect(described_class.new(io, '83').get(1)).to eq memo_text
     end
@@ -33,7 +33,7 @@ RSpec.describe DBF::Memo::Dbase3 do
     let(:table) { DBF::Table.new fixture('dbase_83.dbf') }
 
     it 'reads memo content for a record with a non-blank memo' do
-      record = table.each.find { |r| r && r.desc && r.desc.length > 0 }
+      record = table.each.find { |r| r&.desc && !r.desc.empty? }
       expect(record.desc).to be_a(String)
     end
 

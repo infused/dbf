@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-RSpec.describe DBF::ColumnType do
-  StubColumn = Struct.new(:decimal, :encoding) unless defined?(StubColumn)
+StubColumn = Struct.new(:decimal, :encoding) unless defined?(StubColumn)
 
+RSpec.describe DBF::ColumnType do
   def stub_column(decimal: 0, encoding: nil)
     StubColumn.new(decimal, encoding)
   end
