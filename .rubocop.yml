@@ -80,6 +80,7 @@ Naming/PredicateMethod:
   Enabled: true
   AllowedMethods:
     - type_cast
+    - blank_value
 
 Naming/PredicatePrefix:
   Enabled: false

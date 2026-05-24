@@ -26,7 +26,7 @@ RSpec.describe 'bin/dbf' do
     rescue SystemExit => e
       status = e.status
     rescue Exception => e # rubocop:disable Lint/RescueException
-      $stderr.puts "#{e.class}: #{e.message}"
+      warn "#{e.class}: #{e.message}"
       status = 1
     end
     Result.new($stdout.string, $stderr.string, status)

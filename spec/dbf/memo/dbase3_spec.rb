@@ -23,7 +23,7 @@ RSpec.describe DBF::Memo::Dbase3 do
 
     it 'reads across multiple blocks until a short read terminates the loop' do
       memo_text = 'y' * 1500
-      data = "\x00" * block_size + memo_text + "\x1A\x00"
+      data = ("\x00" * block_size) + memo_text + "\x1A\x00"
       io = StringIO.new(data)
       expect(described_class.new(io, '83').get(1)).to eq memo_text
     end
