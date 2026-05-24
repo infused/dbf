@@ -6,13 +6,13 @@
 <title>
   Class: DBF::Memo::Base
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.43
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "DBF::Memo::Base";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -94,7 +96,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/dbf/memo/base.rb</dd>
+    <dd>lib/dbf/memo/base.rb
+</dd>
   </dl>
   
 </div>
@@ -162,6 +165,7 @@
 
       
     </ul>
+    
   
     <h2>
       Instance Method Summary
@@ -255,14 +259,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Base.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Base.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -279,9 +282,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Base.</p>
-
+    <p>Returns a new instance of Base.</p>
 
   </div>
 </div>
@@ -294,13 +295,13 @@
       <pre class="lines">
 
 
-11
-12
 13
-14</pre>
+14
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 13</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_version'>version</span><span class='rparen'>)</span>
   <span class='ivar'>@data</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span>
@@ -333,12 +334,12 @@
       <pre class="lines">
 
 
-7
-8
-9</pre>
+9
+10
+11</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 7</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 9</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='id identifier rubyid_version'>version</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rb</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_version'>version</span><span class='rparen'>)</span>
@@ -369,12 +370,12 @@
       <pre class="lines">
 
 
-22
-23
-24</pre>
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 24</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close'>close</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_closed?'>closed?</span>
@@ -421,12 +422,12 @@
       <pre class="lines">
 
 
-26
-27
-28</pre>
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_closed?'>closed?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_closed?'>closed?</span>
@@ -451,14 +452,14 @@
       <pre class="lines">
 
 
-16
-17
 18
 19
-20</pre>
+20
+21
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/memo/base.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_start_block'>start_block</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>unless</span> <span class='id identifier rubyid_start_block'>start_block</span> <span class='op'>&gt;</span> <span class='int'>0</span>
@@ -475,9 +476,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 10:30:38 2023 by
+  Generated on Sun May 24 00:23:14 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.43 (ruby-4.0.5).
 </div>
 
     </div>

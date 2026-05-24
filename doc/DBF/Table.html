@@ -6,13 +6,13 @@
 <title>
   Class: DBF::Table
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.43
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "DBF::Table";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -94,7 +96,7 @@
   
   <dl>
       <dt>Includes:</dt>
-      <dd><span class='object_link'><a href="Schema.html" title="DBF::Schema (module)">Schema</a></span>, Enumerable</dd>
+      <dd><span class='object_link'><a href="Find.html" title="DBF::Find (module)">Find</a></span>, <span class='object_link'><a href="Schema.html" title="DBF::Schema (module)">Schema</a></span>, Enumerable</dd>
   </dl>
   
   
@@ -104,16 +106,16 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/dbf/table.rb</dd>
+    <dd>lib/dbf/table.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>DBF::Table is the primary interface to a single DBF file and provides methods for enumerating and searching the records.</p>
-
+    <p>DBF::Table is the primary interface to a single DBF file and provides
+methods for enumerating and searching the records.</p>
 
   </div>
 </div>
@@ -125,74 +127,13 @@
   <p class="children"><span class='object_link'><a href="Database/Table.html" title="DBF::Database::Table (class)">Database::Table</a></span></p>
 </div>
 
-  
-    <h2>
-      Constant Summary
-      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
-    </h2>
-
-    <dl class="constants">
-      
-        <dt id="DBASE2_HEADER_SIZE-constant" class="">DBASE2_HEADER_SIZE =
-          
-        </dt>
-        <dd><pre class="code"><span class='int'>8</span></pre></dd>
-      
-        <dt id="DBASE3_HEADER_SIZE-constant" class="">DBASE3_HEADER_SIZE =
-          
-        </dt>
-        <dd><pre class="code"><span class='int'>32</span></pre></dd>
-      
-        <dt id="DBASE7_HEADER_SIZE-constant" class="">DBASE7_HEADER_SIZE =
-          
-        </dt>
-        <dd><pre class="code"><span class='int'>68</span></pre></dd>
-      
-        <dt id="VERSIONS-constant" class="">VERSIONS =
-          
-        </dt>
-        <dd><pre class="code"><span class='lbrace'>{</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>02</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>FoxBase</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>03</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase III without memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>04</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase IV without memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>05</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase V without memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>07</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Visual Objects 1.x</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>30</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Visual FoxPro</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>32</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Visual FoxPro with field type Varchar or Varbinary</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>31</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Visual FoxPro with AutoIncrement field</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>43</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBASE IV SQL table files, no memo</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>63</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBASE IV SQL system files, no memo</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>7b</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase IV with memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>83</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase III with memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>87</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Visual Objects 1.x with memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>8b</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase IV with memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>8c</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase 7</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>8e</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBase IV with SQL table</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>cb</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>dBASE IV SQL table files, with memo</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>f5</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>FoxPro with memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>fb</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>FoxPro without memo file</span><span class='tstring_end'>&#39;</span></span>
-<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
-      
-        <dt id="FOXPRO_VERSIONS-constant" class="">FOXPRO_VERSIONS =
-          
-        </dt>
-        <dd><pre class="code"><span class='lbrace'>{</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>30</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Visual FoxPro</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>31</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Visual FoxPro with AutoIncrement field</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>f5</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>FoxPro with memo file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>fb</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>FoxPro without memo file</span><span class='tstring_end'>&#39;</span></span>
-<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
-      
-    </dl>
-  
 
 
-
-  
+  <h2>Constant Summary</h2>
   
   <h3 class="inherited">Constants included
      from <span class='object_link'><a href="Schema.html" title="DBF::Schema (module)">Schema</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Schema.html#FORMATS-constant" title="DBF::Schema::FORMATS (constant)">Schema::FORMATS</a></span>, <span class='object_link'><a href="Schema.html#OTHER_DATA_TYPES-constant" title="DBF::Schema::OTHER_DATA_TYPES (constant)">Schema::OTHER_DATA_TYPES</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Schema.html#FORMATS-constant" title="DBF::Schema::FORMATS (constant)">Schema::FORMATS</a></span>, <span class='object_link'><a href="Schema.html#OTHER_DATA_TYPES-constant" title="DBF::Schema::OTHER_DATA_TYPES (constant)">Schema::OTHER_DATA_TYPES</a></span>, <span class='object_link'><a href="Schema.html#STRING_DATA_FORMATS-constant" title="DBF::Schema::STRING_DATA_FORMATS (constant)">Schema::STRING_DATA_FORMATS</a></span></p>
 
 
   <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
@@ -210,32 +151,7 @@
   
   
     
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute encoding.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#name-instance_method" title="#name (instance method)">#<strong>name</strong>  &#x21d2; String </a>
-    
-
-    
-  </span>
-  
-  
-  
+      <span class="note title readonly">readonly</span>
     
     
   
@@ -245,7 +161,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute encoding.</p></div></span>
   
 </li>
 
@@ -280,9 +196,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Closes the table and memo file.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Closes the table and memo file.</p></div></span>
   
 </li>
 
@@ -326,9 +240,29 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Column names.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Column names.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#column_offsets-instance_method" title="#column_offsets (instance method)">#<strong>column_offsets</strong>  &#x21d2; Array&lt;Integer&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Cumulative byte offsets for each column within a record.</p></div></span>
   
 </li>
 
@@ -350,9 +284,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>All columns.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>All columns.</p></div></span>
   
 </li>
 
@@ -374,9 +306,29 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Calls block once for each record in the table.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Calls block once for each record in the table.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#encode_string-instance_method" title="#encode_string (instance method)">#<strong>encode_string</strong>(string)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Encode string.</p></div></span>
   
 </li>
 
@@ -406,30 +358,6 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#find-instance_method" title="#find (instance method)">#<strong>find</strong>(command, options = {}) {|optional, DBF::Record, NilClass| ... } &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Find records using a simple ActiveRecord-like syntax.</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
       <a href="#has_memo_file%3F-instance_method" title="#has_memo_file? (instance method)">#<strong>has_memo_file?</strong>  &#x21d2; TrueClass, FalseClass </a>
     
 
@@ -452,7 +380,29 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(data, memo = nil, encoding = nil) {|_self| ... } &#x21d2; Table </a>
+      <a href="#header_encoding-instance_method" title="#header_encoding (instance method)">#<strong>header_encoding</strong>  &#x21d2; Encoding </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Encoding specified in the file header.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(data, memo = nil, encoding = nil, name: nil) {|_self| ... } &#x21d2; Table </a>
     
 
     
@@ -468,9 +418,29 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Opens a DBF::Table Examples:   # working with a file stored on the filesystem   table = DBF::Table.new ‘data.dbf’.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Opens a DBF::Table Examples:   # working with a file stored on the filesystem   table = DBF::Table.new 'data.dbf'.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#name-instance_method" title="#name (instance method)">#<strong>name</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -494,9 +464,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve a record by index number.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve a record by index number.</p></div></span>
   
 </li>
 
@@ -504,7 +472,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#to_csv-instance_method" title="#to_csv (instance method)">#<strong>to_csv</strong>(path = nil)  &#x21d2; Object </a>
+      <a href="#record_context-instance_method" title="#record_context (instance method)">#<strong>record_context</strong>  &#x21d2; Object </a>
     
 
     
@@ -518,9 +486,29 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Dumps all records to a CSV file.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_csv-instance_method" title="#to_csv (instance method)">#<strong>to_csv</strong>(path_or_io = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Dumps all records to a CSV file.</p></div></span>
   
 </li>
 
@@ -542,16 +530,28 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Human readable version description.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Human readable version description.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Find.html" title="DBF::Find (module)">Find</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Find.html#find-instance_method" title="DBF::Find#find (method)">#find</a></span></p>
 
   
   
@@ -571,7 +571,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(data, memo = nil, encoding = nil) {|_self| ... } &#x21d2; <tt><span class='object_link'><a href="" title="DBF::Table (class)">Table</a></span></tt> 
+    #<strong>initialize</strong>(data, memo = nil, encoding = nil, name: nil) {|_self| ... } &#x21d2; <tt><span class='object_link'><a href="" title="DBF::Table (class)">Table</a></span></tt> 
   
 
   
@@ -579,9 +579,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Opens a DBF::Table Examples:</p>
-
+    <p>Opens a DBF::Table
+Examples:</p>
 <pre class="code ruby"><code class="ruby"><span class='comment'># working with a file stored on the filesystem
 </span><span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="DBF::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>data.dbf</span><span class='tstring_end'>&#39;</span></span>
 
@@ -596,9 +595,7 @@
 
 <span class='comment'># working with a dbf overriding specified in the dbf encoding
 </span><span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="DBF::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>data.dbf</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>cp437</span><span class='tstring_end'>&#39;</span></span>
-<span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="DBF::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>data.dbf</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>memo.dbt</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='const'>Encoding</span><span class='op'>::</span><span class='const'>US_ASCII</span>
-</code></pre>
-
+<span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="DBF::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>data.dbf</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>memo.dbt</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='const'>Encoding</span><span class='op'>::</span><span class='const'>US_ASCII</span></code></pre>
 
   </div>
 </div>
@@ -616,9 +613,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>data Path to the dbf file or a StringIO object</p>
-</div>
+        <div class='inline'><p>data Path to the dbf file or a StringIO object</p></div>
       
     </li>
   
@@ -634,9 +629,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>memo Path to the memo file or a StringIO object</p>
-</div>
+        <div class='inline'><p>memo Path to the memo file or a StringIO object</p></div>
       
     </li>
   
@@ -652,9 +645,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>encoding Name of the encoding or an Encoding object</p>
-</div>
+        <div class='inline'><p>encoding Name of the encoding or an Encoding object</p></div>
       
     </li>
   
@@ -686,9 +677,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the object that the method was called on</p>
-</div>
+        <div class='inline'><p>the object that the method was called on</p></div>
       
     </li>
   
@@ -700,20 +689,24 @@
       <pre class="lines">
 
 
-77
-78
-79
-80
-81
-82</pre>
+46
+47
+48
+49
+50
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 46</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_memo'>memo</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='ivar'>@data</span> <span class='op'>=</span> <span class='id identifier rubyid_open_data'>open_data</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
-  <span class='ivar'>@encoding</span> <span class='op'>=</span> <span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>||</span> <span class='id identifier rubyid_header'>header</span><span class='period'>.</span><span class='id identifier rubyid_encoding'>encoding</span>
-  <span class='ivar'>@memo</span> <span class='op'>=</span> <span class='id identifier rubyid_open_memo'>open_memo</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_memo'>memo</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_memo'>memo</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_encoding'>encoding</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@data</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FileHandler.html" title="DBF::FileHandler (module)">FileHandler</a></span></span><span class='period'>.</span><span class='id identifier rubyid_open_data'><span class='object_link'><a href="FileHandler.html#open_data-class_method" title="DBF::FileHandler.open_data (method)">open_data</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
+  <span class='ivar'>@user_encoding</span> <span class='op'>=</span> <span class='id identifier rubyid_encoding'>encoding</span>
+  <span class='ivar'>@encoding</span> <span class='op'>=</span> <span class='id identifier rubyid_determine_encoding'>determine_encoding</span>
+  <span class='ivar'>@memo</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FileHandler.html" title="DBF::FileHandler (module)">FileHandler</a></span></span><span class='period'>.</span><span class='id identifier rubyid_open_memo'><span class='object_link'><a href="FileHandler.html#open_memo-class_method" title="DBF::FileHandler.open_memo (method)">open_memo</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_memo'>memo</span><span class='comma'>,</span> <span class='id identifier rubyid_version_config'>version_config</span><span class='period'>.</span><span class='id identifier rubyid_memo_class'>memo_class</span><span class='comma'>,</span> <span class='id identifier rubyid_version'>version</span><span class='rparen'>)</span>
+  <span class='ivar'>@name</span> <span class='op'>=</span> <span class='id identifier rubyid_name'>name</span>
   <span class='kw'>yield</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -727,11 +720,11 @@
     <h2>Instance Attribute Details</h2>
     
       
-      <span id="encoding=-instance_method"></span>
+      <span id=""></span>
       <div class="method_details first">
   <h3 class="signature first" id="encoding-instance_method">
   
-    #<strong>encoding</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>encoding</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
   
 
   
@@ -739,9 +732,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns the value of attribute encoding.</p>
-
+    <p>Returns the value of attribute encoding.</p>
 
   </div>
 </div>
@@ -754,69 +745,15 @@
       <pre class="lines">
 
 
-48
-49
-50</pre>
+18
+19
+20</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_encoding'>encoding</span>
   <span class='ivar'>@encoding</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id="name=-instance_method"></span>
-      <div class="method_details ">
-  <h3 class="signature " id="name-instance_method">
-  
-    #<strong>name</strong>  &#x21d2; <tt>String</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-174
-175
-176</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 174</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
-  <span class='ivar'>@name</span> <span class='op'>||=</span> <span class='id identifier rubyid_filename'>filename</span> <span class='op'>&amp;&amp;</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.*</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -841,9 +778,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Closes the table and memo file</p>
-
+    <p>Closes the table and memo file</p>
 
   </div>
 </div>
@@ -869,17 +804,17 @@
       <pre class="lines">
 
 
-87
-88
-89
-90</pre>
+58
+59
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 87</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_close'>close</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
-  <span class='ivar'>@memo</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@memo</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+  <span class='ivar'>@memo</span><span class='op'>&amp;.</span><span class='id identifier rubyid_close'>close</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -923,23 +858,15 @@
       <pre class="lines">
 
 
-93
-94
-95
-96
-97
-98
-99</pre>
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_closed?'>closed?</span>
-  <span class='kw'>if</span> <span class='ivar'>@memo</span>
-    <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_closed?'>closed?</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@memo</span><span class='period'>.</span><span class='id identifier rubyid_closed?'>closed?</span>
-  <span class='kw'>else</span>
-    <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_closed?'>closed?</span>
-  <span class='kw'>end</span>
+  <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_closed?'>closed?</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='op'>!</span><span class='ivar'>@memo</span> <span class='op'>||</span> <span class='ivar'>@memo</span><span class='period'>.</span><span class='id identifier rubyid_closed?'>closed?</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -957,9 +884,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Column names</p>
-
+    <p>Column names</p>
 
   </div>
 </div>
@@ -985,15 +910,73 @@
       <pre class="lines">
 
 
-104
-105
-106</pre>
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 104</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_column_names'>column_names</span>
   <span class='ivar'>@column_names</span> <span class='op'>||=</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="column_offsets-instance_method">
+  
+    #<strong>column_offsets</strong>  &#x21d2; <tt>Array&lt;Integer&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Cumulative byte offsets for each column within a record</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Integer&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+78
+79
+80
+81
+82
+83</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 78</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_column_offsets'>column_offsets</span>
+  <span class='ivar'>@column_offsets</span> <span class='op'>||=</span> <span class='kw'>begin</span>
+    <span class='id identifier rubyid_sum'>sum</span> <span class='op'>=</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_col'>col</span><span class='op'>|</span> <span class='id identifier rubyid_sum'>sum</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_sum'>sum</span> <span class='op'>+=</span> <span class='id identifier rubyid_col'>col</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='rbrace'>}</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1011,9 +994,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>All columns</p>
-
+    <p>All columns</p>
 
   </div>
 </div>
@@ -1039,12 +1020,12 @@
       <pre class="lines">
 
 
-111
-112
-113</pre>
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 111</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_columns'>columns</span>
   <span class='ivar'>@columns</span> <span class='op'>||=</span> <span class='id identifier rubyid_build_columns'>build_columns</span>
@@ -1065,9 +1046,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Calls block once for each record in the table. The record may be nil if the record has been marked as deleted.</p>
-
+    <p>Calls block once for each record in the table. The record may be nil
+if the record has been marked as deleted.</p>
 
   </div>
 </div>
@@ -1093,15 +1073,88 @@
       <pre class="lines">
 
 
-119
-120
-121</pre>
+100
+101
+102
+103
+104
+105</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 119</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 100</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_each'>each</span>
-  <span class='id identifier rubyid_record_count'>record_count</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='kw'>yield</span> <span class='id identifier rubyid_record'>record</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+
+  <span class='const'><span class='object_link'><a href="RecordIterator.html" title="DBF::RecordIterator (class)">RecordIterator</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="RecordIterator.html#initialize-instance_method" title="DBF::RecordIterator#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@data</span><span class='comma'>,</span> <span class='id identifier rubyid_record_context'>record_context</span><span class='comma'>,</span> <span class='id identifier rubyid_header_length'>header_length</span><span class='comma'>,</span> <span class='id identifier rubyid_record_length'>record_length</span><span class='comma'>,</span> <span class='id identifier rubyid_record_count'>record_count</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'><span class='object_link'><a href="RecordIterator.html#each-instance_method" title="DBF::RecordIterator#each (method)">each</a></span></span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="encode_string-instance_method">
+  
+    #<strong>encode_string</strong>(string)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Encode string</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>string</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+166
+167
+168</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 166</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_encode_string'>encode_string</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
+</span>  <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_force_encoding'>force_encoding</span><span class='lparen'>(</span><span class='ivar'>@encoding</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_encode'>encode</span><span class='lparen'>(</span><span class='const'>Encoding</span><span class='period'>.</span><span class='id identifier rubyid_default_external'>default_external</span><span class='comma'>,</span> <span class='label'>undef:</span> <span class='symbol'>:replace</span><span class='comma'>,</span> <span class='label'>invalid:</span> <span class='symbol'>:replace</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1145,145 +1198,15 @@
       <pre class="lines">
 
 
-124
-125
-126
-127
-128</pre>
+108
+109
+110</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 124</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 108</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_filename'>filename</span>
-  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:path</span><span class='rparen'>)</span>
-
-  <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="find-instance_method">
-  
-    #<strong>find</strong>(command, options = {}) {|optional, DBF::Record, NilClass| ... } &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Find records using a simple ActiveRecord-like syntax.</p>
-
-<p>Examples:</p>
-
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="DBF::Table (class)">Table</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="DBF::Table#initialize (method)">new</a></span></span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>mydata.dbf</span><span class='tstring_end'>&#39;</span></span>
-
-<span class='comment'># Find record number 5
-</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='int'>5</span><span class='rparen'>)</span>
-
-<span class='comment'># Find all records for Keith Morrison
-</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='symbol'>:all</span><span class='comma'>,</span> <span class='label'>first_name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Keith</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>last_name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Morrison</span><span class='tstring_end'>&quot;</span></span>
-
-<span class='comment'># Find first record
-</span><span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='symbol'>:first</span><span class='comma'>,</span> <span class='label'>first_name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Keith</span><span class='tstring_end'>&quot;</span></span>
-</code></pre>
-
-<p>The <strong>command</strong> may be a record index, :all, or :first. <strong>options</strong> is optional and, if specified, should be a hash where the keys correspond to column names in the database.  The values will be matched exactly with the value in the database.  If you specify more than one key, all values must match in order for the record to be returned.  The equivalent SQL would be “WHERE key1 = ‘value1’ AND key2 = ‘value2’”.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>command</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>, <tt>Symbol</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>command</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>options</span>
-      
-      
-        <span class='type'>(<tt>optional</tt>, <tt>Hash</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>{}</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>options Hash of search parameters</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>optional</tt>, <tt><span class='object_link'><a href="Record.html" title="DBF::Record (class)">DBF::Record</a></span></tt>, <tt>NilClass</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 155</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_command'>command</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='kw'>case</span> <span class='id identifier rubyid_command'>command</span>
-  <span class='kw'>when</span> <span class='const'>Integer</span>
-    <span class='id identifier rubyid_record'>record</span><span class='lparen'>(</span><span class='id identifier rubyid_command'>command</span><span class='rparen'>)</span>
-  <span class='kw'>when</span> <span class='const'>Array</span>
-    <span class='id identifier rubyid_command'>command</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_record'>record</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
-  <span class='kw'>when</span> <span class='symbol'>:all</span>
-    <span class='id identifier rubyid_find_all'>find_all</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='kw'>when</span> <span class='symbol'>:first</span>
-    <span class='id identifier rubyid_find_first'>find_first</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
+  <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>File</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1327,15 +1250,119 @@
       <pre class="lines">
 
 
-169
-170
-171</pre>
+113
+114
+115</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 169</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_memo_file?'>has_memo_file?</span>
   <span class='op'>!</span><span class='op'>!</span><span class='ivar'>@memo</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="header_encoding-instance_method">
+  
+    #<strong>header_encoding</strong>  &#x21d2; <tt>Encoding</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Encoding specified in the file header</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Encoding</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+173
+174
+175</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 173</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_header_encoding'>header_encoding</span>
+  <span class='id identifier rubyid_header'>header</span><span class='period'>.</span><span class='id identifier rubyid_encoding'>encoding</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="name-instance_method">
+  
+    #<strong>name</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+118
+119
+120</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 118</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='ivar'>@name</span> <span class='op'>||=</span> <span class='id identifier rubyid_filename'>filename</span> <span class='op'>&amp;&amp;</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='id identifier rubyid_filename'>filename</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.*</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1357,9 +1384,9 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve a record by index number. The record will be nil if it has been deleted, but not yet pruned from the database.</p>
-
+    <p>Retrieve a record by index number.
+The record will be nil if it has been deleted, but not yet pruned from
+the database.</p>
 
   </div>
 </div>
@@ -1413,18 +1440,18 @@
       <pre class="lines">
 
 
-184
-185
-186
-187
-188
-189
-190
-191
-192</pre>
+128
+129
+130
+131
+132
+133
+134
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 184</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_record'>record</span><span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="NoColumnsDefined.html" title="DBF::NoColumnsDefined (class)">NoColumnsDefined</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>The DBF file has no columns defined</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1433,7 +1460,37 @@
   <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_deleted_record?'>deleted_record?</span>
 
   <span class='id identifier rubyid_record_data'>record_data</span> <span class='op'>=</span> <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span><span class='lparen'>(</span><span class='id identifier rubyid_record_length'>record_length</span><span class='rparen'>)</span>
-  <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Record.html" title="DBF::Record (class)">Record</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Record.html#initialize-instance_method" title="DBF::Record#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_record_data'>record_data</span><span class='comma'>,</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='id identifier rubyid_version'>version</span><span class='comma'>,</span> <span class='ivar'>@memo</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../DBF.html" title="DBF (module)">DBF</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Record.html" title="DBF::Record (class)">Record</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Record.html#initialize-instance_method" title="DBF::Record#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_record_data'>record_data</span><span class='comma'>,</span> <span class='id identifier rubyid_record_context'>record_context</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="record_context-instance_method">
+  
+    #<strong>record_context</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+85
+86
+87</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 85</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_record_context'>record_context</span>
+  <span class='ivar'>@record_context</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="RecordContext.html" title="DBF::RecordContext (class)">RecordContext</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>columns:</span><span class='comma'>,</span> <span class='label'>version:</span><span class='comma'>,</span> <span class='label'>memo:</span> <span class='ivar'>@memo</span><span class='comma'>,</span> <span class='label'>column_offsets:</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1443,7 +1500,7 @@
       <div class="method_details ">
   <h3 class="signature " id="to_csv-instance_method">
   
-    #<strong>to_csv</strong>(path = nil)  &#x21d2; <tt>Object</tt> 
+    #<strong>to_csv</strong>(path_or_io = nil)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -1451,9 +1508,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Dumps all records to a CSV file.  If no filename is given then CSV is output to STDOUT.</p>
-
+    <p>Dumps all records to a CSV file.  If no filename is given then CSV is
+output to STDOUT.</p>
 
   </div>
 </div>
@@ -1463,19 +1519,17 @@
   
     <li>
       
-        <span class='name'>path</span>
+        <span class='name'>path_or_io</span>
       
       
-        <span class='type'>(<tt>optional String</tt>)</span>
+        <span class='type'>(<tt>optional String</tt>, <tt>IO</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
         &mdash;
-        <div class='inline'>
-<p>Defaults to STDOUT</p>
-</div>
+        <div class='inline'><p>String path, IO-like object, or nil for STDOUT</p></div>
       
     </li>
   
@@ -1488,19 +1542,27 @@
       <pre class="lines">
 
 
-200
-201
-202
-203
-204
-205</pre>
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 200</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 144</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_to_csv'>to_csv</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_out_io'>out_io</span> <span class='op'>=</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>?</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>w</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>:</span> <span class='gvar'>$stdout</span>
-  <span class='id identifier rubyid_csv'>csv</span> <span class='op'>=</span> <span class='const'>CSV</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_out_io'>out_io</span><span class='comma'>,</span> <span class='label'>force_quotes:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_csv'>to_csv</span><span class='lparen'>(</span><span class='id identifier rubyid_path_or_io'>path_or_io</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_io'>io</span> <span class='op'>=</span> <span class='kw'>case</span> <span class='id identifier rubyid_path_or_io'>path_or_io</span>
+  <span class='kw'>when</span> <span class='kw'>nil</span> <span class='kw'>then</span> <span class='gvar'>$stdout</span>
+  <span class='kw'>when</span> <span class='const'>String</span> <span class='kw'>then</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_path_or_io'>path_or_io</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>w</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='kw'>else</span> <span class='id identifier rubyid_path_or_io'>path_or_io</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_csv'>csv</span> <span class='op'>=</span> <span class='const'>CSV</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_io'>io</span><span class='comma'>,</span> <span class='label'>force_quotes:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_csv'>csv</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_column_names'>column_names</span>
   <span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_record'>record</span><span class='op'>|</span> <span class='id identifier rubyid_csv'>csv</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
@@ -1520,9 +1582,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Human readable version description</p>
-
+    <p>Human readable version description</p>
 
   </div>
 </div>
@@ -1548,15 +1608,15 @@
       <pre class="lines">
 
 
-210
-211
-212</pre>
+158
+159
+160</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 210</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/table.rb', line 158</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_version_description'>version_description</span>
-  <span class='const'><span class='object_link'><a href="#VERSIONS-constant" title="DBF::Table::VERSIONS (constant)">VERSIONS</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_version'>version</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_version_config'>version_config</span><span class='period'>.</span><span class='id identifier rubyid_version_description'>version_description</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1568,9 +1628,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 10:30:38 2023 by
+  Generated on Sun May 24 00:23:14 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.43 (ruby-4.0.5).
 </div>
 
     </div>

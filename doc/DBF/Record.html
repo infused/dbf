@@ -6,13 +6,13 @@
 <title>
   Class: DBF::Record
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.43
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "DBF::Record";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -94,16 +96,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/dbf/record.rb</dd>
+    <dd>lib/dbf/record.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An instance of DBF::Record represents a row in the DBF file</p>
-
+    <p>An instance of DBF::Record represents a row in the DBF file</p>
 
   </div>
 </div>
@@ -142,9 +143,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Equality.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Equality.</p></div></span>
   
 </li>
 
@@ -166,9 +165,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Reads attributes by column name.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Reads attributes by column name.</p></div></span>
   
 </li>
 
@@ -190,9 +187,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Record attributes.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Record attributes.</p></div></span>
   
 </li>
 
@@ -200,7 +195,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(data, columns, version, memo)  &#x21d2; Record </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(data, context, offset = 0)  &#x21d2; Record </a>
     
 
     
@@ -216,9 +211,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Initialize a new DBF::Record.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Initialize a new DBF::Record.</p></div></span>
   
 </li>
 
@@ -240,9 +233,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Do all search parameters match?.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Do all search parameters match?.</p></div></span>
   
 </li>
 
@@ -264,14 +255,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Maps a row to an array of values.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Maps a row to an array of values.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -280,7 +270,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(data, columns, version, memo)  &#x21d2; <tt><span class='object_link'><a href="" title="DBF::Record (class)">Record</a></span></tt> 
+    #<strong>initialize</strong>(data, context, offset = 0)  &#x21d2; <tt><span class='object_link'><a href="" title="DBF::Record (class)">Record</a></span></tt> 
   
 
   
@@ -288,9 +278,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Initialize a new DBF::Record</p>
-
+    <p>Initialize a new DBF::Record</p>
 
   </div>
 </div>
@@ -308,29 +296,16 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>data</p>
-</div>
+        <div class='inline'><p>data</p></div>
       
     </li>
   
     <li>
       
-        <span class='name'>columns</span>
+        <span class='name'>context</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="Column.html" title="DBF::Column (class)">Column</a></span></tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>version</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="RecordContext.html" title="DBF::RecordContext (class)">DBF::RecordContext</a></span></tt>)</span>
       
       
       
@@ -338,11 +313,13 @@
   
     <li>
       
-        <span class='name'>memo</span>
+        <span class='name'>offset</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="Memo.html" title="DBF::Memo (module)">DBF::Memo</a></span></tt>)</span>
+        <span class='type'>(<tt>Integer</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
       
       
     </li>
@@ -356,21 +333,21 @@
       <pre class="lines">
 
 
-10
 11
 12
 13
 14
-15</pre>
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 10</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 11</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_columns'>columns</span><span class='comma'>,</span> <span class='id identifier rubyid_version'>version</span><span class='comma'>,</span> <span class='id identifier rubyid_memo'>memo</span><span class='rparen'>)</span>
-  <span class='ivar'>@data</span> <span class='op'>=</span> <span class='const'>StringIO</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
-  <span class='ivar'>@columns</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span>
-  <span class='ivar'>@version</span> <span class='op'>=</span> <span class='id identifier rubyid_version'>version</span>
-  <span class='ivar'>@memo</span> <span class='op'>=</span> <span class='id identifier rubyid_memo'>memo</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_context'>context</span><span class='comma'>,</span> <span class='id identifier rubyid_offset'>offset</span> <span class='op'>=</span> <span class='int'>0</span><span class='rparen'>)</span>
+  <span class='ivar'>@data</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span>
+  <span class='ivar'>@context</span> <span class='op'>=</span> <span class='id identifier rubyid_context'>context</span>
+  <span class='ivar'>@offset</span> <span class='op'>=</span> <span class='id identifier rubyid_offset'>offset</span>
+  <span class='ivar'>@to_a</span> <span class='op'>=</span> <span class='kw'>nil</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -396,9 +373,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>:nodoc:</p>
-
+    <p>:nodoc:</p>
 
   </div>
 </div>
@@ -411,20 +386,30 @@
       <pre class="lines">
 
 
-90
-91
-92
-93
-94
-95
-96</pre>
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 90</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
-</span>  <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_underscored_column_names'>underscored_column_names</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span>
+</span>  <span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_underscored_column_names'>underscored_column_names</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='ivar'>@context</span><span class='period'>.</span><span class='id identifier rubyid_column_offsets'>column_offsets</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='ivar'>@to_a</span>
+      <span class='id identifier rubyid_column_value'>column_value</span><span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='ivar'>@context</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span>
+    <span class='kw'>end</span>
   <span class='kw'>else</span>
     <span class='kw'>super</span>
   <span class='kw'>end</span>
@@ -452,9 +437,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Equality</p>
-
+    <p>Equality</p>
 
   </div>
 </div>
@@ -495,15 +478,19 @@
       <pre class="lines">
 
 
-21
 22
-23</pre>
+23
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 21</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:attributes</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span> <span class='op'>==</span> <span class='id identifier rubyid_attributes'>attributes</span>
+  <span class='id identifier rubyid_attributes'>attributes</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span>
+<span class='kw'>rescue</span> <span class='const'>NoMethodError</span>
+  <span class='kw'>false</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -521,9 +508,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Reads attributes by column name</p>
-
+    <p>Reads attributes by column name</p>
 
   </div>
 </div>
@@ -541,9 +526,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>key</p>
-</div>
+        <div class='inline'><p>key</p></div>
       
     </li>
   
@@ -556,24 +539,30 @@
       <pre class="lines">
 
 
-28
-29
-30
 31
 32
 33
 34
-35</pre>
+35
+36
+37
+38
+39
+40
+41</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 28</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='ivar'>@context</span><span class='period'>.</span><span class='id identifier rubyid_column_offsets'>column_offsets</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='ivar'>@to_a</span>
+    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_column_name_index'>column_name_index</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_index'>index</span> <span class='op'>?</span> <span class='id identifier rubyid_column_value'>column_value</span><span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>nil</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_underscored_column_names'>underscored_column_names</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span>
+  <span class='kw'>elsif</span> <span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_underscored_column_names'>underscored_column_names</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_attributes'>attributes</span><span class='lbracket'>[</span><span class='ivar'>@context</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -592,9 +581,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Record attributes</p>
-
+    <p>Record attributes</p>
 
   </div>
 </div>
@@ -620,15 +607,15 @@
       <pre class="lines">
 
 
-40
-41
-42</pre>
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 46</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_attributes'>attributes</span>
-  <span class='ivar'>@attributes</span> <span class='op'>||=</span> <span class='const'>Hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_column_names'>column_names</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_to_a'>to_a</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+  <span class='ivar'>@attributes</span> <span class='op'>||=</span> <span class='id identifier rubyid_column_names'>column_names</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_to_a'>to_a</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -646,9 +633,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Do all search parameters match?</p>
-
+    <p>Do all search parameters match?</p>
 
   </div>
 </div>
@@ -689,12 +674,12 @@
       <pre class="lines">
 
 
-48
-49
-50</pre>
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_all?'>all?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_value'>value</span> <span class='rbrace'>}</span>
@@ -715,9 +700,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Maps a row to an array of values</p>
-
+    <p>Maps a row to an array of values</p>
 
   </div>
 </div>
@@ -743,15 +726,49 @@
       <pre class="lines">
 
 
-55
-56
-57</pre>
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/record.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_a'>to_a</span>
-  <span class='ivar'>@to_a</span> <span class='op'>||=</span> <span class='ivar'>@columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span> <span class='id identifier rubyid_init_attribute'>init_attribute</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@to_a</span> <span class='op'>||=</span> <span class='kw'>begin</span>
+    <span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='ivar'>@data</span>
+    <span class='id identifier rubyid_offset'>offset</span> <span class='op'>=</span> <span class='ivar'>@offset</span>
+    <span class='id identifier rubyid_columns'>columns</span> <span class='op'>=</span> <span class='ivar'>@context</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span>
+    <span class='id identifier rubyid_col_count'>col_count</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_col_count'>col_count</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='int'>0</span>
+    <span class='kw'>while</span> <span class='id identifier rubyid_index'>index</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_col_count'>col_count</span>
+      <span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_len'>len</span> <span class='op'>=</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+      <span class='id identifier rubyid_raw'>raw</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_byteslice'>byteslice</span><span class='lparen'>(</span><span class='id identifier rubyid_offset'>offset</span><span class='comma'>,</span> <span class='id identifier rubyid_len'>len</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_offset'>offset</span> <span class='op'>+=</span> <span class='id identifier rubyid_len'>len</span>
+      <span class='id identifier rubyid_result'>result</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_decode_column'>decode_column</span><span class='lparen'>(</span><span class='id identifier rubyid_raw'>raw</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_index'>index</span> <span class='op'>+=</span> <span class='int'>1</span>
+    <span class='kw'>end</span>
+    <span class='ivar'>@offset</span> <span class='op'>=</span> <span class='id identifier rubyid_offset'>offset</span>
+    <span class='id identifier rubyid_result'>result</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -763,9 +780,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 10:30:38 2023 by
+  Generated on Sun May 24 00:23:14 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.43 (ruby-4.0.5).
 </div>
 
     </div>

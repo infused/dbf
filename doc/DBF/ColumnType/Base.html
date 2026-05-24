@@ -6,13 +6,13 @@
 <title>
   Class: DBF::ColumnType::Base
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.43
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "DBF::ColumnType::Base";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -94,14 +96,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/dbf/column_type.rb</dd>
+    <dd>lib/dbf/column_type.rb
+</dd>
   </dl>
   
 </div>
 
 <div id="subclasses">
   <h2>Direct Known Subclasses</h2>
-  <p class="children"><span class='object_link'><a href="Boolean.html" title="DBF::ColumnType::Boolean (class)">Boolean</a></span>, <span class='object_link'><a href="Currency.html" title="DBF::ColumnType::Currency (class)">Currency</a></span>, <span class='object_link'><a href="Date.html" title="DBF::ColumnType::Date (class)">Date</a></span>, <span class='object_link'><a href="DateTime.html" title="DBF::ColumnType::DateTime (class)">DateTime</a></span>, <span class='object_link'><a href="Double.html" title="DBF::ColumnType::Double (class)">Double</a></span>, <span class='object_link'><a href="Float.html" title="DBF::ColumnType::Float (class)">Float</a></span>, <span class='object_link'><a href="General.html" title="DBF::ColumnType::General (class)">General</a></span>, <span class='object_link'><a href="Memo.html" title="DBF::ColumnType::Memo (class)">Memo</a></span>, <span class='object_link'><a href="Nil.html" title="DBF::ColumnType::Nil (class)">Nil</a></span>, <span class='object_link'><a href="Number.html" title="DBF::ColumnType::Number (class)">Number</a></span>, <span class='object_link'><a href="SignedLong.html" title="DBF::ColumnType::SignedLong (class)">SignedLong</a></span>, <span class='object_link'><a href="SignedLong2.html" title="DBF::ColumnType::SignedLong2 (class)">SignedLong2</a></span>, <span class='object_link'><a href="String.html" title="DBF::ColumnType::String (class)">String</a></span></p>
+  <p class="children"><span class='object_link'><a href="AutoIncrement.html" title="DBF::ColumnType::AutoIncrement (class)">AutoIncrement</a></span>, <span class='object_link'><a href="Boolean.html" title="DBF::ColumnType::Boolean (class)">Boolean</a></span>, <span class='object_link'><a href="Currency.html" title="DBF::ColumnType::Currency (class)">Currency</a></span>, <span class='object_link'><a href="Date.html" title="DBF::ColumnType::Date (class)">Date</a></span>, <span class='object_link'><a href="DateTime.html" title="DBF::ColumnType::DateTime (class)">DateTime</a></span>, <span class='object_link'><a href="Double.html" title="DBF::ColumnType::Double (class)">Double</a></span>, <span class='object_link'><a href="Float.html" title="DBF::ColumnType::Float (class)">Float</a></span>, <span class='object_link'><a href="General.html" title="DBF::ColumnType::General (class)">General</a></span>, <span class='object_link'><a href="Memo.html" title="DBF::ColumnType::Memo (class)">Memo</a></span>, <span class='object_link'><a href="Nil.html" title="DBF::ColumnType::Nil (class)">Nil</a></span>, <span class='object_link'><a href="Number.html" title="DBF::ColumnType::Number (class)">Number</a></span>, <span class='object_link'><a href="SignedLong.html" title="DBF::ColumnType::SignedLong (class)">SignedLong</a></span>, <span class='object_link'><a href="String.html" title="DBF::ColumnType::String (class)">String</a></span></p>
 </div>
 
 
@@ -132,9 +135,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute decimal.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute decimal.</p></div></span>
   
 </li>
 
@@ -161,9 +162,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute encoding.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute encoding.</p></div></span>
   
 </li>
 
@@ -184,7 +183,51 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(decimal, encoding)  &#x21d2; Base </a>
+      <a href="#blank_value-instance_method" title="#blank_value (instance method)">#<strong>blank_value</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#decode-instance_method" title="#decode (instance method)">#<strong>decode</strong>(raw)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(column)  &#x21d2; Base </a>
     
 
     
@@ -200,14 +243,35 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Base.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Base.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#skip_blank%3F-instance_method" title="#skip_blank? (instance method)">#<strong>skip_blank?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -216,7 +280,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(decimal, encoding)  &#x21d2; <tt><span class='object_link'><a href="" title="DBF::ColumnType::Base (class)">Base</a></span></tt> 
+    #<strong>initialize</strong>(column)  &#x21d2; <tt><span class='object_link'><a href="" title="DBF::ColumnType::Base (class)">Base</a></span></tt> 
   
 
   
@@ -224,9 +288,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Base.</p>
-
+    <p>Returns a new instance of Base.</p>
 
   </div>
 </div>
@@ -236,21 +298,10 @@
   
     <li>
       
-        <span class='name'>decimal</span>
+        <span class='name'>column</span>
       
       
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>encoding</span>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="String.html" title="DBF::ColumnType::String (class)">String</a></span></tt>, <tt>Encoding</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="../Column.html" title="DBF::Column (class)">DBF::Column</a></span></tt>)</span>
       
       
       
@@ -265,17 +316,17 @@
       <pre class="lines">
 
 
-8
 9
 10
-11</pre>
+11
+12</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 9</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_decimal'>decimal</span><span class='comma'>,</span> <span class='id identifier rubyid_encoding'>encoding</span><span class='rparen'>)</span>
-  <span class='ivar'>@decimal</span> <span class='op'>=</span> <span class='id identifier rubyid_decimal'>decimal</span>
-  <span class='ivar'>@encoding</span> <span class='op'>=</span> <span class='id identifier rubyid_encoding'>encoding</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='ivar'>@decimal</span> <span class='op'>=</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_decimal'>decimal</span>
+  <span class='ivar'>@encoding</span> <span class='op'>=</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_encoding'>encoding</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -300,9 +351,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns the value of attribute decimal.</p>
-
+    <p>Returns the value of attribute decimal.</p>
 
   </div>
 </div>
@@ -315,12 +364,12 @@
       <pre class="lines">
 
 
-4
-5
-6</pre>
+6
+7
+8</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 4</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 6</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_decimal'>decimal</span>
   <span class='ivar'>@decimal</span>
@@ -343,9 +392,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns the value of attribute encoding.</p>
-
+    <p>Returns the value of attribute encoding.</p>
 
   </div>
 </div>
@@ -358,12 +405,12 @@
       <pre class="lines">
 
 
-4
-5
-6</pre>
+6
+7
+8</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 4</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 6</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_encoding'>encoding</span>
   <span class='ivar'>@encoding</span>
@@ -376,12 +423,138 @@
   </div>
 
 
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="blank_value-instance_method">
+  
+    #<strong>blank_value</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_blank_value'>blank_value</span>
+  <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="decode-instance_method">
+  
+    #<strong>decode</strong>(raw)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22
+23
+24
+25
+26
+27
+28</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 22</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_decode'>decode</span><span class='lparen'>(</span><span class='id identifier rubyid_raw'>raw</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_skip_blank?'>skip_blank?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw'>raw</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_raw'>raw</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+    <span class='id identifier rubyid_blank_value'>blank_value</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_type_cast'>type_cast</span><span class='lparen'>(</span><span class='id identifier rubyid_raw'>raw</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="skip_blank?-instance_method">
+  
+    #<strong>skip_blank?</strong>  &#x21d2; <tt><span class='object_link'><a href="Boolean.html" title="DBF::ColumnType::Boolean (class)">Boolean</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Boolean.html" title="DBF::ColumnType::Boolean (class)">Boolean</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18
+19
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/dbf/column_type.rb', line 18</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_skip_blank?'>skip_blank?</span>
+  <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 10:30:38 2023 by
+  Generated on Sun May 24 00:23:14 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.43 (ruby-4.0.5).
 </div>
 
     </div>

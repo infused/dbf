@@ -5,8 +5,7 @@ module DBF
     class Base
       attr_reader :decimal, :encoding
 
-      # @param decimal [Integer]
-      # @param encoding [String, Encoding]
+      # @param column [DBF::Column]
       def initialize(column)
         @decimal = column.decimal
         @encoding = column.encoding

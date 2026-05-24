@@ -6,13 +6,13 @@
 <title>
   Module: DBF::Schema
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.43
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "DBF::Schema";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -83,16 +85,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/dbf/schema.rb</dd>
+    <dd>lib/dbf/schema.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>The Schema module is mixin for the Table class</p>
-
+    <p>The Schema module is mixin for the Table class</p>
 
   </div>
 </div>
@@ -125,6 +126,14 @@
   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>B</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:binary</span><span class='tstring_end'>&#39;</span></span>
 <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
       
+        <dt id="STRING_DATA_FORMATS-constant" class="">STRING_DATA_FORMATS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='label'>sequel:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:varchar, :size =&gt; %s</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='label'>activerecord:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:string, :limit =&gt; %s</span><span class='tstring_end'>&#39;</span></span>
+<span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
     </dl>
   
 
@@ -145,7 +154,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#activerecord_schema-instance_method" title="#activerecord_schema (instance method)">#<strong>activerecord_schema</strong>(_table_only = false)  &#x21d2; Object </a>
+      <a href="#activerecord_schema-instance_method" title="#activerecord_schema (instance method)">#<strong>activerecord_schema</strong>  &#x21d2; Object </a>
     
 
     
@@ -159,9 +168,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>:nodoc:.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>:nodoc:.</p></div></span>
   
 </li>
 
@@ -183,9 +190,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>ActiveRecord schema definition.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>ActiveRecord schema definition.</p></div></span>
   
 </li>
 
@@ -193,7 +198,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#json_schema-instance_method" title="#json_schema (instance method)">#<strong>json_schema</strong>(_table_only = false)  &#x21d2; Object </a>
+      <a href="#json_schema-instance_method" title="#json_schema (instance method)">#<strong>json_schema</strong>  &#x21d2; Object </a>
     
 
     
@@ -207,9 +212,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>:nodoc:.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>:nodoc:.</p></div></span>
   
 </li>
 
@@ -239,7 +242,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#schema-instance_method" title="#schema (instance method)">#<strong>schema</strong>(format = :activerecord, table_only = false)  &#x21d2; String </a>
+      <a href="#schema-instance_method" title="#schema (instance method)">#<strong>schema</strong>(format = :activerecord, table_only: false)  &#x21d2; String </a>
     
 
     
@@ -253,9 +256,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Generate an ActiveRecord::Schema.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Generate an ActiveRecord::Schema.</p></div></span>
   
 </li>
 
@@ -277,9 +278,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>:nodoc:.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>:nodoc:.</p></div></span>
   
 </li>
 
@@ -301,9 +300,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>:nodoc:.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>:nodoc:.</p></div></span>
   
 </li>
 
@@ -311,7 +308,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#sequel_schema-instance_method" title="#sequel_schema (instance method)">#<strong>sequel_schema</strong>(table_only = false)  &#x21d2; Object </a>
+      <a href="#sequel_schema-instance_method" title="#sequel_schema (instance method)">#<strong>sequel_schema</strong>(table_only: false)  &#x21d2; Object </a>
     
 
     
@@ -325,9 +322,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>:nodoc:.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>:nodoc:.</p></div></span>
   
 </li>
 
@@ -349,9 +344,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Sequel schema definition.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Sequel schema definition.</p></div></span>
   
 </li>
 
@@ -379,6 +372,7 @@
 
       
     </ul>
+    
   
 
 
@@ -390,7 +384,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="activerecord_schema-instance_method">
   
-    #<strong>activerecord_schema</strong>(_table_only = false)  &#x21d2; <tt>Object</tt> 
+    #<strong>activerecord_schema</strong>  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -398,9 +392,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>:nodoc:</p>
-
+    <p>:nodoc:</p>
 
   </div>
 </div>
@@ -413,27 +405,27 @@
       <pre class="lines">
 
 
-49
-50
-51
-52
-53
-54
-55
 56
-57</pre>
+57
+58
+59
+60
+61
+62
+63
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 56</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_activerecord_schema'>activerecord_schema</span><span class='lparen'>(</span><span class='id identifier rubyid__table_only'>_table_only</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
-</span>  <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ActiveRecord::Schema.define do\n</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  create_table \&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot; do |t|\n</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>def</span> <span class='id identifier rubyid_activerecord_schema'>activerecord_schema</span><span class='lparen'>(</span><span class='op'>*</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
+</span>  <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ActiveRecord::Schema.define do\n</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  create_table \&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot; do |t|\n</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span>
-    <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    t.column </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_activerecord_schema_definition'>activerecord_schema_definition</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    t.column </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_activerecord_schema_definition'>activerecord_schema_definition</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  end\nend</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_s'>s</span>
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  end\nend</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_output'>output</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -451,9 +443,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>ActiveRecord schema definition</p>
-
+    <p>ActiveRecord schema definition</p>
 
   </div>
 </div>
@@ -494,12 +484,12 @@
       <pre class="lines">
 
 
-81
-82
-83</pre>
+86
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 81</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 86</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_activerecord_schema_definition'>activerecord_schema_definition</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_underscored_name'>underscored_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_schema_data_type'>schema_data_type</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='symbol'>:activerecord</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
@@ -512,7 +502,7 @@
       <div class="method_details ">
   <h3 class="signature " id="json_schema-instance_method">
   
-    #<strong>json_schema</strong>(_table_only = false)  &#x21d2; <tt>Object</tt> 
+    #<strong>json_schema</strong>  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -520,9 +510,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>:nodoc:</p>
-
+    <p>:nodoc:</p>
 
   </div>
 </div>
@@ -535,14 +523,14 @@
       <pre class="lines">
 
 
-73
-74
-75</pre>
+78
+79
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 73</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 78</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_json_schema'>json_schema</span><span class='lparen'>(</span><span class='id identifier rubyid__table_only'>_table_only</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
+<span class='kw'>def</span> <span class='id identifier rubyid_json_schema'>json_schema</span><span class='lparen'>(</span><span class='op'>*</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
 </span>  <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_hash</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -565,12 +553,12 @@
       <pre class="lines">
 
 
-104
-105
-106</pre>
+110
+111
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 104</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 110</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_number_data_type'>number_data_type</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_decimal'>decimal</span> <span class='op'>&gt;</span> <span class='int'>0</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:float</span><span class='tstring_end'>&#39;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:integer</span><span class='tstring_end'>&#39;</span></span>
@@ -583,7 +571,7 @@
       <div class="method_details ">
   <h3 class="signature " id="schema-instance_method">
   
-    #<strong>schema</strong>(format = :activerecord, table_only = false)  &#x21d2; <tt>String</tt> 
+    #<strong>schema</strong>(format = :activerecord, table_only: false)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -591,35 +579,25 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Generate an ActiveRecord::Schema</p>
-
+    <p>Generate an ActiveRecord::Schema</p>
 <p>xBase data types are converted to generic types as follows:</p>
-<ul><li>
-<p>Number columns with no decimals are converted to :integer</p>
-</li><li>
-<p>Number columns with decimals are converted to :float</p>
-</li><li>
-<p>Date columns are converted to :datetime</p>
-</li><li>
-<p>Logical columns are converted to :boolean</p>
-</li><li>
-<p>Memo columns are converted to :text</p>
-</li><li>
-<p>Character columns are converted to :string and the :limit option is set to the length of the character column</p>
-</li></ul>
-
+<ul>
+<li>Number columns with no decimals are converted to :integer</li>
+<li>Number columns with decimals are converted to :float</li>
+<li>Date columns are converted to :datetime</li>
+<li>Logical columns are converted to :boolean</li>
+<li>Memo columns are converted to :text</li>
+<li>Character columns are converted to :string and the :limit option is set
+to the length of the character column</li>
+</ul>
 <p>Example:</p>
-
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_create_table'>create_table</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mydata</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span>
-  <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:limit</span> <span class='op'>=&gt;</span> <span class='int'>30</span>
-  <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:last_update</span><span class='comma'>,</span> <span class='symbol'>:datetime</span>
-  <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:is_active</span><span class='comma'>,</span> <span class='symbol'>:boolean</span>
-  <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:age</span><span class='comma'>,</span> <span class='symbol'>:integer</span>
-  <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:notes</span><span class='comma'>,</span> <span class='symbol'>:text</span>
-<span class='kw'>end</span>
-</code></pre>
-
+<span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:limit</span> <span class='op'>=&gt;</span> <span class='int'>30</span>
+<span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:last_update</span><span class='comma'>,</span> <span class='symbol'>:datetime</span>
+<span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:is_active</span><span class='comma'>,</span> <span class='symbol'>:boolean</span>
+<span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:age</span><span class='comma'>,</span> <span class='symbol'>:integer</span>
+<span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='symbol'>:notes</span><span class='comma'>,</span> <span class='symbol'>:text</span>
+<span class='kw'>end</span></code></pre>
 
   </div>
 </div>
@@ -639,9 +617,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>format Valid options are :activerecord and :json</p>
-</div>
+        <div class='inline'><p>format Valid options are :activerecord and :json</p></div>
       
     </li>
   
@@ -680,19 +656,19 @@
       <pre class="lines">
 
 
-38
-39
-40
-41
-42
-43</pre>
+45
+46
+47
+48
+49
+50</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 45</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_schema'>schema</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span> <span class='op'>=</span> <span class='symbol'>:activerecord</span><span class='comma'>,</span> <span class='id identifier rubyid_table_only'>table_only</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_schema'>schema</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span> <span class='op'>=</span> <span class='symbol'>:activerecord</span><span class='comma'>,</span> <span class='label'>table_only:</span> <span class='kw'>false</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_schema_method_name'>schema_method_name</span> <span class='op'>=</span> <span class='id identifier rubyid_schema_name'>schema_name</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_schema_method_name'>schema_method_name</span><span class='comma'>,</span> <span class='id identifier rubyid_table_only'>table_only</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_schema_method_name'>schema_method_name</span><span class='comma'>,</span> <span class='label'>table_only:</span> <span class='id identifier rubyid_table_only'>table_only</span><span class='rparen'>)</span>
 <span class='kw'>rescue</span> <span class='const'>NameError</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format'>format</span><span class='embexpr_end'>}</span><span class='tstring_content'> is not a valid schema. Valid schemas are: </span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="#FORMATS-constant" title="DBF::Schema::FORMATS (constant)">FORMATS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>, </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
@@ -712,9 +688,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>:nodoc:</p>
-
+    <p>:nodoc:</p>
 
   </div>
 </div>
@@ -727,26 +701,28 @@
       <pre class="lines">
 
 
-93
-94
-95
-96
-97
 98
 99
 100
 101
-102</pre>
+102
+103
+104
+105
+106
+107
+108</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 98</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_schema_data_type'>schema_data_type</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='id identifier rubyid_format'>format</span> <span class='op'>=</span> <span class='symbol'>:activerecord</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
-</span>  <span class='kw'>case</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
-  <span class='kw'>when</span> <span class='op'>*</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>N</span><span class='words_sep'> </span><span class='tstring_content'>F</span><span class='words_sep'> </span><span class='tstring_content'>I</span><span class='tstring_end'>]</span></span>
+</span>  <span class='id identifier rubyid_col_type'>col_type</span> <span class='op'>=</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_col_type'>col_type</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>N</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>F</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>I</span><span class='tstring_end'>&#39;</span></span>
     <span class='id identifier rubyid_number_data_type'>number_data_type</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
-  <span class='kw'>when</span> <span class='op'>*</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>Y</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>T</span><span class='words_sep'> </span><span class='tstring_content'>L</span><span class='words_sep'> </span><span class='tstring_content'>M</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='tstring_end'>]</span></span>
-    <span class='const'><span class='object_link'><a href="#OTHER_DATA_TYPES-constant" title="DBF::Schema::OTHER_DATA_TYPES (constant)">OTHER_DATA_TYPES</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span><span class='rbracket'>]</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Y</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>D</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>T</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>L</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>M</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>B</span><span class='tstring_end'>&#39;</span></span>
+    <span class='const'><span class='object_link'><a href="#OTHER_DATA_TYPES-constant" title="DBF::Schema::OTHER_DATA_TYPES (constant)">OTHER_DATA_TYPES</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_col_type'>col_type</span><span class='rbracket'>]</span>
   <span class='kw'>else</span>
     <span class='id identifier rubyid_string_data_format'>string_data_format</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
@@ -767,9 +743,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>:nodoc:</p>
-
+    <p>:nodoc:</p>
 
   </div>
 </div>
@@ -782,12 +756,12 @@
       <pre class="lines">
 
 
-45
-46
-47</pre>
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_schema_name'>schema_name</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
 </span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format'>format</span><span class='embexpr_end'>}</span><span class='tstring_content'>_schema</span><span class='tstring_end'>&quot;</span></span>
@@ -800,7 +774,7 @@
       <div class="method_details ">
   <h3 class="signature " id="sequel_schema-instance_method">
   
-    #<strong>sequel_schema</strong>(table_only = false)  &#x21d2; <tt>Object</tt> 
+    #<strong>sequel_schema</strong>(table_only: false)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -808,9 +782,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>:nodoc:</p>
-
+    <p>:nodoc:</p>
 
   </div>
 </div>
@@ -823,35 +795,31 @@
       <pre class="lines">
 
 
-59
-60
-61
-62
-63
-64
-65
 66
 67
 68
 69
 70
-71</pre>
+71
+72
+73
+74
+75
+76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 59</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 66</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_sequel_schema'>sequel_schema</span><span class='lparen'>(</span><span class='id identifier rubyid_table_only'>table_only</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
-</span>  <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sequel.migration do\n</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_table_only'>table_only</span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  change do\n </span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_table_only'>table_only</span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    create_table(:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>) do\n</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>def</span> <span class='id identifier rubyid_sequel_schema'>sequel_schema</span><span class='lparen'>(</span><span class='label'>table_only:</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='comment'># :nodoc:
+</span>  <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sequel.migration do\n  change do\n </span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_table_only'>table_only</span>
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    create_table(:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>) do\n</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span>
-    <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>      column </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sequel_schema_definition'>sequel_schema_definition</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>      column </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sequel_schema_definition'>sequel_schema_definition</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    end\n</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  end\n</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_table_only'>table_only</span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>end\n</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_table_only'>table_only</span>
-  <span class='id identifier rubyid_s'>s</span>
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    end\n</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  end\nend\n</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_table_only'>table_only</span>
+  <span class='id identifier rubyid_output'>output</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -869,9 +837,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Sequel schema definition</p>
-
+    <p>Sequel schema definition</p>
 
   </div>
 </div>
@@ -912,12 +878,12 @@
       <pre class="lines">
 
 
-89
-90
-91</pre>
+94
+95
+96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 89</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 94</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sequel_schema_definition'>sequel_schema_definition</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_underscored_name'>underscored_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_schema_data_type'>schema_data_type</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='symbol'>:sequel</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
@@ -942,23 +908,15 @@
       <pre class="lines">
 
 
-108
-109
-110
-111
-112
-113
-114</pre>
+114
+115
+116</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 108</span>
+      <pre class="code"><span class="info file"># File 'lib/dbf/schema.rb', line 114</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_string_data_format'>string_data_format</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_format'>format</span> <span class='op'>==</span> <span class='symbol'>:sequel</span>
-    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:varchar, :size =&gt; </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>else</span>
-    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:string, :limit =&gt; </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
+  <span class='const'><span class='object_link'><a href="#STRING_DATA_FORMATS-constant" title="DBF::Schema::STRING_DATA_FORMATS (constant)">STRING_DATA_FORMATS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#STRING_DATA_FORMATS-constant" title="DBF::Schema::STRING_DATA_FORMATS (constant)">STRING_DATA_FORMATS</a></span></span><span class='lbracket'>[</span><span class='symbol'>:activerecord</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>%</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -970,9 +928,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 27 10:30:38 2023 by
+  Generated on Sun May 24 00:23:14 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.43 (ruby-4.0.5).
 </div>
 
     </div>
