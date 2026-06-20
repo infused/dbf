@@ -75,8 +75,18 @@ RSpec.describe DBF::ColumnType do
   end
 
   describe DBF::ColumnType::Float do
+    let(:float) { described_class.new(stub_column) }
+
     it 'casts to Float' do
-      expect(described_class.new(stub_column).type_cast('1.5')).to eq 1.5
+      expect(float.type_cast('1.5')).to eq 1.5
+    end
+
+    it 'returns nil for empty input' do
+      expect(float.type_cast('')).to be_nil
+    end
+
+    it 'returns nil from decode when input is blank' do
+      expect(float.decode('          ')).to be_nil
     end
   end
 

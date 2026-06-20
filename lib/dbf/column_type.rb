@@ -70,8 +70,12 @@ module DBF
     end
 
     class Float < Base
+      def skip_blank? = true
+
       # @param value [String]
       def type_cast(value)
+        return nil if value.empty?
+
         value.to_f
       end
     end

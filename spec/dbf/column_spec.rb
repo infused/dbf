@@ -108,6 +108,13 @@ RSpec.describe DBF::Column do
         column = DBF::Column.new table, 'ColumnName', 'F', 3, 0
         expect(column.type_cast(value)).to eq(-135.0)
       end
+
+      context 'with a blank value' do
+        it 'returns nil' do
+          column = DBF::Column.new table, 'ColumnName', 'F', 20, 18
+          expect(column.decode(' ' * 20)).to be_nil
+        end
+      end
     end
 
     context 'with type B (binary)' do

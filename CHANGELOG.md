@@ -2,9 +2,10 @@
 
 ## main branch
 
-- Blank Visual FoxPro `T` (DateTime) columns now return nil instead of a Julian day-0 date
-- Extract CLI logic into `DBF::CLI` class (`bin/dbf` is now a thin shim)
-- `DBF::Table#to_csv` now accepts an IO in addition to a String path
+- Blank Visual FoxPro "T" (DateTime) columns now return nil instead of a Julian day-0 date
+- Blank "F" (Float) columns now return nil instead of 0.0, matching "N" (Number) behavior
+- Extract CLI logic into DBF::CLI class (bin/dbf is now a thin shim)
+- DBF::Table#to_csv now accepts an IO in addition to a String path
 - Fix broken link in README
 
 ## 5.2.0
