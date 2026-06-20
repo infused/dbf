@@ -131,6 +131,10 @@ RSpec.describe DBF::ColumnType do
       expect(dt.type_cast("\x00")).to be_nil
     end
 
+    it 'returns nil for a blank (all-null) timestamp' do
+      expect(dt.type_cast("\x00" * 8)).to be_nil
+    end
+
     it 'returns a Time for valid JD+millis input' do
       bytes = [2_460_184, 12 * 3_600_000].pack('l2') # noon UTC
       expect(dt.type_cast(bytes)).to be_a(Time)

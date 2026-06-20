@@ -197,6 +197,14 @@ RSpec.describe DBF::Column do
           expect(column.type_cast('')).to be_nil
         end
       end
+
+      context 'with the real dbase_30 fixture' do
+        it 'decodes a populated timestamp to a Time and a blank one to nil' do
+          record = table.record(0)
+          expect(record.updated).to be_a(Time)
+          expect(record.flagdate).to be_nil
+        end
+      end
     end
 
     context 'with type D (date)' do

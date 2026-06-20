@@ -328,16 +328,16 @@ at this time.
 | 04      | dBase IV without memo file                          | Y | Y | Y | Y | - | - | - | - | - | - | - | - | - | - | - | - | - |
 | 05      | dBase V without memo file                           | Y | Y | Y | Y | - | - | - | - | - | - | - | - | - | - | - | - | - |
 | 07      | Visual Objects 1.x                                  | Y | Y | Y | Y | - | - | - | - | - | - | - | - | - | - | - | - | - |
-| 30      | Visual FoxPro                                       | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | N | Y | N | N | N | N | - |
-| 31      | Visual FoxPro with AutoIncrement                    | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | N | Y | N | N | N | N | N |
-| 32      | Visual FoxPro with field type Varchar or Varbinary  | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | N | Y | N | N | N | N | N |
+| 30      | Visual FoxPro                                       | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | Y | Y | N | N | N | N | - |
+| 31      | Visual FoxPro with AutoIncrement                    | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | Y | Y | N | N | N | N | N |
+| 32      | Visual FoxPro with field type Varchar or Varbinary  | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | Y | Y | N | N | N | N | N |
 | 7b      | dBase IV with memo file                             | Y | Y | Y | Y | Y | Y | - | - | - | - | - | - | - | - | - | - | - |
 | 83      | dBase III with memo file                            | Y | Y | Y | Y | Y | - | - | - | - | - | - | - | - | - | - | - | - |
 | 87      | Visual Objects 1.x with memo file                   | Y | Y | Y | Y | Y | - | - | - | - | - | - | - | - | - | - | - | - |
 | 8b      | dBase IV with memo file                             | Y | Y | Y | Y | Y | - | - | - | - | - | - | - | - | N | - | - | - |
 | 8e      | dBase IV with SQL table                             | Y | Y | Y | Y | Y | - | - | - | - | - | - | - | - | N | - | - | - |
-| f5      | FoxPro with memo file                               | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | N | Y | N | N | N | N | N |
-| fb      | FoxPro without memo file                            | Y | Y | Y | Y | - | Y | Y | Y | N | Y | N | Y | N | N | N | N | N |
+| f5      | FoxPro with memo file                               | Y | Y | Y | Y | Y | Y | Y | Y | N | Y | Y | Y | N | N | N | N | N |
+| fb      | FoxPro without memo file                            | Y | Y | Y | Y | - | Y | Y | Y | N | Y | Y | Y | N | N | N | N | N |
 
 Data type descriptions
 

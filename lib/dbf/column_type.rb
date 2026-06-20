@@ -110,6 +110,8 @@ module DBF
       # @param value [String]
       def type_cast(value)
         days, msecs = value.unpack('l2')
+        return nil if days.nil? || days.zero?
+
         secs = (msecs / 1000).to_i
         ::DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60).to_time
       rescue StandardError
