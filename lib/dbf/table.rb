@@ -164,7 +164,7 @@ module DBF
     # @param [String] string
     # @return [String]
     def encode_string(string) # :nodoc:
-      string.force_encoding(@encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
+      Encoder.encode(string, @encoding)
     end
 
     # Encoding specified in the file header

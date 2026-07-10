@@ -66,6 +66,10 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Enabled: false
 
+Metrics/CollectionLiteralLength:
+  Exclude:
+    - lib/dbf/encoder.rb
+
 Metrics/CyclomaticComplexity:
   Max: 10
 

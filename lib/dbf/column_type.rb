@@ -133,7 +133,7 @@ module DBF
       def type_cast(value)
         return value unless encoding && value
 
-        value.dup.force_encoding(encoding).encode(Encoding.default_external, undef: :replace, invalid: :replace)
+        Encoder.encode(value.dup, encoding)
       end
     end
 
@@ -163,8 +163,9 @@ module DBF
       private
 
       def encode(value)
-        value.force_encoding(encoding)
-        @needs_encode ? value.encode(@target_encoding, undef: :replace, invalid: :replace) : value
+        return value.force_encoding(encoding) unless @needs_encode
+
+        Encoder.encode(value, encoding, @target_encoding)
       end
     end
   end

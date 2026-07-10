@@ -151,6 +151,7 @@ table = DBF::Table.new('dbf/books.dbf', nil, 'cp866')
 | 01 | cp437 | U.S. MS–DOS |
 | 02 | cp850 | International MS–DOS |
 | 03 | cp1252 | Windows ANSI |
+| 04 | macRoman | Standard Macintosh |
 | 08 | cp865 | Danish OEM |
 | 09 | cp437 | Dutch OEM |
 | 0a | cp850 | Dutch OEM* |
@@ -191,6 +192,8 @@ table = DBF::Table.new('dbf/books.dbf', nil, 'cp866')
 | 65 | cp866 | Russian MS–DOS |
 | 66 | cp865 | Nordic MS–DOS |
 | 67 | cp861 | Icelandic MS–DOS |
+| 68 | cp895 | Kamenický (Czech) MS–DOS |
+| 69 | cp620 | Mazovia (Polish) MS–DOS |
 | 6a | cp737 | Greek MS–DOS (437G) |
 | 6b | cp857 | Turkish MS–DOS |
 | 6c | cp863 | French–Canadian MS–DOS |
@@ -199,9 +202,14 @@ table = DBF::Table.new('dbf/books.dbf', nil, 'cp866')
 | 7a | cp936 | PRC GBK |
 | 7b | cp932 | Japanese Shift-JIS |
 | 7c | cp874 | Thai Windows/MS–DOS |
+| 7d | cp1255 | Hebrew Windows |
+| 7e | cp1256 | Arabic Windows |
 | 86 | cp737 | Greek OEM |
 | 87 | cp852 | Slovenian OEM |
 | 88 | cp857 | Turkish OEM |
+| 96 | macCyrillic | Russian Macintosh |
+| 97 | macCentEuro | Macintosh EE |
+| 98 | macGreek | Greek Macintosh |
 | c8 | cp1250 | Eastern European Windows |
 | c9 | cp1251 | Russian Windows |
 | ca | cp1254 | Turkish Windows |
