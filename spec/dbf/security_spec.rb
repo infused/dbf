@@ -104,4 +104,25 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-003 ---
+  describe 'FoxPro .dbc table path traversal (CWE-22)' do
+    let(:db) { DBF::Database::Foxpro.new fixture('foxprodb/FOXPRO-DB-TEST.DBC') }
+
+    it 'refuses a container name that escapes the database directory' do
+      Dir.mktmpdir do |dir|
+        FileUtils.cp fixture('dbase_83.dbf'), File.join(dir, 'secret.dbf')
+        outside = ('../' * 12) + File.join(dir, 'secret').sub(%r{\A/}, '')
+        expect { db.table_path(outside) }.to raise_error(DBF::FileNotFoundError)
+      end
+    end
+
+    it 'strips path separators rather than following them' do
+      expect(db.table_path('../contacts')).to end_with File.join('foxprodb', 'contacts.dbf')
+    end
+
+    it 'still resolves a legitimate table name' do
+      expect(db.table_path('contacts')).to end_with 'contacts.dbf'
+    end
+  end
+
 end

@@ -47,10 +47,21 @@ module DBF
       # @param name [String]
       # @return [String]
       def table_path(name)
-        glob = File.join(@dirname, "#{name}.dbf")
+        name = name.to_s
+        raise DBF::FileNotFoundError, "related table not found: #{name}" if name.empty? || name.include?("\x00")
+
+        # Treat the container-supplied name as an untrusted basename so that
+        # path separators and ".." cannot escape the database directory.
+        basename = File.basename(name)
+        glob = File.join(@dirname, "#{basename}.dbf")
         path = Dir.glob(glob, File::FNM_CASEFOLD).first
 
         raise DBF::FileNotFoundError, "related table not found: #{name}" unless path && File.exist?(path)
+
+        # Defense in depth: confirm the resolved file really is inside the
+        # database directory before opening it.
+        contained = File.realpath(path).start_with?("#{File.realpath(@dirname)}#{File::SEPARATOR}")
+        raise DBF::FileNotFoundError, "related table not found: #{name}" unless contained
 
         path
       end
