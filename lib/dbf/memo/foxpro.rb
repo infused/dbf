@@ -23,11 +23,15 @@ module DBF
       private
 
       def read_memo_content(memo_string, memo_size) # :nodoc:
-        if memo_size > block_content_size
-          memo_string << @data.read(content_size(memo_size))
-        else
-          memo_string[0, memo_size]
-        end
+        return memo_string[0, memo_size] unless memo_size > block_content_size
+
+        # Bound the read by the bytes remaining so a crafted 32-bit memo_size
+        # cannot force a ~4 GiB allocation from a small memo file.
+        length = content_size(memo_size)
+        remaining = @data.size - @data.pos
+        length = remaining if length > remaining
+        memo_string << @data.read(length) if length.positive?
+        memo_string
       end
 
       def block_size # :nodoc:

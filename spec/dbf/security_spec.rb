@@ -190,4 +190,21 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-008 ---
+  describe 'FoxPro memo allocation bound (CWE-400)' do
+    let(:data) do
+      bytes = (+"\x00").b * 1024
+      bytes[6, 2] = [64].pack('n')
+      bytes[64, 64] = [1, 4_294_967_295].pack('NN') + ('m'.b * 56)
+      bytes
+    end
+
+    it 'never reads more than the memo file holds' do
+      io = StringIO.new(data)
+      allow(io).to receive(:read).and_call_original
+      DBF::Memo::Foxpro.new(io, '30').get(1)
+      expect(io).to_not have_received(:read).with(satisfy { |n| n.is_a?(Integer) && n > data.bytesize })
+    end
+  end
+
 end
