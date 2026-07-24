@@ -12,7 +12,15 @@ module DBF
       safe_seek do
         @data.seek(@version_config.header_size)
         [].tap do |columns|
-          columns << Column.new(*@version_config.read_column_args(@table, @data)) until end_of_record?
+          until end_of_record?
+            args = @version_config.read_column_args(@table, @data)
+            # A descriptor truncated by EOF unpacks to a nil length; stop
+            # rather than constructing an invalid column (which would crash
+            # on nil < 0).
+            break if args[3].nil?
+
+            columns << Column.new(*args)
+          end
         end
       end
     end

@@ -246,4 +246,13 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-011 ---
+  describe 'truncated column descriptor (CWE-248)' do
+    it 'stops column parsing instead of building an invalid column' do
+      partial = ('N'.b * 11) + 'C'.b + ("\x00".b * 4)
+      bytes = dbf_header(record_count: 1, header_length: 49, record_length: 5) + partial
+      expect { DBF::Table.new(StringIO.new(bytes)).columns }.to_not raise_error
+    end
+  end
+
 end

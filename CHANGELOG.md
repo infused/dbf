@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-248): stop column parsing on a truncated descriptor instead of constructing an invalid column that crashes on a nil length
 - Security (CWE-248): decode truncated numeric cells (Currency, AutoIncrement) to blank instead of raising an uncaught `nil` crash
 - Security (CWE-248): handle truncated headers and missing column terminators gracefully instead of raising an uncaught `nil` crash during column parsing
 - Security (CWE-400): bound FoxPro memo reads by the memo file size so a crafted memo size cannot force a ~4 GiB allocation
