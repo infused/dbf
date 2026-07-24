@@ -263,4 +263,12 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-013 ---
+  describe 'dBase IV memo past EOF (CWE-248)' do
+    it 'returns nil when the block header cannot be read' do
+      memo = DBF::Memo::Dbase4.new(StringIO.new("\x00".b * 512), '8b')
+      expect(memo.get(99)).to be_nil
+    end
+  end
+
 end
