@@ -136,6 +136,10 @@ module DBF
       return nil if deleted_record?
 
       record_data = @data.read(record_length)
+      # A file that ends immediately after the delete flag has no record body;
+      # treat it as absent rather than building a Record over nil data.
+      return nil unless record_data
+
       DBF::Record.new(record_data, record_context)
     end
 

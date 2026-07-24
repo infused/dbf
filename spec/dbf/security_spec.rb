@@ -297,4 +297,22 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
       expect { DBF::Table.new(StringIO.new(bytes)).columns }.to_not raise_error
     end
   end
+
+  # --- VULN-016 ---
+  describe 'record body missing after the delete flag (CWE-248)' do
+    def table_with(records)
+      bytes = dbf_table(record_count: 1, record_length: 6,
+                        columns: [dbf_column(name: 'A', type: 'C', length: 5)],
+                        records:)
+      DBF::Table.new(StringIO.new(bytes))
+    end
+
+    it 'returns nil instead of crashing when the record body is absent' do
+      expect(table_with(' ').record(0)).to be_nil
+    end
+
+    it 'still returns a record when the body is present' do
+      expect(table_with(' hello').record(0).to_a).to eq ['hello']
+    end
+  end
 end
