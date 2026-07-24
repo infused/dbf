@@ -227,4 +227,23 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-010 ---
+  describe 'truncated numeric cells (CWE-248)' do
+    it 'does not crash decoding a Currency cell shorter than its width' do
+      bytes = dbf_table(record_count: 1, record_length: 3,
+                        columns: [dbf_column(name: 'AMT', type: 'Y', length: 8, decimal: 4)],
+                        records: ' ab')
+      table = DBF::Table.new(StringIO.new(bytes))
+      expect { table.each { |record| record&.to_a } }.to_not raise_error
+    end
+
+    it 'decodes a truncated AutoIncrement cell to nil' do
+      bytes = dbf_table(record_count: 1, record_length: 3,
+                        columns: [dbf_column(name: 'INC', type: '+', length: 4)],
+                        records: ' ab')
+      table = DBF::Table.new(StringIO.new(bytes))
+      expect(table.each.to_a.first.to_a).to eq [nil]
+    end
+  end
+
 end

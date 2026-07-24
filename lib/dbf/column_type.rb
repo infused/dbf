@@ -20,6 +20,10 @@ module DBF
       end
 
       def decode(raw, &)
+        # A record truncated before this column yields a nil slice; treat it
+        # as blank rather than crashing in the type cast.
+        return blank_value if raw.nil?
+
         if skip_blank? && raw.count(' ') == raw.length
           blank_value
         else
@@ -49,7 +53,8 @@ module DBF
     class Currency < Base
       # @param value [String]
       def type_cast(value)
-        (value.unpack1('q<') / 10_000.0).to_f
+        int = value.unpack1('q<')
+        int && (int / 10_000.0).to_f
       end
     end
 
@@ -64,6 +69,8 @@ module DBF
       # @param value [String]
       def type_cast(value)
         bits = value.unpack1('B*')
+        return nil unless bits && bits.length >= 32
+
         sign_multiplier = bits[0] == '0' ? -1 : 1
         bits[1, 31].to_i(2) * sign_multiplier
       end
