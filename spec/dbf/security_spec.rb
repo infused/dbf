@@ -255,4 +255,12 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-012 ---
+  describe 'dBase III memo past EOF (CWE-248)' do
+    it 'does not crash when the start block is past the end of the file' do
+      memo = DBF::Memo::Dbase3.new(StringIO.new("\x00".b * 512), '83')
+      expect { memo.get(99) }.to_not raise_error
+    end
+  end
+
 end

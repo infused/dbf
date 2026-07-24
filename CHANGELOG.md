@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-248): guard dBase III memo reads against a start block past EOF instead of crashing on a nil block
 - Security (CWE-248): stop column parsing on a truncated descriptor instead of constructing an invalid column that crashes on a nil length
 - Security (CWE-248): decode truncated numeric cells (Currency, AutoIncrement) to blank instead of raising an uncaught `nil` crash
 - Security (CWE-248): handle truncated headers and missing column terminators gracefully instead of raising an uncaught `nil` crash during column parsing
