@@ -55,7 +55,7 @@ module DBF
 
     def activerecord_schema(*) # :nodoc:
       output = +"ActiveRecord::Schema.define do\n"
-      output << "  create_table \"#{name}\" do |t|\n"
+      output << "  create_table #{name.to_s.inspect} do |t|\n"
       columns.each do |column|
         output << "    t.column #{activerecord_schema_definition(column)}"
       end
@@ -66,7 +66,7 @@ module DBF
     def sequel_schema(table_only: false) # :nodoc:
       output = +''
       output << "Sequel.migration do\n  change do\n " unless table_only
-      output << "    create_table(:#{name}) do\n"
+      output << "    create_table(#{name.to_s.to_sym.inspect}) do\n"
       columns.each do |column|
         output << "      column #{sequel_schema_definition(column)}"
       end
@@ -84,7 +84,7 @@ module DBF
     # @param column [DBF::Column]
     # @return [String]
     def activerecord_schema_definition(column)
-      "\"#{column.underscored_name}\", #{schema_data_type(column, :activerecord)}\n"
+      "#{column.underscored_name.inspect}, #{schema_data_type(column, :activerecord)}\n"
     end
 
     # Sequel schema definition
@@ -92,7 +92,7 @@ module DBF
     # @param column [DBF::Column]
     # @return [String]
     def sequel_schema_definition(column)
-      ":#{column.underscored_name}, #{schema_data_type(column, :sequel)}\n"
+      "#{column.underscored_name.to_sym.inspect}, #{schema_data_type(column, :sequel)}\n"
     end
 
     def schema_data_type(column, format = :activerecord) # :nodoc:
