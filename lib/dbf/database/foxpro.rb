@@ -52,9 +52,12 @@ module DBF
 
         # Treat the container-supplied name as an untrusted basename so that
         # path separators and ".." cannot escape the database directory.
-        basename = File.basename(name)
-        glob = File.join(@dirname, "#{basename}.dbf")
-        path = Dir.glob(glob, File::FNM_CASEFOLD).first
+        # Match case-insensitively by scanning the directory rather than
+        # globbing, so glob metacharacters (`{}`, `*`, `?`, `[]`) in the name
+        # cannot trigger brace-expansion CPU exhaustion.
+        target = "#{File.basename(name)}.dbf"
+        entry = Dir.children(@dirname).find { |child| child.casecmp?(target) }
+        path = entry && File.join(@dirname, entry)
 
         raise DBF::FileNotFoundError, "related table not found: #{name}" unless path && File.exist?(path)
 

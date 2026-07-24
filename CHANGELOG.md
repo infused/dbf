@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-400): resolve FoxPro `.dbc` tables by scanning the directory instead of `Dir.glob`, preventing glob brace-expansion CPU exhaustion from a crafted object name
 - Security (CWE-22): confine Visual FoxPro `.dbc` table resolution to the database directory, preventing path traversal via a crafted container object name
 - Security (CWE-1236): neutralize spreadsheet formula injection in `Table#to_csv` by prefixing a quote to string cells/headers starting with `= + - @`
 - Security (CWE-94): escape table and column names when generating ActiveRecord/Sequel schemas, preventing Ruby code injection from crafted DBF header names

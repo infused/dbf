@@ -125,4 +125,21 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-004 ---
+  describe 'FoxPro .dbc glob expansion (CWE-400)' do
+    let(:db) { DBF::Database::Foxpro.new fixture('foxprodb/FOXPRO-DB-TEST.DBC') }
+
+    it 'does not treat a wildcard in the name as a glob pattern' do
+      expect { db.table_path('contact*') }.to raise_error(DBF::FileNotFoundError)
+    end
+
+    it 'does not expand brace groups in the name' do
+      expect { db.table_path('{contacts,calls}') }.to raise_error(DBF::FileNotFoundError)
+    end
+
+    it 'still matches a legitimate name case-insensitively' do
+      expect(db.table_path('CONTACTS')).to end_with 'contacts.dbf'
+    end
+  end
+
 end
