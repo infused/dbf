@@ -20,7 +20,12 @@ module DBF
     private
 
     def end_of_record?
-      safe_seek { @data.read(1).ord == 13 }
+      safe_seek do
+        byte = @data.read(1)
+        # A truncated file that ends before the 0x0D column terminator marks
+        # the end of the column list rather than crashing on nil.ord.
+        byte.nil? || byte.ord == 13
+      end
     end
 
     def safe_seek

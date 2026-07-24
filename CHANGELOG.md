@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-248): handle truncated headers and missing column terminators gracefully instead of raising an uncaught `nil` crash during column parsing
 - Security (CWE-400): bound FoxPro memo reads by the memo file size so a crafted memo size cannot force a ~4 GiB allocation
 - Security (CWE-400): bound dBase IV memo reads by the memo file size so a crafted length field cannot force a ~4 GiB allocation
 - Security (CWE-835): bound record iteration by the bytes actually read so a crafted `record_count` (or zero `record_length`) cannot cause an unbounded loop

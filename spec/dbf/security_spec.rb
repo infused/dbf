@@ -207,4 +207,24 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-009 ---
+  describe 'truncated header and column terminator (CWE-248)' do
+    it 'returns no columns when the file ends before the column terminator' do
+      bytes = dbf_header(record_count: 1, header_length: 32, record_length: 5)
+      expect(DBF::Table.new(StringIO.new(bytes)).columns).to eq []
+    end
+
+    it 'tolerates an empty header read' do
+      expect { DBF::Header.new(nil) }.to_not raise_error
+    end
+
+    it 'tolerates an empty file' do
+      expect { DBF::Table.new(StringIO.new(+'')).columns }.to_not raise_error
+    end
+
+    it 'tolerates a header shorter than 32 bytes' do
+      expect { DBF::Table.new(StringIO.new("\x03\x00\x00")).columns }.to_not raise_error
+    end
+  end
+
 end
