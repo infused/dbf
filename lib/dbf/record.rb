@@ -83,7 +83,9 @@ module DBF
 
     def decode_memo_value(raw) # :nodoc:
       memo = @context.memo
-      return nil unless memo
+      # A record truncated before the memo column yields a nil pointer; skip
+      # decoding rather than crashing on nil.unpack1.
+      return nil unless memo && raw
 
       version = @context.version
       raw = raw.unpack1('V') if version == '30' || version == '31'

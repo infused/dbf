@@ -271,4 +271,15 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-014 ---
+  describe 'FoxPro memo pointer on a truncated record (CWE-248)' do
+    it 'does not crash when the record ends before the memo column' do
+      bytes = dbf_table(version: 0x30, record_count: 1, record_length: 25,
+                        columns: [dbf_column(name: 'A', type: 'C', length: 20),
+                                  dbf_column(name: 'M', type: 'M', length: 4)],
+                        records: "\x00XXXX")
+      table = DBF::Table.new(StringIO.new(bytes), StringIO.new("\x00".b * 1024))
+      expect { table.record(0)&.to_a }.to_not raise_error
+    end
+  end
 end
