@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-248): replace unrepresentable column type bytes so a corrupt descriptor cannot raise when the schema is serialized to JSON
 - Security (CWE-248): `Table#record` returns nil when the file ends after the delete flag instead of crashing on a nil record body
 - Security (CWE-248): stop column parsing when the file ends mid-descriptor instead of raising `ArgumentError` from a short unpack
 - Security (CWE-248): guard FoxPro memo-pointer decoding against a nil value from a truncated record instead of crashing on nil.unpack1

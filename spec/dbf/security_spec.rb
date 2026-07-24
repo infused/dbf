@@ -298,6 +298,26 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-017 ---
+  describe 'non-ASCII column type byte (CWE-248)' do
+    let(:bytes) do
+      dbf_table(columns: [dbf_column(name: 'A', type: "\x9E".b, length: 5)])
+    end
+
+    it 'exposes a type that can be serialized to JSON' do
+      expect { DBF::Table.new(StringIO.new(bytes)).schema(:json) }.to_not raise_error
+    end
+
+    it 'keeps a valid encoding for the type' do
+      expect(DBF::Table.new(StringIO.new(bytes)).columns.first.type).to be_valid_encoding
+    end
+
+    it 'leaves ordinary type characters untouched' do
+      ordinary = dbf_table(columns: [dbf_column(name: 'A', type: 'C', length: 5)])
+      expect(DBF::Table.new(StringIO.new(ordinary)).columns.first.type).to eq 'C'
+    end
+  end
+
   # --- VULN-016 ---
   describe 'record body missing after the delete flag (CWE-248)' do
     def table_with(records)

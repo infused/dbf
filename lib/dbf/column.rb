@@ -38,7 +38,7 @@ module DBF
     def initialize(table, name, type, length, decimal)
       @table = table
       @name = clean(name)
-      @type = type
+      @type = clean_type(type)
       @length = length
       @decimal = decimal
 
@@ -83,6 +83,14 @@ module DBF
 
     def clean(value) # :nodoc:
       @table.encode_string(value.strip.split("\x00", 2).first || +'')
+    end
+
+    # The column type is a single ASCII character. A corrupt file can supply
+    # any byte, which would otherwise stay binary and raise when serialized
+    # (e.g. to JSON), so replace anything unrepresentable.
+    def clean_type(value) # :nodoc:
+      type = value.to_s.dup.force_encoding(Encoding::UTF_8)
+      type.valid_encoding? ? type : type.scrub('?')
     end
 
     def type_cast_class # :nodoc:
