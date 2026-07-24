@@ -190,10 +190,23 @@ module DBF
     # returned unchanged. The leading byte is compared numerically so that a
     # value whose bytes are invalid in its encoding cannot raise here.
     def csv_safe_value(value) # :nodoc:
-      return value unless value.is_a?(::String) && CSV_FORMULA_TRIGGERS.include?(value.getbyte(0))
+      return value unless value.is_a?(::String)
+
+      value = csv_compatible(value)
+      return value unless CSV_FORMULA_TRIGGERS.include?(value.getbyte(0))
 
       quote = +"'"
       quote.force_encoding(value.encoding) + value
+    end
+
+    # A row is written as a single string, so a binary (General/OLE) or
+    # invalidly encoded cell would raise Encoding::CompatibilityError when
+    # combined with text cells. Represent those bytes instead of raising.
+    def csv_compatible(value) # :nodoc:
+      return value if value.ascii_only?
+      return value if value.valid_encoding? && value.encoding != Encoding::BINARY
+
+      value.dup.force_encoding(Encoding::UTF_8).scrub('?')
     end
 
     def version_config

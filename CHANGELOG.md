@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-248): write binary or invalidly encoded cells in `Table#to_csv` as representable text instead of raising an encoding error
 - Security (CWE-248): replace unrepresentable column type bytes so a corrupt descriptor cannot raise when the schema is serialized to JSON
 - Security (CWE-248): `Table#record` returns nil when the file ends after the delete flag instead of crashing on a nil record body
 - Security (CWE-248): stop column parsing when the file ends mid-descriptor instead of raising `ArgumentError` from a short unpack

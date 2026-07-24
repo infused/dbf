@@ -96,6 +96,14 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
       expect(csv_for(bytes)).to include "'="
     end
 
+    it 'does not raise when a binary cell is mixed with text cells' do
+      bytes = dbf_table(record_count: 1, record_length: 7,
+                        columns: [dbf_column(name: 'T', type: 'C', length: 2),
+                                  dbf_column(name: 'G', type: 'G', length: 4)],
+                        records: " ab\xFF\x9E\x80\x81".b)
+      expect { csv_for(bytes) }.to_not raise_error
+    end
+
     it 'leaves ordinary values untouched' do
       bytes = dbf_table(record_count: 1, record_length: 6,
                         columns: [dbf_column(name: 'F', type: 'C', length: 5)],
