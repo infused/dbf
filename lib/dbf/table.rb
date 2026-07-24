@@ -7,6 +7,10 @@ module DBF
   class NoColumnsDefined < StandardError
   end
 
+  # Leading bytes that make a spreadsheet treat a CSV cell as a formula:
+  # "=", "+", "-", "@", tab, and carriage return.
+  CSV_FORMULA_TRIGGERS = [0x3D, 0x2B, 0x2D, 0x40, 0x09, 0x0D].freeze
+
   # DBF::Table is the primary interface to a single DBF file and provides
   # methods for enumerating and searching the records.
   class Table
@@ -148,8 +152,8 @@ module DBF
       else path_or_io
       end
       csv = CSV.new(io, force_quotes: true)
-      csv << column_names
-      each { |record| csv << record.to_a }
+      csv << column_names.map { |name| csv_safe_value(name) }
+      each { |record| csv << record.to_a.map { |value| csv_safe_value(value) } }
     end
 
     # Human readable version description
@@ -175,6 +179,18 @@ module DBF
     end
 
     private
+
+    # Neutralizes spreadsheet formula injection (CWE-1236) on CSV export by
+    # prefixing a single quote to string cells that begin with a formula
+    # trigger character. Non-string values (numbers, dates, booleans) are
+    # returned unchanged. The leading byte is compared numerically so that a
+    # value whose bytes are invalid in its encoding cannot raise here.
+    def csv_safe_value(value) # :nodoc:
+      return value unless value.is_a?(::String) && CSV_FORMULA_TRIGGERS.include?(value.getbyte(0))
+
+      quote = +"'"
+      quote.force_encoding(value.encoding) + value
+    end
 
     def version_config
       @version_config ||= VersionConfig.new(version)

@@ -61,4 +61,47 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-002 ---
+  describe 'CSV formula injection (CWE-1236)' do
+    def csv_for(bytes)
+      io = StringIO.new(+'')
+      DBF::Table.new(StringIO.new(bytes)).to_csv(io)
+      io.string
+    end
+
+    it 'neutralizes a cell value that begins with a formula trigger' do
+      bytes = dbf_table(record_count: 1, record_length: 6,
+                        columns: [dbf_column(name: 'F', type: 'C', length: 5)],
+                        records: ' =1+2 ')
+      expect(csv_for(bytes)).to include %("'=1+2")
+    end
+
+    it 'neutralizes a column name that begins with a formula trigger' do
+      bytes = dbf_table(record_count: 0, record_length: 6,
+                        columns: [dbf_column(name: '=X', type: 'C', length: 5)])
+      expect(csv_for(bytes)).to include %("'=X")
+    end
+
+    it 'does not raise on values whose bytes are invalid in the declared encoding' do
+      bytes = dbf_table(record_count: 1, record_length: 6,
+                        columns: [dbf_column(name: 'F', type: 'C', length: 5)],
+                        records: " =\xFF\xFE\x9E\x8E".b)
+      expect { csv_for(bytes) }.to_not raise_error
+    end
+
+    it 'still neutralizes a formula when later bytes are invalid' do
+      bytes = dbf_table(record_count: 1, record_length: 6,
+                        columns: [dbf_column(name: 'F', type: 'C', length: 5)],
+                        records: " =\xFF\xFE\x9E\x8E".b)
+      expect(csv_for(bytes)).to include "'="
+    end
+
+    it 'leaves ordinary values untouched' do
+      bytes = dbf_table(record_count: 1, record_length: 6,
+                        columns: [dbf_column(name: 'F', type: 'C', length: 5)],
+                        records: ' safe ')
+      expect(csv_for(bytes)).to include %("safe")
+    end
+  end
+
 end
