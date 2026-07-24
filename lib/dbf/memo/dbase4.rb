@@ -5,7 +5,15 @@ module DBF
     class Dbase4 < Base
       def build_memo(start_block) # :nodoc:
         data.seek offset(start_block)
-        data.read(data.read(BLOCK_HEADER_SIZE).unpack1('x4L'))
+        length = data.read(BLOCK_HEADER_SIZE).unpack1('x4L')
+
+        # Bound the read by the bytes remaining so a crafted 32-bit length
+        # field cannot force a ~4 GiB allocation from a small memo file.
+        remaining = data.size - data.pos
+        length = remaining if length > remaining
+        return nil if length <= 0
+
+        data.read(length)
       end
     end
   end

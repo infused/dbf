@@ -174,4 +174,20 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-007 ---
+  describe 'dBase IV memo allocation bound (CWE-400)' do
+    let(:data) { ("\x00".b * 512) + "\x00\x00\x00\x00#{[4_294_967_295].pack('L')}" + ('m'.b * 100) }
+
+    it 'never reads more than the memo file holds' do
+      io = StringIO.new(data)
+      allow(io).to receive(:read).and_call_original
+      DBF::Memo::Dbase4.new(io, '8b').get(1)
+      expect(io).to_not have_received(:read).with(satisfy { |n| n.is_a?(Integer) && n > data.bytesize })
+    end
+
+    it 'still returns the memo content' do
+      expect(DBF::Memo::Dbase4.new(StringIO.new(data), '8b').get(1)).to eq('m' * 100)
+    end
+  end
+
 end

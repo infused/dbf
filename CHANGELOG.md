@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-400): bound dBase IV memo reads by the memo file size so a crafted length field cannot force a ~4 GiB allocation
 - Security (CWE-835): bound record iteration by the bytes actually read so a crafted `record_count` (or zero `record_length`) cannot cause an unbounded loop
 - Security (CWE-789): bound the record read buffer by the file's actual size so a crafted header cannot force a multi-gigabyte allocation from a tiny file
 - Security (CWE-400): resolve FoxPro `.dbc` tables by scanning the directory instead of `Dir.glob`, preventing glob brace-expansion CPU exhaustion from a crafted object name
