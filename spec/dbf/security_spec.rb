@@ -157,4 +157,21 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-006 ---
+  describe 'record iteration bound (CWE-835)' do
+    it 'yields only the records actually present in the file' do
+      bytes = dbf_table(record_count: 1_000_000, record_length: 10,
+                        columns: [dbf_column(name: 'A', type: 'C', length: 9)],
+                        records: " #{'x' * 9}")
+      expect(DBF::Table.new(StringIO.new(bytes)).each.to_a.size).to eq 1
+    end
+
+    it 'yields nothing when the header declares a zero record length' do
+      bytes = dbf_table(record_count: 1_000_000, record_length: 0,
+                        columns: [dbf_column(name: 'A', type: 'C', length: 9)],
+                        records: " #{'x' * 9}")
+      expect(DBF::Table.new(StringIO.new(bytes)).each.to_a).to be_empty
+    end
+  end
+
 end

@@ -14,8 +14,13 @@ module DBF
       buf = read_buffer
       return unless buf
 
+      # Bound the iteration by the bytes actually read so a crafted
+      # record_count (or record_length == 0) cannot drive an unbounded loop.
+      max_records = @record_length > 0 ? buf.bytesize / @record_length : 0
+      count = @record_count < max_records ? @record_count : max_records
+
       pos = 0
-      @record_count.times do
+      count.times do
         if buf.getbyte(pos) == 0x2A
           yield nil
         else
