@@ -29,7 +29,14 @@ module DBF
 
     def read_buffer
       @data.seek(@header_length)
-      @data.read(@record_length * @record_count)
+
+      # Bound the allocation by the bytes actually available so a crafted
+      # header (huge record_length * record_count) cannot force a giant read
+      # from a tiny file.
+      requested = @record_length * @record_count
+      available = @data.size - @header_length
+      available = 0 if available.negative?
+      @data.read(requested < available ? requested : available)
     end
   end
 end

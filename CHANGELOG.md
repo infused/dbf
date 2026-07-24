@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-789): bound the record read buffer by the file's actual size so a crafted header cannot force a multi-gigabyte allocation from a tiny file
 - Security (CWE-400): resolve FoxPro `.dbc` tables by scanning the directory instead of `Dir.glob`, preventing glob brace-expansion CPU exhaustion from a crafted object name
 - Security (CWE-22): confine Visual FoxPro `.dbc` table resolution to the database directory, preventing path traversal via a crafted container object name
 - Security (CWE-1236): neutralize spreadsheet formula injection in `Table#to_csv` by prefixing a quote to string cells/headers starting with `= + - @`

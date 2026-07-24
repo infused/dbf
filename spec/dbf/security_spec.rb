@@ -142,4 +142,19 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     end
   end
 
+  # --- VULN-005 ---
+  describe 'record buffer allocation bound (CWE-789)' do
+    it 'does not allocate beyond the file for a crafted record count and length' do
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, 'crafted.dbf')
+        File.binwrite(path, dbf_table(record_count: 4_294_967_295, record_length: 65_535,
+                                      columns: [dbf_column(name: 'A', type: 'C', length: 10)]))
+        File.open(path, 'rb') do |io|
+          iterator = DBF::RecordIterator.new(io, nil, 32, 65_535, 4_294_967_295)
+          expect(iterator.send(:read_buffer).bytesize).to be <= io.size
+        end
+      end
+    end
+  end
+
 end
