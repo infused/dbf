@@ -282,4 +282,19 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
       expect { table.record(0)&.to_a }.to_not raise_error
     end
   end
+
+  # --- VULN-015 ---
+  describe 'column descriptor cut short by EOF (CWE-248)' do
+    (10..17).each do |size|
+      it "stops cleanly when the column area holds only #{size} bytes" do
+        bytes = dbf_header(record_count: 1, header_length: 32 + size, record_length: 5) + ('A'.b * size)
+        expect { DBF::Table.new(StringIO.new(bytes)).columns }.to_not raise_error
+      end
+    end
+
+    it 'stops cleanly for a truncated dBase II column area' do
+      bytes = dbf_header(version: 0x02, record_count: 1, record_length: 5) + ('A'.b * 6)
+      expect { DBF::Table.new(StringIO.new(bytes)).columns }.to_not raise_error
+    end
+  end
 end

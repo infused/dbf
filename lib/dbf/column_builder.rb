@@ -14,10 +14,10 @@ module DBF
         [].tap do |columns|
           until end_of_record?
             args = @version_config.read_column_args(@table, @data)
-            # A descriptor truncated by EOF unpacks to a nil length; stop
-            # rather than constructing an invalid column (which would crash
-            # on nil < 0).
-            break if args[3].nil?
+            # A descriptor truncated by EOF is returned as nil, or unpacks to
+            # a nil length; stop rather than constructing an invalid column
+            # (which would crash on nil < 0).
+            break if args.nil? || args[3].nil?
 
             columns << Column.new(*args)
           end

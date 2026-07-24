@@ -68,11 +68,22 @@ module DBF
       end
     end
 
+    # Returns the Column.new arguments for the next column descriptor, or nil
+    # when the file ends mid-descriptor. Unpacking a short descriptor would
+    # otherwise raise ArgumentError ("x outside of string").
     def read_column_args(table, io)
+      size, format, defaults = column_layout
+      data = io.read(size)
+      return nil unless data && data.bytesize == size
+
+      [table, *data.unpack(format), *defaults]
+    end
+
+    def column_layout # :nodoc:
       case version
-      when '02' then [table, *io.read(header_size * 2).unpack('A11 a C'), 0]
-      when '04', '8c' then [table, *io.read(48).unpack('A32 a C C x13')]
-      else [table, *io.read(header_size).unpack('A11 a x4 C2')]
+      when '02' then [header_size * 2, 'A11 a C', [0]]
+      when '04', '8c' then [48, 'A32 a C C x13', []]
+      else [header_size, 'A11 a x4 C2', []]
       end
     end
   end

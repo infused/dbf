@@ -2,6 +2,7 @@
 
 ## main branch
 
+- Security (CWE-248): stop column parsing when the file ends mid-descriptor instead of raising `ArgumentError` from a short unpack
 - Security (CWE-248): guard FoxPro memo-pointer decoding against a nil value from a truncated record instead of crashing on nil.unpack1
 - Security (CWE-248): guard dBase IV memo reads against a nil/short block header instead of crashing on nil.unpack1
 - Security (CWE-248): guard dBase III memo reads against a start block past EOF instead of crashing on a nil block
