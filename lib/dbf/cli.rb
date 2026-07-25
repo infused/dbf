@@ -14,6 +14,50 @@ module DBF
         -c = export as CSV
     HELP
 
+    # Bytes a terminal interprets as control or escape sequences. A crafted
+    # DBF can carry these in column names and record values, so they are
+    # replaced before file-derived text reaches an interactive terminal.
+    CONTROL_BYTES = /[\x00-\x1F\x7F]/n
+    # The same, but keeping CR and LF so CSV row separators survive.
+    CONTROL_BYTES_KEEPING_NEWLINES = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/n
+
+    # Replaces terminal control bytes. Substitution happens on a byte copy so
+    # a value whose bytes are invalid in its encoding cannot raise here.
+    #
+    # @param value [Object]
+    # @param pattern [Regexp]
+    # @return [String]
+    def self.sanitize(value, pattern = CONTROL_BYTES)
+      string = value.to_s
+      string.b.gsub(pattern, '?').force_encoding(string.encoding)
+    end
+
+    # Wraps an IO so text written to an interactive terminal is stripped of
+    # control bytes. Redirected or piped output is never wrapped, so exported
+    # data is passed through unaltered.
+    class TerminalFilter
+      def initialize(io)
+        @io = io
+      end
+
+      def <<(data)
+        @io << CLI.sanitize(data, CONTROL_BYTES_KEEPING_NEWLINES)
+        self
+      end
+
+      def write(*data)
+        @io.write(*data.map { |datum| CLI.sanitize(datum, CONTROL_BYTES_KEEPING_NEWLINES) })
+      end
+
+      def method_missing(name, ...) # :nodoc:
+        @io.respond_to?(name) ? @io.send(name, ...) : super
+      end
+
+      def respond_to_missing?(name, include_private = false) # :nodoc:
+        @io.respond_to?(name, include_private) || super
+      end
+    end
+
     def self.run(argv, stdout: $stdout, stderr: $stderr)
       new(argv, stdout: stdout, stderr: stderr).run
     end
@@ -65,11 +109,11 @@ module DBF
     end
 
     def print_ar_schema(filename)
-      @stdout.puts DBF::Table.new(filename).schema(:activerecord)
+      @stdout.puts terminal_safe(DBF::Table.new(filename).schema(:activerecord))
     end
 
     def print_sequel_schema(filename)
-      @stdout.puts DBF::Table.new(filename).schema(:sequel)
+      @stdout.puts terminal_safe(DBF::Table.new(filename).schema(:sequel))
     end
 
     def print_summary(filename)
@@ -84,12 +128,27 @@ module DBF
       @stdout.puts 'Name             Type       Length     Decimal'
       @stdout.puts '-' * 78
       table.columns.each do |f|
-        @stdout.puts format('%-16s %-10s %-10s %-10s', f.name, f.type, f.length, f.decimal)
+        # Column names and types come from the file. Always replace control
+        # bytes here: they are never valid in a name and would otherwise both
+        # emit escape sequences and break the column alignment below.
+        @stdout.puts format('%-16s %-10s %-10s %-10s', self.class.sanitize(f.name), self.class.sanitize(f.type), f.length, f.decimal)
       end
     end
 
     def print_csv(filename)
-      DBF::Table.new(filename).to_csv(@stdout)
+      DBF::Table.new(filename).to_csv(interactive? ? TerminalFilter.new(@stdout) : @stdout)
+    end
+
+    # Exported data is only filtered when it is going to a terminal, so
+    # redirecting or piping still produces byte-for-byte the original values.
+    def terminal_safe(text)
+      return text unless interactive?
+
+      self.class.sanitize(text, CONTROL_BYTES_KEEPING_NEWLINES)
+    end
+
+    def interactive?
+      @stdout.respond_to?(:tty?) && @stdout.tty?
     end
   end
 end

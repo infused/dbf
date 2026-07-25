@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'stringio'
+require 'tmpdir'
 
 RSpec.describe DBF::CLI do
   let(:stdout) { StringIO.new }
@@ -75,6 +76,57 @@ RSpec.describe DBF::CLI do
       expect(lines.first).to include '"ID"'
       expect(lines.first).to include '"NAME"'
       expect(lines.size).to be > 1
+    end
+  end
+
+  describe 'terminal control bytes in a crafted file' do
+    let(:crafted) do
+      path = File.join(@tmpdir, 'escapes.dbf')
+      header = (+"\x00").b * 32
+      header.setbyte(0, 0x03)
+      header[4, 4] = [1].pack('V')
+      header[8, 2] = [65].pack('v')
+      header[10, 2] = [11].pack('v')
+      column = (+"\x00").b * 32
+      column[0, 11] = "\e[31mRED\e[0m".b[0, 11]
+      column.setbyte(11, 'C'.ord)
+      column.setbyte(16, 10)
+      File.binwrite(path, header + column + "\x0D".b + " \e[2Jwiped!".b)
+      path
+    end
+
+    around do |example|
+      Dir.mktmpdir { |dir| @tmpdir = dir; example.run }
+    end
+
+    it 'strips escape sequences from summary output' do
+      _, out, = run('-s', crafted)
+      expect(out).to_not include "\e"
+      expect(out).to include 'RED'
+    end
+
+    it 'strips escape sequences from CSV written to a terminal' do
+      allow(stdout).to receive(:tty?).and_return(true)
+      _, out, = run('-c', crafted)
+      expect(out).to_not include "\e"
+      expect(out).to include 'wiped!'
+    end
+
+    it 'leaves CSV untouched when the output is redirected' do
+      _, out, = run('-c', crafted)
+      expect(out).to include "\e[2Jwiped!"
+    end
+
+    it 'strips escape sequences from schema output on a terminal' do
+      allow(stdout).to receive(:tty?).and_return(true)
+      _, out, = run('-a', crafted)
+      expect(out).to_not include "\e"
+    end
+
+    it 'keeps CSV row separators intact on a terminal' do
+      allow(stdout).to receive(:tty?).and_return(true)
+      _, out, = run('-c', crafted)
+      expect(out.lines.size).to eq 2
     end
   end
 

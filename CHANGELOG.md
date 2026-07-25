@@ -2,6 +2,7 @@
 
 ## main branch
 
+- CLI: replace terminal control bytes in file-derived output so a crafted DBF cannot emit escape sequences to an interactive terminal; CSV and schema output are only filtered when writing to a terminal, so redirected exports are unchanged
 - Security (CWE-248): write binary or invalidly encoded cells in `Table#to_csv` as representable text instead of raising an encoding error
 - Security (CWE-248): replace unrepresentable column type bytes so a corrupt descriptor cannot raise when the schema is serialized to JSON
 - Security (CWE-248): `Table#record` returns nil when the file ends after the delete flag instead of crashing on a nil record body
