@@ -1,6 +1,6 @@
 # Changelog
 
-## main branch
+## 5.4.0
 
 - CLI: replace terminal control bytes in file-derived output so a crafted DBF cannot emit escape sequences to an interactive terminal; CSV and schema output are only filtered when writing to a terminal, so redirected exports are unchanged
 - Security (CWE-248): write binary or invalidly encoded cells in `Table#to_csv` as representable text instead of raising an encoding error
