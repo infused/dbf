@@ -23,6 +23,10 @@
 - RuboCop config: restore the default `vendor/**/*` exclusion (overriding `Exclude` replaces the defaults), fixing a CI lint crash where RuboCop descended into cached vendored gems and tried to load plugins from their configs
 - CLI: close the table when finished, so the DBF file can be deleted or replaced immediately afterwards on Windows (an open handle blocks deletion there)
 
+### Removed
+
+- CodeClimate config and README badges: the service is sunset, and coverage is now enforced directly in CI
+
 ### Changed
 
 - `DBF::Column::NameError` is renamed to `DBF::Column::InvalidNameError` (it shadowed Ruby's `::NameError` without being one); the old constant remains as a deprecated alias

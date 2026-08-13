@@ -2,8 +2,6 @@
 
 [![Version](https://img.shields.io/gem/v/dbf.svg?style=flat)](https://rubygems.org/gems/dbf)
 [![Build Status](https://github.com/infused/dbf/actions/workflows/build.yml/badge.svg)](https://github.com/infused/dbf/actions/workflows/build.yml)
-[![Code Quality](https://img.shields.io/codeclimate/maintainability/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
-[![Code Coverage](https://img.shields.io/codeclimate/c/infused/dbf.svg?style=flat)](https://codeclimate.com/github/infused/dbf)
 [![Total Downloads](https://img.shields.io/gem/dt/dbf.svg)](https://rubygems.org/gems/dbf/)
 [![License](https://img.shields.io/github/license/infused/dbf.svg)](https://github.com/infused/dbf)
 
