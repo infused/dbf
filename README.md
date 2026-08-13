@@ -8,27 +8,27 @@
 DBF is a small, fast Ruby library for reading dBase, xBase, Clipper, and FoxPro database files.
 
 * Project page: <https://github.com/infused/dbf>
-* API Documentation: <https://rdoc.info/gems/dbf>
+* API Documentation: <https://dbf.infused.org>
 * Report bugs: <https://github.com/infused/dbf/issues>
 * Questions: Email <mailto:keithm@infused.org> and put DBF somewhere in the
   subject line
 * Change log: <https://github.com/infused/dbf/blob/main/CHANGELOG.md>
-
-NOTE: Beginning with version 5.2 we have dropped support for Ruby 3.2 and earlier.
-
-NOTE: Beginning with version 4.3 we have dropped support for Ruby 3.0 and earlier.
-
-NOTE: Beginning with version 4 we have dropped support for Ruby 2.0, 2.1, 2.2, and 2.3. If you need support for these older Rubies,
-please use 3.0.x (<https://github.com/infused/dbf/tree/3_stable>)
-
-NOTE: Beginning with version 3 we have dropped support for Ruby 1.8 and 1.9. If you need support for older Rubies,
-please use 2.0.x (<https://github.com/infused/dbf/tree/2_stable>)
 
 ## Compatibility
 
 DBF is tested to work with the following versions of Ruby:
 
 * Ruby 3.3.x, 3.4.x, 4.0.x
+
+Older Rubies are supported by older DBF release lines:
+
+| DBF version | Ruby support |
+| ----------- | ------------ |
+| 5.2+        | 3.3+         |
+| 4.3 – 5.1   | 3.1+         |
+| 4.0 – 4.2   | 2.4+         |
+| 3.x ([3_stable](https://github.com/infused/dbf/tree/3_stable)) | 2.0 – 2.3 |
+| 2.x ([2_stable](https://github.com/infused/dbf/tree/2_stable)) | 1.8 – 1.9 |
 
 ## Installation
 
@@ -383,25 +383,6 @@ Data type descriptions
 
 ## License
 
-Copyright (c) 2006-2024 Keith Morrison <<keithm@infused.org>>
+Copyright (c) 2006-2026 Keith Morrison <<keithm@infused.org>>
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+Released under the MIT License. See [LICENSE](LICENSE) for the full text.
