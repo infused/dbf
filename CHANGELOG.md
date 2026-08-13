@@ -19,6 +19,7 @@
 - `Table#schema` validates the format against the documented list up front; a `NoMethodError` raised inside a valid schema generator is no longer misreported as "not a valid schema"
 - FoxPro memo files shorter than their 512-byte header no longer crash memo reads (they return nil like other truncations)
 - RuboCop config: restore the default `vendor/**/*` exclusion (overriding `Exclude` replaces the defaults), fixing a CI lint crash where RuboCop descended into cached vendored gems and tried to load plugins from their configs
+- CLI: close the table when finished, so the DBF file can be deleted or replaced immediately afterwards on Windows (an open handle blocks deletion there)
 
 ### Changed
 

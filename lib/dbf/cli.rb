@@ -108,16 +108,28 @@ module DBF
       1
     end
 
+    # Always close the table when done: an open handle prevents deleting or
+    # replacing the file on Windows.
+    def with_table(filename)
+      table = DBF::Table.new(filename)
+      yield table
+    ensure
+      table&.close
+    end
+
     def print_ar_schema(filename)
-      @stdout.puts terminal_safe(DBF::Table.new(filename).schema(:activerecord))
+      with_table(filename) { |table| @stdout.puts terminal_safe(table.schema(:activerecord)) }
     end
 
     def print_sequel_schema(filename)
-      @stdout.puts terminal_safe(DBF::Table.new(filename).schema(:sequel))
+      with_table(filename) { |table| @stdout.puts terminal_safe(table.schema(:sequel)) }
     end
 
     def print_summary(filename)
-      table = DBF::Table.new(filename)
+      with_table(filename) { |table| write_summary(filename, table) }
+    end
+
+    def write_summary(filename, table)
       @stdout.puts
       @stdout.puts "Database: #{filename}"
       @stdout.puts "Type: (#{table.version}) #{table.version_description}"
@@ -136,7 +148,7 @@ module DBF
     end
 
     def print_csv(filename)
-      DBF::Table.new(filename).to_csv(interactive? ? TerminalFilter.new(@stdout) : @stdout)
+      with_table(filename) { |table| table.to_csv(interactive? ? TerminalFilter.new(@stdout) : @stdout) }
     end
 
     # Exported data is only filtered when it is going to a terminal, so

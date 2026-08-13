@@ -24,7 +24,7 @@ detectors:
     exclude:
       - count_allocations
       - measure_time
-      - DBF::CLI#print_summary
+      - DBF::CLI#write_summary
       - DBF::Database::Foxpro#table_path
   LongParameterList:
     max_params: 5

@@ -79,6 +79,15 @@ RSpec.describe DBF::CLI do
     end
   end
 
+  describe 'resource handling' do
+    it 'closes the table after processing' do
+      table = DBF::Table.new(dbf_fixture)
+      allow(DBF::Table).to receive(:new).and_return(table)
+      run('-s', dbf_fixture)
+      expect(table.closed?).to be true
+    end
+  end
+
   describe 'terminal control bytes in a crafted file' do
     let(:tmpdir) { Dir.mktmpdir }
     let(:crafted) do
