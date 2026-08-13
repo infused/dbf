@@ -96,7 +96,10 @@ RSpec.describe DBF::CLI do
     end
 
     around do |example|
-      Dir.mktmpdir { |dir| @tmpdir = dir; example.run }
+      Dir.mktmpdir do |dir| 
+        @tmpdir = dir
+        example.run
+      end
     end
 
     it 'strips escape sequences from summary output' do

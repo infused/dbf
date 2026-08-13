@@ -8,7 +8,7 @@ require 'tmpdir'
 # and asserts the parser degrades safely rather than injecting code, escaping
 # the database directory, over-allocating, looping unboundedly, or crashing on
 # a nil read.
-RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/SpecFilePathFormat
+RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
   def dbf_header(version: 0x03, record_count: 0, header_length: 0, record_length: 0)
     bytes = (+"\x00").b * 32
     bytes.setbyte(0, version)
@@ -47,7 +47,7 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
 
     it 'escapes quotes in column names in the Sequel schema' do
       table = DBF::Table.new(StringIO.new(bytes), nil, nil, name: 'safe')
-      expect(table.schema(:sequel)).to include 'a"b'.to_sym.inspect
+      expect(table.schema(:sequel)).to include :'a"b'.inspect
     end
 
     it 'escapes a hostile table name in the ActiveRecord schema' do
@@ -119,7 +119,7 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass, RSpec/Sp
     it 'refuses a container name that escapes the database directory' do
       Dir.mktmpdir do |dir|
         FileUtils.cp fixture('dbase_83.dbf'), File.join(dir, 'secret.dbf')
-        outside = ('../' * 12) + File.join(dir, 'secret').sub(%r{\A/}, '')
+        outside = ('../' * 12) + File.join(dir, 'secret').delete_prefix('/')
         expect { db.table_path(outside) }.to raise_error(DBF::FileNotFoundError)
       end
     end
