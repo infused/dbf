@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- CI: lint job running RuboCop and Reek on every push and pull request
+- CI: test on Windows and macOS (Ruby 3.4) in addition to Linux, since much real-world DBF data originates on Windows/FoxPro systems
+- CI: observe-only (non-blocking) test jobs for JRuby, TruffleRuby, and Ruby head
+- CI: enforce a 99% minimum test coverage floor via SimpleCov
+
+### Changed
+
+- Declare `reek` and `simplecov` as direct development dependencies instead of relying on rubycritic's transitive dependencies
+- Restrict `debug` and `ruby-lsp` to MRI so `bundle install` succeeds on JRuby/TruffleRuby
+- Test matrix no longer fails fast, and a Ruby head regression no longer fails the build
+- Update pinned `ruby/setup-ruby` action to v1.321.0
+
 ## 5.4.0
 
 - CLI: replace terminal control bytes in file-derived output so a crafted DBF cannot emit escape sequences to an interactive terminal; CSV and schema output are only filtered when writing to a terminal, so redirected exports are unchanged

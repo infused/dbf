@@ -80,8 +80,9 @@ RSpec.describe DBF::CLI do
   end
 
   describe 'terminal control bytes in a crafted file' do
+    let(:tmpdir) { Dir.mktmpdir }
     let(:crafted) do
-      path = File.join(@tmpdir, 'escapes.dbf')
+      path = File.join(tmpdir, 'escapes.dbf')
       header = (+"\x00").b * 32
       header.setbyte(0, 0x03)
       header[4, 4] = [1].pack('V')
@@ -95,12 +96,7 @@ RSpec.describe DBF::CLI do
       path
     end
 
-    around do |example|
-      Dir.mktmpdir do |dir| 
-        @tmpdir = dir
-        example.run
-      end
-    end
+    after { FileUtils.remove_entry(tmpdir) }
 
     it 'strips escape sequences from summary output' do
       _, out, = run('-s', crafted)

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-begin
+if RUBY_ENGINE == 'ruby'
   require 'simplecov'
   SimpleCov.start
-rescue LoadError
-  # ignore
+  # Enforce only in CI so running a single spec file locally doesn't fail
+  SimpleCov.minimum_coverage 99 if ENV['CI']
 end
 
 require 'dbf'
