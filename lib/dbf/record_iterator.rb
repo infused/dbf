@@ -2,46 +2,75 @@
 
 module DBF
   class RecordIterator
-    def initialize(data, context, header_length, record_length, record_count)
+    # Records are read in chunks of whole records totalling roughly this many
+    # bytes, so enumerating a multi-gigabyte file (for example a shapefile
+    # sidecar) needs only chunk-sized memory instead of the entire record
+    # section at once.
+    CHUNK_SIZE = 4 * 1024 * 1024
+
+    def initialize(data, context, header_length, record_length, record_count, chunk_size: CHUNK_SIZE)
       @data = data
       @context = context
       @header_length = header_length
       @record_length = record_length
       @record_count = record_count
+      @chunk_size = chunk_size
     end
 
-    def each
-      buf = read_buffer
-      return unless buf
+    def each(&)
+      return enum_for(:each) unless block_given?
 
-      # Bound the iteration by the bytes actually read so a crafted
-      # record_count (or record_length == 0) cannot drive an unbounded loop.
-      max_records = @record_length > 0 ? buf.bytesize / @record_length : 0
-      count = [@record_count, max_records].min
+      # A record_length of 0 from a crafted header cannot drive an unbounded
+      # loop: capacity is 0 and enumeration ends immediately.
+      remaining = record_capacity
+      @data.seek(@header_length)
 
-      pos = 0
-      count.times do
-        if buf.getbyte(pos) == 0x2A
-          yield nil
-        else
-          yield Record.new(buf, @context, pos + 1)
-        end
-        pos += @record_length
+      while remaining.positive?
+        wanted = [per_chunk, remaining].min
+        buffer = @data.read(wanted * @record_length)
+        break unless buffer
+
+        whole_records = buffer.bytesize / @record_length
+        break if whole_records.zero?
+
+        yield_chunk(buffer, whole_records, &)
+        remaining -= whole_records
+
+        # A short read means the file ended earlier than the header promised
+        break if whole_records < wanted
       end
     end
 
     private
 
-    def read_buffer
-      @data.seek(@header_length)
+    # Whole records per read; at least one so a record larger than the chunk
+    # size still makes progress. Only called when record_length is positive.
+    def per_chunk
+      @per_chunk ||= [@chunk_size / @record_length, 1].max
+    end
 
-      # Bound the allocation by the bytes actually available so a crafted
-      # header (huge record_length * record_count) cannot force a giant read
-      # from a tiny file.
-      requested = @record_length * @record_count
+    def yield_chunk(buffer, count)
+      pos = 0
+      count.times do
+        if buffer.getbyte(pos) == 0x2A
+          yield nil
+        else
+          yield Record.new(buffer, @context, pos + 1)
+        end
+        pos += @record_length
+      end
+    end
+
+    # Bound enumeration by the bytes actually available so a crafted header
+    # (huge record_length * record_count) cannot force reads past the real
+    # file size, while record_count still caps a file with trailing garbage.
+    def record_capacity
+      return 0 unless @record_length.positive?
+
       available = @data.size - @header_length
-      available = 0 if available.negative?
-      @data.read([requested, available].min)
+      return 0 if available.negative?
+
+      [@record_count, available / @record_length].min
     end
   end
 end

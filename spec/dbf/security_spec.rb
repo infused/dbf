@@ -159,7 +159,8 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
                                       columns: [dbf_column(name: 'A', type: 'C', length: 10)]))
         File.open(path, 'rb') do |io|
           iterator = DBF::RecordIterator.new(io, nil, 32, 65_535, 4_294_967_295)
-          expect(iterator.send(:read_buffer).bytesize).to be <= io.size
+          expect(iterator.send(:record_capacity)).to eq 0
+          expect { |b| iterator.each(&b) }.to_not yield_control
         end
       end
     end

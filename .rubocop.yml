@@ -3,6 +3,9 @@ plugins:
   - rubocop-rspec
   - rubocop-performance
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 AllCops:
   NewCops: enable
   Exclude:

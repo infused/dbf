@@ -31,6 +31,7 @@
 
 ### Changed
 
+- Streaming reads: `Table#each` now reads records in 4 MB chunks of whole records instead of loading the entire record section into memory, so enumerating multi-gigabyte files (for example shapefile `.dbf` sidecars) uses bounded memory. On a 190 MB file, peak process memory drops from ~222 MB to ~35 MB with identical results. No API change; all malformed-file bounds are preserved
 - Internal: `DBF::RecordContext` is now an immutable `Data` class instead of a `Struct`
 - Internal: remove a redundant `Memo::Foxpro#initialize` and the duplicate `Header::HEADER_SIZE` constant (now sourced from `VersionConfig`)
 - README: replace the stack of version-support notes with a compatibility table, point API docs at dbf.infused.org, and refer to LICENSE instead of inlining the full MIT text; copyright years updated through 2026

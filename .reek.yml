@@ -28,6 +28,8 @@ detectors:
       - DBF::Database::Foxpro#table_path
   LongParameterList:
     max_params: 5
+    exclude:
+      - DBF::RecordIterator#initialize
   ManualDispatch:
     exclude:
       - DBF::CLI#interactive?
