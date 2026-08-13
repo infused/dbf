@@ -59,6 +59,14 @@ RSpec.describe DBF::Database::Foxpro do
         expect(db.calls.record_count).to eq 16
       end
     end
+
+    describe 'when the container supplies fewer long names than columns' do
+      it 'falls back to the short column name instead of crashing' do
+        table = DBF::Database::Table.new(fixture('foxprodb/contacts.dbf'), long_names: [])
+        expect(table.columns).to_not be_empty
+        expect(table.column_names).to all(be_a(String))
+      end
+    end
   end
 
   describe '#table_path' do

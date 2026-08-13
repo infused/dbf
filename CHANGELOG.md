@@ -15,6 +15,7 @@
 ### Fixed
 
 - `Table#to_csv(path)` closes the file it opens, so the CSV is fully flushed to disk when the method returns (previously the data could stay buffered until garbage collection)
+- Visual FoxPro: a `.dbc` container supplying fewer long names than the table has columns no longer crashes column building; missing long names fall back to the table's own column names. Column rebuilding is also no longer O(n²)
 
 ### Changed
 

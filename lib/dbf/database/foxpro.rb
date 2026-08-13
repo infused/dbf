@@ -114,12 +114,10 @@ module DBF
       end
 
       def build_columns # :nodoc:
-        columns = super
-
         # modify the column definitions to use the long names as the
         # columnname property is readonly, recreate the column definitions
-        columns.map do |column|
-          long_name = long_names[columns.index(column)]
+        super.each_with_index.map do |column, index|
+          long_name = long_names[index] || column.name
           Column.new(self, long_name, column.type, column.length, column.decimal)
         end
       end

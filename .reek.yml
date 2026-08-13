@@ -56,5 +56,6 @@ detectors:
       - DBF::Schema#sequel_schema
       - DBF::Table#csv_safe_value
       - DBF::VersionConfig#read_column_args
+      - DBF::Database::Table#build_columns
   UtilityFunction:
     enabled: false
