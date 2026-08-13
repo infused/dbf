@@ -5,14 +5,9 @@ module DBF
     class Foxpro < Base
       FPT_HEADER_SIZE = 512
 
-      def initialize(data, version)
-        @data = data
-        super
-      end
-
       def build_memo(start_block) # :nodoc:
-        @data.seek offset(start_block)
-        block = @data.read(block_size)
+        data.seek offset(start_block)
+        block = data.read(block_size)
         return nil unless block
 
         # memo_size is nil when the block header is truncated (< 8 bytes)
@@ -32,16 +27,16 @@ module DBF
         # Bound the read by the bytes remaining so a crafted 32-bit memo_size
         # cannot force a ~4 GiB allocation from a small memo file.
         length = content_size(memo_size)
-        remaining = @data.size - @data.pos
+        remaining = data.size - data.pos
         length = remaining if length > remaining
-        memo_string << @data.read(length) if length.positive?
+        memo_string << data.read(length) if length.positive?
         memo_string
       end
 
       def block_size # :nodoc:
         @block_size ||= begin
-          @data.rewind
-          header = @data.read(FPT_HEADER_SIZE)
+          data.rewind
+          header = data.read(FPT_HEADER_SIZE)
           # A header shorter than 8 bytes cannot contain the block size field
           header && header.bytesize >= 8 ? header.unpack1('x6n') : 0
         end

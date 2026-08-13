@@ -31,6 +31,7 @@
 ### Changed
 
 - Internal: `DBF::RecordContext` is now an immutable `Data` class instead of a `Struct`
+- Internal: remove a redundant `Memo::Foxpro#initialize` and the duplicate `Header::HEADER_SIZE` constant (now sourced from `VersionConfig`)
 - README: replace the stack of version-support notes with a compatibility table, point API docs at dbf.infused.org, and refer to LICENSE instead of inlining the full MIT text; copyright years updated through 2026
 - Gemspec: add `homepage_uri`, `bug_tracker_uri`, `documentation_uri`, and `funding_uri` metadata (shown on the rubygems.org sidebar), and constrain the `csv` runtime dependency to `~> 3.3`
 - `DBF::Column::NameError` is renamed to `DBF::Column::InvalidNameError` (it shadowed Ruby's `::NameError` without being one); the old constant remains as a deprecated alias
