@@ -12,6 +12,10 @@
 - CI: observe-only (non-blocking) test jobs for JRuby, TruffleRuby, and Ruby head
 - CI: enforce a 99% minimum test coverage floor via SimpleCov
 
+### Fixed
+
+- `Table#to_csv(path)` closes the file it opens, so the CSV is fully flushed to disk when the method returns (previously the data could stay buffered until garbage collection)
+
 ### Changed
 
 - `DBF::Column::NameError` is renamed to `DBF::Column::InvalidNameError` (it shadowed Ruby's `::NameError` without being one); the old constant remains as a deprecated alias

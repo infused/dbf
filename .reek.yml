@@ -35,7 +35,7 @@ detectors:
       - DBF::CLI::TerminalFilter#respond_to_missing?
   NestedIterators:
     exclude:
-      - DBF::Table#to_csv
+      - DBF::Table#write_csv
   # Nil-checks are this library's deliberate degradation strategy for
   # malformed files (truncated reads return nil rather than raising).
   NilCheck:

@@ -147,14 +147,11 @@ module DBF
     #
     # @param [optional String, IO] path_or_io String path, IO-like object, or nil for STDOUT
     def to_csv(path_or_io = nil)
-      io = case path_or_io
-      when nil then $stdout
-      when String then File.open(path_or_io, 'w')
-      else path_or_io
+      if path_or_io.is_a?(String)
+        File.open(path_or_io, 'w') { |file| write_csv(file) }
+      else
+        write_csv(path_or_io || $stdout)
       end
-      csv = CSV.new(io, force_quotes: true)
-      csv << column_names.map { |name| csv_safe_value(name) }
-      each { |record| csv << record.to_a.map { |value| csv_safe_value(value) } }
     end
 
     # Human readable version description
@@ -180,6 +177,12 @@ module DBF
     end
 
     private
+
+    def write_csv(io) # :nodoc:
+      csv = CSV.new(io, force_quotes: true)
+      csv << column_names.map { |name| csv_safe_value(name) }
+      each { |record| csv << record.to_a.map { |value| csv_safe_value(value) } }
+    end
 
     # Neutralizes spreadsheet formula injection (CWE-1236) on CSV export by
     # prefixing a single quote to string cells that begin with a formula

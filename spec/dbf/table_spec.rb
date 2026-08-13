@@ -176,6 +176,11 @@ RSpec.describe DBF::Table do
       it 'creates a custom csv file' do
         expect(File).to exist('test.csv')
       end
+
+      it 'closes the file so all rows are flushed to disk' do
+        rows = CSV.read('test.csv')
+        expect(rows.size).to eq table.record_count + 1
+      end
     end
   end
 
