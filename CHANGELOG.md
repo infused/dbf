@@ -12,6 +12,7 @@
 - CI: observe-only (non-blocking) test jobs for JRuby, TruffleRuby, and Ruby head
 - CI: enforce a 99% minimum test coverage floor via SimpleCov
 - Docs site (dbf.infused.org): YARD docs are now built and deployed by CI instead of being committed to the repository; the Pages workflow's deprecated v2/v3 actions (whose artifact backend was shut down in early 2025) are updated to current versions, repairing the broken deploy
+- Dependabot updates for GitHub Actions and gems (weekly), a security policy (SECURITY.md) with private vulnerability reporting, and contributor documentation (CONTRIBUTING.md)
 - Automated releases: pushing a `vX.Y.Z` tag now builds and publishes the gem to RubyGems.org from CI via Trusted Publishing (OIDC) — no long-lived API key. `bundler/gem_tasks` is loaded in the Rakefile, providing `rake build` / `rake release`. Git tags resume at v5.4.0; versions 4.0.0–5.3.0 were released without tags
 
 ### Fixed
