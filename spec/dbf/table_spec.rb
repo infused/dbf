@@ -68,6 +68,36 @@ RSpec.describe DBF::Table do
     end
   end
 
+  describe '.open' do
+    it 'yields the table, closes it afterwards, and returns the block value' do
+      yielded = nil
+      result = DBF::Table.open(dbf_path) do |t|
+        yielded = t
+        t.record_count
+      end
+      expect(yielded).to be_a(DBF::Table)
+      expect(yielded.closed?).to be true
+      expect(result).to eq 67
+    end
+
+    it 'closes the table when the block raises' do
+      yielded = nil
+      expect do
+        DBF::Table.open(dbf_path) do |t|
+          yielded = t
+          raise ArgumentError
+        end
+      end.to raise_error(ArgumentError)
+      expect(yielded.closed?).to be true
+    end
+
+    it 'returns an open table when no block is given' do
+      table = DBF::Table.open(dbf_path)
+      expect(table.closed?).to be false
+      table.close
+    end
+  end
+
   describe '#close' do
     before { table.close }
 

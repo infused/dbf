@@ -41,6 +41,26 @@ module DBF
     #   table = DBF::Table.new 'data.dbf', nil, 'cp437'
     #   table = DBF::Table.new 'data.dbf', 'memo.dbt', Encoding::US_ASCII
     #
+    # Opens a table like .new, but when given a block, yields the table,
+    # closes it when the block returns, and returns the block's value —
+    # the same contract as File.open.
+    #
+    #   DBF::Table.open('data.dbf') do |table|
+    #     table.each { |record| ... }
+    #   end
+    #
+    # Takes the same arguments as .new. Without a block, equivalent to .new.
+    def self.open(data, memo = nil, encoding = nil, name: nil)
+      table = new(data, memo, encoding, name: name)
+      return table unless block_given?
+
+      begin
+        yield table
+      ensure
+        table.close
+      end
+    end
+
     # @param data [String, StringIO, IO] data Path to the dbf file or an IO-like object
     # @param memo [optional String, StringIO, IO] memo Path to the memo file or an IO-like object
     # @param encoding [optional String, Encoding] encoding Name of the encoding or an Encoding object

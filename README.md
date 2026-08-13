@@ -77,6 +77,14 @@ Open a DBF by passing in raw data (wrap the raw data with StringIO):
 widgets = DBF::Table.new(StringIO.new('raw binary data'))
 ```
 
+Use the block form to close the table automatically, like File.open:
+
+```ruby
+DBF::Table.open('widgets.dbf') do |table|
+  table.each { |record| puts record.name }
+end
+```
+
 Enumerate all records
 
 ```ruby

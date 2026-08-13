@@ -7,6 +7,7 @@
 - `DBF::Table.new` accepts any IO-like object responding to `#read` and `#seek` (`File`, `Tempfile`, …) in addition to a path or `StringIO`, matching what the README already documented; IO inputs are switched to binary mode, and memo auto-discovery works from the IO's path when it has one
 - `DBF::Error` base class: all library errors (`FileNotFoundError`, `NoColumnsDefined`, `Column::LengthError`, `Column::InvalidNameError`) now inherit from it, so callers can `rescue DBF::Error` to catch anything the library raises
 - `Table#filename` now works for any IO input with a path, not only `File`
+- `DBF::Table.open`: same arguments as `.new`, but the block form yields the table, closes it when the block returns, and returns the block's value — the same contract as `File.open`
 - CI: lint job running RuboCop and Reek on every push and pull request
 - CI: test on Windows and macOS (Ruby 3.4) in addition to Linux, since much real-world DBF data originates on Windows/FoxPro systems
 - CI: observe-only (non-blocking) test jobs for JRuby, TruffleRuby, and Ruby head

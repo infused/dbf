@@ -110,12 +110,7 @@ module DBF
 
     # Always close the table when done: an open handle prevents deleting or
     # replacing the file on Windows.
-    def with_table(filename)
-      table = DBF::Table.new(filename)
-      yield table
-    ensure
-      table&.close
-    end
+    def with_table(filename, &) = DBF::Table.open(filename, &)
 
     def print_ar_schema(filename)
       with_table(filename) { |table| @stdout.puts terminal_safe(table.schema(:activerecord)) }
