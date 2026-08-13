@@ -30,6 +30,7 @@
 
 ### Changed
 
+- Gemspec: add `homepage_uri`, `bug_tracker_uri`, `documentation_uri`, and `funding_uri` metadata (shown on the rubygems.org sidebar), and constrain the `csv` runtime dependency to `~> 3.3`
 - `DBF::Column::NameError` is renamed to `DBF::Column::InvalidNameError` (it shadowed Ruby's `::NameError` without being one); the old constant remains as a deprecated alias
 - Rescues in date/datetime decoding and FoxPro memo reads are narrowed to the specific expected errors, so genuine programmer errors surface instead of silently returning nil
 - Declare `reek` and `simplecov` as direct development dependencies instead of relying on rubycritic's transitive dependencies

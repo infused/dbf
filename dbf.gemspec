@@ -15,7 +15,11 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.required_ruby_version = '>= 3.3.0'
   s.metadata['rubygems_mfa_required'] = 'true'
+  s.metadata['homepage_uri'] = 'https://github.com/infused/dbf'
   s.metadata['source_code_uri'] = 'https://github.com/infused/dbf'
   s.metadata['changelog_uri'] = 'https://github.com/infused/dbf/blob/main/CHANGELOG.md'
-  s.add_dependency 'csv'
+  s.metadata['bug_tracker_uri'] = 'https://github.com/infused/dbf/issues'
+  s.metadata['documentation_uri'] = 'https://dbf.infused.org'
+  s.metadata['funding_uri'] = 'https://github.com/sponsors/infused'
+  s.add_dependency 'csv', '~> 3.3'
 end
