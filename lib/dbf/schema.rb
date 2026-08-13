@@ -43,10 +43,9 @@ module DBF
     # @param table_only [Boolean]
     # @return [String]
     def schema(format = :activerecord, table_only: false)
-      schema_method_name = schema_name(format)
-      send(schema_method_name, table_only: table_only)
-    rescue NameError
-      raise ArgumentError, ":#{format} is not a valid schema. Valid schemas are: #{FORMATS.join(', ')}."
+      raise ArgumentError, ":#{format} is not a valid schema. Valid schemas are: #{FORMATS.join(', ')}." unless FORMATS.include?(format.to_s.to_sym)
+
+      send(schema_name(format), table_only: table_only)
     end
 
     def schema_name(format) # :nodoc:

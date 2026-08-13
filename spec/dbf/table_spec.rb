@@ -104,6 +104,11 @@ RSpec.describe DBF::Table do
           ':invalid is not a valid schema. Valid schemas are: activerecord, json, sequel.'
         )
       end
+
+      it 'does not misreport errors raised inside a valid schema generator' do
+        allow(table).to receive(:columns).and_raise(NoMethodError)
+        expect { table.schema(:activerecord) }.to raise_error(NoMethodError)
+      end
     end
 
     describe 'when data is StringIO' do
