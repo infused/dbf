@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
 module DBF
-  RecordContext = Struct.new(:columns, :version, :memo, :column_offsets, keyword_init: true)
+  # Immutable per-table state shared by every record during decoding
+  RecordContext = Data.define(:columns, :version, :memo, :column_offsets)
 end
