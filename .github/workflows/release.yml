@@ -1,0 +1,35 @@
+# Publishes the gem to RubyGems.org via Trusted Publishing (OIDC) when a
+# version tag is pushed. No API key is stored; RubyGems trusts this exact
+# repository + workflow, configured at:
+# https://rubygems.org/gems/dbf/trusted_publishers
+#
+# Release process:
+#   1. bump lib/dbf/version.rb, update CHANGELOG, commit
+#   2. git tag vX.Y.Z && git push origin main vX.Y.Z
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write # mandatory for RubyGems Trusted Publishing
+      contents: write # allows rake release to push the tag if not present
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
+      with:
+        ruby-version: '3.4'
+        bundler-cache: true
+    - uses: rubygems/release-gem@052cc82692552de3ef2b81fd670e41d13cba8092 # v1.4.0
