@@ -5,13 +5,15 @@ require 'optparse'
 module DBF
   class CLI
     USAGE = <<~HELP
-      usage: dbf [-h|-s|-a|-c|-r] filename
+      usage: dbf [-h|-s|-a|-c|-r|-j|-J] filename
         -h = print this message
         -v = print the DBF gem version
         -s = print summary information
         -a = create an ActiveRecord::Schema
         -r = create a Sequel migration
         -c = export as CSV
+        -j = export as a JSON array
+        -J = export as JSON Lines (one record per line)
     HELP
 
     # Bytes a terminal interprets as control or escape sequences. A crafted
@@ -68,8 +70,17 @@ module DBF
       @stderr = stderr
     end
 
+    ACTIONS = {
+      'a' => :print_ar_schema,
+      'r' => :print_sequel_schema,
+      's' => :print_summary,
+      'c' => :print_csv,
+      'j' => :print_json,
+      'J' => :print_jsonl
+    }.freeze
+
     def run
-      params = OptionParser.new.getopts(@argv, 'h', 's', 'a', 'c', 'r', 'v')
+      params = OptionParser.new.getopts(@argv, 'hsacrvjJ')
 
       if params['v']
         print_version
@@ -79,13 +90,8 @@ module DBF
         filename = @argv.shift
         return missing_filename unless filename
 
-        action = %w[a r s c].find { |flag| params[flag] }
-        case action
-        when 'a' then print_ar_schema(filename)
-        when 'r' then print_sequel_schema(filename)
-        when 's' then print_summary(filename)
-        when 'c' then print_csv(filename)
-        end
+        action = ACTIONS.find { |flag, _method| params[flag] }&.last
+        send(action, filename) if action
       end
       0
     rescue DBF::FileNotFoundError => e
@@ -144,6 +150,53 @@ module DBF
 
     def print_csv(filename)
       with_table(filename) { |table| table.to_csv(interactive? ? TerminalFilter.new(@stdout) : @stdout) }
+    end
+
+    # Streams a JSON array without materializing all records in memory.
+    # JSON string escaping makes the output terminal-safe by construction:
+    # control bytes are emitted as \uXXXX escapes.
+    def print_json(filename)
+      with_table(filename) { |table| write_json(table) }
+    end
+
+    def write_json(table)
+      first = true
+      @stdout.write('[')
+      each_present_record(table) do |record|
+        @stdout.write(first ? "\n" : ",\n")
+        @stdout.write(json_record(record))
+        first = false
+      end
+      @stdout.write("\n]\n")
+    end
+
+    # One JSON object per line (JSON Lines). Combined with chunked record
+    # reading this exports arbitrarily large files in constant memory.
+    def print_jsonl(filename)
+      with_table(filename) { |table| write_jsonl(table) }
+    end
+
+    def write_jsonl(table)
+      each_present_record(table) { |record| @stdout.write("#{json_record(record)}\n") }
+    end
+
+    # Deleted records have no attributes, so JSON export skips them.
+    def each_present_record(table, &)
+      table.each { |record| yield record if record }
+    end
+
+    def json_record(record)
+      JSON.generate(record.attributes.to_h { |key, value| [json_safe(key), json_safe(value)] })
+    end
+
+    # JSON.generate raises on binary or invalidly encoded strings; represent
+    # their bytes instead of raising, mirroring the CSV export behavior.
+    def json_safe(value)
+      return value unless value.is_a?(::String)
+
+      value.encode(Encoding::UTF_8, invalid: :replace, undef: :replace, replace: '?')
+    rescue Encoding::ConverterNotFoundError
+      value.dup.force_encoding(Encoding::UTF_8).scrub('?')
     end
 
     # Exported data is only filtered when it is going to a terminal, so

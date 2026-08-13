@@ -304,13 +304,15 @@ table.name = 'my_table_name'
 A small command-line utility called dbf is installed with the gem.
 
     $ dbf -h
-    usage: dbf [-h|-s|-a] filename
+    usage: dbf [-h|-s|-a|-c|-r|-j|-J] filename
       -h = print this message
-      -v = print the version number
+      -v = print the DBF gem version
       -s = print summary information
       -a = create an ActiveRecord::Schema
-      -r = create a Sequel Migration
+      -r = create a Sequel migration
       -c = export as CSV
+      -j = export as a JSON array
+      -J = export as JSON Lines (one record per line)
 
 Create an executable ActiveRecord schema:
 
@@ -323,6 +325,15 @@ Create an executable Sequel schema:
 Dump all records to a CSV file:
 
     dbf -c books.dbf > books.csv
+
+Dump all records as JSON or JSON Lines:
+
+    dbf -j books.dbf > books.json
+    dbf -J books.dbf > books.jsonl
+
+JSON Lines output is streamed record by record, so it works well for very
+large files and pipelines (for example `dbf -J books.dbf | jq` or importing
+into DuckDB).
 
 ## Reading a Visual Foxpro database (v8, v9)
 

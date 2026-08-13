@@ -7,6 +7,8 @@ detectors:
   TooManyMethods:
     exclude:
       - DBF::Table
+      # One small method per CLI flag is the design
+      - DBF::CLI
   TooManyInstanceVariables:
     max_instance_variables: 10
   TooManyStatements:

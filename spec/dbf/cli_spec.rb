@@ -27,7 +27,7 @@ RSpec.describe DBF::CLI do
       status, out, = run('-h')
       expect(status).to eq 0
       expect(out).to include 'usage:'
-      %w[-h -v -s -a -r -c].each { |flag| expect(out).to include "#{flag} =" }
+      %w[-h -v -s -a -r -c -j -J].each { |flag| expect(out).to include "#{flag} =" }
     end
   end
 
@@ -79,6 +79,27 @@ RSpec.describe DBF::CLI do
     end
   end
 
+  describe '-j' do
+    it 'emits a JSON array of all records' do
+      status, out, = run('-j', dbf_fixture)
+      expect(status).to eq 0
+      records = JSON.parse(out)
+      expect(records.size).to eq 67
+      expect(records.first['NAME']).to eq 'Assorted Petits Fours'
+    end
+  end
+
+  describe '-J' do
+    it 'emits one JSON object per line' do
+      status, out, = run('-J', dbf_fixture)
+      expect(status).to eq 0
+      lines = out.lines
+      expect(lines.size).to eq 67
+      expect(JSON.parse(lines.first)['NAME']).to eq 'Assorted Petits Fours'
+      lines.each { |line| expect { JSON.parse(line) }.to_not raise_error }
+    end
+  end
+
   describe 'resource handling' do
     it 'closes the table after processing' do
       table = DBF::Table.new(dbf_fixture)
@@ -111,6 +132,12 @@ RSpec.describe DBF::CLI do
       _, out, = run('-s', crafted)
       expect(out).to_not include "\e"
       expect(out).to include 'RED'
+    end
+
+    it 'escapes control bytes in JSON output by construction' do
+      _, out, = run('-j', crafted)
+      expect(out).to_not include "\e"
+      expect(JSON.parse(out)).to be_an(Array)
     end
 
     it 'strips escape sequences from CSV written to a terminal' do
