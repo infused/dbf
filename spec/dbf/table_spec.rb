@@ -33,7 +33,23 @@ RSpec.describe DBF::Table do
 
     describe 'when data is nil' do
       it 'raises ArgumentError' do
-        expect { DBF::Table.new nil }.to raise_error(ArgumentError, 'data must be a file path or StringIO object')
+        expect { DBF::Table.new nil }.to raise_error(ArgumentError, 'data must be a file path or an IO-like object responding to #read and #seek')
+      end
+    end
+
+    describe 'when given an open File object' do
+      it 'reads records and auto-discovers the memo file' do
+        File.open(dbf_path, 'rb') do |file|
+          file_table = DBF::Table.new file
+          expect(file_table.record_count).to eq 67
+          expect(file_table.record(0).desc).to match(/Our Original assortment/)
+        end
+      end
+
+      it 'reports the filename' do
+        File.open(dbf_path, 'rb') do |file|
+          expect(DBF::Table.new(file).filename).to eq 'dbase_83.dbf'
+        end
       end
     end
 

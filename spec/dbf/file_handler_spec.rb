@@ -22,14 +22,37 @@ RSpec.describe DBF::FileHandler do
         .to raise_error(DBF::FileNotFoundError, 'file not found: does_not_exist.dbf')
     end
 
+    it 'returns the same File when given a File, switched to binary mode' do
+      File.open(fixture('dbase_83.dbf')) do |file|
+        expect(described_class.open_data(file)).to be(file)
+        expect(file.binmode?).to be true
+      end
+    end
+
     it 'raises ArgumentError when given nil' do
       expect { described_class.open_data(nil) }
-        .to raise_error(ArgumentError, 'data must be a file path or StringIO object')
+        .to raise_error(ArgumentError, 'data must be a file path or an IO-like object responding to #read and #seek')
     end
 
     it 'raises ArgumentError when given an unsupported type' do
       expect { described_class.open_data(42) }
-        .to raise_error(ArgumentError, 'data must be a file path or StringIO object')
+        .to raise_error(ArgumentError, 'data must be a file path or an IO-like object responding to #read and #seek')
+    end
+  end
+
+  describe '.data_path' do
+    it 'returns the string itself for a path' do
+      expect(described_class.data_path('a.dbf')).to eq 'a.dbf'
+    end
+
+    it 'returns the path of an IO that has one' do
+      File.open(fixture('dbase_83.dbf')) do |file|
+        expect(described_class.data_path(file)).to eq fixture('dbase_83.dbf')
+      end
+    end
+
+    it 'returns nil for an IO without a path' do
+      expect(described_class.data_path(StringIO.new)).to be_nil
     end
   end
 
@@ -62,6 +85,20 @@ RSpec.describe DBF::FileHandler do
     it 'auto-discovers a memo file next to the data path' do
       allow(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83').and_return(:opened)
       expect(described_class.open_memo(fixture('dbase_83.dbf'), nil, memo_class, '83')).to eq(:opened)
+    end
+
+    it 'auto-discovers a memo file next to a File object' do
+      allow(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83').and_return(:opened)
+      File.open(fixture('dbase_83.dbf')) do |file|
+        expect(described_class.open_memo(file, nil, memo_class, '83')).to eq(:opened)
+      end
+    end
+
+    it 'instantiates the memo via memo_class.new when an IO is given' do
+      File.open(fixture('dbase_83.dbt')) do |file|
+        allow(memo_class).to receive(:new).with(file, '83').and_return(:built)
+        expect(described_class.open_memo('any.dbf', file, memo_class, '83')).to eq(:built)
+      end
     end
   end
 

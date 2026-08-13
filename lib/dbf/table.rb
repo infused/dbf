@@ -31,6 +31,9 @@ module DBF
     #   # working with a dbf in memory
     #   table = DBF::Table.new StringIO.new(dbf_data)
     #
+    #   # working with an open IO object
+    #   table = DBF::Table.new File.open('data.dbf', 'rb')
+    #
     #   # working with a dbf and memo in memory
     #   table = DBF::Table.new StringIO.new(dbf_data), StringIO.new(memo_data)
     #
@@ -38,8 +41,8 @@ module DBF
     #   table = DBF::Table.new 'data.dbf', nil, 'cp437'
     #   table = DBF::Table.new 'data.dbf', 'memo.dbt', Encoding::US_ASCII
     #
-    # @param data [String, StringIO] data Path to the dbf file or a StringIO object
-    # @param memo [optional String, StringIO] memo Path to the memo file or a StringIO object
+    # @param data [String, StringIO, IO] data Path to the dbf file or an IO-like object
+    # @param memo [optional String, StringIO, IO] memo Path to the memo file or an IO-like object
     # @param encoding [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil, name: nil)
       @data = FileHandler.open_data(data)
@@ -104,7 +107,7 @@ module DBF
 
     # @return [String]
     def filename
-      File.basename(@data.path) if @data.is_a?(File)
+      File.basename(@data.path) if @data.respond_to?(:path)
     end
 
     # @return [TrueClass, FalseClass]

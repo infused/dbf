@@ -58,7 +58,7 @@ widgets = DBF::Table.new("widgets.dbf")
 Open a DBF file using an IO object:
 
 ```ruby
-data = File.open('widgets.dbf')
+data = File.open('widgets.dbf', 'rb')
 widgets = DBF::Table.new(data)
 ```
 
