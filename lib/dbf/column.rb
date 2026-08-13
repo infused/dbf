@@ -2,11 +2,16 @@
 
 module DBF
   class Column
-    class LengthError < StandardError
+    class LengthError < DBF::Error
     end
 
-    class NameError < StandardError
+    class InvalidNameError < DBF::Error
     end
+
+    # Deprecated alias, kept for backward compatibility. It shadowed
+    # ::NameError (without being one), so it was renamed.
+    NameError = InvalidNameError
+    deprecate_constant :NameError
 
     attr_reader :name, :type, :length, :decimal
 
@@ -105,7 +110,7 @@ module DBF
     end
 
     def validate_name # :nodoc:
-      raise NameError, 'column name cannot be empty' if @name.empty?
+      raise InvalidNameError, 'column name cannot be empty' if @name.empty?
     end
   end
 end

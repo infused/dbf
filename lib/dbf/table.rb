@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 module DBF
-  class FileNotFoundError < StandardError
-  end
-
-  class NoColumnsDefined < StandardError
-  end
-
   # Leading bytes that make a spreadsheet treat a CSV cell as a formula:
   # "=", "+", "-", "@", tab, and carriage return.
   CSV_FORMULA_TRIGGERS = [0x3D, 0x2B, 0x2D, 0x40, 0x09, 0x0D].freeze

@@ -62,6 +62,17 @@ data = File.open('widgets.dbf')
 widgets = DBF::Table.new(data)
 ```
 
+All errors raised by the library inherit from DBF::Error, so you can rescue
+the library as a unit:
+
+```ruby
+begin
+  widgets = DBF::Table.new("widgets.dbf")
+rescue DBF::Error => e
+  puts "Unable to read DBF file: #{e.message}"
+end
+```
+
 Open a DBF by passing in raw data (wrap the raw data with StringIO):
 
 ```ruby

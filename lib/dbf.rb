@@ -7,6 +7,7 @@ require 'json'
 require 'time'
 
 require 'dbf/version'
+require 'dbf/errors'
 require 'dbf/schema'
 require 'dbf/find'
 require 'dbf/record'

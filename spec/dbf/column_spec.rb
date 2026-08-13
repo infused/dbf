@@ -37,8 +37,8 @@ RSpec.describe DBF::Column do
     end
 
     describe 'with empty column name' do
-      it 'raises DBF::Column::NameError' do
-        expect { DBF::Column.new table, '', 'N', 1, 0 }.to raise_error(DBF::Column::NameError)
+      it 'raises DBF::Column::InvalidNameError' do
+        expect { DBF::Column.new table, '', 'N', 1, 0 }.to raise_error(DBF::Column::InvalidNameError)
       end
     end
   end
