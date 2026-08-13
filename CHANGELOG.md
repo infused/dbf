@@ -16,6 +16,7 @@
 - Dependabot updates for GitHub Actions and gems (weekly), a security policy (SECURITY.md) with private vulnerability reporting, and contributor documentation (CONTRIBUTING.md)
 - Automated releases: pushing a `vX.Y.Z` tag now builds and publishes the gem to RubyGems.org from CI via Trusted Publishing (OIDC) — no long-lived API key. `bundler/gem_tasks` is loaded in the Rakefile, providing `rake build` / `rake release`. Git tags resume at v5.4.0; versions 4.0.0–5.3.0 were released without tags
 
+- Ractor safety: all library constants are verified Ractor-shareable and reading/exporting tables inside non-main Ractors is covered by specs
 - CLI: `-j` exports records as a JSON array and `-J` as JSON Lines (one record per line, streamed in constant memory); deleted records are skipped, control bytes are escaped by JSON itself, and binary cells are scrubbed instead of raising
 
 ### Fixed

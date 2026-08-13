@@ -30,6 +30,9 @@ Older Rubies are supported by older DBF release lines:
 | 3.x ([3_stable](https://github.com/infused/dbf/tree/3_stable)) | 2.0 – 2.3 |
 | 2.x ([2_stable](https://github.com/infused/dbf/tree/2_stable)) | 1.8 – 1.9 |
 
+DBF is Ractor-friendly: all library constants are deeply frozen, so tables
+can be opened, enumerated, and exported inside non-main Ractors.
+
 ## Installation
 
 Install the gem manually:
