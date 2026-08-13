@@ -7,6 +7,7 @@
 .vscode
 .yardoc
 Gemfile.lock
+doc/
 /*.gem
 tmp/*
 coverage/*
