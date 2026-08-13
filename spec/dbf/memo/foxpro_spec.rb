@@ -4,11 +4,38 @@ require 'spec_helper'
 
 RSpec.describe DBF::Memo::Foxpro do
   describe '#build_memo' do
-    it 'returns nil on error' do
+    it 'returns nil on IO error' do
       data = StringIO.new('')
       memo = DBF::Memo::Foxpro.new(data, '30')
-      allow(data).to receive(:seek).and_raise(StandardError)
+      allow(data).to receive(:seek).and_raise(IOError)
       expect(memo.get(1)).to be_nil
+    end
+
+    it 'returns nil when the start block is past the end of the file' do
+      header = +("\x00" * 512)
+      header[6, 2] = [64].pack('n')
+      memo = DBF::Memo::Foxpro.new(StringIO.new(header), '30')
+      expect(memo.get(8)).to be_nil
+    end
+
+    it 'returns nil when the memo file is shorter than the FPT header' do
+      memo = DBF::Memo::Foxpro.new(StringIO.new('xy'), '30')
+      expect(memo.get(1)).to be_nil
+    end
+
+    it 'returns nil when the block header is truncated' do
+      header = +("\x00" * 512)
+      header[6, 2] = [64].pack('n')
+      truncated_block_header = [1].pack('N') # memo_type only, no memo_size
+      memo = DBF::Memo::Foxpro.new(StringIO.new(header + truncated_block_header), '30')
+      expect(memo.get(8)).to be_nil
+    end
+
+    it 'does not swallow unrelated programmer errors' do
+      data = StringIO.new('')
+      memo = DBF::Memo::Foxpro.new(data, '30')
+      allow(data).to receive(:seek).and_raise(NoMethodError)
+      expect { memo.get(1) }.to raise_error(NoMethodError)
     end
   end
 

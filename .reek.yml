@@ -33,6 +33,11 @@ detectors:
       - DBF::CLI#interactive?
       - DBF::CLI::TerminalFilter#method_missing
       - DBF::CLI::TerminalFilter#respond_to_missing?
+      # Duck-typed IO acceptance is the documented API contract
+      - DBF::FileHandler#open_data
+      - DBF::FileHandler#data_path
+      - DBF::Table#filename
+      - DBF::Record#==
   NestedIterators:
     exclude:
       - DBF::Table#write_csv
@@ -57,5 +62,6 @@ detectors:
       - DBF::Table#csv_safe_value
       - DBF::VersionConfig#read_column_args
       - DBF::Database::Table#build_columns
+      - DBF::Record#==
   UtilityFunction:
     enabled: false

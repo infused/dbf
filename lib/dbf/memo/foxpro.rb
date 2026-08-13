@@ -12,11 +12,15 @@ module DBF
 
       def build_memo(start_block) # :nodoc:
         @data.seek offset(start_block)
-        memo_type, memo_size, memo_string = @data.read(block_size).unpack('NNa*')
-        return nil unless memo_type == 1 && memo_size > 0
+        block = @data.read(block_size)
+        return nil unless block
+
+        # memo_size is nil when the block header is truncated (< 8 bytes)
+        memo_type, memo_size, memo_string = block.unpack('NNa*')
+        return nil unless memo_type == 1 && memo_size.to_i.positive?
 
         read_memo_content(memo_string, memo_size)
-      rescue StandardError
+      rescue IOError, SystemCallError, RangeError
         nil
       end
 
@@ -37,7 +41,9 @@ module DBF
       def block_size # :nodoc:
         @block_size ||= begin
           @data.rewind
-          @data.read(FPT_HEADER_SIZE).unpack1('x6n') || 0
+          header = @data.read(FPT_HEADER_SIZE)
+          # A header shorter than 8 bytes cannot contain the block size field
+          header && header.bytesize >= 8 ? header.unpack1('x6n') : 0
         end
       end
     end

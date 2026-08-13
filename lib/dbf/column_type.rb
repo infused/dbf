@@ -112,7 +112,7 @@ module DBF
       # @param value [String]
       def type_cast(value)
         value.match?(/\d{8}/) && ::Date.strptime(value, '%Y%m%d')
-      rescue StandardError
+      rescue ArgumentError, RangeError, TypeError
         nil
       end
     end
@@ -125,7 +125,7 @@ module DBF
 
         secs = (msecs / 1000).to_i
         ::DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60).to_time
-      rescue StandardError
+      rescue ArgumentError, RangeError, TypeError
         nil
       end
     end

@@ -20,9 +20,7 @@ module DBF
     # @param [DBF::Record] other
     # @return [Boolean]
     def ==(other)
-      attributes == other.attributes
-    rescue NoMethodError
-      false
+      other.respond_to?(:attributes) && attributes == other.attributes
     end
 
     # Reads attributes by column name

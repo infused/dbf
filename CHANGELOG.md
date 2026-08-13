@@ -17,10 +17,12 @@
 - `Table#to_csv(path)` closes the file it opens, so the CSV is fully flushed to disk when the method returns (previously the data could stay buffered until garbage collection)
 - Visual FoxPro: a `.dbc` container supplying fewer long names than the table has columns no longer crashes column building; missing long names fall back to the table's own column names. Column rebuilding is also no longer O(n²)
 - `Table#schema` validates the format against the documented list up front; a `NoMethodError` raised inside a valid schema generator is no longer misreported as "not a valid schema"
+- FoxPro memo files shorter than their 512-byte header no longer crash memo reads (they return nil like other truncations)
 
 ### Changed
 
 - `DBF::Column::NameError` is renamed to `DBF::Column::InvalidNameError` (it shadowed Ruby's `::NameError` without being one); the old constant remains as a deprecated alias
+- Rescues in date/datetime decoding and FoxPro memo reads are narrowed to the specific expected errors, so genuine programmer errors surface instead of silently returning nil
 - Declare `reek` and `simplecov` as direct development dependencies instead of relying on rubycritic's transitive dependencies
 - Restrict `debug` and `ruby-lsp` to MRI so `bundle install` succeeds on JRuby/TruffleRuby
 - Test matrix no longer fails fast, and a Ruby head regression no longer fails the build
