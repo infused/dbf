@@ -42,7 +42,7 @@ RSpec.describe DBF::Table do
         File.open(dbf_path, 'rb') do |file|
           file_table = DBF::Table.new file
           expect(file_table.record_count).to eq 67
-          expect(file_table.record(0).desc).to match(/Our Original assortment/)
+          expect(file_table.record(0).desc).to include('Our Original assortment')
         end
       end
 

@@ -7,6 +7,11 @@ AllCops:
   NewCops: enable
   Exclude:
     - 'spec/benchmark.rb'
+    # Overriding Exclude replaces RuboCop's defaults, so restate the vendor
+    # exclusion: in CI, bundler-cache vendors gems into the workspace and some
+    # gems ship .rubocop.yml files requiring plugins we don't have (e.g. rbs
+    # wants rubocop-rubycw)
+    - 'vendor/**/*'
 
 Layout/CaseIndentation:
   Enabled: false

@@ -18,6 +18,7 @@
 - Visual FoxPro: a `.dbc` container supplying fewer long names than the table has columns no longer crashes column building; missing long names fall back to the table's own column names. Column rebuilding is also no longer O(n²)
 - `Table#schema` validates the format against the documented list up front; a `NoMethodError` raised inside a valid schema generator is no longer misreported as "not a valid schema"
 - FoxPro memo files shorter than their 512-byte header no longer crash memo reads (they return nil like other truncations)
+- RuboCop config: restore the default `vendor/**/*` exclusion (overriding `Exclude` replaces the defaults), fixing a CI lint crash where RuboCop descended into cached vendored gems and tried to load plugins from their configs
 
 ### Changed
 
