@@ -3,9 +3,34 @@
 require 'spec_helper'
 
 RSpec.describe 'Ractor safety', if: defined?(Ractor) do # rubocop:disable RSpec/DescribeClass
-  # Ractor#take was replaced by #value in newer Rubies
-  def await(ractor)
-    ractor.respond_to?(:value) ? ractor.value : ractor.take
+  # Creating a Ractor corrupts Coverage collection on Ruby < 4.0, silently
+  # dropping coverage for everything that runs afterward. Examples that spawn
+  # Ractors therefore run in a child process so SimpleCov results stay stable.
+  def ractor_eval(script)
+    program = <<~RUBY
+      Warning[:experimental] = false
+      require 'dbf'
+
+      # Ractor#take was replaced by #value in newer Rubies
+      def await(ractor)
+        ractor.respond_to?(:value) ? ractor.value : ractor.take
+      end
+
+      result = begin
+        #{script}
+      end
+      puts "RACTOR_RESULT=\#{result.inspect}"
+    RUBY
+
+    lib = File.expand_path('../../lib', __dir__)
+    output = IO.popen([RbConfig.ruby, '-I', lib, '-'], 'r+', err: [:child, :out]) do |io|
+      io.write(program)
+      io.close_write
+      io.read
+    end
+    raise "Ractor child process failed:\n#{output}" unless Process.last_status.success?
+
+    output[/^RACTOR_RESULT=(.*)$/, 1]
   end
 
   it 'exposes only Ractor-shareable constants' do
@@ -24,18 +49,22 @@ RSpec.describe 'Ractor safety', if: defined?(Ractor) do # rubocop:disable RSpec/
   end
 
   it 'reads a table inside a non-main Ractor' do
-    ractor = Ractor.new(fixture('dbase_83.dbf')) do |path|
-      DBF::Table.open(path) do |table|
-        [table.record_count, table.record(0).attributes['NAME']]
-      end
-    end
-    expect(await(ractor)).to eq [67, 'Assorted Petits Fours']
+    result = ractor_eval(<<~RUBY)
+      await(Ractor.new(#{fixture('dbase_83.dbf').inspect}) do |path|
+        DBF::Table.open(path) do |table|
+          [table.record_count, table.record(0).attributes['NAME']]
+        end
+      end)
+    RUBY
+    expect(result).to eq [67, 'Assorted Petits Fours'].inspect
   end
 
   it 'enumerates and exports inside a non-main Ractor' do
-    ractor = Ractor.new(fixture('dbase_83.dbf')) do |path|
-      DBF::Table.open(path) { |table| table.each.count { |record| !record.nil? } }
-    end
-    expect(await(ractor)).to eq 67
+    result = ractor_eval(<<~RUBY)
+      await(Ractor.new(#{fixture('dbase_83.dbf').inspect}) do |path|
+        DBF::Table.open(path) { |table| table.each.count { |record| !record.nil? } }
+      end)
+    RUBY
+    expect(result).to eq '67'
   end
 end
