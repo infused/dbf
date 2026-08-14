@@ -24,7 +24,7 @@ jobs:
       id-token: write # mandatory for RubyGems Trusted Publishing
       contents: write # allows rake release to push the tag if not present
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         persist-credentials: false
     - name: Set up Ruby
