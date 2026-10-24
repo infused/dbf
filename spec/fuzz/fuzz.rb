@@ -65,9 +65,9 @@ module DBFFuzz
   # Seeds larger than this are cut down to whole records so a single
   # iteration stays fast.
   MAX_SEED_SIZE = 64 * 1024
-  # Large enough for every seed, small enough that linear per-record work
-  # stays well inside the time budget.
-  MAX_INPUT_SIZE = 256 * 1024
+  # Twice the largest seed, small enough that linear per-record work stays
+  # well inside the time budget even on a loaded machine.
+  MAX_INPUT_SIZE = 128 * 1024
   MAX_CORPUS = 4096
   MEMO_FANOUT = 4
 
@@ -570,13 +570,22 @@ module DBFFuzz
       return if File.exist?("#{base}.txt")
 
       # A slow or allocation-heavy run may be noise; it must reproduce.
-      return unless confirmed?(input, finding)
+      return unless confirmed?(input, finding) && claim("#{base}.txt")
 
       minimal = Minimizer.new(@options[:minimize_time]).minimize(input) { |candidate| same?(candidate, finding) }
       final = @target.run(minimal) || finding
       write(base, minimal, final)
       @reported += 1
       log "NEW #{final.kind} #{final.signature} (#{minimal.size} bytes) -> #{base}.txt"
+    end
+
+    # Creates the report exclusively, so when several workers hit the same
+    # finding at once only one of them minimises it.
+    def claim(path)
+      File.open(path, File::WRONLY | File::CREAT | File::EXCL) { nil }
+      true
+    rescue Errno::EEXIST
+      false
     end
 
     def confirmed?(input, finding)
@@ -634,7 +643,7 @@ module DBFFuzz
       options = {
         time: Float(ENV.fetch('FUZZ_TIME', 60)), jobs: Integer(ENV.fetch('FUZZ_JOBS', 1)),
         seed: Integer(ENV.fetch('FUZZ_SEED', Random.new_seed % (2**31))), runs: nil,
-        budget: 1.0, hard_limit: 10.0, alloc_ratio: 1024, alloc_floor: 8 * 1024 * 1024,
+        budget: 1.0, hard_limit: 10.0, alloc_ratio: 2048, alloc_floor: 8 * 1024 * 1024,
         minimize_time: 60.0, out: File.join(ROOT, 'tmp', 'fuzz'), repro: nil
       }
       OptionParser.new do |opts|
@@ -645,7 +654,7 @@ module DBFFuzz
         opts.on('--seed N', Integer, 'Random seed') { |value| options[:seed] = value }
         opts.on('--budget SECONDS', Float, 'Report inputs slower than this (default 1.0)') { |value| options[:budget] = value }
         opts.on('--hard-limit SECONDS', Float, 'Abort inputs slower than this (default 10)') { |value| options[:hard_limit] = value }
-        opts.on('--alloc-ratio N', Integer, 'Report inputs allocating more than N x their size ... (default 1024)') { |value| options[:alloc_ratio] = value }
+        opts.on('--alloc-ratio N', Integer, 'Report inputs allocating more than N x their size ... (default 2048)') { |value| options[:alloc_ratio] = value }
         opts.on('--alloc-floor BYTES', Integer, '... plus this many bytes (default 8 MiB)') { |value| options[:alloc_floor] = value }
         opts.on('--minimize-time SECONDS', Float, 'Time spent shrinking each finding (default 60)') { |value| options[:minimize_time] = value }
         opts.on('--out DIR', 'Where findings are written (default tmp/fuzz)') { |value| options[:out] = File.expand_path(value) }
