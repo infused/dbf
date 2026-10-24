@@ -102,10 +102,24 @@ RSpec.describe DBF::FileHandler do
     end
   end
 
-  describe '.memo_search_path' do
-    it 'builds a glob covering .fpt/.FPT/.dbt/.DBT siblings' do
-      path = described_class.memo_search_path('/data/foo.dbf')
-      expect(path).to eq '/data/foo*.{fpt,FPT,dbt,DBT}'
+  describe '.find_memo' do
+    it 'finds a .fpt or .dbt sibling with the same basename in any case' do
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, 'FOO.DBT'), '')
+        expect(described_class.find_memo(File.join(dir, 'foo.dbf'))).to eq File.join(dir, 'FOO.DBT')
+      end
+    end
+
+    it 'prefers .fpt over .dbt' do
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, 'foo.dbt'), '')
+        File.write(File.join(dir, 'foo.fpt'), '')
+        expect(described_class.find_memo(File.join(dir, 'foo.dbf'))).to eq File.join(dir, 'foo.fpt')
+      end
+    end
+
+    it 'returns nil when the directory does not exist' do
+      expect(described_class.find_memo('/nonexistent/dir/foo.dbf')).to be_nil
     end
   end
 end

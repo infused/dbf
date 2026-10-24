@@ -71,14 +71,20 @@ module DBF
 
       def method_missing(method, *args) # :nodoc:
         name = method.to_s
-        table_names.index(name) ? table(name) : super
+        table_method?(name) ? table(name) : super
       end
 
       def respond_to_missing?(method, *)
-        table_names.index(method.to_s) || super
+        table_method?(method.to_s) || super
       end
 
       private
+
+      # Table names come from the container file, so implicit-conversion
+      # method names are never dispatched to a table (see Record).
+      def table_method?(name) # :nodoc:
+        !Record::RESERVED_METHODS.include?(name) && table_names.include?(name)
+      end
 
       # This method extracts the data from the database container. This is
       # just an ordinary table with a treelike structure. Field definitions

@@ -3,6 +3,15 @@
 module DBF
   # An instance of DBF::Record represents a row in the DBF file
   class Record
+    # Column names come from the file, so they are never exposed as these
+    # methods: Ruby (and Rails) call them implicitly to convert or render an
+    # object, which would let a crafted file control how a record behaves.
+    # Such columns remain readable through #[] and #attributes.
+    RESERVED_METHODS = %w[
+      to_str to_ary to_hash to_proc to_int to_io to_path to_regexp to_open
+      to_model to_partial_path to_param to_key
+    ].freeze
+
     # Initialize a new DBF::Record
     #
     # @param data [String, StringIO] data
@@ -112,7 +121,7 @@ module DBF
 
     def method_missing(method, *args) # :nodoc:
       key = method.to_s
-      if (index = underscored_column_names.index(key))
+      if (index = column_method_index(key))
         if @context.column_offsets && !@to_a
           column_value(index)
         else
@@ -124,7 +133,13 @@ module DBF
     end
 
     def respond_to_missing?(method, *) # :nodoc:
-      underscored_column_names.include?(method.to_s) || super
+      !column_method_index(method.to_s).nil? || super
+    end
+
+    def column_method_index(key) # :nodoc:
+      return nil if RESERVED_METHODS.include?(key)
+
+      underscored_column_names.index(key)
     end
 
     def underscored_column_names # :nodoc:

@@ -27,6 +27,11 @@ RSpec.describe DBF::Memo::Dbase3 do
       io = StringIO.new(data)
       expect(described_class.new(io, '83').get(1)).to eq memo_text
     end
+
+    it 'drops leftover bytes that follow the terminator in the same block' do
+      data = "#{"\x00" * block_size}hello\u001A\u001A#{'z' * 505}"
+      expect(described_class.new(StringIO.new(data), '83').get(1)).to eq 'hello'
+    end
   end
 
   describe 'integration with the dBase III fixture' do

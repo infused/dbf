@@ -22,6 +22,9 @@ module DBF
     CONTROL_BYTES = /[\x00-\x1F\x7F]/n
     # The same, but keeping CR and LF so CSV row separators survive.
     CONTROL_BYTES_KEEPING_NEWLINES = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/n
+    # C1 controls (U+0080..U+009F) as UTF-8 bytes. Some terminals honor
+    # these, e.g. U+009B as a single-character CSI.
+    UTF8_C1_CONTROLS = /\xC2[\x80-\x9F]/n
 
     # Replaces terminal control bytes. Substitution happens on a byte copy so
     # a value whose bytes are invalid in its encoding cannot raise here.
@@ -31,7 +34,10 @@ module DBF
     # @return [String]
     def self.sanitize(value, pattern = CONTROL_BYTES)
       string = value.to_s
-      string.b.gsub(pattern, '?').force_encoding(string.encoding)
+      encoding = string.encoding
+      bytes = string.b.gsub(pattern, '?')
+      bytes = bytes.gsub(UTF8_C1_CONTROLS, '?') if encoding == Encoding::UTF_8
+      bytes.force_encoding(encoding)
     end
 
     # Wraps an IO so text written to an interactive terminal is stripped of

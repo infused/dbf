@@ -148,6 +148,9 @@ module DBF
     # @return [DBF::Record, NilClass]
     def record(index)
       raise DBF::NoColumnsDefined, 'The DBF file has no columns defined' if columns.empty?
+      # A negative index would read header bytes as a record (or raise
+      # Errno::EINVAL); treat it, like any index past the end, as absent.
+      return nil unless index >= 0 && index < record_count
 
       seek_to_record(index)
       return nil if deleted_record?
@@ -238,7 +241,7 @@ module DBF
     end
 
     def build_columns # :nodoc:
-      ColumnBuilder.new(self, @data, version_config).build
+      ColumnBuilder.new(self, @data, version_config, header_length:, record_length:).build
     end
 
     def deleted_record? # :nodoc:

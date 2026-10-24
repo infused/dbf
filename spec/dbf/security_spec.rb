@@ -28,9 +28,12 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
     bytes
   end
 
-  def dbf_table(version: 0x03, record_count: 0, record_length: 0, columns: nil, records: '')
-    descriptors = (columns || [dbf_column]).join
+  def dbf_table(version: 0x03, record_count: 0, record_length: nil, columns: nil, records: '')
+    columns ||= [dbf_column]
+    descriptors = columns.join
     header_length = 32 + descriptors.bytesize + 1
+    # Default to the record width the descriptors imply: flag byte + columns
+    record_length ||= 1 + columns.sum { |column| column.getbyte(16) }
     dbf_header(version:, record_count:, header_length:, record_length:) +
       descriptors + "\x0D".b + records.b
   end
@@ -239,19 +242,19 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
   # --- VULN-010 ---
   describe 'truncated numeric cells (CWE-248)' do
     it 'does not crash decoding a Currency cell shorter than its width' do
-      bytes = dbf_table(record_count: 1, record_length: 3,
+      bytes = dbf_table(record_count: 1,
                         columns: [dbf_column(name: 'AMT', type: 'Y', length: 8, decimal: 4)],
                         records: ' ab')
       table = DBF::Table.new(StringIO.new(bytes))
-      expect { table.each { |record| record&.to_a } }.to_not raise_error
+      expect { table.record(0).to_a }.to_not raise_error
     end
 
     it 'decodes a truncated AutoIncrement cell to nil' do
-      bytes = dbf_table(record_count: 1, record_length: 3,
+      bytes = dbf_table(record_count: 1,
                         columns: [dbf_column(name: 'INC', type: '+', length: 4)],
                         records: ' ab')
       table = DBF::Table.new(StringIO.new(bytes))
-      expect(table.each.to_a.first.to_a).to eq [nil]
+      expect(table.record(0).to_a).to eq [nil]
     end
   end
 
@@ -342,6 +345,116 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
 
     it 'still returns a record when the body is present' do
       expect(table_with(' hello').record(0).to_a).to eq ['hello']
+    end
+  end
+
+  # --- VULN-018 ---
+  describe 'memo auto-discovery (CWE-200, CWE-400)' do
+    let(:dir) { Dir.mktmpdir }
+
+    after { FileUtils.remove_entry(dir) }
+
+    def write_table(name)
+      path = File.join(dir, name)
+      File.binwrite(path, dbf_table(version: 0x83))
+      path
+    end
+
+    it 'does not pick up a memo whose name merely starts with the table name' do
+      File.binwrite(File.join(dir, '12.dbt'), '')
+      expect(DBF::Table.new(write_table('1.dbf'))).to_not have_memo_file
+    end
+
+    it 'does not expand glob metacharacters in the table filename' do
+      File.binwrite(File.join(dir, 'ac.dbt'), '')
+      expect(DBF::Table.new(write_table('{a,b}*.dbf'))).to_not have_memo_file
+    end
+
+    it 'still finds a same-named memo case-insensitively' do
+      File.binwrite(File.join(dir, 'DATA.DBT'), '')
+      expect(DBF::Table.new(write_table('data.dbf'))).to have_memo_file
+    end
+  end
+
+  # --- VULN-019 ---
+  describe 'column descriptor amplification (CWE-400)' do
+    let(:columns) { Array.new(2_000) { |i| dbf_column(name: "C#{i}", length: 255) } }
+
+    it 'ignores descriptors beyond header_length' do
+      bytes = dbf_header(record_count: 1, header_length: 32 + (2 * 32) + 1, record_length: 1_000) +
+        columns.join + "\x0D".b
+      expect(DBF::Table.new(StringIO.new(bytes)).columns.size).to eq 2
+    end
+
+    it 'ignores columns that do not fit within record_length' do
+      bytes = dbf_table(record_count: 0xFFFF_FFFF, record_length: 1 + 255 + 10, columns:)
+      expect(DBF::Table.new(StringIO.new(bytes)).columns.sum(&:length)).to be <= 265
+    end
+  end
+
+  # --- VULN-020 ---
+  describe 'invalid bytes in an untranscoded string column (CWE-838)' do
+    it 'returns a validly encoded value that can be serialized to JSON' do
+      bytes = dbf_table(record_count: 1, columns: [dbf_column(name: 'NAME', length: 5)], records: " ab\xFFc".b)
+      value = DBF::Table.new(StringIO.new(bytes), nil, Encoding.default_external).record(0)['NAME']
+      expect(value).to be_valid_encoding
+      expect { JSON.generate([value]) }.to_not raise_error
+    end
+  end
+
+  # --- VULN-021 ---
+  describe 'DateTime column narrower than 8 bytes (CWE-248)' do
+    it 'decodes to nil instead of crashing' do
+      bytes = dbf_table(record_count: 1, columns: [dbf_column(name: 'WHEN', type: 'T', length: 4)],
+                        records: " \x01\x00\x00\x00".b)
+      expect(DBF::Table.new(StringIO.new(bytes)).record(0).to_a).to eq [nil]
+    end
+  end
+
+  # --- VULN-022 ---
+  describe 'column names that shadow implicit conversions (CWE-915)' do
+    let(:record) do
+      bytes = dbf_table(record_count: 1, columns: [dbf_column(name: 'TO_STR', length: 5)], records: ' evil!')
+      DBF::Table.new(StringIO.new(bytes)).record(0)
+    end
+
+    it 'does not respond to to_str' do
+      expect(record).to_not respond_to(:to_str)
+    end
+
+    it 'is not implicitly converted to a String' do
+      expect { +'prefix-' + record }.to raise_error(TypeError)
+    end
+
+    it 'still exposes the value through #[]' do
+      expect(record['TO_STR']).to eq 'evil!'
+    end
+  end
+
+  # --- VULN-023 ---
+  describe 'out-of-range record index (CWE-129)' do
+    let(:table) do
+      bytes = dbf_table(record_count: 1, columns: [dbf_column(name: 'A', length: 5)], records: ' hello')
+      DBF::Table.new(StringIO.new(bytes))
+    end
+
+    it 'returns nil for a negative index instead of reading the header' do
+      expect(table.record(-1)).to be_nil
+    end
+
+    it 'returns nil for a negative index instead of raising Errno::EINVAL' do
+      expect(table.record(-20)).to be_nil
+    end
+  end
+
+  # --- VULN-024 ---
+  describe 'UTF-8 C1 control characters on a terminal (CWE-150)' do
+    it 'replaces U+009B (CSI) in sanitized output' do
+      expect(DBF::CLI.sanitize("a\u009B2Jb")).to eq 'a?2Jb'
+    end
+
+    it 'leaves other non-ASCII characters untouched' do
+      expect(DBF::CLI.sanitize('café')).to eq 'café'
     end
   end
 end

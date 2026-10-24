@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Security (CWE-200, CWE-400): memo auto-discovery now looks only for a memo with exactly the table's basename (`.fpt`/`.dbt`, any case), by scanning the directory rather than globbing. Previously `1.dbf` could pick up `12.fpt`, and glob metacharacters in an uploaded filename were expanded
+- Security (CWE-400): column parsing stops at `header_length` and drops columns that do not fit within `record_length`, so a small crafted file can no longer declare thousands of overlapping columns and cause quadratic decoding work and output
+- Security (CWE-838): string values that need no transcoding have invalid bytes replaced, as transcoded values already did, so they no longer raise in JSON generation, HTML escaping, or database inserts
+- Security (CWE-248): a DateTime (`T`) column narrower than 8 bytes decodes to nil instead of raising `NoMethodError`
+- Security (CWE-915): column names (and Visual FoxPro `.dbc` table names) such as `to_str`, `to_ary`, `to_hash`, `to_proc`, or `to_partial_path` are no longer exposed as methods, so a crafted file cannot hijack implicit conversions or Rails rendering; those columns stay readable via `#[]` and `#attributes`
+- Security (CWE-129): `Table#record` returns nil for a negative index instead of reading header bytes as a record or raising `Errno::EINVAL`
+- Security (CWE-150): CLI terminal output also replaces UTF-8 encoded C1 control characters (U+0080–U+009F, e.g. the single-character CSI U+009B)
+- dBase III memos end at the `0x1A` terminator; bytes left over after it in the same block are no longer appended to the memo
+
+### Added
+
+- README: "Processing untrusted files" section with guidance for accepting DBF uploads
+
 ## 5.5.0
 
 ### Added

@@ -398,6 +398,24 @@ Data type descriptions
 * O = Double
 * + = Autoincrement
 
+## Processing untrusted files
+
+The parser is hardened against malformed files: crafted headers cannot force
+huge allocations, unbounded loops, path traversal, or crashes from truncated
+data. If you accept DBF uploads (for example in a web application), also:
+
+* Treat every column name and value as untrusted text. HTML-escape it before
+  rendering it, and escape JSON before embedding it in a `<script>` tag.
+* Pass the upload as a `StringIO` (with an explicit memo `StringIO` if there is
+  one) rather than as a path, so memo files are never looked up in a shared
+  upload directory.
+* Limit upload size and processing time. Many records can point at the same
+  large memo, so exported output can be far larger than the uploaded files.
+* Rescue `DBF::Error`, and also `StandardError` if a malformed file must never
+  fail a request.
+* `Table#to_csv` prefixes a `'` to string cells that begin with `=`, `+`, `-`,
+  `@`, tab, or carriage return so spreadsheets do not run them as formulas.
+
 ## Limitations
 
 * DBF is read-only
