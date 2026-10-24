@@ -19,6 +19,9 @@ module DBF
         return nil unless start_block > 0
 
         build_memo start_block
+      rescue RangeError
+        # A corrupt memo pointer too large to seek to has no memo
+        nil
       end
 
       def close

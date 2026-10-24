@@ -15,7 +15,7 @@ module DBF
 
     attr_reader :name, :type, :length, :decimal
 
-    # rubocop:disable Style/MutableConstant
+    # rubocop:disable-next Style/MutableConstant
     TYPE_CAST_CLASS = {
       N: ColumnType::Number,
       I: ColumnType::SignedLong,
@@ -29,7 +29,6 @@ module DBF
       G: ColumnType::General,
       :+ => ColumnType::AutoIncrement
     }
-    # rubocop:enable Style/MutableConstant
     TYPE_CAST_CLASS.default = ColumnType::String
     TYPE_CAST_CLASS.freeze
 

@@ -457,4 +457,52 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
       expect(DBF::CLI.sanitize('café')).to eq 'café'
     end
   end
+
+  # --- VULN-025 ---
+  describe 'zero-length column amplification (CWE-400)' do
+    let(:columns) { Array.new(2_000) { |i| dbf_column(name: "C#{i}", length: 0) } }
+
+    it 'declares no more columns than a record has bytes' do
+      bytes = dbf_table(record_count: 3, record_length: 3, columns:, records: ' ' * 9)
+      expect(DBF::Table.new(StringIO.new(bytes)).columns.size).to eq 2
+    end
+
+    it 'keeps a zero-length column that fits alongside the others' do
+      bytes = dbf_table(record_count: 1, columns: [dbf_column(name: 'A', length: 5), dbf_column(name: 'Z', length: 0)],
+                        records: ' hello')
+      expect(DBF::Table.new(StringIO.new(bytes)).record(0).to_a).to eq ['hello', nil]
+    end
+  end
+
+  # --- VULN-026 ---
+  describe 'memo pointer too large to seek to (CWE-248)' do
+    {0x83 => 'dBase III', 0x8b => 'dBase IV'}.each do |version, format|
+      it "decodes a #{format} memo to nil instead of raising RangeError" do
+        bytes = dbf_table(version:, record_count: 1, columns: [dbf_column(name: 'NOTES', type: 'M', length: 30)],
+                          records: " #{'9' * 30}")
+        table = DBF::Table.new(StringIO.new(bytes), StringIO.new(+''))
+        expect(table.record(0).to_a).to eq [nil]
+      end
+    end
+  end
+
+  # --- VULN-027 ---
+  describe 'language driver without a Ruby converter (CWE-248)' do
+    def table_with(driver)
+      bytes = dbf_table(record_count: 1, columns: [dbf_column(name: "N\x8Ame".b, length: 5)], records: " \x87\x9Aabc".b)
+      bytes.setbyte(29, driver)
+      DBF::Table.new(StringIO.new(bytes))
+    end
+
+    it 'decodes Macintosh Central European (0x97) text' do
+      table = table_with(0x97)
+      expect([table.columns.first.name, table.record(0)['Näme']]).to eq %w[Näme áöabc]
+    end
+
+    it 'transcodes every code page in DBF::ENCODINGS' do
+      DBF::ENCODINGS.each_key do |driver|
+        expect { table_with(driver.to_i(16)).record(0).to_a }.to_not raise_error
+      end
+    end
+  end
 end

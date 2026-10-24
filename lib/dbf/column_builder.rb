@@ -26,8 +26,10 @@ module DBF
 
             # Columns longer than the record would read into the following
             # records; stop so a crafted file cannot multiply decoding work.
+            # Zero-length columns take no record bytes, so also allow at most
+            # one column per record byte.
             width += length
-            break if width > @max_width
+            break if width > @max_width || columns.size >= @max_width
 
             columns << Column.new(*args)
           end

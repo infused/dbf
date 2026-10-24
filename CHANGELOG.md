@@ -11,10 +11,14 @@
 - Security (CWE-915): column names (and Visual FoxPro `.dbc` table names) such as `to_str`, `to_ary`, `to_hash`, `to_proc`, or `to_partial_path` are no longer exposed as methods, so a crafted file cannot hijack implicit conversions or Rails rendering; those columns stay readable via `#[]` and `#attributes`
 - Security (CWE-129): `Table#record` returns nil for a negative index instead of reading header bytes as a record or raising `Errno::EINVAL`
 - Security (CWE-150): CLI terminal output also replaces UTF-8 encoded C1 control characters (U+0080–U+009F, e.g. the single-character CSI U+009B)
+- Security (CWE-400): a table declares no more columns than its records have bytes, so zero-length columns can no longer bypass the column bound (an 84 KB file previously produced 2,000 nil cells per one-byte record: a 120 MB CSV and 34 s of work)
+- Security (CWE-248): a dBase III/IV memo pointer too large to seek to decodes to nil instead of raising `RangeError`
+- Tables with the Macintosh Central European language driver (`0x97`) decode through a vendored code page table instead of raising `Encoding::ConverterNotFoundError`, since Ruby has no converter for `macCentEuro`
 - dBase III memos end at the `0x1A` terminator; bytes left over after it in the same block are no longer appended to the memo
 
 ### Added
 
+- `rake fuzz`: coverage-guided mutation fuzzer for the read path (`spec/fuzz/fuzz.rb`), also run as a non-blocking CI job
 - README: "Processing untrusted files" section with guidance for accepting DBF uploads
 
 ## 5.5.0
