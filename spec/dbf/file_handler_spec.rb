@@ -40,6 +40,27 @@ RSpec.describe DBF::FileHandler do
     end
   end
 
+  describe '.open_file' do
+    it 'raises DBF::FileNotFoundError for a path containing a null byte' do
+      expect { described_class.open_file("a\x00b.dbf") }.to raise_error(DBF::FileNotFoundError)
+    end
+
+    it 'raises DBF::FileAccessError for a directory' do
+      Dir.mktmpdir do |dir|
+        expect { described_class.open_file(dir) }
+          .to raise_error(DBF::FileAccessError, "cannot open file: #{dir} (Is a directory)")
+      end
+    end
+
+    it 'raises DBF::FileAccessError, keeping the system error as the cause, when the file cannot be read' do
+      allow(File).to receive(:open).with('locked.dbf', 'rb').and_raise(Errno::EACCES)
+      expect { described_class.open_file('locked.dbf') }.to raise_error(DBF::FileAccessError) { |error|
+        expect(error.message).to eq 'cannot open file: locked.dbf (Permission denied)'
+        expect(error.cause).to be_a(Errno::EACCES)
+      }
+    end
+  end
+
   describe '.data_path' do
     it 'returns the string itself for a path' do
       expect(described_class.data_path('a.dbf')).to eq 'a.dbf'

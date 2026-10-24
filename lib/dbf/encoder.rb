@@ -137,6 +137,21 @@ module DBF
       encoding.is_a?(::String) && CUSTOM_TABLES.key?(encoding.downcase)
     end
 
+    # Raise unless strings in the encoding can be transcoded to Unicode, so
+    # an unknown name or a dummy encoding such as UTF-7 fails up front with
+    # a DBF::Error rather than with ArgumentError or
+    # Encoding::ConverterNotFoundError on the first read.
+    #
+    # @param encoding [String, Encoding]
+    # @raise [DBF::UnsupportedEncodingError]
+    def self.check(encoding)
+      return if custom?(encoding)
+
+      (+'').force_encoding(encoding).encode(Encoding::UTF_8)
+    rescue ArgumentError, TypeError, Encoding::ConverterNotFoundError
+      raise DBF::UnsupportedEncodingError, "unsupported encoding: #{encoding}"
+    end
+
     # Transcode a string from source_encoding to target_encoding
     #
     # @param string [String]

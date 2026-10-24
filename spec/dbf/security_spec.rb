@@ -505,4 +505,35 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
       end
     end
   end
+
+  # --- VULN-028 ---
+  describe 'errors that are not DBF::Error (CWE-248)' do
+    it 'raises UnsupportedEncodingError for an unknown encoding name instead of ArgumentError' do
+      expect { DBF::Table.new(fixture('dbase_03.dbf'), nil, 'bogus') }
+        .to raise_error(DBF::UnsupportedEncodingError, 'unsupported encoding: bogus')
+    end
+
+    it 'raises UnsupportedEncodingError for an encoding Ruby cannot transcode instead of failing on read' do
+      expect { DBF::Table.new(fixture('dbase_03.dbf'), nil, Encoding::UTF_7) }
+        .to raise_error(DBF::UnsupportedEncodingError, 'unsupported encoding: UTF-7')
+    end
+
+    it 'accepts an encoding decoded through a vendored table' do
+      expect(DBF::Table.new(fixture('dbase_03.dbf'), nil, 'cp620').encoding).to eq 'cp620'
+    end
+
+    it 'raises FileAccessError for a directory instead of Errno::EISDIR' do
+      Dir.mktmpdir do |dir|
+        expect { DBF::Table.new(dir) }.to raise_error(DBF::FileAccessError)
+      end
+    end
+
+    it 'raises FileNotFoundError for a missing memo path instead of Errno::ENOENT, closing the data file' do
+      opened = []
+      allow(File).to(receive(:open).and_wrap_original { |original, *args| original.call(*args).tap { |file| opened << file } })
+      expect { DBF::Table.new(fixture('dbase_83.dbf'), 'missing.dbt') }
+        .to raise_error(DBF::FileNotFoundError, 'file not found: missing.dbt')
+      expect(opened).to contain_exactly(an_object_having_attributes(closed?: true))
+    end
+  end
 end

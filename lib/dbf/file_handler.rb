@@ -9,7 +9,7 @@ module DBF
       when StringIO
         data
       when String
-        File.open(data, 'rb')
+        open_file(data)
       else
         raise ArgumentError, 'data must be a file path or an IO-like object responding to #read and #seek' unless data.respond_to?(:read) && data.respond_to?(:seek)
 
@@ -18,8 +18,21 @@ module DBF
         data.binmode if data.respond_to?(:binmode)
         data
       end
-    rescue Errno::ENOENT
-      raise DBF::FileNotFoundError, "file not found: #{data}"
+    end
+
+    # Opens a file for binary reading, raising DBF errors instead of the
+    # system errors File.open raises, so callers need only rescue DBF::Error.
+    # A path containing a null byte cannot name a file, so it is not found.
+    # A directory opens without error but fails on the first read, so it is
+    # rejected here.
+    def open_file(path)
+      raise Errno::EISDIR if File.directory?(path)
+
+      File.open(path, 'rb')
+    rescue Errno::ENOENT, Errno::ENOTDIR, ArgumentError
+      raise DBF::FileNotFoundError, "file not found: #{path}"
+    rescue SystemCallError => e
+      raise DBF::FileAccessError, "cannot open file: #{path} (#{SystemCallError.new(nil, e.errno).message})"
     end
 
     def open_memo(data, memo, memo_class, version)

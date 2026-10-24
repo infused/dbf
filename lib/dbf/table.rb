@@ -65,10 +65,11 @@ module DBF
     # @param memo [optional String, StringIO, IO] memo Path to the memo file or an IO-like object
     # @param encoding [optional String, Encoding] encoding Name of the encoding or an Encoding object
     def initialize(data, memo = nil, encoding = nil, name: nil)
+      Encoder.check(encoding) if encoding
       @data = FileHandler.open_data(data)
       @user_encoding = encoding
       @encoding = determine_encoding
-      @memo = FileHandler.open_memo(data, memo, version_config.memo_class, version)
+      @memo = open_memo(data, memo)
       @name = name
       yield self if block_given?
     end
@@ -238,6 +239,15 @@ module DBF
 
     def determine_encoding
       @user_encoding || header.encoding || Encoding.default_external
+    end
+
+    # Close a data file opened from a path if its memo cannot be opened, so
+    # the failed Table does not leak a file handle.
+    def open_memo(data, memo) # :nodoc:
+      FileHandler.open_memo(data, memo, version_config.memo_class, version)
+    rescue DBF::Error
+      @data.close if data.is_a?(String)
+      raise
     end
 
     def build_columns # :nodoc:

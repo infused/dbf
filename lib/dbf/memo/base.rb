@@ -7,7 +7,7 @@ module DBF
       BLOCK_SIZE = 512
 
       def self.open(filename, version)
-        new(File.open(filename, 'rb'), version)
+        new(FileHandler.open_file(filename), version)
       end
 
       def initialize(data, version)
