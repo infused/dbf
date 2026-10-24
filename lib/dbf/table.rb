@@ -41,6 +41,9 @@ module DBF
     #   table = DBF::Table.new 'data.dbf', nil, 'cp437'
     #   table = DBF::Table.new 'data.dbf', 'memo.dbt', Encoding::US_ASCII
     #
+    #   # reading at most the first 64 KB of each memo
+    #   table = DBF::Table.new 'data.dbf', max_memo_size: 65_536
+    #
     # Opens a table like .new, but when given a block, yields the table,
     # closes it when the block returns, and returns the block's value —
     # the same contract as File.open.
@@ -50,8 +53,8 @@ module DBF
     #   end
     #
     # Takes the same arguments as .new. Without a block, equivalent to .new.
-    def self.open(data, memo = nil, encoding = nil, name: nil)
-      table = new(data, memo, encoding, name: name)
+    def self.open(data, memo = nil, encoding = nil, name: nil, max_memo_size: nil)
+      table = new(data, memo, encoding, name:, max_memo_size:)
       return table unless block_given?
 
       begin
@@ -64,12 +67,15 @@ module DBF
     # @param data [String, StringIO, IO] data Path to the dbf file or an IO-like object
     # @param memo [optional String, StringIO, IO] memo Path to the memo file or an IO-like object
     # @param encoding [optional String, Encoding] encoding Name of the encoding or an Encoding object
-    def initialize(data, memo = nil, encoding = nil, name: nil)
+    # @param max_memo_size [optional Integer] Bytes to read from each memo;
+    #   longer memos are cut off. Every memo is read in full by default.
+    def initialize(data, memo = nil, encoding = nil, name: nil, max_memo_size: nil)
       Encoder.check(encoding) if encoding
+      validate_max_memo_size(max_memo_size)
       @data = FileHandler.open_data(data)
       @user_encoding = encoding
       @encoding = determine_encoding
-      @memo = open_memo(data, memo)
+      @memo = open_memo(data, memo, max_memo_size)
       @name = name
       yield self if block_given?
     end
@@ -243,11 +249,17 @@ module DBF
 
     # Close a data file opened from a path if its memo cannot be opened, so
     # the failed Table does not leak a file handle.
-    def open_memo(data, memo) # :nodoc:
-      FileHandler.open_memo(data, memo, version_config.memo_class, version)
+    def open_memo(data, memo, max_size) # :nodoc:
+      FileHandler.open_memo(data, memo, version_config.memo_class, version, max_size:)
     rescue DBF::Error
       @data.close if data.is_a?(String)
       raise
+    end
+
+    def validate_max_memo_size(max_memo_size) # :nodoc:
+      return if max_memo_size.nil? || (max_memo_size.is_a?(Integer) && max_memo_size.positive?)
+
+      raise ArgumentError, 'max_memo_size must be a positive Integer or nil'
     end
 
     def build_columns # :nodoc:

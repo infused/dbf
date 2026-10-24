@@ -93,23 +93,23 @@ RSpec.describe DBF::FileHandler do
     end
 
     it 'opens the memo via memo_class.open when a path is given' do
-      allow(memo_class).to receive(:open).with('/tmp/m.dbt', '83').and_return(:opened)
+      allow(memo_class).to receive(:open).with('/tmp/m.dbt', '83', max_size: nil).and_return(:opened)
       expect(described_class.open_memo('any.dbf', '/tmp/m.dbt', memo_class, '83')).to eq(:opened)
     end
 
     it 'instantiates the memo via memo_class.new when a StringIO is given' do
       io = StringIO.new
-      allow(memo_class).to receive(:new).with(io, '83').and_return(:built)
+      allow(memo_class).to receive(:new).with(io, '83', max_size: nil).and_return(:built)
       expect(described_class.open_memo('any.dbf', io, memo_class, '83')).to eq(:built)
     end
 
     it 'auto-discovers a memo file next to the data path' do
-      allow(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83').and_return(:opened)
+      allow(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83', max_size: nil).and_return(:opened)
       expect(described_class.open_memo(fixture('dbase_83.dbf'), nil, memo_class, '83')).to eq(:opened)
     end
 
     it 'auto-discovers a memo file next to a File object' do
-      allow(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83').and_return(:opened)
+      allow(memo_class).to receive(:open).with(fixture('dbase_83.dbt'), '83', max_size: nil).and_return(:opened)
       File.open(fixture('dbase_83.dbf')) do |file|
         expect(described_class.open_memo(file, nil, memo_class, '83')).to eq(:opened)
       end
@@ -117,7 +117,7 @@ RSpec.describe DBF::FileHandler do
 
     it 'instantiates the memo via memo_class.new when an IO is given' do
       File.open(fixture('dbase_83.dbt')) do |file|
-        allow(memo_class).to receive(:new).with(file, '83').and_return(:built)
+        allow(memo_class).to receive(:new).with(file, '83', max_size: nil).and_return(:built)
         expect(described_class.open_memo('any.dbf', file, memo_class, '83')).to eq(:built)
       end
     end

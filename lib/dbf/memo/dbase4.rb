@@ -11,7 +11,7 @@ module DBF
         header = data.read(BLOCK_HEADER_SIZE)
         return nil unless header && header.bytesize == BLOCK_HEADER_SIZE
 
-        length = header.unpack1('x4L')
+        length = limit(header.unpack1('x4L'))
 
         # Bound the read by the bytes remaining so a crafted 32-bit length
         # field cannot force a ~4 GiB allocation from a small memo file.

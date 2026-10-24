@@ -6,13 +6,16 @@ module DBF
       BLOCK_HEADER_SIZE = 8
       BLOCK_SIZE = 512
 
-      def self.open(filename, version)
-        new(FileHandler.open_file(filename), version)
+      def self.open(filename, version, max_size: nil)
+        new(FileHandler.open_file(filename), version, max_size:)
       end
 
-      def initialize(data, version)
+      # @param max_size [Integer, nil] bytes to read from each memo; longer
+      #   memos are cut off. nil reads every memo in full.
+      def initialize(data, version, max_size: nil)
         @data = data
         @version = version
+        @max_size = max_size
       end
 
       def get(start_block)
@@ -34,7 +37,12 @@ module DBF
 
       private
 
-      attr_reader :data
+      attr_reader :data, :max_size
+
+      # Bounds a memo length by max_size, when one is set
+      def limit(length) # :nodoc:
+        max_size && length > max_size ? max_size : length
+      end
 
       def offset(start_block) # :nodoc:
         start_block * block_size

@@ -411,6 +411,13 @@ data. If you accept DBF uploads (for example in a web application), also:
   upload directory.
 * Limit upload size and processing time. Many records can point at the same
   large memo, so exported output can be far larger than the uploaded files.
+  Pass `max_memo_size:` to cut off each memo after that many bytes:
+
+  ```ruby
+  DBF::Table.new(upload, memo_upload, max_memo_size: 64 * 1024)
+  ```
+
+  `DBF::Database::Foxpro.new` takes the same option.
 * Rescue `DBF::Error`, and also `StandardError` if a malformed file must never
   fail a request.
 * `Table#to_csv` prefixes a `'` to string cells that begin with `=`, `+`, `-`,

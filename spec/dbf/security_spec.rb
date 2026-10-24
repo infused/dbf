@@ -536,4 +536,56 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
       expect(opened).to contain_exactly(an_object_having_attributes(closed?: true))
     end
   end
+
+  # --- VULN-029 ---
+  describe 'memo output blow-up (CWE-400)' do
+    let(:unterminated) { ("\x00".b * 512) + ('m'.b * 16_384) }
+
+    def memo_table(record_count, memo, **)
+      records = " #{'1'.rjust(10)}" * record_count
+      bytes = dbf_table(version: 0x83, record_count:, columns: [dbf_column(name: 'NOTES', type: 'M', length: 10)], records:)
+      DBF::Table.new(StringIO.new(bytes), StringIO.new(memo), **)
+    end
+
+    it 'reads every memo in full by default' do
+      expect(memo_table(3, unterminated).map { |record| record['NOTES'].bytesize }).to eq [16_384] * 3
+    end
+
+    it 'cuts off each memo at max_memo_size when many records share one large memo' do
+      expect(memo_table(200, unterminated, max_memo_size: 100).map { |record| record['NOTES'] }).to all(eq('m' * 100))
+    end
+
+    it 'stops reading an unterminated dBase III memo once max_size bytes are read' do
+      io = StringIO.new(unterminated)
+      expect(DBF::Memo::Dbase3.new(io, '83', max_size: 100).get(1)).to eq 'm' * 100
+      expect(io.pos).to eq 1024
+    end
+
+    it 'reads at most max_size bytes of a dBase IV memo' do
+      io = StringIO.new(("\x00".b * 512) + "\x00\x00\x00\x00#{[100_000].pack('L')}" + ('m'.b * 100_000))
+      expect(DBF::Memo::Dbase4.new(io, '8b', max_size: 10).get(1)).to eq 'm' * 10
+      expect(io.pos).to eq 512 + 8 + 10
+    end
+
+    it 'reads at most max_size bytes of a FoxPro memo that spans blocks' do
+      bytes = ("\x00".b * 64) + [1, 100_000].pack('NN') + ('m'.b * 100_000)
+      bytes[6, 2] = [64].pack('n')
+      io = StringIO.new(bytes)
+      expect(DBF::Memo::Foxpro.new(io, '30', max_size: 100).get(1)).to eq 'm' * 100
+      expect(io.pos).to eq 64 + 8 + 100
+    end
+
+    it 'passes max_memo_size through Table.open' do
+      memos = DBF::Table.open(fixture('dbase_83.dbf'), max_memo_size: 5) { |table| table.filter_map { |record| record['DESC'] } }
+      expect(memos).to include(satisfy { |memo| memo.bytesize == 5 })
+      expect(memos).to all(satisfy { |memo| memo.bytesize <= 5 })
+    end
+
+    [0, -1, 1.5, '100'].each do |size|
+      it "raises ArgumentError for max_memo_size #{size.inspect}" do
+        expect { DBF::Table.new(fixture('dbase_83.dbf'), max_memo_size: size) }
+          .to raise_error(ArgumentError, 'max_memo_size must be a positive Integer or nil')
+      end
+    end
+  end
 end

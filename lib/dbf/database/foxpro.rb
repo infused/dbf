@@ -20,10 +20,13 @@ module DBF
       #  contacts = db.contacts.record(0)
       #
       # @param path [String]
-      def initialize(path)
+      # @param max_memo_size [optional Integer] Bytes to read from each memo
+      #   of the container and its tables; see DBF::Table.new
+      def initialize(path, max_memo_size: nil)
         @path = path
         @dirname = File.dirname(@path)
-        @db = DBF::Table.new(@path)
+        @max_memo_size = max_memo_size
+        @db = DBF::Table.new(@path, max_memo_size:)
         @tables = extract_dbc_data
       rescue Errno::ENOENT
         raise DBF::FileNotFoundError, "file not found: #{path}"
@@ -38,7 +41,7 @@ module DBF
       # @param name [String]
       # @return [DBF::Table]
       def table(name)
-        Table.new(table_path(name), long_names: @tables[name])
+        Table.new(table_path(name), long_names: @tables[name], max_memo_size: @max_memo_size)
       end
 
       # Searches the database directory for the table's dbf file
@@ -114,9 +117,9 @@ module DBF
     class Table < DBF::Table
       attr_reader :long_names
 
-      def initialize(path, long_names:)
+      def initialize(path, long_names:, max_memo_size: nil)
         @long_names = long_names
-        super(path)
+        super(path, max_memo_size:)
       end
 
       # Replaces each column's short name with its long name from the

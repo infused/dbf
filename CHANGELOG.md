@@ -24,6 +24,7 @@
 
 ### Added
 
+- Security (CWE-400): optional `max_memo_size:` for `DBF::Table.new`, `DBF::Table.open` and `DBF::Database::Foxpro.new`. Each memo is cut off after that many bytes, and no more than that is read from the memo file, so a small table whose records all point at one large (or unterminated) memo can no longer produce output far larger than the upload. Memos are read in full by default
 - `rake fuzz`: coverage-guided mutation fuzzer for the read path (`spec/fuzz/fuzz.rb`), also run as a non-blocking CI job
 - README: "Processing untrusted files" section with guidance for accepting DBF uploads
 

@@ -20,9 +20,17 @@ module DBF
           text, terminated = TERMINATOR_PATTERN.match(block).captures
           text = text.delete("\000")
           memo_string << text
-          break if terminated || text.size < BLOCK_SIZE
+          break if terminated || text.size < BLOCK_SIZE || full?(memo_string)
         end
-        memo_string
+        memo_string.byteslice(0, limit(memo_string.bytesize))
+      end
+
+      private
+
+      # A memo with no terminator runs to the end of the file, so stop
+      # reading blocks once max_size bytes have been read.
+      def full?(memo_string) # :nodoc:
+        max_size && memo_string.bytesize >= max_size
       end
     end
   end

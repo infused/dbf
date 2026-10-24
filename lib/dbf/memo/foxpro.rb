@@ -14,7 +14,7 @@ module DBF
         memo_type, memo_size, memo_string = block.unpack('NNa*')
         return nil unless memo_type == 1 && memo_size.to_i.positive?
 
-        read_memo_content(memo_string, memo_size)
+        read_memo_content(memo_string, limit(memo_size))
       rescue IOError, SystemCallError, RangeError
         nil
       end

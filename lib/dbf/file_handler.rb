@@ -35,13 +35,13 @@ module DBF
       raise DBF::FileAccessError, "cannot open file: #{path} (#{SystemCallError.new(nil, e.errno).message})"
     end
 
-    def open_memo(data, memo, memo_class, version)
+    def open_memo(data, memo, memo_class, version, max_size: nil)
       if memo
         meth = memo.is_a?(String) ? :open : :new
-        memo_class.send(meth, memo, version)
+        memo_class.send(meth, memo, version, max_size:)
       elsif (path = data_path(data))
         found = find_memo(path)
-        found && memo_class.open(found, version)
+        found && memo_class.open(found, version, max_size:)
       end
     end
 

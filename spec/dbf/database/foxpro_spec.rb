@@ -68,6 +68,14 @@ RSpec.describe DBF::Database::Foxpro do
       end
     end
 
+    describe 'when given max_memo_size' do
+      it 'cuts off the memos of related tables' do
+        notes = DBF::Database::Foxpro.new(dbf_path, max_memo_size: 5).contacts.filter_map(&:notes)
+        expect(notes).to include(satisfy { |memo| memo.bytesize == 5 })
+        expect(notes).to all(satisfy { |memo| memo.bytesize <= 5 })
+      end
+    end
+
     describe 'when a long name is not ASCII' do
       it 'uses the already decoded long name instead of decoding it again' do
         table = DBF::Database::Table.new(fixture('foxprodb/contacts.dbf'), long_names: %w[Café naïve])
