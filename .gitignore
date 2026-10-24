@@ -11,3 +11,5 @@ doc/
 /*.gem
 tmp/*
 coverage/*
+/*AUDIT.md
+
