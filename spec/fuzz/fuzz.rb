@@ -23,6 +23,10 @@
 # backtrace and a reproducer). Findings whose signature is already in --out
 # are not reported again, so delete the directory to start afresh.
 #
+# Inputs that reach new branches are kept in --out/corpus. Parallel workers
+# (--jobs) share them while they run, and a later run with the same --out
+# starts from them.
+#
 # The fuzzer is not part of the rspec run. Usage:
 #
 #   bundle exec rake fuzz                        # FUZZ_TIME, FUZZ_JOBS, FUZZ_SEED
@@ -471,6 +475,9 @@ module DBFFuzz
       @reported = 0
       @execs = 0
       @fanouts = 0
+      @corpus_dir = File.join(options[:out], 'corpus')
+      @shared = {}
+      FileUtils.mkdir_p(@corpus_dir)
     end
 
     # @return [Integer] number of new findings
@@ -478,10 +485,14 @@ module DBFFuzz
       started = now
       deadline = started + @options[:time]
       @corpus.each { |input| execute(input) }
+      sync
       @last_status = started
       until now > deadline || (@options[:runs] && @execs >= @options[:runs])
         execute(@mutator.mutate(@corpus.sample(random: @rng)))
-        status(started) if now - @last_status > 10
+        next unless now - @last_status > 10
+
+        sync
+        status(started)
       end
       status(started)
       @reported
@@ -500,6 +511,38 @@ module DBFFuzz
       elsif fresh
         @corpus << input
         @corpus.delete_at(@seeds.size + @rng.rand(@corpus.size - @seeds.size)) if @corpus.size > MAX_CORPUS
+        share(input)
+      end
+    end
+
+    # Workers pool the inputs that found new coverage in <out>/corpus, so
+    # parallel workers build on each other's progress and a later run
+    # resumes where this one stopped. The memo is written before the .dbf
+    # that names the entry, and each file is renamed into place whole.
+    def share(input)
+      name = Digest::SHA256.hexdigest("#{input.dbf}\0#{input.memo}")[0, 16]
+      return if @shared.key?(name)
+
+      @shared[name] = true
+      publish("#{name}.memo", input.memo) if input.memo
+      publish("#{name}.dbf", input.dbf)
+    end
+
+    def publish(file, bytes)
+      tmp = File.join(@corpus_dir, ".#{file}.#{Process.pid}")
+      File.binwrite(tmp, bytes)
+      File.rename(tmp, File.join(@corpus_dir, file))
+    end
+
+    # Runs the entries other workers have shared since the last sync.
+    def sync
+      Dir.children(@corpus_dir).each do |file|
+        name = file.delete_suffix('.dbf')
+        next if name == file || @shared.key?(name)
+
+        @shared[name] = true
+        memo = File.join(@corpus_dir, "#{name}.memo")
+        execute(Input.new(File.binread(File.join(@corpus_dir, file)), File.exist?(memo) ? File.binread(memo) : nil))
       end
     end
 
