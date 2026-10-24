@@ -1,0 +1,45 @@
+name: fuzz
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+    inputs:
+      seconds:
+        description: Seconds each worker fuzzes
+        default: '600'
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    # Observe-only: findings fail this job (and upload reproducers) but never
+    # block a merge.
+    continue-on-error: true
+    timeout-minutes: 60
+    env:
+      LANG: C.UTF-8
+      FUZZ_JOBS: '2'
+      # Short on pushes and pull requests, longer on the weekly schedule
+      FUZZ_TIME: ${{ inputs.seconds || (github.event_name == 'schedule' && '1800') || '120' }}
+    steps:
+    - uses: actions/checkout@v7
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
+      with:
+        ruby-version: '4.0'
+        bundler-cache: true
+    - name: Fuzz
+      run: bundle exec rake fuzz
+    - name: Upload reproducers
+      if: failure()
+      uses: actions/upload-artifact@v5
+      with:
+        name: fuzz-findings
+        path: tmp/fuzz/
