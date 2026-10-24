@@ -43,6 +43,21 @@ RSpec.describe DBF::Column do
     end
   end
 
+  describe '#with_name' do
+    let(:column) { DBF::Column.new table, 'ColumnName', 'N', 1, 0 }
+
+    it 'returns a copy with the new name, leaving the original unchanged' do
+      column.underscored_name
+      renamed = column.with_name('LongColumnName')
+      expect([renamed.name, renamed.underscored_name, renamed.type, renamed.length]).to eq ['LongColumnName', 'long_column_name', 'N', 1]
+      expect(column.name).to eq 'ColumnName'
+    end
+
+    it 'raises DBF::Column::InvalidNameError for an empty name' do
+      expect { column.with_name('') }.to raise_error(DBF::Column::InvalidNameError)
+    end
+  end
+
   describe '#type_cast' do
     context 'with type N (number)' do
       context 'when value is empty' do

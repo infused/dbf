@@ -67,6 +67,13 @@ RSpec.describe DBF::Database::Foxpro do
         expect(table.column_names).to all(be_a(String))
       end
     end
+
+    describe 'when a long name is not ASCII' do
+      it 'uses the already decoded long name instead of decoding it again' do
+        table = DBF::Database::Table.new(fixture('foxprodb/contacts.dbf'), long_names: %w[Café naïve])
+        expect(table.column_names.first(3)).to eq %w[Café naïve LAST_NAME]
+      end
+    end
   end
 
   describe '#table_path' do

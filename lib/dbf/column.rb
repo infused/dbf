@@ -52,6 +52,17 @@ module DBF
 
     def encoding = @table.encoding
 
+    # Returns a copy of the column with a different name. The name is used
+    # as given rather than decoded from the table's code page, so it must
+    # already be a decoded string, such as a Visual FoxPro long name read
+    # from the .dbc container.
+    #
+    # @param name [String]
+    # @return [DBF::Column]
+    def with_name(name) # :nodoc:
+      dup.tap { |column| column.rename(name) }
+    end
+
     # @param value [String]
     def type_cast(value)
       type_cast_class.type_cast(value)
@@ -81,6 +92,14 @@ module DBF
     # @return [String]
     def underscored_name
       @underscored_name ||= name.gsub(/([a-z\d])([A-Z])/, '\1_\2').tr('-', '_').downcase
+    end
+
+    protected
+
+    def rename(name) # :nodoc:
+      @name = name
+      @underscored_name = nil
+      validate_name
     end
 
     private

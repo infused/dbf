@@ -119,12 +119,13 @@ module DBF
         super(path)
       end
 
+      # Replaces each column's short name with its long name from the
+      # container. Long names were decoded when the .dbc was read, so they
+      # are not decoded again with this table's code page.
       def build_columns # :nodoc:
-        # modify the column definitions to use the long names as the
-        # columnname property is readonly, recreate the column definitions
         super.each_with_index.map do |column, index|
-          long_name = long_names[index] || column.name
-          Column.new(self, long_name, column.type, column.length, column.decimal)
+          long_name = long_names[index]
+          long_name ? column.with_name(long_name) : column
         end
       end
     end
