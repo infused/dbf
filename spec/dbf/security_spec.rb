@@ -18,6 +18,12 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
     bytes
   end
 
+  # A header that cannot hold its column descriptors makes the parser warn
+  # that it ignored them
+  def warn_ignored_columns
+    output(/\ADBF: ignored the columns after the first \d+: they do not fit/).to_stderr
+  end
+
   def dbf_column(name: 'COL1', type: 'C', length: 10, decimal: 0)
     bytes = (+"\x00").b * 32
     encoded = name.b[0, 11]
@@ -182,7 +188,9 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
       bytes = dbf_table(record_count: 1_000_000, record_length: 0,
                         columns: [dbf_column(name: 'A', type: 'C', length: 9)],
                         records: " #{'x' * 9}")
-      expect(DBF::Table.new(StringIO.new(bytes)).each.to_a).to be_empty
+      table = DBF::Table.new(StringIO.new(bytes))
+      expect { table.columns }.to warn_ignored_columns
+      expect(table.each.to_a).to be_empty
     end
   end
 
@@ -263,7 +271,7 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
     it 'stops column parsing instead of building an invalid column' do
       partial = ('N'.b * 11) + 'C'.b + ("\x00".b * 4)
       bytes = dbf_header(record_count: 1, header_length: 49, record_length: 5) + partial
-      expect { DBF::Table.new(StringIO.new(bytes)).columns }.to_not raise_error
+      expect { DBF::Table.new(StringIO.new(bytes)).columns }.to warn_ignored_columns
     end
   end
 
@@ -300,13 +308,13 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
     (10..17).each do |size|
       it "stops cleanly when the column area holds only #{size} bytes" do
         bytes = dbf_header(record_count: 1, header_length: 32 + size, record_length: 5) + ('A'.b * size)
-        expect { DBF::Table.new(StringIO.new(bytes)).columns }.to_not raise_error
+        expect { DBF::Table.new(StringIO.new(bytes)).columns }.to warn_ignored_columns
       end
     end
 
     it 'stops cleanly for a truncated dBase II column area' do
       bytes = dbf_header(version: 0x02, record_count: 1, record_length: 5) + ('A'.b * 6)
-      expect { DBF::Table.new(StringIO.new(bytes)).columns }.to_not raise_error
+      expect { DBF::Table.new(StringIO.new(bytes)).columns }.to warn_ignored_columns
     end
   end
 
@@ -383,12 +391,16 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
     it 'ignores descriptors beyond header_length' do
       bytes = dbf_header(record_count: 1, header_length: 32 + (2 * 32) + 1, record_length: 1_000) +
         columns.join + "\x0D".b
-      expect(DBF::Table.new(StringIO.new(bytes)).columns.size).to eq 2
+      table = DBF::Table.new(StringIO.new(bytes))
+      expect { table.columns }.to output(/the first 2: they do not fit within the header length of 97 bytes/).to_stderr
+      expect(table.columns.size).to eq 2
     end
 
     it 'ignores columns that do not fit within record_length' do
       bytes = dbf_table(record_count: 0xFFFF_FFFF, record_length: 1 + 255 + 10, columns:)
-      expect(DBF::Table.new(StringIO.new(bytes)).columns.sum(&:length)).to be <= 265
+      table = DBF::Table.new(StringIO.new(bytes))
+      expect { table.columns }.to output(/the first 1: they do not fit within the record length of 266 bytes/).to_stderr
+      expect(table.columns.sum(&:length)).to be <= 265
     end
   end
 
@@ -464,7 +476,9 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
 
     it 'declares no more columns than a record has bytes' do
       bytes = dbf_table(record_count: 3, record_length: 3, columns:, records: ' ' * 9)
-      expect(DBF::Table.new(StringIO.new(bytes)).columns.size).to eq 2
+      table = DBF::Table.new(StringIO.new(bytes))
+      expect { table.columns }.to warn_ignored_columns
+      expect(table.columns.size).to eq 2
     end
 
     it 'keeps a zero-length column that fits alongside the others' do
@@ -586,6 +600,36 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
         expect { DBF::Table.new(fixture('dbase_83.dbf'), max_memo_size: size) }
           .to raise_error(ArgumentError, 'max_memo_size must be a positive Integer or nil')
       end
+    end
+  end
+
+  # --- VULN-030 ---
+  describe 'server paths in error messages (CWE-209)' do
+    let(:dir) { File.join(Dir.tmpdir, 'srv', 'uploads') }
+
+    it 'names only the missing file, keeping the full path on #path' do
+      path = File.join(dir, 'missing.dbf')
+      expect { DBF::Table.new(path) }.to raise_error(DBF::FileNotFoundError, 'file not found: missing.dbf') { |error|
+        expect(error.path).to eq path
+      }
+    end
+
+    it 'names only the missing memo file' do
+      expect { DBF::Table.new(fixture('dbase_83.dbf'), File.join(dir, 'missing.dbt')) }
+        .to raise_error(DBF::FileNotFoundError, 'file not found: missing.dbt')
+    end
+
+    it 'names only the file that cannot be opened' do
+      Dir.mktmpdir do |parent|
+        path = File.join(parent, 'upload.dbf')
+        Dir.mkdir(path)
+        expect { DBF::Table.new(path) }.to raise_error(DBF::FileAccessError, 'cannot open file: upload.dbf (Is a directory)')
+      end
+    end
+
+    it 'names only the missing database container' do
+      expect { DBF::Database::Foxpro.new(File.join(dir, 'missing.dbc')) }
+        .to raise_error(DBF::FileNotFoundError, 'file not found: missing.dbc')
     end
   end
 end

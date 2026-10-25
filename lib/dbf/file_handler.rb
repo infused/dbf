@@ -30,9 +30,20 @@ module DBF
 
       File.open(path, 'rb')
     rescue Errno::ENOENT, Errno::ENOTDIR, ArgumentError
-      raise DBF::FileNotFoundError, "file not found: #{path}"
+      raise not_found(path)
     rescue SystemCallError => e
-      raise DBF::FileAccessError, "cannot open file: #{path} (#{SystemCallError.new(nil, e.errno).message})"
+      reason = SystemCallError.new(nil, e.errno).message
+      raise DBF::FileAccessError.new("cannot open file: #{display_name(path)} (#{reason})", path:)
+    end
+
+    def not_found(path)
+      DBF::FileNotFoundError.new("file not found: #{display_name(path)}", path:)
+    end
+
+    # The file name without its directory, for error messages. A null byte,
+    # which File.basename rejects, is shown as "?".
+    def display_name(path)
+      File.basename(path.to_s.tr("\x00", '?'))
     end
 
     def open_memo(data, memo, memo_class, version, max_size: nil)

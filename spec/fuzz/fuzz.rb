@@ -167,7 +167,11 @@ module DBFFuzz
       GC.enable
     end
 
+    # Malformed inputs make the library warn (e.g. about ignored column
+    # descriptors); silence that so it does not flood the fuzzer's output.
     def exercise(input)
+      verbose = $VERBOSE
+      $VERBOSE = nil
       table = nil
       step(:open) { table = DBF::Table.new(StringIO.new(input.dbf), input.memo && StringIO.new(input.memo), name: 'fuzz') }
       return unless table
@@ -179,6 +183,8 @@ module DBFFuzz
       step(:schema_sequel) { table.schema(:sequel) }
       step(:schema_json) { table.schema(:json) }
       step(:to_csv) { table.to_csv(StringIO.new) }
+    ensure
+      $VERBOSE = verbose
     end
 
     def record_indexes(table)

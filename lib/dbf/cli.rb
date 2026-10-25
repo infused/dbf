@@ -100,8 +100,8 @@ module DBF
         send(action, filename) if action
       end
       0
-    rescue DBF::FileNotFoundError => e
-      @stderr.puts "DBF::FileNotFoundError: #{e.message}"
+    rescue DBF::FileError => e
+      @stderr.puts "#{e.class}: #{e.message}"
       1
     end
 

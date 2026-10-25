@@ -48,7 +48,7 @@ RSpec.describe DBF::FileHandler do
     it 'raises DBF::FileAccessError for a directory' do
       Dir.mktmpdir do |dir|
         expect { described_class.open_file(dir) }
-          .to raise_error(DBF::FileAccessError, "cannot open file: #{dir} (Is a directory)")
+          .to raise_error(DBF::FileAccessError, "cannot open file: #{File.basename(dir)} (Is a directory)")
       end
     end
 

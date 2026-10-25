@@ -173,4 +173,14 @@ RSpec.describe DBF::CLI do
       expect(err).to include 'no_such_file.dbf'
     end
   end
+
+  describe 'with a directory' do
+    it 'exits non-zero and reports the error to stderr' do
+      Dir.mktmpdir do |dir|
+        status, _, err = run('-s', dir)
+        expect(status).to eq 1
+        expect(err).to include 'DBF::FileAccessError'
+      end
+    end
+  end
 end

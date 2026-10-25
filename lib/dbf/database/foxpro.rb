@@ -29,7 +29,7 @@ module DBF
         @db = DBF::Table.new(@path, max_memo_size:)
         @tables = extract_dbc_data
       rescue Errno::ENOENT
-        raise DBF::FileNotFoundError, "file not found: #{path}"
+        raise FileHandler.not_found(path)
       end
 
       def table_names

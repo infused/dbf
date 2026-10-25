@@ -422,6 +422,21 @@ data. If you accept DBF uploads (for example in a web application), also:
   fail a request.
 * `Table#to_csv` prefixes a `'` to string cells that begin with `=`, `+`, `-`,
   `@`, tab, or carriage return so spreadsheets do not run them as formulas.
+* Text is passed through as it is, including Unicode bidirectional controls
+  (such as U+202E RIGHT-TO-LEFT OVERRIDE) and zero-width characters. These
+  make displayed text differ from the underlying data (in a web page, a CSV
+  export, or `dbf` terminal output), but some real data needs them, so the
+  library does not remove them. Strip or flag them yourself where that
+  matters:
+
+  ```ruby
+  value.gsub(/[​-‏‪-‮⁠-⁤⁦-⁩﻿]/, '')
+  ```
+
+* Column descriptors that do not fit within the header length or record
+  length are ignored, and the library prints a warning (silenced when
+  `$VERBOSE` is nil). If a file you trust loses columns, its header has wrong
+  length fields.
 
 ## Limitations
 

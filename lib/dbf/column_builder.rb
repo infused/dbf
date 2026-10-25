@@ -16,7 +16,16 @@ module DBF
         @data.seek(@version_config.header_size)
         width = 0
         [].tap do |columns|
-          until end_of_columns?
+          until end_of_record?
+            count = columns.size
+            # Descriptors live inside the header. Stop at header_length so a
+            # crafted file cannot declare thousands of columns over its
+            # record area.
+            if past_header?
+              warn_ignored(count, "header length of #{@header_length}")
+              break
+            end
+
             args = @version_config.read_column_args(@table, @data)
             # A descriptor truncated by EOF is returned as nil, or unpacks to
             # a nil length; stop rather than constructing an invalid column
@@ -29,7 +38,10 @@ module DBF
             # Zero-length columns take no record bytes, so also allow at most
             # one column per record byte.
             width += length
-            break if width > @max_width || columns.size >= @max_width
+            if width > @max_width || count >= @max_width
+              warn_ignored(count, "record length of #{@max_width + 1}")
+              break
+            end
 
             columns << Column.new(*args)
           end
@@ -39,10 +51,16 @@ module DBF
 
     private
 
-    # Descriptors live inside the header. Stop at header_length so a
-    # crafted file cannot declare thousands of columns over its record area.
-    def end_of_columns?
-      @data.pos + @version_config.column_layout.first > @header_length || end_of_record?
+    def past_header?
+      @data.pos + @version_config.column_layout.first > @header_length
+    end
+
+    # Columns that do not fit are dropped rather than read, so say so: a file
+    # written with a wrong header or record length would otherwise lose
+    # columns silently. The message holds no text from the file, so a
+    # crafted column name cannot inject lines into a log.
+    def warn_ignored(kept, limit)
+      warn "DBF: ignored the columns after the first #{kept}: they do not fit within the #{limit} bytes"
     end
 
     def end_of_record?

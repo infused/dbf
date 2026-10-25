@@ -18,6 +18,9 @@
 - Visual FoxPro long column names from a `.dbc` container are no longer decoded a second time with the table's code page, which garbled non-ASCII names (`Café` became `CafÃ©`)
 - Security (CWE-248): `Table.new` raises only `DBF::Error` subclasses for a bad path or encoding, so rescuing `DBF::Error` is enough. A directory or unreadable file (data or memo) raises the new `DBF::FileAccessError` instead of `Errno::EISDIR`/`Errno::EACCES`. A missing memo path, or a path containing a null byte, raises `DBF::FileNotFoundError` instead of `Errno::ENOENT`/`ArgumentError`. An unknown encoding, or one Ruby cannot transcode such as UTF-7, raises the new `DBF::UnsupportedEncodingError` when the table is opened, rather than `ArgumentError` or `Encoding::ConverterNotFoundError` on the first read. The data file is closed if its memo cannot be opened
 
+- Security (CWE-209): `DBF::FileNotFoundError` and `DBF::FileAccessError` messages name only the file (`file not found: data.dbf`), not its directory, so an app that shows error messages to users does not reveal server paths. The full path is available as `#path`. Both now inherit from the new `DBF::FileError`
+- The `dbf` command reports a file that cannot be opened (such as a directory) as an error and exits 1, instead of printing a stack trace
+
 ### Changed
 
 - Code that rescued `ArgumentError`, `Errno::*` or `Encoding::ConverterNotFoundError` from `Table.new` should rescue `DBF::Error` (or the specific subclasses above) instead. Passing something other than a path or IO still raises `ArgumentError`
@@ -26,7 +29,8 @@
 
 - Security (CWE-400): optional `max_memo_size:` for `DBF::Table.new`, `DBF::Table.open` and `DBF::Database::Foxpro.new`. Each memo is cut off after that many bytes, and no more than that is read from the memo file, so a small table whose records all point at one large (or unterminated) memo can no longer produce output far larger than the upload. Memos are read in full by default
 - `rake fuzz`: coverage-guided mutation fuzzer for the read path (`spec/fuzz/fuzz.rb`), also run as a non-blocking CI job
-- README: "Processing untrusted files" section with guidance for accepting DBF uploads
+- A warning when column descriptors are ignored because they do not fit within the header length or record length, so a file written with wrong length fields no longer loses columns silently. The warning holds no text from the file, and is silenced when `$VERBOSE` is nil
+- README: "Processing untrusted files" section with guidance for accepting DBF uploads, including how to strip Unicode bidirectional controls and zero-width characters, which the library passes through
 
 ## 5.5.0
 

@@ -4,8 +4,9 @@ require 'spec_helper'
 
 RSpec.describe DBF::Error do
   it 'is the ancestor of every DBF error class' do
-    expect(DBF::FileNotFoundError).to be < DBF::Error
-    expect(DBF::FileAccessError).to be < DBF::Error
+    expect(DBF::FileError).to be < DBF::Error
+    expect(DBF::FileNotFoundError).to be < DBF::FileError
+    expect(DBF::FileAccessError).to be < DBF::FileError
     expect(DBF::UnsupportedEncodingError).to be < DBF::Error
     expect(DBF::NoColumnsDefined).to be < DBF::Error
     expect(DBF::Column::LengthError).to be < DBF::Error
