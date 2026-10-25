@@ -277,9 +277,9 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
 
   # --- VULN-012 ---
   describe 'dBase III memo past EOF (CWE-248)' do
-    it 'does not crash when the start block is past the end of the file' do
+    it 'returns nil when the start block is past the end of the file' do
       memo = DBF::Memo::Dbase3.new(StringIO.new("\x00".b * 512), '83')
-      expect { memo.get(99) }.to_not raise_error
+      expect(memo.get(99)).to be_nil
     end
   end
 
@@ -362,25 +362,28 @@ RSpec.describe 'DBF security' do # rubocop:disable RSpec/DescribeClass
 
     after { FileUtils.remove_entry(dir) }
 
-    def write_table(name)
+    # Closes the table before the directory is removed; Windows cannot
+    # delete open files.
+    def memo_file?(name)
       path = File.join(dir, name)
       File.binwrite(path, dbf_table(version: 0x83))
-      path
+      DBF::Table.open(path, &:has_memo_file?)
     end
 
     it 'does not pick up a memo whose name merely starts with the table name' do
       File.binwrite(File.join(dir, '12.dbt'), '')
-      expect(DBF::Table.new(write_table('1.dbf'))).to_not have_memo_file
+      expect(memo_file?('1.dbf')).to be false
     end
 
+    # Braces rather than * or ?, which Windows does not allow in filenames
     it 'does not expand glob metacharacters in the table filename' do
       File.binwrite(File.join(dir, 'ac.dbt'), '')
-      expect(DBF::Table.new(write_table('{a,b}*.dbf'))).to_not have_memo_file
+      expect(memo_file?('{a,b}c.dbf')).to be false
     end
 
     it 'still finds a same-named memo case-insensitively' do
       File.binwrite(File.join(dir, 'DATA.DBT'), '')
-      expect(DBF::Table.new(write_table('data.dbf'))).to have_memo_file
+      expect(memo_file?('data.dbf')).to be true
     end
   end
 

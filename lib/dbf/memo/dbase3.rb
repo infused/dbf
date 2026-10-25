@@ -5,11 +5,14 @@ module DBF
     class Dbase3 < Base
       def build_memo(start_block) # :nodoc:
         data.seek offset(start_block)
+        # A start block past EOF has no memo. Some Rubies (TruffleRuby) seek
+        # there instead of raising RangeError for a huge pointer.
+        return nil if data.eof?
+
         memo_string = +''
         loop do
           block = data.read(BLOCK_SIZE)
-          # A start block past EOF yields nil; return what we have rather
-          # than crashing on nil.gsub.
+          # A memo with no terminator ends at EOF
           break if block.nil?
 
           # The memo ends at its 0x1A terminator; bytes after it in the same
