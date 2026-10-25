@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 5.6.0
 
 ### Fixed
 
@@ -17,13 +17,13 @@
 - dBase III memos end at the `0x1A` terminator; bytes left over after it in the same block are no longer appended to the memo
 - Visual FoxPro long column names from a `.dbc` container are no longer decoded a second time with the table's code page, which garbled non-ASCII names (`Café` became `CafÃ©`)
 - Security (CWE-248): `Table.new` raises only `DBF::Error` subclasses for a bad path or encoding, so rescuing `DBF::Error` is enough. A directory or unreadable file (data or memo) raises the new `DBF::FileAccessError` instead of `Errno::EISDIR`/`Errno::EACCES`. A missing memo path, or a path containing a null byte, raises `DBF::FileNotFoundError` instead of `Errno::ENOENT`/`ArgumentError`. An unknown encoding, or one Ruby cannot transcode such as UTF-7, raises the new `DBF::UnsupportedEncodingError` when the table is opened, rather than `ArgumentError` or `Encoding::ConverterNotFoundError` on the first read. The data file is closed if its memo cannot be opened
-
 - Security (CWE-209): `DBF::FileNotFoundError` and `DBF::FileAccessError` messages name only the file (`file not found: data.dbf`), not its directory, so an app that shows error messages to users does not reveal server paths. The full path is available as `#path`. Both now inherit from the new `DBF::FileError`
 - The `dbf` command reports a file that cannot be opened (such as a directory) as an error and exits 1, instead of printing a stack trace
 
 ### Changed
 
 - Code that rescued `ArgumentError`, `Errno::*` or `Encoding::ConverterNotFoundError` from `Table.new` should rescue `DBF::Error` (or the specific subclasses above) instead. Passing something other than a path or IO still raises `ArgumentError`
+- File error messages no longer include the directory (`file not found: data.dbf` rather than `file not found: /srv/uploads/data.dbf`). Use `DBF::FileError#path` for the full path
 
 ### Added
 
