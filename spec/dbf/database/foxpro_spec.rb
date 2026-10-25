@@ -19,16 +19,15 @@ RSpec.describe DBF::Database::Foxpro do
       end
     end
 
-    describe 'it loads the example db correctly' do
-      it 'shows a correct list of tables' do
-        expect(db.table_names.sort).to eq(%w[contacts calls setup types].sort)
+    describe 'when given a path containing a null byte' do
+      it 'raises DBF::FileNotFoundError' do
+        expect { DBF::Database::Foxpro.new "x\x00y.dbc" }.to raise_error(DBF::FileNotFoundError, 'file not found: x?y.dbc')
       end
     end
 
-    describe 'when Errno::ENOENT is raised' do
-      it 'raises DBF::FileNotFoundError' do
-        allow(DBF::Table).to receive(:new).and_raise(Errno::ENOENT)
-        expect { DBF::Database::Foxpro.new('missing.dbc') }.to raise_error(DBF::FileNotFoundError, 'file not found: missing.dbc')
+    describe 'it loads the example db correctly' do
+      it 'shows a correct list of tables' do
+        expect(db.table_names.sort).to eq(%w[contacts calls setup types].sort)
       end
     end
   end

@@ -15,7 +15,7 @@ module DBF
         return nil unless memo_type == 1 && memo_size.to_i.positive?
 
         read_memo_content(memo_string, limit(memo_size))
-      rescue IOError, SystemCallError, RangeError
+      rescue IOError, SystemCallError
         nil
       end
 

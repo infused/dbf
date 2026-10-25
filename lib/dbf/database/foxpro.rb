@@ -24,12 +24,12 @@ module DBF
       #   of the container and its tables; see DBF::Table.new
       def initialize(path, max_memo_size: nil)
         @path = path
-        @dirname = File.dirname(@path)
         @max_memo_size = max_memo_size
+        # Open first: Table.new turns a bad path into a DBF::Error, while
+        # File.dirname raises ArgumentError for one containing a null byte.
         @db = DBF::Table.new(@path, max_memo_size:)
+        @dirname = File.dirname(@path)
         @tables = extract_dbc_data
-      rescue Errno::ENOENT
-        raise FileHandler.not_found(path)
       end
 
       def table_names
@@ -86,7 +86,7 @@ module DBF
       # Table names come from the container file, so implicit-conversion
       # method names are never dispatched to a table (see Record).
       def table_method?(name) # :nodoc:
-        !Record::RESERVED_METHODS.include?(name) && table_names.include?(name)
+        !Record::RESERVED_METHODS.include?(name) && @tables.key?(name)
       end
 
       # This method extracts the data from the database container. This is

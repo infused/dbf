@@ -263,7 +263,7 @@ module DBF
     end
 
     def build_columns # :nodoc:
-      ColumnBuilder.new(self, @data, version_config, header_length:, record_length:).build
+      ColumnBuilder.new(self, @data, version_config).build
     end
 
     def deleted_record? # :nodoc:

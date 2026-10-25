@@ -2,19 +2,20 @@
 
 module DBF
   class ColumnBuilder
-    def initialize(table, data, version_config, header_length:, record_length:)
+    def initialize(table, data, version_config)
       @table = table
       @data = data
       @version_config = version_config
-      @header_length = header_length
-      # One byte of every record is the deletion flag
-      @max_width = record_length - 1
+      @header_length = table.header_length
+      @record_length = table.record_length
     end
 
     def build
       safe_seek do
         @data.seek(@version_config.header_size)
         width = 0
+        # One byte of every record is the deletion flag
+        max_width = @record_length - 1
         [].tap do |columns|
           until end_of_record?
             count = columns.size
@@ -27,19 +28,17 @@ module DBF
             end
 
             args = @version_config.read_column_args(@table, @data)
-            # A descriptor truncated by EOF is returned as nil, or unpacks to
-            # a nil length; stop rather than constructing an invalid column
-            # (which would crash on nil < 0).
-            length = args&.[](3)
-            break if length.nil?
+            # A descriptor truncated by EOF is returned as nil; stop rather
+            # than constructing an invalid column.
+            break unless args
 
             # Columns longer than the record would read into the following
             # records; stop so a crafted file cannot multiply decoding work.
             # Zero-length columns take no record bytes, so also allow at most
             # one column per record byte.
-            width += length
-            if width > @max_width || count >= @max_width
-              warn_ignored(count, "record length of #{@max_width + 1}")
+            width += args[3]
+            if width > max_width || count >= max_width
+              warn_ignored(count, "record length of #{@record_length}")
               break
             end
 

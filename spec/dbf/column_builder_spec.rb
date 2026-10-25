@@ -20,7 +20,7 @@ RSpec.describe DBF::ColumnBuilder do
         io.seek(0)
         original_pos = io.pos
         version_config = DBF::VersionConfig.new('83')
-        DBF::ColumnBuilder.new(table, io, version_config, header_length: table.header_length, record_length: table.record_length).build
+        DBF::ColumnBuilder.new(table, io, version_config).build
         expect(io.pos).to eq original_pos
       end
     end

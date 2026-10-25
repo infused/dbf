@@ -122,7 +122,7 @@ module DBF
       def type_cast(value)
         days, msecs = value.unpack('l2')
         # A column narrower than 8 bytes leaves msecs nil
-        return nil if days.nil? || msecs.nil? || days.zero?
+        return nil if msecs.nil? || days.zero?
 
         secs = (msecs / 1000).to_i
         ::DateTime.jd(days, (secs / 3600).to_i, (secs / 60).to_i % 60, secs % 60).to_time
@@ -171,13 +171,10 @@ module DBF
       private
 
       def encode(value)
-        unless @needs_encode
-          # No transcoding happens here, so replace invalid bytes the same
-          # way Encoder.encode does rather than handing callers a string that
-          # raises in JSON generation, HTML escaping, or a database insert.
-          value.force_encoding(encoding)
-          return value.valid_encoding? ? value : value.scrub
-        end
+        # No transcoding happens here, so replace invalid bytes the same way
+        # Encoder.encode does rather than handing callers a string that raises
+        # in JSON generation, HTML escaping, or a database insert.
+        return value.force_encoding(encoding).scrub! unless @needs_encode
 
         Encoder.encode(value, encoding, @target_encoding)
       end

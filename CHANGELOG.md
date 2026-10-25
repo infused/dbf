@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Security (CWE-248): `DBF::Database::Foxpro.new` raises `DBF::FileNotFoundError` for a path containing a null byte instead of `ArgumentError`, as `Table.new` already did
+
 ## 5.6.0
 
 ### Fixed
