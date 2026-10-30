@@ -39,7 +39,7 @@ jobs:
       run: bundle exec rake fuzz
     - name: Upload reproducers
       if: failure()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
         name: fuzz-findings
         path: tmp/fuzz/
